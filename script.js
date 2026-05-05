@@ -669,6 +669,27 @@ function applyPromoFreeItems() {
 
 
 
+// ══ INJECT MARQUEE DYNAMIC VALUES ══
+(function injectMarqueeValues() {
+  const settings = products.find(p => p.type === 'settings') || {};
+  const cd       = settings.cart_drawer  || {};
+  const ab       = settings.announcement_bar || {};
+  const stats    = settings.site_stats   || {};
+
+  const freeShipping = cd.free_shipping_threshold || 350;
+  const buyQty       = cd.promo_buy_quantity      || 5;
+  const getQty       = cd.promo_get_quantity      || 3;
+  const members      = stats.members              || 12000;
+  const promoCode    = ab.promo_code              || 'PAUL81';
+
+  document.querySelectorAll('.marquee-free-shipping').forEach(el => el.textContent = freeShipping);
+  document.querySelectorAll('.marquee-buy-qty').forEach(el       => el.textContent = buyQty);
+  document.querySelectorAll('.marquee-get-qty').forEach(el       => el.textContent = getQty);
+  document.querySelectorAll('.marquee-members').forEach(el       => el.textContent = members.toLocaleString());
+  document.querySelectorAll('.marquee-promo-code').forEach(el    => el.textContent = promoCode);
+})();
+
+
   function initAnnouncementBar() {
   const slider = document.getElementById('paulAnnouncementSlider');
   if (!slider) return;
@@ -8078,14 +8099,31 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ════════════════════════════════════════════════════════
        1. INJECTION MÉDIAS
     ════════════════════════════════════════════════════════ */
-    if (videoUrl) {
+      if (videoUrl) {
       /* Mode vidéo → une seule vidéo, thumbs cachées, dots cachés */
+
+      /* ── Placeholder image ── */
+      var placeholderSrc = cfg.video_placeholder_image || '';
+      var placeholderEl  = document.getElementById('bbwHeroVideoPlaceholder');
+      if (placeholderEl && placeholderSrc) {
+        placeholderEl.src          = placeholderSrc;
+        placeholderEl.style.display = 'block';
+      }
+
       var vid = document.createElement('video');
-      vid.autoplay  = true;
-      vid.muted     = true;
-      vid.loop      = true;
+      vid.autoplay    = true;
+      vid.muted       = true;
+      vid.loop        = true;
       vid.playsInline = true;
       vid.setAttribute('playsinline', '');
+      vid.style.position = 'relative';
+      vid.style.zIndex   = '2';
+
+      /* Cacher le placeholder dès que la vidéo peut jouer */
+      vid.addEventListener('canplay', function () {
+        if (placeholderEl) placeholderEl.style.display = 'none';
+      });
+
       var src = document.createElement('source');
       src.src  = videoUrl;
       src.type = 'video/mp4';

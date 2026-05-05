@@ -24,7 +24,7 @@
     /* Col 1 */
     title1: 'EXPLORE MORE',
     links1: [
-      { text: 'Most populare',   url: '#' },
+      { text: 'Most populare',   url: '/collections/most-popular.html' },
       { text: 'Bbw4life Style',  url: '#' },
       { text: 'FB Community',    url: '#' },
       { text: 'Our Blog Post',   url: '/blog/blog.html' },

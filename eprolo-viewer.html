@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, noodp">
+  <meta name="googlebot" content="noindex, nofollow">
   <title>Eprolo Product Viewer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -46,6 +48,177 @@
       pointer-events: none;
       z-index: 0;
     }
+
+    /* ── GATE SCREEN ── */
+    #gate-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #gate-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .gate-box {
+      position: relative;
+      z-index: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .gate-box::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 20%; right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      border-radius: 2px;
+    }
+
+    .gate-icon {
+      font-size: 28px;
+      margin-bottom: 20px;
+      display: block;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      font-family: var(--mono);
+    }
+
+    .gate-title {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .gate-title span { color: var(--accent2); }
+
+    .gate-subtitle {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .gate-input-wrap {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .gate-input-wrap input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 12px 44px 12px 16px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .gate-input-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0,229,255,0.08);
+    }
+
+    .gate-input-wrap input.shake {
+      animation: shake 0.38s ease;
+      border-color: var(--accent2) !important;
+    }
+
+    .gate-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-size: 14px;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .gate-eye:hover { color: var(--accent); }
+
+    .gate-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      padding: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: box-shadow 0.2s, opacity 0.2s;
+      margin-top: 4px;
+    }
+
+    .gate-btn:hover { box-shadow: 0 0 24px rgba(0,229,255,0.35); }
+    .gate-btn:active { opacity: 0.85; }
+    .gate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .gate-attempts {
+      margin-top: 14px;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      min-height: 16px;
+    }
+
+    .gate-lock-msg {
+      font-size: 11px;
+      color: var(--accent2);
+      margin-top: 14px;
+      letter-spacing: 0.05em;
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      18%      { transform: translateX(-6px); }
+      36%      { transform: translateX(6px); }
+      54%      { transform: translateX(-4px); }
+      72%      { transform: translateX(4px); }
+    }
+
+    .gate-screen-exit {
+      animation: gateExit 0.4s ease forwards;
+    }
+
+    @keyframes gateExit {
+      to { opacity: 0; transform: scale(1.04); pointer-events: none; }
+    }
+
+    /* ── MAIN DASHBOARD (hidden until auth) ── */
+    #dashboard { display: none; }
 
     .wrap {
       position: relative;
@@ -408,16 +581,36 @@
 </head>
 <body>
 
+<!-- ══════════════════════════════════════
+     GATE SCREEN — shown until password OK
+══════════════════════════════════════ -->
+<div id="gate-screen">
+  <div class="gate-box">
+    <span class="gate-icon">// EPROLO</span>
+    <h2 class="gate-title">INVENTORY <span>VIEWER</span></h2>
+    <p class="gate-subtitle">Restricted Access — Authorize to continue</p>
+    <div class="gate-input-wrap">
+      <input type="password" id="gate-pwd" placeholder="Enter password" autocomplete="off" spellcheck="false">
+      <button class="gate-eye" id="gate-eye-btn" tabindex="-1" title="Show/Hide">👁</button>
+    </div>
+    <button class="gate-btn" id="gate-submit-btn">Unlock →</button>
+    <p class="gate-attempts" id="gate-attempts-msg"></p>
+    <p class="gate-lock-msg" id="gate-lock-msg" style="display:none;"></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN DASHBOARD
+══════════════════════════════════════ -->
+<div id="dashboard">
 <div class="wrap">
 
-  <!-- HEADER -->
   <header>
     <div class="label">// Inventory Dashboard</div>
     <h1>EPROLO <span>VIEWER</span></h1>
     <p class="subtitle" id="header-subtitle">Prêt · Netlify Function · fetch natif Node 18+</p>
   </header>
 
-  <!-- CONTROLS -->
   <div class="controls">
     <button class="btn btn-run" id="run-btn" onclick="fetchProducts()">
       ▶ &nbsp;Récupérer les produits
@@ -427,13 +620,11 @@
     </button>
   </div>
 
-  <!-- STATUS -->
   <div class="status-bar" id="status-bar">
     <div class="dot"></div>
     <span id="status-text">Prêt. Clique sur le bouton pour lancer.</span>
   </div>
 
-  <!-- STATS -->
   <div class="stats" id="stats-row">
     <div class="stat-card">
       <div class="s-label">Produits</div>
@@ -449,16 +640,10 @@
     </div>
   </div>
 
-  <!-- CATEGORY TABS -->
   <div class="cat-tabs" id="cat-tabs"></div>
-
-  <!-- SUBCATEGORY CHIPS -->
   <div class="subcat-row" id="subcat-row"></div>
-
-  <!-- PRODUCT CARDS -->
   <div id="product-view"></div>
 
-  <!-- LOADING SKELETONS -->
   <div id="skeleton-view" style="display:none">
     <div class="skeleton-card"><div class="skeleton" style="width:30px;height:10px"></div><div class="skeleton" style="width:220px"></div><div class="skeleton" style="width:60px;height:10px;margin-left:auto"></div></div>
     <div class="skeleton-card"><div class="skeleton" style="width:30px;height:10px"></div><div class="skeleton" style="width:180px"></div><div class="skeleton" style="width:60px;height:10px;margin-left:auto"></div></div>
@@ -467,7 +652,6 @@
     <div class="skeleton-card"><div class="skeleton" style="width:30px;height:10px"></div><div class="skeleton" style="width:240px"></div><div class="skeleton" style="width:60px;height:10px;margin-left:auto"></div></div>
   </div>
 
-  <!-- RAW LOG SECTION -->
   <div id="log-section">
     <div class="section-toggle" onclick="toggleLog()">
       <span id="log-toggle-icon">▶</span>
@@ -477,33 +661,178 @@
   </div>
 
 </div>
+</div>
 
 <script>
+  /* ══════════════════════════════════════
+     GATE — Password protection
+     Password loaded from products.data.json
+     settings.eprolo_viewer_password
+  ══════════════════════════════════════ */
+  (function () {
+    'use strict';
+
+    const MAX_ATTEMPTS   = 5;
+    const LOCK_DURATION  = 5 * 60 * 1000; // 5 minutes in ms
+    const SESSION_KEY    = 'eprolo_auth_ok';
+    const LOCK_KEY       = 'eprolo_lock_until';
+    const ATTEMPT_KEY    = 'eprolo_attempts';
+
+    const gateScreen   = document.getElementById('gate-screen');
+    const gateInput    = document.getElementById('gate-pwd');
+    const gateSubmit   = document.getElementById('gate-submit-btn');
+    const gateEyeBtn   = document.getElementById('gate-eye-btn');
+    const gateAttempts = document.getElementById('gate-attempts-msg');
+    const gateLockMsg  = document.getElementById('gate-lock-msg');
+    const dashboard    = document.getElementById('dashboard');
+
+    let correctPassword = null;
+    let passwordLoaded  = false;
+
+    /* ── Load password from products.data.json ── */
+    fetch('/products.data.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var arr      = Array.isArray(data) ? data : [];
+        var settings = arr.find(function (p) { return p.type === 'settings'; }) || {};
+        correctPassword = settings.eprolo_viewer_password || null;
+        passwordLoaded  = true;
+
+        /* If no password configured → block everything, show nothing */
+        if (!correctPassword) {
+          gateInput.disabled  = true;
+          gateSubmit.disabled = true;
+          gateAttempts.textContent = 'Access not configured.';
+          return;
+        }
+
+        /* Check if already authenticated this session */
+        if (sessionStorage.getItem(SESSION_KEY) === 'yes') {
+          unlockDashboard(false);
+          return;
+        }
+
+        checkLockState();
+        gateInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') tryUnlock();
+        });
+        gateSubmit.addEventListener('click', tryUnlock);
+      })
+      .catch(function () {
+        gateInput.disabled  = true;
+        gateSubmit.disabled = true;
+        gateAttempts.textContent = 'Unable to load configuration.';
+      });
+
+    /* ── Show/Hide password ── */
+    gateEyeBtn.addEventListener('click', function () {
+      gateInput.type = gateInput.type === 'password' ? 'text' : 'password';
+    });
+
+    /* ── Check if account is locked ── */
+    function checkLockState() {
+      var lockUntil = parseInt(localStorage.getItem(LOCK_KEY) || '0');
+      var now       = Date.now();
+      if (lockUntil > now) {
+        applyLock(lockUntil - now);
+      }
+    }
+
+    /* ── Try to unlock ── */
+    function tryUnlock() {
+      if (!passwordLoaded || !correctPassword) return;
+
+      var lockUntil = parseInt(localStorage.getItem(LOCK_KEY) || '0');
+      if (lockUntil > Date.now()) return;
+
+      var val      = gateInput.value;
+      var attempts = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0');
+
+      if (val === correctPassword) {
+        localStorage.removeItem(ATTEMPT_KEY);
+        localStorage.removeItem(LOCK_KEY);
+        sessionStorage.setItem(SESSION_KEY, 'yes');
+        unlockDashboard(true);
+      } else {
+        attempts++;
+        localStorage.setItem(ATTEMPT_KEY, attempts);
+        gateInput.value = '';
+        gateInput.classList.add('shake');
+        setTimeout(function () { gateInput.classList.remove('shake'); }, 400);
+
+        var remaining = MAX_ATTEMPTS - attempts;
+        if (remaining <= 0) {
+          var lockUntilNew = Date.now() + LOCK_DURATION;
+          localStorage.setItem(LOCK_KEY, lockUntilNew);
+          localStorage.removeItem(ATTEMPT_KEY);
+          applyLock(LOCK_DURATION);
+        } else {
+          gateAttempts.textContent = remaining + ' attempt' + (remaining > 1 ? 's' : '') + ' remaining';
+        }
+      }
+    }
+
+    /* ── Apply lock UI ── */
+    function applyLock(msRemaining) {
+      gateInput.disabled  = true;
+      gateSubmit.disabled = true;
+      gateInput.placeholder = 'Locked';
+      gateAttempts.textContent = '';
+      gateLockMsg.style.display = 'block';
+
+      function tick() {
+        var left = parseInt(localStorage.getItem(LOCK_KEY) || '0') - Date.now();
+        if (left <= 0) {
+          localStorage.removeItem(LOCK_KEY);
+          localStorage.removeItem(ATTEMPT_KEY);
+          gateInput.disabled    = false;
+          gateSubmit.disabled   = false;
+          gateInput.placeholder = 'Enter password';
+          gateLockMsg.style.display = 'none';
+          gateAttempts.textContent  = '';
+          gateInput.focus();
+          return;
+        }
+        var m = Math.floor(left / 60000);
+        var s = Math.floor((left % 60000) / 1000);
+        gateLockMsg.textContent = 'Too many attempts — locked for ' + m + ':' + (s < 10 ? '0' : '') + s;
+        setTimeout(tick, 1000);
+      }
+      tick();
+    }
+
+    /* ── Unlock dashboard ── */
+    function unlockDashboard(animate) {
+      if (animate) {
+        gateScreen.classList.add('gate-screen-exit');
+        setTimeout(function () {
+          gateScreen.style.display = 'none';
+          dashboard.style.display  = 'block';
+        }, 420);
+      } else {
+        gateScreen.style.display = 'none';
+        dashboard.style.display  = 'block';
+      }
+    }
+
+  })();
+
+  /* ══════════════════════════════════════
+     DASHBOARD LOGIC
+  ══════════════════════════════════════ */
   let rawLogs     = [];
   let allProducts = [];
   let logVisible  = false;
 
-  // Active filters
   let activeCategory    = 'ALL';
   let activeSubcategory = 'ALL';
 
-  // Category structure (mirrors the function)
   const CATEGORIES = [
-    {
-      category: "Beauty",
-      subcategories: ["Nails","Eyebrow","Lips","Makeup","Haircare","Skincare"]
-    },
-    {
-      category: "Main Plus Size",
-      subcategories: ["Pants","Shoes","Shirt","Sweater"]
-    },
-    {
-      category: "Plus Size Woman",
-      subcategories: ["Shoes","Dresses","Bathrobe","Sexy","Breathable","Bikini","Plus Size Top"]
-    },
+    { category: "Beauty",         subcategories: ["Nails","Eyebrow","Lips","Makeup","Haircare","Skincare"] },
+    { category: "Main Plus Size", subcategories: ["Pants","Shoes","Shirt","Sweater"] },
+    { category: "Plus Size Woman",subcategories: ["Shoes","Dresses","Bathrobe","Sexy","Breathable","Bikini","Plus Size Top"] },
   ];
 
-  // ── SWATCHES ─────────────────────────────────────────────────────────────
   const COLOR_MAP = {
     black:'#222', white:'#eee', red:'#e74c3c', blue:'#3498db',
     green:'#2ecc71', yellow:'#f1c40f', pink:'#e91e8c', purple:'#9b59b6',
@@ -517,7 +846,6 @@
     return COLOR_MAP[key] || `hsl(${Math.abs(colorName.charCodeAt(0)*37 + colorName.charCodeAt(1)*17) % 360},55%,55%)`;
   }
 
-  // ── FETCH ─────────────────────────────────────────────────────────────────
   async function fetchProducts() {
     const runBtn  = document.getElementById('run-btn');
     const copyBtn = document.getElementById('copy-btn');
@@ -545,7 +873,6 @@
       const data = await res.json();
 
       document.getElementById('skeleton-view').style.display = 'none';
-
       rawLogs = data.logs || [];
 
       if (data.success) {
@@ -566,16 +893,13 @@
           `${allProducts.length} produits · 3 catégories · Netlify Function`;
 
         setStatus('ok', `${allProducts.length} produits récupérés · ${variantTotal} variants au total`);
-
         copyBtn.style.display = 'inline-flex';
         copyBtn.textContent   = '⧉  Copier le log brut';
         copyBtn.classList.remove('copied');
-
         document.getElementById('log-section').style.display = 'block';
       } else {
         setStatus('err', 'Aucune donnée retournée. Vérifie la fonction Netlify.');
       }
-
     } catch (err) {
       document.getElementById('skeleton-view').style.display = 'none';
       setStatus('err', 'Erreur : ' + err.message);
@@ -585,7 +909,6 @@
     runBtn.textContent = '▶  Récupérer les produits';
   }
 
-  // ── PARSE PRODUCTS ────────────────────────────────────────────────────────
   function parseProducts(data) {
     if (data.products && Array.isArray(data.products)) {
       return data.products.map(p => {
@@ -615,65 +938,44 @@
     return [];
   }
 
-  // ── FILTERED PRODUCTS ─────────────────────────────────────────────────────
   function getFiltered() {
     return allProducts.filter(p => {
-      const catOk  = activeCategory    === 'ALL' || p.category    === activeCategory;
-      const subOk  = activeSubcategory === 'ALL' || p.subcategory === activeSubcategory;
+      const catOk = activeCategory    === 'ALL' || p.category    === activeCategory;
+      const subOk = activeSubcategory === 'ALL' || p.subcategory === activeSubcategory;
       return catOk && subOk;
     });
   }
 
-  // ── CATEGORY TABS ─────────────────────────────────────────────────────────
   function renderCategoryTabs() {
     const tabs = document.getElementById('cat-tabs');
     tabs.innerHTML = '';
-
-    // "Tous" tab
     const allTab = document.createElement('button');
     allTab.className  = 'cat-tab all-tab' + (activeCategory === 'ALL' ? ' active' : '');
     allTab.textContent = `Tous (${allProducts.length})`;
     allTab.onclick = () => { activeCategory = 'ALL'; activeSubcategory = 'ALL'; renderCategoryTabs(); renderSubcatChips(); renderProductCards(); };
     tabs.appendChild(allTab);
-
     CATEGORIES.forEach(cat => {
       const count = allProducts.filter(p => p.category === cat.category).length;
       const btn   = document.createElement('button');
       btn.className  = 'cat-tab' + (activeCategory === cat.category ? ' active' : '');
       btn.textContent = `${cat.category} (${count})`;
-      btn.onclick = () => {
-        activeCategory    = cat.category;
-        activeSubcategory = 'ALL';
-        renderCategoryTabs();
-        renderSubcatChips();
-        renderProductCards();
-      };
+      btn.onclick = () => { activeCategory = cat.category; activeSubcategory = 'ALL'; renderCategoryTabs(); renderSubcatChips(); renderProductCards(); };
       tabs.appendChild(btn);
     });
-
     tabs.style.display = 'flex';
   }
 
-  // ── SUBCATEGORY CHIPS ─────────────────────────────────────────────────────
   function renderSubcatChips() {
     const row = document.getElementById('subcat-row');
     row.innerHTML = '';
-
-    if (activeCategory === 'ALL') {
-      row.style.display = 'none';
-      return;
-    }
-
+    if (activeCategory === 'ALL') { row.style.display = 'none'; return; }
     const catDef = CATEGORIES.find(c => c.category === activeCategory);
     if (!catDef) { row.style.display = 'none'; return; }
-
-    // "Tout" chip
     const allChip = document.createElement('button');
     allChip.className  = 'subcat-chip' + (activeSubcategory === 'ALL' ? ' active' : '');
     allChip.textContent = 'Tout';
     allChip.onclick = () => { activeSubcategory = 'ALL'; renderSubcatChips(); renderProductCards(); };
     row.appendChild(allChip);
-
     catDef.subcategories.forEach(sub => {
       const count = allProducts.filter(p => p.category === activeCategory && p.subcategory === sub).length;
       if (count === 0) return;
@@ -683,25 +985,20 @@
       chip.onclick = () => { activeSubcategory = sub; renderSubcatChips(); renderProductCards(); };
       row.appendChild(chip);
     });
-
     row.style.display = 'flex';
   }
 
-  // ── RENDER PRODUCT CARDS ──────────────────────────────────────────────────
   function renderProductCards() {
-    const view    = document.getElementById('product-view');
+    const view     = document.getElementById('product-view');
     const filtered = getFiltered();
     view.style.display = 'block';
-
     if (!filtered.length) {
       view.innerHTML = `<div style="color:var(--text-dim);padding:20px;text-align:center;font-size:12px;">Aucun produit dans cette sélection.</div>`;
       return;
     }
-
     view.innerHTML = filtered.map((p, i) => {
       const varCount = p.variants.length;
       const isOk     = p.status === 'ok';
-
       const variantsHTML = Object.entries(p.colorGroups).map(([color, vars]) => `
         <div class="color-group">
           <div class="color-label">
@@ -710,28 +1007,18 @@
             <span class="color-count">${vars.length} taille(s)</span>
           </div>
           <table class="variants-table">
-            <thead>
-              <tr>
-                <th>ID</th><th>SKU</th><th>SIZE</th><th>PRIX</th><th>POIDS</th><th>STOCK</th>
-                ${vars.some(v => v.option3) ? '<th>OPT3</th>' : ''}
-              </tr>
-            </thead>
-            <tbody>
-              ${vars.map(v => `
-                <tr>
-                  <td class="td-id">${esc(v.id)}</td>
-                  <td class="td-sku">${esc(v.sku)}</td>
-                  <td class="td-size">${esc(v.size) || '—'}</td>
-                  <td class="td-price">$${esc(String(v.price))}</td>
-                  <td class="td-weight">${esc(String(v.weight))}g</td>
-                  <td class="td-stock" style="color:${stockColor(v.stock)}">${esc(String(v.stock))}</td>
-                  ${vars.some(vv => vv.option3) ? `<td>${esc(v.option3)}</td>` : ''}
-                </tr>`).join('')}
-            </tbody>
+            <thead><tr><th>ID</th><th>SKU</th><th>SIZE</th><th>PRIX</th><th>POIDS</th><th>STOCK</th>${vars.some(v => v.option3) ? '<th>OPT3</th>' : ''}</tr></thead>
+            <tbody>${vars.map(v => `<tr>
+              <td class="td-id">${esc(v.id)}</td>
+              <td class="td-sku">${esc(v.sku)}</td>
+              <td class="td-size">${esc(v.size) || '—'}</td>
+              <td class="td-price">$${esc(String(v.price))}</td>
+              <td class="td-weight">${esc(String(v.weight))}g</td>
+              <td class="td-stock" style="color:${stockColor(v.stock)}">${esc(String(v.stock))}</td>
+              ${vars.some(vv => vv.option3) ? `<td>${esc(v.option3)}</td>` : ''}
+            </tr>`).join('')}</tbody>
           </table>
-        </div>
-      `).join('');
-
+        </div>`).join('');
       return `
         <div class="product-card" id="card-${i}">
           <div class="product-header" onclick="toggleCard(${i})">
@@ -740,9 +1027,7 @@
             <span class="p-id">${esc(String(p.id))}</span>
             <div class="p-badges">
               <span class="badge badge-subcat">${esc(p.subcategory)}</span>
-              ${isOk
-                ? `<span class="badge badge-ok">OK</span>`
-                : `<span class="badge badge-err">ERR</span>`}
+              ${isOk ? `<span class="badge badge-ok">OK</span>` : `<span class="badge badge-err">ERR</span>`}
               <span class="badge badge-variants">${varCount} variants</span>
             </div>
             <span class="chevron">▶</span>
@@ -754,7 +1039,6 @@
     }).join('');
   }
 
-  // ── RENDER RAW LOG ────────────────────────────────────────────────────────
   function renderRawLog(logs) {
     const output = document.getElementById('log-output');
     output.innerHTML = logs.map(line => {
@@ -769,10 +1053,7 @@
     }).join('\n');
   }
 
-  // ── HELPERS ───────────────────────────────────────────────────────────────
-  function toggleCard(i) {
-    document.getElementById('card-' + i).classList.toggle('open');
-  }
+  function toggleCard(i) { document.getElementById('card-' + i).classList.toggle('open'); }
 
   function toggleLog() {
     logVisible = !logVisible;
@@ -791,10 +1072,7 @@
       const btn = document.getElementById('copy-btn');
       btn.textContent = '✅  Copié !';
       btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = '⧉  Copier le log brut';
-        btn.classList.remove('copied');
-      }, 2500);
+      setTimeout(() => { btn.textContent = '⧉  Copier le log brut'; btn.classList.remove('copied'); }, 2500);
     });
   }
 
@@ -807,10 +1085,7 @@
   }
 
   function esc(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 </script>
 </body>

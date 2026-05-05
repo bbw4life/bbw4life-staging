@@ -285,15 +285,6 @@
 <!-- SNOW EFFECT -->
 <div id="snow-container" aria-hidden="true"></div>
 
-<!-- NEWSLETTER POPUP -->
-<div id="newsletter-popup" class="popup" role="dialog" aria-modal="true">
-  <div class="popup-icon"><i class="fi fi-rr-envelope"></i></div>
-  <div class="popup-content">
-    <h3></h3>
-    <p></p>
-  </div>
-  <button id="popup-close-btn" class="popup-close-btn">Close</button>
-</div>
 `;
 
   /* ──────────────────────────────────────────────────────────
