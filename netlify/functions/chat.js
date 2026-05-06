@@ -16,7 +16,7 @@ async function loadProductsData() {
       if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
     } catch (e) { /* continue */ }
   }
-  const siteUrl = process.env.SITE_URL || process.env.URL || 'https://curvafit.com';
+  const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
   const res = await fetch(`${siteUrl}/products.data.json`);
   if (!res.ok) throw new Error(`Cannot load products.data.json: ${res.status}`);
   return res.json();
@@ -35,7 +35,7 @@ async function loadSearchData() {
     } catch (e) { /* continue */ }
   }
   try {
-    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://curvafit.com';
+    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/search.data.json`);
     if (res.ok) return res.json();
   } catch (e) { /* ignore */ }
@@ -55,7 +55,7 @@ async function loadBlogArticles() {
     } catch (e) { /* continue */ }
   }
   try {
-    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://curvafit.com';
+    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/blog/blog-articles.json`);
     if (res.ok) return res.json();
   } catch (e) { /* ignore */ }
@@ -159,27 +159,27 @@ function detectLanguage(message, allowedLanguages) {
   if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) scores.ja += 10;
 
   /* French */
-  if (/\b(bonjour|bonsoir|salut|merci|comment|c'est|je|vous|nous|les|des|une|pour|avec|dans|sur|mais|très|aussi|peut|plus|produit|livraison|taille|couleur|disponible|combien|où|quand|prix|acheter|réduction|programme)\b/.test(text)) scores.fr += 3;
+  if (/\b(bonjour|bonsoir|salut|merci|comment|c'est|je|vous|nous|les|des|une|pour|avec|dans|sur|mais|très|aussi|peut|plus|produit|livraison|taille|couleur|disponible|combien|où|quand|prix|acheter|réduction)\b/.test(text)) scores.fr += 3;
   if (/[àâçèêëîïôùûü]/.test(text)) scores.fr += 3;
   ['je','tu','il','elle','nous','vous','ils','elles','le','la','les','un','une','des','du','et','est','sont','avec','dans','pour','sur','pas','plus','très','bien','aussi','mais','ou','donc','car','que','qui','quoi','comment','quand','où','pourquoi','quel','quelle','bonjour','merci','oui','non'].forEach(w => { if (words.includes(w)) scores.fr += 2; });
 
   /* Spanish */
-  if (/\b(hola|buenas|buenos|cómo|como|puedo|quiero|necesito|tienes|tengo|gracias|ayuda|precio|envío|producto|comprar|descuento|talla|disponible|cuánto|dónde|también|adelgazar|perder)\b/.test(text)) scores.es += 3;
+  if (/\b(hola|buenas|buenos|cómo|como|puedo|quiero|necesito|tienes|tengo|gracias|ayuda|precio|envío|producto|comprar|descuento|talla|disponible|cuánto|dónde|también)\b/.test(text)) scores.es += 3;
   if (/[áéíóúüñ¿¡]/.test(text)) scores.es += 3;
   ['yo','él','ella','nosotros','ellos','ellas','los','las','del','al','con','por','para','sobre','más','muy','también','pero','porque','quien','cuando','donde','hola','gracias','sí','tener','ser','estar','hacer','poder','querer'].forEach(w => { if (words.includes(w)) scores.es += 2; });
 
   /* Portuguese */
-  if (/\b(olá|oi|obrigado|obrigada|como|você|produto|preço|comprar|ajuda|envio|disponível|desconto|programa)\b/.test(text)) scores.pt += 3;
+  if (/\b(olá|oi|obrigado|obrigada|como|você|produto|preço|comprar|ajuda|envio|disponível|desconto)\b/.test(text)) scores.pt += 3;
   if (/[ãõâêôáéíóúàü]/.test(text)) scores.pt += 2;
   ['você','nós','eles','elas','uma','por','para','com','mas','também','não','sim','obrigado','como','onde','quando','porque','produto','preço'].forEach(w => { if (words.includes(w)) scores.pt += 2; });
 
   /* German */
-  if (/\b(hallo|guten|danke|bitte|wie|was|wo|wann|warum|ich|sie|wir|der|die|das|und|für|mit|auf|ist|sind|haben|kaufen|produkt|preis|versand|verfügbar|rabatt|programm)\b/.test(text)) scores.de += 3;
+  if (/\b(hallo|guten|danke|bitte|wie|was|wo|wann|warum|ich|sie|wir|der|die|das|und|für|mit|auf|ist|sind|haben|kaufen|produkt|preis|versand|verfügbar|rabatt)\b/.test(text)) scores.de += 3;
   if (/[äöüß]/.test(text)) scores.de += 3;
   ['ich','du','er','sie','es','wir','ihr','der','die','das','und','ist','sind','mit','auf','für','von','zu','an','ein','eine','nicht','auch','aber','oder','wie','was','wo','wann'].forEach(w => { if (words.includes(w)) scores.de += 2; });
 
   /* English */
-  if (/\b(hello|hi|hey|what|how|can|could|would|should|where|when|why|which|who|the|and|for|with|this|that|have|your|you|want|need|does|do|is|are|was|were|help|price|shipping|color|size|available|discount|program|product|buy|order)\b/.test(text)) scores.en += 3;
+  if (/\b(hello|hi|hey|what|how|can|could|would|should|where|when|why|which|who|the|and|for|with|this|that|have|your|you|want|need|does|do|is|are|was|were|help|price|shipping|color|size|available|discount|product|buy|order)\b/.test(text)) scores.en += 3;
   ['i','you','he','she','it','we','they','the','a','an','is','are','was','were','have','has','had','do','does','did','will','would','can','could','should','may','might','and','or','but','for','with','at','by','from','to','in','on','of','that','this','what','how','when','where','why','who','which'].forEach(w => { if (words.includes(w)) scores.en += 1; });
 
   /* Find best score */
@@ -211,80 +211,41 @@ function detectIntent(message) {
   const q = message.toLowerCase();
 
   const generalPatterns = [
-    /fondateur|founder|qui.+(fond|cre[aé]t)|paul|francenel|administrateur|admin/,
-    /objectif|mission|but de curva|about curva|à propos/,
+    /fondateur|founder|qui.+(fond|cre[aé]t)|francenel|administrateur|admin/,
+    /objectif|mission|but de bbw|about bbw|à propos/,
     /\bequipe\b|\bteam\b|\bstaff\b/,
-    /c.est quoi curva|what is curva|what.s curva/,
-    /cortisol|hormone|métabolis|metabolism|yo.yo|famine/,
-    /pourquoi.+(prise|grossi|gain)|why.+(gain|weight gain)/,
-    /comment.+(perdre|lose|maigrir)|how to lose|tips.+(lose|weight)/,
+    /c.est quoi bbw|what is bbw|what.s bbw4life/,
+    /histoire|story|origin|origine/,
+    /pourquoi.+(cre|fond|lanc)|why.+(creat|found|launch)/,
+    /mouvement|movement|communauté|community|famille|family/,
+    /beauté|beauty|courbes|curves|plus.?size|taille.+plus/,
     /conseils?|advice|astuce|tips?/,
-    /sommeil|sleep.*weight|dormir/,
-    /stress|anxiet|depress|mental|moral|confiance|confidence/,
-    /plateau.+(normal|pourquoi|why)|normal.+plateau/,
-    /programme?|program|plan.+coach|coaching|coach/,
-    /beginner|débutant|intermédiaire|intermediate|maintenance/,
-    /comment.+(fonctionne|work|works)|how.+(work|program)/,
-    /s.inscrire|sign up|inscription/,
+    /confiance|confidence|acceptation|acceptance|estime de soi|self.esteem/,
+    /stress|anxiet|depress|mental|moral/,
     /contact|joindre|reach|parler.+(humain|person|quelqu)|message|whatsapp|telegram/,
     /support|aide.+(équipe|team)/,
-    /nutrition|manger|what to eat|quoi manger|food|aliment/,
-    /calorie|deficit|protéine|protein|régime|diet/,
-    /eau|water.*drink|hydrat/,
-    /repas|meal.*plan|plan.*repas/,
-    /résultat|result|combien.+temps|how long|semaine|week/,
-    /visible.+(result|résultat)|quand.+voir/,
-    /code.+promo|promo.+code|discount.+code|code.+réduction/,
-    /livraison|shipping.+info|delivery.+time|délai/,
-    /fiable|reliable|trust|sûr|safe|médecin|doctor/,
-    /pilule|pill|complément|supplement/,
-    /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc)\b/,
-    /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno)\b/,
-    /fundador|fundadora|quién.+(fund|cre)|equipo|misión/,
-    /qué es curva|sobre curva/,
-    /consejo|consejos|nutrición|alimentación|comida/,
-    /programa|entrenamiento|coaching/,
-    /contacto|soporte|ayuda.+equipo/,
-    /envío|envio|tiempo.+entrega|costo.+envío/,
-    /código.+descuento|descuento.+código|promo/,
-    /\bblog\b|\barticle\b|\bpost\b|\bread\b|\blire\b|\barticles?\b/,
-    /derniers?.+article|latest.+article|nouveaux?.+article/,
+    /blog|article|post|read|lire/,
     /\bcompte\b|\baccount\b|\bcuenta\b/,
     /mon profil|my profile|mi perfil/,
     /mes commandes|my orders|mis pedidos/,
     /historique.+(commande|order|pedido)/,
-    /adresse.+(livraison|enregistr)|delivery address|dirección/,
     /mode.+paiement|payment method|método.+pago/,
     /changer.+(mot de passe|password|contraseña)/,
-    /badge|niveau|level|membership|niveau.+membre/,
-    /points|récompense|reward/,
     /wishlist|liste.+(souhaits|envie)|saved items/,
     /suivre.+(commande|colis)|track.+(order|package)|rastrear/,
-    /checkout|passer.+(commande|à la caisse)|proceder.+pago/,
-    /collection|catalogue|catalog|tous les produits|all products|todos los productos/,
-    /panier|cart|carrito/, 
-    /payer|pay now|pagar/,
+    /collection|catalogue|catalog|tous les produits|all products|todas las colecciones/,
     /frais.+(port|livraison)|shipping cost|costo.+envío/,
-    /livraison standard|standard shipping|envío estándar/,
-    /livraison express|express shipping|express dhl/,
-    /livraison prioritaire|priority fedex|prioritaire/,
-    /livraison économique|economy shipping|económico/,
-    /délai.+livraison|delivery time|tiempo.+entrega/,
-    /total.+(commande|order)|order total|total.+pedido/,
+    /livraison|shipping.+info|delivery.+time|délai/,
     /taxes|impôts|impuestos/,
     /stripe|paypal|apple pay|google pay|carte.+crédit|credit card|tarjeta/,
-    /privacy|confidentialit|privacidad|données.+person|personal.+data|datos.+person/,
+    /privacy|confidentialit|privacidad|données.+person|personal.+data/,
     /remboursement|refund|reembolso|retour|return|devolution/,
     /conditions.+(utilisation|service|vente)|terms.+(service|conditions|use)|términos/,
-    /disclaimer|avertissement|advertencia|médical.+disclaimer|medical.+disclaimer/,
+    /disclaimer|avertissement|advertencia/,
     /politique|policy|politica/,
-    /vos droits|your rights|sus derechos|gdpr|rgpd/,
-    /données.+(collecte|utilise)|data.+(collect|use)|datos.+(recopil)/,
     /cookies|tracking|pistage/,
-    /sécurité.+données|data.+security|seguridad.+datos/,
-    /annulation.+abonnement|cancel.+subscription|cancelar.+suscripci/,
-    /preuve.+utilisation|proof.+use|prueba.+uso/,
-    /non.+remboursable|non.+refundable|no.+reembolsable/,
+    /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc)\b/,
+    /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno)\b/,
   ];
 
   for (const pattern of generalPatterns) {
@@ -297,34 +258,23 @@ function detectIntent(message) {
     /recommande.+(produit|article)|recommend.+(product|item)|recomienda.+(producto)/,
     /quel.+(produit|article)|which.+(product|item)|qué.+(producto)/,
     /montre.+(produit)|show.+(product|me)|muestra.+(producto)/,
-    /meilleur.+(pour).+(ventre|belly|poids|weight|taille|waist)/,
-    /best.+(for|pour).+(belly|ventre|weight|waist)/,
-    /mejor.+(para).+(barriga|vientre|peso|cintura)/,
-    /hula.?hoop|\bhoop\b/,
-    /waist.?trainer|gainant|faja/,
-    /jump.?rope|corde.+sauter|cuerda.+saltar/,
-    /\blegging\b|\bpantalon.+sport\b|\byoga.+pant\b|\bmalla\b/,
-    /\bjumpsuit\b|\bcombinaison.+sport\b|\bmono.+deporte\b/,
-    /sport.?bra|\bbrassière\b|\bsujetador.+deporte\b|\btop.+deporte\b/,
-    /knee.?pad|genouillère|rodillera/,
-    /posture.?correct|correcteur.+posture|corrector.+postura/,
-    /bracelet.+connect|smart.+bracelet|fitness.+track|pulsera.+inteligente/,
-    /acupressure.?mat|tapis.+acupressure|esterilla.+acupresión/,
-    /belly.?belt|ceinture.+(ventre|chaleur)|cinturón.+(vientre|calor)/,
-    /water.?bottle|gourde|bouteille.+sport|botella.+agua/,
-    /running.?shoe|chaussure.+running|\bsneaker\b|zapatilla.+running/,
-    /neck.?pillow|oreiller.+nuque|almohada.+cervical/,
-    /\bearbuds?\b|écouteur.+sport|auricular.+deporte/,
-    /tie.?dye/,
-    /quelle.+(couleur|taille).+disponible|available.+(color|size)|qué.+(color|talla).+disponible/,
+    /robe|dress|vestido|chaussure|shoe|zapato|sandale|sandal|sandalia/,
+    /soutien.gorge|bra|sujetador|bikini|maillot|swimsuit|traje.+baño/,
+    /jean|pantalon|pant|trouser|short|shorts|veste|jacket|manteau/,
+    /haut|top|chemise|shirt|blouse|pull|sweat|sweater|robe.+nuit|nightdress/,
+    /lingerie|ensemble|set|peignoir|robe.+chambre|bathrobe/,
+    /vernis|nail|ongle|mascara|eye|sourcil|eyebrow|brow|rouge.+lèvre|lipstick|lipgloss/,
+    /soin|serum|crème|cream|masque|mask|huile|oil|nettoyant|cleanser/,
+    /cheveux|hair|coiffure|shampooing|shampoo/,
+    /beauty|beauté|maquillage|makeup/,
+    /taille.+(disponible|dispo)|available.+(color|size)|qué.+(color|talla)/,
     /existe.+(couleur|taille)|come in.+(color|size)|viene.+(color|talla)/,
-    /\$\d+|under \$|moins de \$|budget.+(produit|product)|menos de \$|presupuesto/,
+    /\$\d+|under \$|moins de \$|budget.+(produit|product)|menos de \$/,
     /combien.+(coûte|cost).+(ce|this|le|la)|cuánto.+(cuesta|vale)/,
     /best.?seller|meilleure?.+vente|más.+vendido|top.+vente/,
     /en promotion|in promotion|on sale|en promo/,
     /new.?arrival|nouvel?.+arriv|nueva?.+llegad/,
     /top.+deal|meilleure?.+offre|mejor.+oferta/,
-    /out.?of.?stock|rupture.+stock|agotado/,
   ];
 
   for (const pattern of productPatterns) {
@@ -341,7 +291,7 @@ function isTopStarterRequest(message) {
   const q = message.toLowerCase();
   const patterns = [
     /produits?.+(pour commencer|pour débuter|pour démarrer)/,
-    /pour.+(commencer|débuter|démarrer).+(ma transformation|mon parcours|ma perte|perdre|maigrir|mincir)/,
+    /pour.+(commencer|débuter|démarrer).+(mon style|ma garde.robe|ma beauté|ma transform)/,
     /par où commencer/,
     /que me recommandes.+pour commencer/,
     /quels? produits?.+commencer/,
@@ -350,18 +300,17 @@ function isTopStarterRequest(message) {
     /kit.+(départ|débutant|starter)/,
     /pack.+(débutant|commencer|démarrer)/,
     /products?.+to (get started|start my journey|begin my journey)/,
-    /where (do i |should i |can i |)(start|begin) (my journey|my transformation|losing weight)/,
-    /what.*recommend.*to start (my|the) journey/,
+    /where (do i |should i |can i |)(start|begin)/,
+    /what.*recommend.*to start/,
     /best products?.+for (absolute )?beginners?/,
     /starter.+products?/,
-    /i('m| am) new (here|to curvafit)/,
-    /to start my (journey|transformation|weight loss journey)/,
-    /get started (with|on) curvafit/,
-    /productos?.+(para empezar|para comenzar|para iniciar) (mi|el)/,
+    /i('m| am) new (here|to bbw4life)/,
+    /to start my (journey|transformation|style journey)/,
+    /get started (with|on) bbw4life/,
+    /productos?.+(para empezar|para comenzar|para iniciar)/,
     /por dónde empezar/,
     /qué me recomiendas para empezar/,
     /soy nueva.+(aquí|cliente)/,
-    /pack.+(principiante|empezar|comenzar)/,
   ];
   return patterns.some(p => p.test(q));
 }
@@ -397,29 +346,83 @@ function searchProducts(query, products) {
     if ((q.includes('promotion') || q.includes('promo') || q.includes('on sale') || q.includes('en promo') || q.includes('in promotion')) && badgeLower.includes('promotion')) score += 15;
     if ((q.includes('new arrival') || q.includes('new arriv') || q.includes('nouvel') || q.includes('nouveau') || q.includes('nueva llegada')) && badgeLower.includes('new')) score += 15;
     if ((q.includes('top sale') || q.includes('top deal') || q.includes('meilleure offre') || q.includes('mejor oferta')) && (badgeLower.includes('top sale') || badgeLower.includes('best deal'))) score += 15;
-    if ((q.includes('out of stock') || q.includes('rupture') || q.includes('agotado')) && badgeLower.includes('out stock')) score += 15;
 
+    /* BBW4LIFE product themes */
     const themes = [
-  { words: ['hula','hoop','belly','ventre','barriga','vientre'],          id: 'Pdg-Francenel-product1',  boost: 12 },
-  { words: ['waist trainer','gainant','waist cinch','corset','faja'],     id: 'Pdg-Francenel-product2',  boost: 12 },
-  { words: ['jump rope','corde','skip','sauter','cuerda','saltar'],       id: 'Pdg-Francenel-product3',  boost: 12 },
-  { words: ['legging','yoga pant','high waist','peach','malla'],          id: 'Pdg-Francenel-product4',  boost: 12 },
-  { words: ['jumpsuit','combinaison','pilates','mono'],                   id: 'Pdg-Francenel-product5',  boost: 12 },
-  { words: ['tie dye','seamless legging'],                                id: 'Pdg-Francenel-product6',  boost: 12 },
-  { words: ['sport bra','bra','brassiere','soutien','sujetador','top'],   id: 'Pdg-Francenel-product7',  boost: 12 },
-  { words: ['knee','genoux','genouillère','pad','rodilla','rodillera'],   id: 'Pdg-Francenel-product8',  boost: 12 },
-  { words: ['posture','dos','back','corrector','correcteur','postura'],   id: 'Pdg-Francenel-product9',  boost: 12 },
-  { words: ['bracelet','tracker','heart rate','sleep','pouls','pulsera'], id: 'Pdg-Francenel-product10', boost: 12 },
-  { words: ['acupressure','stress mat','recovery','tapis','esterilla'],   id: 'Pdg-Francenel-product11', boost: 12 },
-  { words: ['belly belt','ceinture ventre','cramp','chaleur','cinturón'], id: 'Pdg-Francenel-product12', boost: 12 },
-  { words: ['bottle','water','gourde','bouteille','botella','agua'],      id: 'Pdg-Francenel-product13', boost: 12 },
-  { words: ['shoe','chaussure','running','sneaker','zapatilla'],          id: 'Pdg-Francenel-product14', boost: 12 },
-  { words: ['pillow','oreiller','neck','cervical','nuque','almohada'],    id: 'Pdg-Francenel-product15', boost: 12 },
-  { words: ['earbuds','headphone','music','écouteur','auricular'],        id: 'Pdg-Francenel-product16', boost: 12 },
-];
+      { words: ['glam','heel','stiletto','cross strap','sandale'],      id: 'Pdg-Francenel-product1',  boost: 12 },
+      { words: ['retrorun','sneaker','chunky','street','retro'],        id: 'Pdg-Francenel-product2',  boost: 12 },
+      { words: ['boho','flip','sandal','summer','embroid'],             id: 'Pdg-Francenel-product3',  boost: 12 },
+      { words: ['powerheels','stiletto pump','12cm','queen'],           id: 'Pdg-Francenel-product4',  boost: 12 },
+      { words: ['winterboost','boot','ankle boot','court'],             id: 'Pdg-Francenel-product5',  boost: 12 },
+      { words: ['colorstilett','stiletto flip flop','vibrant'],        id: 'Pdg-Francenel-product6',  boost: 12 },
+      { words: ['nightchic','mock neck','long sleeve','dress'],         id: 'Pdg-Francenel-product7',  boost: 12 },
+      { words: ['slitlux','cutout','slit','round neck'],                id: 'Pdg-Francenel-product8',  boost: 12 },
+      { words: ['plaid','overall','dungaree','wide strap'],             id: 'Pdg-Francenel-product9',  boost: 12 },
+      { words: ['floral','flounce','surplice','printed'],               id: 'Pdg-Francenel-product10', boost: 12 },
+      { words: ['vintage','square neck','short sleeve','imprim'],       id: 'Pdg-Francenel-product11', boost: 12 },
+      { words: ['paisley','belt','orange','belted'],                    id: 'Pdg-Francenel-product12', boost: 12 },
+      { words: ['mesh duo','perspective','two piece','sheer'],          id: 'Pdg-Francenel-product13', boost: 12 },
+      { words: ['meshglam','solid','stitching','maxi'],                 id: 'Pdg-Francenel-product14', boost: 12 },
+      { words: ['linen','breeze','cotton','button.down'],               id: 'Pdg-Francenel-product15', boost: 12 },
+      { words: ['striped','mini','v.neck','vneck'],                     id: 'Pdg-Francenel-product16', boost: 12 },
+      { words: ['loungerobe','bathrobe','sleepwear','peignoir'],        id: 'Pdg-Francenel-product17', boost: 12 },
+      { words: ['lacenight','nightdress','strap','night dress'],        id: 'Pdg-Francenel-product18', boost: 12 },
+      { words: ['lacethong','lingerie','sheer skirt','set lingerie'],   id: 'Pdg-Francenel-product19', boost: 12 },
+      { words: ['solid','bikini','high waist','swimsuit'],              id: 'Pdg-Francenel-product20', boost: 12 },
+      { words: ['curvebikini','curve','swimwear','solid color'],        id: 'Pdg-Francenel-product21', boost: 12 },
+      { words: ['leopard','mesh','pajama','pyjama'],                    id: 'Pdg-Francenel-product22', boost: 12 },
+      { words: ['supportbra','bra','breathable','large cup'],           id: 'Pdg-Francenel-product23', boost: 12 },
+      { words: ['laceromper','romper','jumpsuit','lace'],               id: 'Pdg-Francenel-product24', boost: 12 },
+      { words: ['striped','print','stripes','swimwear'],                id: 'Pdg-Francenel-product25', boost: 12 },
+      { words: ['tube','tube top','swimsuit','swimming'],               id: 'Pdg-Francenel-product26', boost: 12 },
+      { words: ['ruffle','ruffle','one piece','v.neck swim'],           id: 'Pdg-Francenel-product27', boost: 12 },
+      { words: ['bandage','bandage bikini','swimsuit'],                 id: 'Pdg-Francenel-product28', boost: 12 },
+      { words: ['contrast','contrasting','one.piece','swim'],          id: 'Pdg-Francenel-product29', boost: 12 },
+      { words: ['premium','plus size','swimsuit collection'],           id: 'Pdg-Francenel-product30', boost: 12 },
+      { words: ['irregular','top','loose','round neck'],                id: 'Pdg-Francenel-product31', boost: 12 },
+      { words: ['christmas','sweat','sweatshirt','casual'],             id: 'Pdg-Francenel-product32', boost: 12 },
+      { words: ['dalmatian','dalmation','shorts','high waist'],         id: 'Pdg-Francenel-product33', boost: 12 },
+      { words: ['leopard','shirt','irregular collar','blouse'],         id: 'Pdg-Francenel-product34', boost: 12 },
+      { words: ['drawstring','pants','pockets','casual'],               id: 'Pdg-Francenel-product35', boost: 12 },
+      { words: ['crop','slim','cropped','drawstring pants'],            id: 'Pdg-Francenel-product36', boost: 12 },
+      { words: ['harem','printed','trouser','cuffed'],                  id: 'Pdg-Francenel-product37', boost: 12 },
+      { words: ['loose','jeans','relaxed','denim'],                     id: 'Pdg-Francenel-product38', boost: 12 },
+      { words: ['british','loafer','formal','tassel'],                  id: 'Pdg-Francenel-product39', boost: 12 },
+      { words: ['airmesh','runner','sport','sneaker','mesh shoe'],      id: 'Pdg-Francenel-product40', boost: 12 },
+      { words: ['leather','casual','flat','breathable'],                id: 'Pdg-Francenel-product41', boost: 12 },
+      { words: ['business','formal','wedding','dress shoe'],            id: 'Pdg-Francenel-product42', boost: 12 },
+      { words: ['hollow','mesh','big size','fashion shoe'],             id: 'Pdg-Francenel-product43', boost: 12 },
+      { words: ['trendtrainer','outdoor','sport shoe','trainer'],       id: 'Pdg-Francenel-product44', boost: 12 },
+      { words: ['patent','loafer','luxury','party shoe'],               id: 'Pdg-Francenel-product45', boost: 12 },
+      { words: ['collar','shirt','button.down','chemise'],              id: 'Pdg-Francenel-product46', boost: 12 },
+      { words: ['geo','polo','geometric','print polo'],                 id: 'Pdg-Francenel-product47', boost: 12 },
+      { words: ['striped collar','sweater','knit','collar sweater'],   id: 'Pdg-Francenel-product48', boost: 12 },
+      { words: ['turtleneck','lux','long sleeve','pull'],               id: 'Pdg-Francenel-product49', boost: 12 },
+      { words: ['hike','jacket','waterproof','outdoor'],                id: 'Pdg-Francenel-product50', boost: 12 },
+      { words: ['roundneck','sweatshirt','pullover','mens'],            id: 'Pdg-Francenel-product51', boost: 12 },
+      { words: ['nail','glue','uv','adhesive'],                         id: 'Pdg-Francenel-product52', boost: 12 },
+      { words: ['bow','nail','fake nail','almond'],                     id: 'Pdg-Francenel-product53', boost: 12 },
+      { words: ['nail','repair','lotion','nourish'],                    id: 'Pdg-Francenel-product54', boost: 12 },
+      { words: ['brow','eyebrow','pencil','waterproof'],                id: 'Pdg-Francenel-product55', boost: 12 },
+      { words: ['mascara','volumizing','4d','lash'],                    id: 'Pdg-Francenel-product56', boost: 12 },
+      { words: ['browkit','eyebrow kit','stencil','cream'],             id: 'Pdg-Francenel-product57', boost: 12 },
+      { words: ['obsidian','lip','balm','moisture'],                    id: 'Pdg-Francenel-product58', boost: 12 },
+      { words: ['lip gloss','tearoff','peel.off','long.lasting'],       id: 'Pdg-Francenel-product59', boost: 12 },
+      { words: ['ginger','lemon','makeup remover','clean pad'],         id: 'Pdg-Francenel-product60', boost: 12 },
+      { words: ['hair mask','repair','moisturize','smooth'],            id: 'Pdg-Francenel-product61', boost: 12 },
+      { words: ['batana','oil','hair oil','glow'],                      id: 'Pdg-Francenel-product62', boost: 12 },
+      { words: ['batanaboost','conditioner','hair growth','120ml'],     id: 'Pdg-Francenel-product63', boost: 12 },
+      { words: ['poreclean','exfoliant','anti-acne','pore'],            id: 'Pdg-Francenel-product64', boost: 12 },
+      { words: ['knuckle','white','serum','brightener'],                id: 'Pdg-Francenel-product65', boost: 12 },
+      { words: ['propolis','glow','essence','brightening'],             id: 'Pdg-Francenel-product66', boost: 12 },
+      { words: ['menglow','men','concealing','lazy cream'],             id: 'Pdg-Francenel-product67', boost: 12 },
+      { words: ['ice','grid','silicone','cooling','facial'],            id: 'Pdg-Francenel-product68', boost: 12 },
+    ];
+
     themes.forEach(t => {
       if (p.id === t.id && t.words.some(w => q.includes(w))) score += t.boost;
     });
+
     if ((q.includes('cheap') || q.includes('budget') || q.includes('pas cher') || q.includes('barato') || q.includes('économico')) && p.price < 20) score += 5;
     return { ...p, score };
   });
@@ -450,18 +453,10 @@ function formatDelivery(startDate, endDate) {
 function buildSearchDataContext(searchData) {
   if (!searchData || !Array.isArray(searchData)) return '';
   const pages    = searchData.filter(i => i.type === 'page');
-  const programs = searchData.filter(i => i.type === 'program');
-  const coaches  = searchData.filter(i => i.type === 'coach');
-  const features = searchData.filter(i => i.type === 'feature');
-  const products = searchData.filter(i => i.type === 'product');
   const policies = searchData.filter(i => i.type === 'policy');
   const blogs    = searchData.filter(i => i.type === 'blog');
   let text = '';
   if (pages.length)    { text += '\nSITE PAGES:\n';    pages.forEach(p    => { text += `  • ${p.title} → ${p.url}\n`; }); }
-  if (programs.length) { text += '\nPROGRAMS:\n';      programs.forEach(p => { text += `  • ${p.title} → ${p.url}\n`; }); }
-  if (coaches.length)  { text += '\nCOACHES:\n';       coaches.forEach(p  => { text += `  • ${p.title} → ${p.url}\n`; }); }
-  if (features.length) { text += '\nFEATURES:\n';      features.forEach(p => { text += `  • ${p.title} → ${p.url}\n`; }); }
-  if (products.length) { text += '\nPRODUCT PAGES:\n'; products.forEach(p => { text += `  • ${p.title} → ${p.url}\n`; }); }
   if (policies.length) { text += '\nPOLICIES:\n';      policies.forEach(p => { text += `  • ${p.title} → ${p.url}\n`; }); }
   if (blogs.length)    { text += '\nBLOG ARTICLES:\n'; blogs.forEach(p    => { text += `  • ${p.title} → ${p.url}\n`; }); }
   return text;
@@ -494,53 +489,59 @@ function buildBlogContext(blogData) {
 }
 
 /* ══════════════════════════════════════════════════════
-   PAGE NAVIGATION MAP
+   PAGE NAVIGATION MAP — BBW4LIFE
 ══════════════════════════════════════════════════════ */
 const PAGE_MAP = {
-  '/index.html':               { label: 'Home',               icon: '🏠' },
-  '/shop.html':                { label: 'Shop',               icon: '🛍️' },
-  '/collection.html':          { label: 'Collection',         icon: '🛒' },
-  '/programs.html':            { label: 'Programs',           icon: '💪' },
-  '/nutrition.html':           { label: 'Nutrition',          icon: '🥗' },
-  '/blog/blog.html':           { label: 'Blog',               icon: '📝' },
-  '/about.html':               { label: 'About Us',           icon: 'ℹ️' },
-  '/contact.html':             { label: 'Contact',            icon: '📩' },
-  '/account.html':             { label: 'My Account',         icon: '👤' },
-  '/checkout.html':            { label: 'Checkout',           icon: '🛒' },
-  '/success.html':             { label: 'Success Stories',    icon: '🏆' },
-  '/community.html':           { label: 'Community',          icon: '👥' },
-  '/method.html':              { label: 'Our Method',         icon: '🔬' },
-  '/faq.html':                 { label: 'FAQ',                icon: '❓' },
-  '/careers.html':             { label: 'Careers',            icon: '💼' },
-  '/policies/privacy.html':    { label: 'Privacy Policy',     icon: '🔒' },
-  '/policies/refund.html':     { label: 'Refund Policy',      icon: '↩️' },
-  '/policies/terms.html':      { label: 'Terms & Conditions', icon: '📄' },
-  '/disclaimer.html':          { label: 'Medical Disclaimer', icon: '⚕️' },
+  '/index.html':                              { label: 'Home',                   icon: '🏠' },
+  '/collections/bbw4life-all-product.html':   { label: 'Shop All',               icon: '🛍️' },
+  '/collections/bbw4life-all-collections.html':{ label: 'Collections',           icon: '🗂️' },
+  '/collections/curvy-woman.html':            { label: 'Curvy Woman',            icon: '💃' },
+  '/collections/curvy-dresses.html':          { label: 'Curvy Dresses',          icon: '👗' },
+  '/collections/curvy-beauty.html':           { label: 'Curvy Beauty',           icon: '💄' },
+  '/collections/main-plus-size.html':         { label: 'Men Plus Size',          icon: '👔' },
+  '/collections/bbw4life-pants-skirts.html':  { label: 'Pants & Shorts',         icon: '👖' },
+  '/collections/most-popular.html':           { label: 'Most Popular',           icon: '🔥' },
+  '/blog/blog.html':                          { label: 'Blog',                   icon: '📝' },
+  '/page/our-story.html':                     { label: 'Our Story',              icon: '💖' },
+  '/page/about.html':                         { label: 'About Us',               icon: 'ℹ️' },
+  '/page/contact.html':                       { label: 'Contact',                icon: '📩' },
+  '/account.html':                            { label: 'My Account',             icon: '👤' },
+  '/page/order-tracking.html':                { label: 'Order Tracking',         icon: '📦' },
+  '/page/faq.html':                           { label: 'FAQ',                    icon: '❓' },
+  '/policies/privacy.html':                   { label: 'Privacy Policy',         icon: '🔒' },
+  '/policies/refund.html':                    { label: 'Refund Policy',          icon: '↩️' },
+  '/policies/shipping.html':                  { label: 'Shipping Info',          icon: '🚚' },
+  '/policies/terms.html':                     { label: 'Terms & Conditions',     icon: '📄' },
+  '/page/disclaimer.html':                    { label: 'Medical Disclaimer',     icon: '⚕️' },
 };
 
 /* ══════════════════════════════════════════════════════
-   BUILD SYSTEM PROMPT
+   BUILD SYSTEM PROMPT — BBW4LIFE
 ══════════════════════════════════════════════════════ */
 function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap) {
   const contactEmails  = settings.contact_emails || {};
   const emailsText     = Object.entries(contactEmails).map(([k, v]) => `• ${k}: ${v}`).join('\n') || '• No emails configured';
-  const programs       = settings.programs    || {};
   const promos         = settings.promos      || [];
   const shipping       = settings.cart_drawer || {};
-  const taxRate        = settings.tax_rate      || 0.1;
-  const shippingCost   = settings.shipping_cost || 10.0;
+  const taxRate        = settings.tax_rate      || 0.5;
+  const shippingCost   = settings.shipping_cost || 40.0;
   const taxPercent     = Math.round(taxRate * 100);
-  const freeShipThresh = shipping.free_shipping_threshold || 120;
+  const freeShipThresh = shipping.free_shipping_threshold || 350;
 
-  const plansAvailable = (settings.plans_available || 'Yes').trim().toLowerCase() === 'yes';
-  const reservationPrice = settings.reservation_price || 10;
-
-  const programsText = Object.entries(programs).map(([, val]) => `• ${val.label}: $${val.price}`).join('\n');
-  const promosText   = promos.length
-    ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items (Shop only — NOT valid on programs)`).join('\n')
+  const promosText = promos.length
+    ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items`).join('\n')
     : '• No active promo codes at this time';
 
-  const catalogText = products.map((p, i) => {
+  /* Build catalog — EXCLUDE bbw-features-products (BBW Original Coming Soon) */
+  const EXCLUDED_IDS = [
+    'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
+    'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
+    'Pdg-Francenel-product75'
+  ];
+
+  const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+
+  const catalogText = visibleProducts.map((p, i) => {
     const colorsList = p.colors.map(c => c.name).join(', ');
     const sizesList  = p.sizes.length ? p.sizes.join(', ') : 'No size needed';
     const discounts  = [
@@ -568,77 +569,42 @@ PRODUCT ${i + 1}:
 
   const topStarter      = settings.top_starter_products || {};
   const topStarterIds   = topStarter.product_ids || [];
-  const topStarterLabel = topStarter.label || 'Best products to start your weight loss journey';
-  const topStarterList  = topStarterIds.map(id => {
-    const prod = products.find(p => p.id === id);
-    return prod ? `  • ${prod.title} → ${prod.url}` : null;
-  }).filter(Boolean).join('\n');
+  const topStarterLabel = topStarter.label || 'Best products to discover BBW4LIFE';
+  const topStarterList  = topStarterIds
+    .filter(id => !EXCLUDED_IDS.includes(id))
+    .map(id => {
+      const prod = visibleProducts.find(p => p.id === id);
+      return prod ? `  • ${prod.title} → ${prod.url}` : null;
+    }).filter(Boolean).join('\n');
 
   const contactChannels = [];
   if (contactInfo.hasWhatsapp) contactChannels.push('WhatsApp');
   if (contactInfo.hasTelegram) contactChannels.push('Telegram');
   contactChannels.push('Contact page');
 
-  const colSettings  = settings['Pdg-Francenel-products'] || {};
-const colHeroTitle = colSettings.hero_title    || 'Our Collection';
-const colHeroSub   = colSettings.hero_subtitle || '';
-const colEyebrow   = colSettings.hero_eyebrow  || '';
-const colPageSize  = colSettings.page_size      || 12;
-
   const searchContext = buildSearchDataContext(searchData);
   const blogContext   = buildBlogContext(blogData);
 
- 
-
-  const programsSection = plansAvailable
-    ? `
-═══════════════════════════════════════
-💪 PROGRAMS
-═══════════════════════════════════════
-${programsText}
-`
-    : `
-═══════════════════════════════════════
-💪 PROGRAMS — RESERVATION MODE
-═══════════════════════════════════════
-plans_available is currently NO.
-reservation_price is $${reservationPrice}.
-
-When a user asks about programs, plans, prices, coaching, or how to sign up:
-
-1. DO NOT give program prices or full details.
-2. Reply with HIGH ENERGY marketing — create urgency, scarcity, excitement.
-3. Tell them spots are LIMITED and filling fast.
-4. Tell them they can RESERVE their spot now for only $${reservationPrice} (fully deducted from program price — 100% refundable).
-5. Tell them once reserved, the CurvaFit team contacts them within 24h to build their custom plan.
-6. Always push them to the Programs page to find the "Reserve Your Spot" button.
-7. Always end with 🔗[PAGE:/programs.html]
-
-TONE: Exciting, warm, urgent, human. Like a friend telling you about a limited deal.
-USE EMOJIS naturally. Keep it SHORT — max 5 lines.
-
-EXAMPLES by language:
-
-FR: "Nos programmes sont presque complets ! 🔥 Les places sont vraiment limitées en ce moment. Mais bonne nouvelle — tu peux sécuriser la tienne dès maintenant pour seulement **$${reservationPrice}** (déduit de ton programme, 100% remboursable 🛡️). Une coach CurvaFit te contacte dans les 24h pour construire ton plan sur mesure. Ne laisse pas ta place partir ! 👇"
-
-EN: "Our programs are almost full! 🔥 Spots are going fast — but you can lock yours in right now for just **$${reservationPrice}** (fully deducted from your program price, 100% refundable 🛡️). A CurvaFit coach will reach out within 24h to build your custom plan. Don't let your spot go to someone else! 👇"
-
-ES: "¡Nuestros programas están casi llenos! 🔥 Los cupos se agotan rápido — pero puedes reservar el tuyo ahora mismo por solo **$${reservationPrice}** (se descuenta de tu programa, 100% reembolsable 🛡️). Una coach de CurvaFit te contactará en 24h para crear tu plan personalizado. ¡No dejes que alguien más tome tu lugar! 👇"
-
-Always add 🔗[PAGE:/programs.html] at the end.
-NEVER mention any program price when plans_available is No.
-NEVER skip the urgency and scarcity angle.
-The $${reservationPrice} reservation fee is the ONLY price to mention.
+  /* Collections known to Berline (BBW Featured excluded) */
+  const collectionsContext = `
+COLLECTIONS:
+  • Curvy Woman (34 styles: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
+  • Men Plus Size (18 styles: pants, shoes, shirts, sweaters) → /collections/main-plus-size.html
+  • Curvy Beauty (17 styles: nails, eyebrow, lip, makeup, haircare, skincare) → /collections/curvy-beauty.html
+  • Curvy Dresses (dresses, bathrobe, sexy, breathable) → /collections/curvy-dresses.html
+  • Pants & Shorts (5 styles) → /collections/bbw4life-pants-skirts.html
+  • Most Popular (community favorites) → /collections/most-popular.html
+  • All Products (68 styles) → /collections/bbw4life-all-product.html
 `;
 
-  return `You are **Curva**, the official AI assistant and coach of CurvaFit.
+  return `You are **Berline**, the official AI assistant and stylist of **BBW4LIFE**.
 
 ═══════════════════════════════════════
 🎯 YOUR IDENTITY & PERSONALITY
 ═══════════════════════════════════════
 You are warm, human, motivating, and natural — never robotic or stiff.
 Adapt your tone: casual when they are casual, caring when they share struggles.
-You feel like a real friend who knows everything about CurvaFit.
+You feel like a real friend who knows everything about BBW4LIFE.
 Use emojis naturally — not on every sentence, only when it feels right.
 KEEP RESPONSES SHORT — max 4-5 lines. No walls of text.
 
@@ -656,10 +622,10 @@ NEVER mix languages in your response.
 ═══════════════════════════════════════
 ✏️ FORMATTING RULES
 ═══════════════════════════════════════
-Bold: **Paul Francenel**, **CurvaFit**, product names, key prices.
+Bold: **Francenel**, **BBW4LIFE**, product names, key prices.
 
 🎟️ PROMO CODES — always: **[[CODE]]**
-Example: Use **[[CURVA15]]** for **20% off** on 4+ items.
+Example: Use **[[PAUL81]]** for **40% off** on 10+ items.
 NEVER show a code without [[...]].
 
 🔗 PAGE BUTTONS — place at END of reply: 🔗[PAGE:/url]
@@ -667,34 +633,39 @@ Frontend converts to a clickable button. NEVER write raw URLs. Say "button below
 
 Page URLs:
   Home → 🔗[PAGE:/index.html]
-  Shop → 🔗[PAGE:/shop.html]
-  Programs → 🔗[PAGE:/programs.html]
-  Nutrition → 🔗[PAGE:/nutrition.html]
+  Shop All → 🔗[PAGE:/collections/bbw4life-all-product.html]
+  All Collections → 🔗[PAGE:/collections/bbw4life-all-collections.html]
+  Curvy Woman → 🔗[PAGE:/collections/curvy-woman.html]
+  Curvy Dresses → 🔗[PAGE:/collections/curvy-dresses.html]
+  Curvy Beauty → 🔗[PAGE:/collections/curvy-beauty.html]
+  Men Plus Size → 🔗[PAGE:/collections/main-plus-size.html]
+  Pants & Shorts → 🔗[PAGE:/collections/bbw4life-pants-skirts.html]
+  Most Popular → 🔗[PAGE:/collections/most-popular.html]
   Blog → 🔗[PAGE:/blog/blog.html]
-  About → 🔗[PAGE:/about.html]
-  Contact → 🔗[PAGE:/contact.html]
+  Our Story → 🔗[PAGE:/page/our-story.html]
+  About → 🔗[PAGE:/page/about.html]
+  Contact → 🔗[PAGE:/page/contact.html]
   My Account → 🔗[PAGE:/account.html]
-  Checkout → 🔗[PAGE:/checkout.html]
-  Success Stories → 🔗[PAGE:/success.html]
-  Community → 🔗[PAGE:/community.html]
-  Our Method → 🔗[PAGE:/method.html]
-  FAQ → 🔗[PAGE:/faq.html]
-  Careers → 🔗[PAGE:/careers.html]
+  Order Tracking → 🔗[PAGE:/page/order-tracking.html]
+  FAQ → 🔗[PAGE:/page/faq.html]
   Privacy Policy → 🔗[PAGE:/policies/privacy.html]
   Refund Policy → 🔗[PAGE:/policies/refund.html]
+  Shipping Info → 🔗[PAGE:/policies/shipping.html]
   Terms & Conditions → 🔗[PAGE:/policies/terms.html]
-  Medical Disclaimer → 🔗[PAGE:/disclaimer.html]
+  Disclaimer → 🔗[PAGE:/page/disclaimer.html]
   Product N → 🔗[PAGE:/products/productN.html]
 
 WHEN TO ADD 🔗[PAGE:...]:
 ✅ User asks to go to / visit a page → add that page button
 ✅ privacy / data / GDPR / cookies → add 🔗[PAGE:/policies/privacy.html]
 ✅ refund / return / remboursement / reembolso / cancel → add 🔗[PAGE:/policies/refund.html]
+✅ shipping / livraison / envío → add 🔗[PAGE:/policies/shipping.html]
 ✅ terms / conditions / CGV / términos → add 🔗[PAGE:/policies/terms.html]
-✅ disclaimer / medical / avertissement → add 🔗[PAGE:/disclaimer.html]
-✅ account / orders / profile / password / badge → add 🔗[PAGE:/account.html]
-✅ checkout / payment / shipping options → add 🔗[PAGE:/checkout.html]
-❌ NEVER for greetings, small talk, founder questions, general fitness advice
+✅ disclaimer / medical / avertissement → add 🔗[PAGE:/page/disclaimer.html]
+✅ account / orders / profile / password → add 🔗[PAGE:/account.html]
+✅ track order / order tracking → add 🔗[PAGE:/page/order-tracking.html]
+✅ faq / questions → add 🔗[PAGE:/page/faq.html]
+❌ NEVER for greetings, small talk, founder questions, general style advice
 
 👇 CONTACT BUTTONS — shown when reply ends with 👇 on its own line.
 Backend uses this to show WhatsApp / Telegram / Contact page buttons.
@@ -713,16 +684,15 @@ WHEN TO ADD 👇 — EVERY TIME one of these is detected, add 👇 NO EXCEPTION:
 
 IMPORTANT: Even if the user asked about contact before → ALWAYS add 👇 again.
 The frontend needs it EVERY TIME to show the buttons. Never skip it.
-
-❌ NEVER add 👇 for: greetings, founder info, products, nutrition, programs, policies, shipping, results.
+❌ NEVER add 👇 for: greetings, founder info, products, style advice, policies.
 
 ═══════════════════════════════════════
 🚦 PRODUCT DISPLAY RULES
 ═══════════════════════════════════════
 Show products ONLY when user explicitly asks to buy or names a specific product type.
-NEVER suggest products for: greetings, contact, policies, nutrition, programs, general info.
+NEVER suggest products for: greetings, contact, policies, general style info.
 Specific → show 1 product only.
-Vague (belly, weight loss, something good) → show up to 4, ask which one they mean.
+Vague (dress, shoes, something nice) → show up to 4, ask which one they mean.
 
 ═══════════════════════════════════════
 🏷️ BADGE RULE — CRITICAL
@@ -752,31 +722,37 @@ EMAILS — use ONLY these, NEVER invent:
 ${emailsText}
 
 When contact is requested → reply warmly, mention buttons (👇), give right email if needed.
-- General → general email | Billing/refund → billing email | Tech → tech email
-- Coach → coaches email | Press → press email
-
-Vary your contact reply wording naturally each time:
-FR: "Bien sûr ! Écris-nous par email ou utilise les boutons ci-dessous 😊 On répond en 24h !"
-EN: "Of course! Use the buttons below or email us — we reply within 24h 😊"
-ES: "¡Claro! Usa los botones de abajo o escríbenos. ¡Respondemos en 24h! 😊"
-
+Vary your contact reply wording naturally each time.
 Always end with 👇 on its own line for contact requests.
 
 ═══════════════════════════════════════
-🏢 ABOUT CURVAFIT & THE FOUNDER
+🏢 ABOUT BBW4LIFE & THE FOUNDER
 ═══════════════════════════════════════
-**CurvaFit** was born from a bold idea: what if weight loss was actually designed for real women?
+**BBW4LIFE** was born on **June 18, 2025**, from a real and deeply personal story.
 
-**Paul Francenel** founded **CurvaFit** on November 5, 2025. At just 25, this young entrepreneur didn't build from a spreadsheet — he built from observation, empathy, and fire. Not a doctor, not a certified trainer — something rarer: someone who truly listened to the women the fitness industry had failed for years.
+**Francenel** — founder and CEO of **BBW4LIFE** — was in a relationship with a plus-size woman who was incredibly beautiful, radiant, and full of life. Despite her confidence in herself, the weight of others' judgment began to wear her down. Day after day, looks, remarks, and criticism started to affect her — until she began considering changing herself, not for her own happiness, but to fit into a standard imposed by others.
 
-He saw them. Plus-size women who wanted to change, who had tried everything, and kept hitting walls — programs not designed for their bodies, advice that felt like shame in disguise. **Paul** refused to accept that. He brought together qualified coaches, wellness experts, and technology to create something different: a science-backed, judgment-free platform where transformation is not a dream, but a real plan.
+That moment changed everything. **Francenel** realized she wasn't alone — thousands of women live under the same pressure. Women who are magnificent, yet filled with self-doubt because of unrealistic beauty standards.
 
-Today, **CurvaFit** stands as proof that you don't need all the titles to create real impact. Just the right vision — and the courage to build it.
+So he made a decision: create **BBW4LIFE**.
 
-When asked about "administrateur" or "admin" → same answer as founder. It refers to **Paul Francenel**.
-Give a warm, inspiring 3–4 line answer. Not too long. Make it feel real.
+**Our mission:** To tell plus-size women a simple but essential truth — *You are beautiful as you are. Your body doesn't need to be corrected. Beauty has no sizes.*
 
-${programsSection}
+**What we stand for:**
+- A movement, not just a brand
+- A space where every woman feels proud of her body
+- A voice against judgment and imposed norms
+- A community where no one is judged — only loved and supported
+- Because every curve tells a story. Every body is unique.
+
+**What we offer:**
+- Plus-size fashion (shoes, dresses, lingerie, swimwear, tops, beauty)
+- Style advice adapted for plus-size bodies
+- Beauty & skincare recommendations
+- A genuine community to share, exchange, and feel understood
+
+When asked about "administrateur" or "admin" → same answer as founder. It refers to **Francenel**.
+Give a warm, inspiring 3–4 line answer. Not too long. Make it feel real and human.
 
 ═══════════════════════════════════════
 🎟️ PROMO CODES
@@ -787,63 +763,61 @@ Free shipping over $${freeShipThresh}
 ═══════════════════════════════════════
 💰 TAXES & SHIPPING
 ═══════════════════════════════════════
-Tax: ${taxPercent}% at checkout. Standard shipping: $${shippingCost} (free over $${freeShipThresh}). Returns: 30 days.
+Tax: ${taxPercent}% at checkout. Standard shipping: $${shippingCost}.
+Free shipping on orders over $${freeShipThresh}. Returns: 30 days.
+
+Shipping options available at checkout:
+• Standard (free over $${freeShipThresh}, 20–12 business days)
+• Express DHL (3–5 business days)
+• Priority (1–3 business days)
+• Economy (10–15 business days)
 
 ═══════════════════════════════════════
 👤 ACCOUNT PAGE
 ═══════════════════════════════════════
-Profile, orders history, order tracking, delivery addresses, payment methods (Visa/MC/PayPal/Apple Pay/Google Pay/Stripe),
-password change, wishlist, membership badge (Bronze/Silver/Gold), points, newsletter.
+Profile, order history, order tracking, delivery addresses, payment methods, password change, wishlist.
 Everything is in the account area. → 🔗[PAGE:/account.html]
-
-═══════════════════════════════════════
-🛍️ CHECKOUT PAGE
-═══════════════════════════════════════
-Order summary, promo code field, taxes (${taxPercent}%), shipping choice, payment via Stripe or PayPal.
-Shipping: Standard (free, 7–12d) · Express DHL (3–5d) · Priority FedEx (1–3d) · Economy (10–15d).
-→ 🔗[PAGE:/checkout.html]
+Track your order → 🔗[PAGE:/page/order-tracking.html]
 
 ═══════════════════════════════════════
 🔒 PRIVACY POLICY
 ═══════════════════════════════════════
-- NEVER sell personal data. NEVER share health data with advertisers. NEVER store card details.
-- Data: name, email, purchase info, IP (security), optional progress.
-- GDPR: access, correction, deletion, portability, objection rights. Contact: support@curvafit.com.
+- NEVER sell personal data. NEVER share data with advertisers. NEVER store card details.
+- GDPR rights: access, correction, deletion, portability.
 - Cookies: essential (required) · analytics (anonymized) · marketing (opt-in only).
 When asked → 2–3 line reassuring answer + 🔗[PAGE:/policies/privacy.html]
 
 ═══════════════════════════════════════
 ↩️ REFUND POLICY
 ═══════════════════════════════════════
-- Cancel subscription anytime, no penalty.
-- Product returns: original condition, ~14 days. Refund processed up to 30 days.
-- Result-based refund: proof of use required (photos/videos/log, up to 15 days). 30 days to process.
-- Refund via original payment method. Alternative possible if asked 5+ days before processing.
-- Non-refundable: used/damaged products, fully-accessed digital content without proof.
-- Contact: billing@curvafit.com with order number and purchase email.
+- Product returns: original condition, within 30 days.
+- Refund processed up to 30 days after approval.
+- Non-refundable: used or damaged items.
+- Contact: support email with order number and purchase email.
 When asked → 2–3 line clear answer + 🔗[PAGE:/policies/refund.html]
 
 ═══════════════════════════════════════
 📄 TERMS & CONDITIONS
 ═══════════════════════════════════════
-- CurvaFit works with partner platforms who deliver programs by email.
-- Programs: Beginner (2–4 kg/month) · Intermediate (3–5 kg/month) · Maintenance (stable weight).
-- Access is personal and non-transferable.
-- Payments via Stripe or PayPal. Card details never stored by CurvaFit.
-- Cancel subscription anytime. Partial refund for unused time.
-- Results: safe rate 0.5–1 kg/week. Up to 70% success with full consistency. No guarantee.
+- Payments via Stripe or PayPal. Card details never stored by BBW4LIFE.
+- Cancel subscription anytime.
+- No guaranteed results — individual results vary.
 When asked → 2–3 line clear answer + 🔗[PAGE:/policies/terms.html]
 
 ═══════════════════════════════════════
-⚕️ MEDICAL DISCLAIMER
+⚕️ DISCLAIMER
 ═══════════════════════════════════════
-- Educational guidance only — NOT medical treatment.
-- Consult a doctor first, especially with: diabetes, PCOS, thyroid, heart conditions, joint pain, eating disorder history.
-- Pregnant or breastfeeding → consult OB/GYN first. Weight loss during pregnancy is not recommended.
-- Stop exercise if: chest pain, dizziness, sharp joint pain.
-- CurvaFit NEVER sells pills, detox teas, or unregulated supplements.
-- Testimonials are real but individual — not guaranteed for everyone.
-When asked → 2–3 line caring answer + 🔗[PAGE:/disclaimer.html]
+- Educational content only — NOT medical treatment.
+- Consult a doctor if needed.
+- BBW4LIFE NEVER sells pills, detox teas, or unregulated supplements.
+When asked → 2–3 line caring answer + 🔗[PAGE:/page/disclaimer.html]
+
+═══════════════════════════════════════
+🗂️ COLLECTIONS
+═══════════════════════════════════════
+${collectionsContext}
+When user asks to browse, see the catalog, or visit the shop → add 🔗[PAGE:/collections/bbw4life-all-product.html]
+When user asks about a specific collection → add that collection's button.
 
 ═══════════════════════════════════════
 🛍️ PRODUCT CATALOG
@@ -856,26 +830,10 @@ ${catalogText}
 🏆 TOP STARTER PRODUCTS
 ═══════════════════════════════════════
 Label: "${topStarterLabel}"
-These are ONLY for when the client explicitly asks which products to start with, what to buy to begin their journey, "par où commencer", "where do I start", "por dónde empezar", "I'm new here", etc.
+These are ONLY for when the client explicitly asks which products to start with, what to buy first, "par où commencer", "where do I start", "por dónde empezar", "I'm new here", etc.
 This is NOT a badge query. Do NOT use this for "best seller" or similar questions.
 Show ALL of these product cards — exactly in this order:
 ${topStarterList || '(none configured)'}
-
-═══════════════════════════════════════
-🥗 NUTRITION
-═══════════════════════════════════════
-Protein at every meal. Cut liquid sugars. 2L water/day. 300–500 calorie deficit. Sleep 7–8h.
-
-
-═══════════════════════════════════════
-🛒 COLLECTION PAGE — /collection.html
-═══════════════════════════════════════
-Title: "${colHeroTitle}"
-Subtitle: "${colHeroSub}"
-Label: "${colEyebrow}"
-Shows ${colPageSize} products per page with filters (price, color, size, rating, discount).
-Features: sort, quick view, compare, wishlist, recently viewed, flash deals.
-When user asks to browse all products, see the full catalog, or visit the shop/collection → add 🔗[PAGE:/collection.html]
 
 ═══════════════════════════════════════
 🌐 SITE CONTENT
@@ -897,10 +855,9 @@ ${blogContext || '(not available)'}
 - Never show products for non-product requests
 - Never add 👇 for greetings, policies, or general info
 - Never show promo codes without [[CODE]] format
-- Never apply promo codes to programs — Shop only
 - Never answer policy questions without the relevant 🔗[PAGE:...] button
-- Never give program prices when plans_available is No
-- Never confuse badge queries (best seller, promo…) with top-starter queries (beginners, start journey)`;
+- Never confuse badge queries (best seller, promo…) with top-starter queries
+- NEVER mention, reveal, or hint about the "BBW Featured" collection or its products (product69–75) — this section does not exist yet for you`;
 }
 
 /* ── Fallback / Error messages ── */
@@ -981,7 +938,7 @@ exports.handler = async (event, context) => {
       console.error('Could not load products.data.json:', err.message);
     }
 
-    /* ── Read allowed_languages from settings — default all 10 if not set ── */
+    /* ── Read allowed_languages from settings ── */
     const allowedLanguages = (settings.allowed_languages && settings.allowed_languages.length > 0)
       ? settings.allowed_languages
       : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
@@ -1003,10 +960,18 @@ exports.handler = async (event, context) => {
       hasTelegram: !!(contactSettings.telegram_url),
       whatsappUrl: contactSettings.whatsapp_url || socials.whatsapp || '',
       telegramUrl: contactSettings.telegram_url || '',
-      contactPage: '/contact.html'
+      contactPage: '/page/contact.html'
     };
 
-    const badgeMap = buildBadgeMap(products);
+    /* Exclude BBW Featured products from badge/search context */
+    const EXCLUDED_IDS = [
+      'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
+      'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
+      'Pdg-Francenel-product75'
+    ];
+    const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+
+    const badgeMap = buildBadgeMap(visibleProducts);
 
     const intent            = detectIntent(message);
     const topStarterRequest = isTopStarterRequest(message);
@@ -1017,14 +982,17 @@ exports.handler = async (event, context) => {
     let relevantProducts = [], isVague = false;
 
     if (isBadgeQuery) {
-      relevantProducts = products.filter(p => (p.badge || '').toLowerCase().trim() === matchedBadge);
+      relevantProducts = visibleProducts.filter(p => (p.badge || '').toLowerCase().trim() === matchedBadge);
       isVague = false;
     } else if (topStarterRequest) {
       const topStarterIds = (settings.top_starter_products || {}).product_ids || [];
-      relevantProducts = topStarterIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+      relevantProducts = topStarterIds
+        .filter(id => !EXCLUDED_IDS.includes(id))
+        .map(id => visibleProducts.find(p => p.id === id))
+        .filter(Boolean);
       isVague = false;
     } else if (intent === 'product') {
-      const searchResult = searchProducts(message, products);
+      const searchResult = searchProducts(message, visibleProducts);
       relevantProducts   = searchResult.results;
       isVague            = searchResult.isVague;
     }
@@ -1059,7 +1027,7 @@ exports.handler = async (event, context) => {
 
     const isContactIntent = !topStarterRequest && !isBadgeQuery && intent !== 'product' && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
 
-    const systemPrompt = buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap);
+    const systemPrompt = buildSystemPrompt(visibleProducts, settings, contactInfo, searchData, blogData, badgeMap);
 
     const contactInstruction = isContactIntent
       ? '\n[CONTACT REQUEST: User wants to reach the team. You MUST end your reply with 👇 on its own line — no exception.]'
@@ -1070,7 +1038,7 @@ exports.handler = async (event, context) => {
       : '\n[SPECIFIC PRODUCT: Show ONLY the 1 most relevant product.]';
 
     const topStarterInstruction = topStarterRequest
-      ? '\n[TOP STARTER REQUEST: User asks which products to start their weight loss journey. Show ALL the top starter products from the TOP STARTER PRODUCTS section. Introduce them warmly. This is NOT a badge/best-seller question.]'
+      ? '\n[TOP STARTER REQUEST: User asks which products to discover first or start with. Show ALL the top starter products from the TOP STARTER PRODUCTS section. Introduce them warmly. This is NOT a badge/best-seller question.]'
       : '';
 
     const badgeInstruction = isBadgeQuery
@@ -1146,7 +1114,7 @@ exports.handler = async (event, context) => {
       if (PAGE_MAP[url]) return { url, label: PAGE_MAP[url].label, icon: PAGE_MAP[url].icon };
       const pm = url.match(/^\/products\/product(\d+)\.html$/);
       if (pm) {
-        const prod = products[parseInt(pm[1], 10) - 1];
+        const prod = visibleProducts[parseInt(pm[1], 10) - 1];
         return { url, label: prod ? prod.title : `Product ${pm[1]}`, icon: '🛍️' };
       }
       return { url, label: 'Visit Page', icon: '🔗' };

@@ -3,143 +3,189 @@
     "title": "Home",
     "url": "/index.html",
     "keywords": [
-      "home", "accueil", "curvafit", "weight loss", "curvy women", "start",
-      "landing", "main page", "welcome", "fat burn", "slim", "transform",
-      "lose weight", "belly fat", "waist", "fitness", "health", "wellness",
-      "women", "plus size", "body", "shape", "début", "démarrer"
+      "home", "accueil", "bbw4life", "bbw", "plus size", "curvy women",
+      "welcome", "main page", "landing", "fashion", "style", "beauty",
+      "big beautiful women", "body positive", "women", "clothing", "shop",
+      "start", "beauty has no size", "collection", "new arrivals"
     ],
     "type": "page",
     "icon": "fas fa-home"
   },
   {
-    "title": "Method — The CurvaFit Approach",
-    "url": "/method.html",
+    "title": "Shop — All Products",
+    "url": "/collections/bbw4life-all-product.html",
     "keywords": [
-      "method", "approach", "how it works", "process", "program", "system",
-      "méthode", "technique", "strategy", "science", "fat loss science",
-      "curvafit method", "philosophy", "framework", "steps", "étapes",
-      "weight loss method", "slimming approach", "body transformation system"
-    ],
-    "type": "page",
-    "icon": "fas fa-cogs"
-  },
-  {
-    "title": "Programs — Weight Loss Plans",
-    "url": "/programs.html",
-    "keywords": [
-      "programs", "plans", "workout", "beginner", "intermediate", "maintenance",
-      "slimmer", "curve", "programme", "plan", "training plan", "exercise plan",
-      "coaching", "fitness plan", "weight loss program", "slim program",
-      "belly fat program", "waist program", "curvy program", "women program",
-      "séance", "entraînement", "minceur", "programme minceur"
-    ],
-    "type": "page",
-    "icon": "fas fa-dumbbell"
-  },
-  {
-    "title": "Nutrition — Healthy Eating Guide",
-    "url": "/nutrition.html",
-    "keywords": [
-      "nutrition", "food", "eating", "diet", "meals", "recipes", "healthy",
-      "nourriture", "alimentation", "meal plan", "calories", "protein",
-      "carbs", "fat", "fiber", "vitamins", "minerals", "hydration",
-      "intermittent fasting", "clean eating", "portion control",
-      "weight loss diet", "slim diet", "belly fat diet", "régime", "diète",
-      "repas", "recette", "manger sainement", "cuisine saine"
-    ],
-    "type": "page",
-    "icon": "fas fa-apple-alt"
-  },
-  {
-    "title": "Shop — Fitness Gear",
-    "url": "/shop.html",
-    "keywords": [
-      "shop", "store", "buy", "gear", "products", "boutique", "acheter",
-      "purchase", "order", "cart", "checkout", "fitness products",
-      "workout gear", "equipment", "accessories", "apparel", "clothing",
-      "hoop", "bands", "weights", "leggings", "bra", "bottle", "tracker",
-      "panier", "commande", "achat", "équipement", "matériel"
+      "shop", "store", "all products", "buy", "boutique", "acheter",
+      "purchase", "order", "cart", "checkout", "clothing", "fashion",
+      "plus size", "curvy", "women", "men", "beauty", "shoes", "dresses",
+      "swimwear", "tops", "pants", "collection", "catalog", "browse"
     ],
     "type": "page",
     "icon": "fas fa-shopping-bag"
   },
   {
-    "title": "Success Stories",
-    "url": "/success.html",
+    "title": "Collections — All Collections",
+    "url": "/collections/bbw4life-all-collections.html",
     "keywords": [
-      "success", "stories", "results", "transformations", "before after",
-      "témoignages", "résultats", "real results", "testimonials", "reviews",
-      "customer stories", "weight loss results", "before and after",
-      "transformation photos", "inches lost", "waist lost", "community wins",
-      "women results", "real women", "histoires", "avant après", "réussite"
+      "collections", "categories", "browse", "all collections",
+      "curvy woman", "plus size men", "curvy beauty", "dresses",
+      "swimwear", "tops", "pants", "shoes", "beauty products",
+      "featured", "new arrivals", "best sellers"
     ],
     "type": "page",
-    "icon": "fas fa-trophy"
+    "icon": "fas fa-gem"
   },
   {
-    "title": "Community — Curvy Support Circle",
-    "url": "/community.html",
+    "title": "Curvy Woman Collection",
+    "url": "/collections/curvy-woman.html",
     "keywords": [
-      "community", "sisterhood", "support", "circle", "group", "members",
-      "communauté", "forum", "network", "connect", "women support",
-      "accountability", "motivation", "challenges", "curvy community",
-      "plus size community", "women empowerment", "body positivity",
-      "soutien", "groupe", "réseau", "motivation", "femmes"
+      "curvy woman", "plus size woman", "women fashion", "curvy",
+      "shoes", "dresses", "bathrobe", "lingerie", "sexy", "bikini",
+      "tops", "plus size clothing", "women collection", "BBW fashion",
+      "femme ronde", "grande taille femme"
     ],
     "type": "page",
-    "icon": "fas fa-users"
+    "icon": "fas fa-heart"
   },
   {
-    "title": "Blog — Tips & Wellness Articles",
-    "url": "/blog/blog.html",
+    "title": "Curvy Dresses",
+    "url": "/collections/curvy-dresses.html",
     "keywords": [
-      "blog", "articles", "tips", "insights", "wellness", "stories", "conseils",
-      "read", "guides", "tutorials", "advice", "weight loss tips",
-      "nutrition tips", "fitness tips", "motivation tips", "lifestyle",
-      "health articles", "curvy lifestyle", "body positivity articles",
-      "lire", "article", "guide", "astuce", "santé"
+      "dresses", "plus size dress", "curvy dress", "maxi dress",
+      "mini dress", "midi dress", "night dress", "evening dress",
+      "casual dress", "mesh dress", "linen dress", "striped dress",
+      "floral dress", "belted dress", "robe grande taille"
     ],
     "type": "page",
-    "icon": "fas fa-pen-alt"
+    "icon": "fas fa-person-dress"
   },
   {
-    "title": "About CurvaFit",
-    "url": "/about.html",
+    "title": "Men Plus Size Collection",
+    "url": "/collections/men-plus-size.html",
     "keywords": [
-      "about", "who we are", "mission", "team", "story", "à propos",
-      "our values", "founders", "vision", "company", "brand",
-      "curvafit story", "why curvafit", "our philosophy", "our goal",
-      "women empowerment", "body positive brand", "histoire", "équipe",
-      "fondateurs", "valeurs", "mission"
+      "men", "plus size men", "men fashion", "men clothing",
+      "men pants", "men shoes", "men shirts", "men sweaters",
+      "men sweatshirt", "men jeans", "men jacket", "harem pants",
+      "loafers", "sneakers", "men collection", "big size men"
+    ],
+    "type": "page",
+    "icon": "fas fa-person"
+  },
+  {
+    "title": "Curvy Beauty Collection",
+    "url": "/collections/curvy-beauty.html",
+    "keywords": [
+      "beauty", "makeup", "skincare", "haircare", "nails", "eyebrow",
+      "lip", "mascara", "nail glue", "lip gloss", "lip balm",
+      "hair mask", "hair oil", "serum", "face cream", "cleansing",
+      "beauty products", "cosmetics", "grooming"
+    ],
+    "type": "page",
+    "icon": "fas fa-magic"
+  },
+  {
+    "title": "Pants & Shorts Collection",
+    "url": "/collections/bbw4life-pants-skirts.html",
+    "keywords": [
+      "pants", "shorts", "bottoms", "plus size pants", "drawstring pants",
+      "cropped pants", "harem pants", "jeans", "high waist shorts",
+      "casual pants", "wide leg", "curvy bottoms"
+    ],
+    "type": "page",
+    "icon": "fas fa-layers"
+  },
+  {
+    "title": "BBW Featured — New Arrivals",
+    "url": "/collections/bbw-features-products.html",
+    "keywords": [
+      "new arrivals", "featured", "new", "latest", "nouveautés",
+      "coming soon", "BBW original", "gown", "power suit", "maxi dress",
+      "lounge set", "lace gown", "empire gown", "jacquard suit",
+      "new collection", "fresh drops", "just arrived"
+    ],
+    "type": "page",
+    "icon": "fas fa-star"
+  },
+  {
+    "title": "Most Popular Products",
+    "url": "/collections/most-popular.html",
+    "keywords": [
+      "most popular", "best sellers", "top products", "favorites",
+      "trending", "popular", "community favorites", "loved by all",
+      "top picks", "customer favorites", "highly rated"
+    ],
+    "type": "page",
+    "icon": "fas fa-fire"
+  },
+  {
+    "title": "Our Story",
+    "url": "/page/our-story.html",
+    "keywords": [
+      "our story", "about us", "who we are", "mission", "brand story",
+      "bbw4life story", "founders", "vision", "values", "why bbw4life",
+      "body positive", "beauty has no size", "plus size brand",
+      "women empowerment", "histoire", "notre histoire"
+    ],
+    "type": "page",
+    "icon": "fas fa-book-open"
+  },
+  {
+    "title": "About BBW4LIFE",
+    "url": "/page/about.html",
+    "keywords": [
+      "about", "about us", "who we are", "bbw4life", "brand",
+      "company", "team", "values", "mission", "philosophy",
+      "plus size", "body positivity", "curvy", "à propos"
     ],
     "type": "page",
     "icon": "fas fa-info-circle"
   },
   {
     "title": "Contact Us",
-    "url": "/contact.html",
+    "url": "/page/contact.html",
     "keywords": [
       "contact", "support", "help", "email", "message", "aide",
       "customer service", "reach us", "get in touch", "inquiry",
       "question", "assistance", "live chat", "whatsapp", "telegram",
-      "response time", "support team", "contacter", "joindre", "aide",
-      "service client", "demande"
+      "response time", "contacter", "joindre", "service client"
     ],
     "type": "page",
     "icon": "fas fa-envelope"
   },
   {
-    "title": "FAQ — Frequently Asked Questions",
-    "url": "/faq.html",
+    "title": "Blog — Style & Lifestyle Articles",
+    "url": "/blog/blog.html",
     "keywords": [
-      "faq", "questions", "answers", "help", "how to", "beginner",
-      "foire aux questions", "common questions", "shipping faq",
-      "return faq", "product faq", "program faq", "payment faq",
-      "delivery faq", "size faq", "how does it work", "is it safe",
-      "does it work", "results faq", "comment", "réponse", "question fréquente"
+      "blog", "articles", "tips", "style", "lifestyle", "fashion tips",
+      "beauty tips", "curvy style", "plus size tips", "body positive",
+      "women empowerment", "fashion guide", "read", "lire", "article"
+    ],
+    "type": "blog",
+    "icon": "fas fa-pen-alt"
+  },
+  {
+    "title": "FAQ — Frequently Asked Questions",
+    "url": "/page/faq.html",
+    "keywords": [
+      "faq", "questions", "answers", "help", "how to",
+      "shipping faq", "return faq", "product faq", "payment faq",
+      "delivery faq", "size faq", "how does it work",
+      "does it fit", "common questions", "foire aux questions"
     ],
     "type": "page",
     "icon": "fas fa-question-circle"
+  },
+  {
+    "title": "Order Tracking",
+    "url": "/page/order-tracking.html",
+    "keywords": [
+      "order tracking", "track order", "where is my order",
+      "delivery status", "shipping status", "package tracking",
+      "track my package", "order status", "suivre commande",
+      "where is my package", "delivery update"
+    ],
+    "type": "page",
+    "icon": "fas fa-search"
   },
   {
     "title": "My Account",
@@ -148,23 +194,10 @@
       "account", "login", "profile", "orders", "history", "compte",
       "connexion", "sign in", "register", "sign up", "my orders",
       "order history", "saved items", "wishlist", "address", "password",
-      "personal info", "dashboard", "mon compte", "se connecter", "s'inscrire",
-      "historique commandes", "profil"
+      "personal info", "dashboard", "mon compte", "se connecter"
     ],
     "type": "page",
     "icon": "fas fa-user-circle"
-  },
-  {
-    "title": "Checkout",
-    "url": "/checkout.html",
-    "keywords": [
-      "checkout", "payment", "order", "buy", "paiement", "commande",
-      "pay now", "complete order", "credit card", "visa", "mastercard",
-      "paypal", "apple pay", "google pay", "secure payment", "place order",
-      "shipping address", "billing", "payer", "valider commande", "paiement sécurisé"
-    ],
-    "type": "page",
-    "icon": "fas fa-credit-card"
   },
   {
     "title": "Privacy Policy",
@@ -172,8 +205,7 @@
     "keywords": [
       "privacy", "policy", "data", "gdpr", "confidentialité",
       "personal data", "cookies", "data protection", "user rights",
-      "data collection", "privacy rights", "opt out", "consent",
-      "données personnelles", "protection", "vie privée", "rgpd"
+      "données personnelles", "vie privée", "rgpd"
     ],
     "type": "policy",
     "icon": "fas fa-lock"
@@ -184,8 +216,7 @@
     "keywords": [
       "terms", "conditions", "legal", "agreement", "cgu",
       "terms of service", "user agreement", "rules", "policies",
-      "terms of use", "legal notice", "liability", "intellectual property",
-      "conditions générales", "mentions légales", "règles", "accord"
+      "conditions générales", "mentions légales"
     ],
     "type": "policy",
     "icon": "fas fa-file-alt"
@@ -196,358 +227,908 @@
     "keywords": [
       "refund", "return", "money back", "remboursement", "retour",
       "30 day guarantee", "return policy", "exchange", "damaged item",
-      "wrong item", "refund request", "how to return", "return process",
-      "guarantee", "satisfaction guarantee", "politique de retour",
-      "garantie", "échange", "remboursé"
+      "wrong item", "refund request", "how to return", "garantie",
+      "politique de retour", "échange", "remboursé"
     ],
     "type": "policy",
     "icon": "fas fa-undo"
   },
   {
-    "title": "Medical Disclaimer",
-    "url": "/disclaimer.html",
+    "title": "Shipping Information",
+    "url": "/policies/shipping.html",
     "keywords": [
-      "disclaimer", "medical", "health", "avertissement",
-      "medical advice", "not a doctor", "consult doctor", "health warning",
-      "safety", "results disclaimer", "individual results", "health risks",
-      "avertissement médical", "santé", "mise en garde", "résultats individuels"
+      "shipping", "delivery", "livraison", "shipping cost", "free shipping",
+      "delivery time", "express shipping", "international shipping",
+      "standard shipping", "ship to", "when will i receive",
+      "délai de livraison", "frais de port", "expédition"
     ],
     "type": "policy",
-    "icon": "fas fa-hospital"
+    "icon": "fas fa-truck"
   },
   {
-    "title": "Careers",
-    "url": "/careers.html",
+    "title": "Disclaimer",
+    "url": "/page/disclaimer.html",
     "keywords": [
-      "careers", "jobs", "hiring", "work with us", "emploi",
-      "job openings", "positions", "remote work", "join the team",
-      "apply", "job application", "internship", "freelance",
-      "offres d'emploi", "rejoindre", "candidature", "poste"
+      "disclaimer", "legal", "avertissement",
+      "individual results", "no guarantee", "mise en garde",
+      "terms disclaimer", "legal notice"
     ],
-    "type": "page",
-    "icon": "fas fa-briefcase"
+    "type": "policy",
+    "icon": "fas fa-exclamation-triangle"
   },
+
   {
-    "title": "Soft Start Curve Slimmer — Beginner Program",
-    "url": "/programs.html",
-    "keywords": [
-      "soft start", "beginner", "gentle", "slimmer", "entry level", "débutant",
-      "first program", "easy workout", "low impact", "start fitness",
-      "beginner weight loss", "gentle exercise", "no experience needed",
-      "total beginner", "start from scratch", "premiers pas", "facile",
-      "doux", "programme débutant", "perte de poids débutant"
-    ],
-    "type": "program",
-    "icon": "fas fa-seedling"
-  },
-  {
-    "title": "Deeper Curve Refiner — Intermediate Program",
-    "url": "/programs.html",
-    "keywords": [
-      "curve refiner", "intermediate", "deeper", "progress", "intermédiaire",
-      "level up", "next step", "advanced beginner", "push harder",
-      "more results", "accelerate", "plateau buster", "intermediate workout",
-      "deeper results", "niveau intermédiaire", "progresser", "avancer",
-      "intensifier", "résultats plus rapides"
-    ],
-    "type": "program",
-    "icon": "fas fa-fire"
-  },
-  {
-    "title": "Forever Fit Maintainer — Maintenance Program",
-    "url": "/programs.html",
-    "keywords": [
-      "forever fit", "maintenance", "maintain", "sustain", "maintien",
-      "keep results", "stay slim", "long term", "lifestyle", "forever",
-      "sustain weight loss", "keep weight off", "maintain shape",
-      "ongoing fitness", "permanent results", "garder les résultats",
-      "maintenir", "long terme", "forme durable", "résultats permanents"
-    ],
-    "type": "program",
-    "icon": "fas fa-star"
-  },
-  {
-    "title": "Kind Tips for Steady Slimming",
-    "url": "/blog/blog.html",
-    "keywords": [
-      "tips", "slimming", "weight loss", "steady", "gentle", "wellness",
-      "conseils minceur", "slimming tips", "fat loss tips", "daily tips",
-      "healthy habits", "lifestyle tips", "weight loss advice",
-      "natural slimming", "belly tips", "waist tips", "astuces minceur",
-      "habitudes saines", "conseils quotidiens", "amincissement naturel"
-    ],
-    "type": "blog",
-    "icon": "fas fa-pen-alt"
-  },
-  {
-    "title": "Busting Food Fables for Curves",
-    "url": "/blog/blog.html",
-    "keywords": [
-      "food", "myths", "fables", "nutrition", "curves", "diet myths",
-      "mythes alimentaires", "food myths debunked", "nutrition facts",
-      "diet facts", "what to eat", "what not to eat", "food truth",
-      "carbs myth", "fat myth", "sugar myth", "fasting myth",
-      "mythes régime", "vérité nutrition", "idées reçues alimentaires"
-    ],
-    "type": "blog",
-    "icon": "fas fa-pen-alt"
-  },
-  {
-    "title": "Inspiring Curve Stories",
-    "url": "/blog/blog.html",
-    "keywords": [
-      "stories", "inspiration", "success", "curves", "transformation",
-      "histoires inspirantes", "real stories", "customer journey",
-      "weight loss journey", "before after stories", "curvy women success",
-      "body transformation stories", "motivating stories", "real people",
-      "parcours", "témoignage", "voyage minceur", "femmes courbes"
-    ],
-    "type": "blog",
-    "icon": "fas fa-pen-alt"
-  },
-  {
-    "title": "Product 1",
+    "title": "Glam Heels — Cross Strap Stiletto Sandals",
     "url": "/products/product1.html",
     "keywords": [
-      "product1", "hula hoop", "waist", "slim waist", "belly fat",
-      "hoop workout", "smart hoop", "gravity lock", "no gym",
-      "10 min workout", "home workout", "waist trainer hoop"
+      "heels", "stiletto", "sandals", "cross strap", "glam heels",
+      "women shoes", "high heels", "red shoes", "black shoes", "pink shoes",
+      "party shoes", "summer shoes", "dressy sandals", "chaussures femme",
+      "talons hauts", "sandales", "product1"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 2",
+    "title": "RetroRun Sneakers — Thick Sole Street Style",
     "url": "/products/product2.html",
     "keywords": [
-      "product2", "waist trainer", "slimming belt", "corset",
-      "compression", "shapewear", "back support", "posture"
+      "sneakers", "retro", "chunky sole", "street style", "retrorun",
+      "thick sole", "round toe", "platform sneakers", "women sneakers",
+      "casual shoes", "black sneakers", "green sneakers", "blue sneakers",
+      "wine red", "chaussures de sport", "baskets", "product2"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 3",
+    "title": "BohoFlip Sandals — Embroidered Summer Vibes",
     "url": "/products/product3.html",
     "keywords": [
-      "product3", "jump rope", "skipping", "cardio", "fat burn",
-      "calorie burn", "counter", "smart rope"
+      "flip flops", "boho", "embroidered", "summer sandals", "bohostyle",
+      "casual sandals", "beach shoes", "plus size sandals", "black sandals",
+      "pink sandals", "blue sandals", "brown sandals", "sandales brodées",
+      "tongs", "été", "product3"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 4",
+    "title": "PowerHeels — 12cm Stiletto Pumps for Queens",
     "url": "/products/product4.html",
     "keywords": [
-      "product4", "leggings", "yoga pants", "workout pants",
-      "tie dye", "curvy leggings", "high waist", "stretchy"
+      "stiletto pumps", "12cm heels", "powerheels", "high heels", "queens",
+      "party heels", "dramatic heels", "black heels", "green heels",
+      "orange heels", "lavender heels", "bold heels", "escarpins",
+      "talons aiguilles", "product4"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 5",
+    "title": "WinterBoost Boots — Versatile Short Ankle Boots",
     "url": "/products/product5.html",
     "keywords": [
-      "product5", "jumpsuit", "one piece", "yoga outfit",
-      "pilates", "workout suit", "zen", "stretchy"
+      "ankle boots", "short boots", "winter boots", "versatile boots",
+      "black boots", "brown boots", "gray boots", "chic boots",
+      "women boots", "casual boots", "bottines", "bottes courtes",
+      "bottes hiver", "product5"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 6",
+    "title": "ColorStilettos — Stiletto Flip Flop Heels",
     "url": "/products/product6.html",
     "keywords": [
-      "product6", "ankle weights", "leg weights", "walk workout",
-      "tone legs", "resistance", "clip on weights"
+      "stiletto flip flops", "colorful heels", "party flip flops",
+      "beach heels", "bold shoes", "colorful stilettos", "fun heels",
+      "multicolor shoes", "summer heels", "sandales à talons",
+      "tongs talons", "product6"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 7",
+    "title": "NightChic Dress — Mock Neck Long Sleeve",
     "url": "/products/product7.html",
     "keywords": [
-      "product7", "sports bra", "support bra", "high impact",
-      "workout bra", "plus size bra", "breathable", "comfortable"
+      "mock neck dress", "long sleeve dress", "night dress", "evening dress",
+      "printed dress", "elegant dress", "plus size dress", "black dress",
+      "nightchic", "sophisticated dress", "robe col montant",
+      "robe grande taille", "robe de soirée", "product7"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 8",
+    "title": "SlitLux Dress — Cutout Slit Round Neck",
     "url": "/products/product8.html",
     "keywords": [
-      "product8", "knee pads", "knee support", "joint protection",
-      "workout safety", "training pads", "cushion"
+      "slit dress", "cutout dress", "round neck dress", "long sleeve dress",
+      "daring dress", "sexy dress", "plus size dress", "black dress",
+      "slitlux", "bodycon dress", "robe fendue", "robe découpée",
+      "robe grande taille", "product8"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 9",
+    "title": "PlaidOverall Dress — Wide Strap Dungaree Style",
     "url": "/products/product9.html",
     "keywords": [
-      "product9", "posture strap", "back support", "posture corrector",
-      "invisible", "under clothes", "back pain"
+      "plaid dress", "overall dress", "dungaree dress", "wide strap",
+      "casual dress", "playful dress", "dark green", "black", "caramel",
+      "plus size dress", "comfortable dress", "salopette robe",
+      "robe décontractée", "product9"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 10",
+    "title": "FloralFlounce Dress — Surplice Sleeve Printed",
     "url": "/products/product10.html",
     "keywords": [
-      "product10", "smart band", "fitness tracker", "heart rate",
-      "sleep tracker", "oxygen", "wristband", "health monitor"
+      "floral dress", "flounce dress", "surplice neck", "printed dress",
+      "feminine dress", "flowing dress", "plus size dress", "white dress",
+      "floralflounce", "boho dress", "robe fleurie", "robe imprimée",
+      "product10"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 11",
+    "title": "VintageSquare Dress — Printed Square Neck",
     "url": "/products/product11.html",
     "keywords": [
-      "product11", "acupressure mat", "acurelief", "relaxation",
-      "stress relief", "tension", "muscle relief", "sleep better"
+      "square neck dress", "vintage dress", "printed dress", "short sleeve",
+      "plus size dress", "black dress", "red dress", "vintagesquare",
+      "flattering dress", "robe col carré", "robe vintage",
+      "robe imprimée", "product11"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 12",
+    "title": "PaisleyBelt Dress — Orange Floral Print Belted",
     "url": "/products/product12.html",
     "keywords": [
-      "product12", "warm belt", "heating belt", "cramps relief",
-      "menstrual pain", "belly warmth", "heat therapy", "period pain"
+      "paisley dress", "belted dress", "floral print", "orange dress",
+      "wrap dress", "plus size dress", "paisleybelt", "vibrant dress",
+      "feminine dress", "robe ceinturée", "robe à imprimé",
+      "robe orange", "product12"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 13",
+    "title": "MeshDuo Set — Perspective Long Dress & Suit",
     "url": "/products/product13.html",
     "keywords": [
-      "product13", "water bottle", "hydration bottle", "sport bottle",
-      "leak proof", "650ml", "stay hydrated", "aquaflow"
+      "mesh set", "two piece set", "sheer mesh", "long dress",
+      "suit set", "black mesh", "white mesh", "sexy set",
+      "plus size set", "meshduo", "ensemble", "robe longue",
+      "set deux pièces", "product13"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 14",
+    "title": "MeshGlam Dress — Solid Color Stitching Maxi",
     "url": "/products/product14.html",
     "keywords": [
-      "product14", "running shoes", "sneakers", "lightweight shoes",
-      "breathable shoes", "sport shoes", "women shoes", "airStep"
+      "mesh dress", "maxi dress", "solid color", "stitching dress",
+      "khaki dress", "black dress", "white dress", "plus size maxi",
+      "meshglam", "elegant maxi", "robe maxi", "robe filet",
+      "product14"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 15",
+    "title": "LinenBreeze Dress — Cotton Linen Button-Down",
     "url": "/products/product15.html",
     "keywords": [
-      "product15", "pillow", "water pillow", "neck pillow",
-      "sleep pillow", "cervical", "aquapillow", "pain free sleep"
+      "linen dress", "cotton dress", "button down dress", "breathable dress",
+      "casual dress", "white dress", "black dress", "green dress",
+      "linenbreeze", "natural fabric", "robe lin", "robe boutonnée",
+      "product15"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Product 16",
+    "title": "StripedMini Dress — V-Neck Long Sleeve",
     "url": "/products/product16.html",
     "keywords": [
-      "product16", "earbuds", "airbuds", "wireless", "bluetooth",
-      "music", "workout music", "j18", "sound"
+      "striped dress", "mini dress", "v neck dress", "long sleeve",
+      "burnt coral", "casual dress", "fun dress", "stripedmini",
+      "plus size mini", "robe rayée", "robe courte", "product16"
     ],
     "type": "product",
     "icon": "fas fa-tag"
   },
   {
-    "title": "Gentle Movements for Your Shape",
-    "url": "/programs.html",
+    "title": "LoungeRobe — Loose Comfortable Sleepwear Bathrobe",
+    "url": "/products/product17.html",
     "keywords": [
-      "movements", "exercise", "gentle", "workout", "shape", "mouvements doux",
-      "low impact exercise", "body movement", "curvy workout", "safe exercise",
-      "joint friendly", "no pain workout", "soft workout", "mouvement doux",
-      "exercice adapté", "sport sans douleur"
+      "bathrobe", "robe", "sleepwear", "lounge", "comfortable",
+      "plus size robe", "black robe", "wine red robe", "navy robe",
+      "white robe", "loungeroble", "cozy", "home wear",
+      "peignoir", "vêtement de nuit", "product17"
     ],
-    "type": "feature",
-    "icon": "fas fa-running"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Nourishing Food Wisdom",
-    "url": "/nutrition.html",
+    "title": "LaceNight Dress — Sexy Short Strap Nightdress",
+    "url": "/products/product18.html",
     "keywords": [
-      "food", "nutrition", "nourishing", "meals", "wisdom", "nourriture",
-      "balanced diet", "wholesome food", "healthy eating", "clean food",
-      "anti inflammatory", "gut health", "food wisdom", "eating smart",
-      "alimentation équilibrée", "manger intelligent", "nourriture saine"
+      "nightdress", "lace dress", "short strap", "sexy nightdress",
+      "wine red", "plus size nightdress", "lacenight", "lingerie",
+      "evening wear", "chemise de nuit", "nuisette dentelle",
+      "product18"
     ],
-    "type": "feature",
-    "icon": "fas fa-leaf"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Sisterly Encouragement — Community",
-    "url": "/community.html",
+    "title": "LaceThong Set — Sheer Skirt & Lingerie Set",
+    "url": "/products/product19.html",
     "keywords": [
-      "sisterhood", "encouragement", "support", "community", "women", "soutien",
-      "accountability partner", "workout buddy", "women network", "curvy sisterhood",
-      "body positivity community", "plus size support", "women health community",
-      "partenaire", "accompagnement", "entraide", "sœurs"
+      "lingerie set", "lace set", "thong", "sheer skirt", "sexy lingerie",
+      "black lingerie", "red lingerie", "plus size lingerie",
+      "lacethong", "seductive", "ensemble lingerie", "product19"
     ],
-    "type": "feature",
-    "icon": "fas fa-heart"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Progress Tracking",
-    "url": "/index.html#progress-evolution",
+    "title": "SolidSexy Bikini — High Waist Hot Swimsuit",
+    "url": "/products/product20.html",
     "keywords": [
-      "progress", "tracking", "chart", "data", "evolution", "suivi",
-      "measure progress", "track results", "weight chart", "inches chart",
-      "weekly progress", "monthly progress", "track weight loss",
-      "suivi progression", "mesurer résultats", "courbe de progression"
+      "bikini", "high waist bikini", "swimsuit", "hot swimsuit",
+      "plus size swimwear", "solid bikini", "curvy bikini",
+      "solidsexy", "beach", "pool", "maillot de bain", "bikini taille haute",
+      "product20"
     ],
-    "type": "feature",
-    "icon": "fas fa-chart-line"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Coach Anna — Strength Expert",
-    "url": "/programs.html",
+    "title": "CurveBikini — Solid Color High Waist Swimwear",
+    "url": "/products/product21.html",
     "keywords": [
-      "coach anna", "coach", "strength", "trainer", "expert", "entraîneur",
-      "strength training coach", "weight training", "toning coach",
-      "fitness coach", "anna trainer", "body sculpting", "coach force",
-      "entraîneur musculation", "sculpture corporelle"
+      "curve bikini", "high waist", "swimwear", "plus size bikini",
+      "curvy swimwear", "curvebikini", "beach bikini", "solid color",
+      "maillot deux pièces", "bikini grande taille", "product21"
     ],
-    "type": "coach",
-    "icon": "fas fa-chalkboard-teacher"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Coach Maria — Nutrition Expert",
-    "url": "/nutrition.html",
+    "title": "LeopardNight Set — Mesh Pajama Lingerie Dress",
+    "url": "/products/product22.html",
     "keywords": [
-      "coach maria", "nutrition", "food", "coach", "diet", "nutritionniste",
-      "nutrition coach", "meal planning coach", "diet coach", "food expert",
-      "maria nutritionist", "healthy eating coach", "coach nutrition",
-      "planification repas", "experte alimentation"
+      "leopard print", "mesh pajama", "lingerie dress", "night set",
+      "leopardnight", "animal print", "plus size lingerie",
+      "black lingerie", "white lingerie", "red lingerie",
+      "imprimé léopard", "pyjama dentelle", "product22"
     ],
-    "type": "coach",
-    "icon": "fas fa-chalkboard-teacher"
+    "type": "product",
+    "icon": "fas fa-tag"
   },
   {
-    "title": "Coach Lisa — Yoga & Wellness",
-    "url": "/programs.html",
+    "title": "SupportBra — Large Cup Gathered Breathable Mesh",
+    "url": "/products/product23.html",
     "keywords": [
-      "coach lisa", "yoga", "wellness", "calm", "mindfulness", "bien-être",
-      "yoga coach", "meditation", "breathing", "flexibility", "stress relief",
-      "mind body", "yoga for curves", "coach yoga", "méditation",
-      "flexibilité", "respiration", "gestion du stress"
+      "bra", "support bra", "large cup", "mesh bra", "breathable bra",
+      "plus size bra", "black bra", "apricot bra", "supportbra",
+      "comfortable bra", "everyday bra", "soutien-gorge grande taille",
+      "soutien-gorge respirant", "product23"
     ],
-    "type": "coach",
-    "icon": "fas fa-spa"
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "LaceRomper — Jumpsuit Lace Splicing Thong",
+    "url": "/products/product24.html",
+    "keywords": [
+      "romper", "lace romper", "jumpsuit", "one piece lingerie",
+      "thong romper", "black romper", "white romper", "red romper",
+      "laceromper", "sexy romper", "bold lingerie",
+      "combinaison dentelle", "product24"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "StripedBikini — Print Striped Swimwear",
+    "url": "/products/product25.html",
+    "keywords": [
+      "striped bikini", "print swimwear", "beach bikini", "fun bikini",
+      "strippedbikini", "colorful swimwear", "plus size swimwear",
+      "maillot rayé", "bikini imprimé", "product25"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "TubeBikini — Plus Size Tube Top Swimsuit",
+    "url": "/products/product26.html",
+    "keywords": [
+      "tube bikini", "tube top swimsuit", "plus size bikini",
+      "blue bikini", "green bikini", "tubebikini", "beach",
+      "coverage bikini", "maillot tube", "product26"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "RuffleOne Bikini — V-Neck Ruffled One Piece",
+    "url": "/products/product27.html",
+    "keywords": [
+      "ruffle swimsuit", "one piece swimsuit", "v neck swimsuit",
+      "ruffleone", "feminine swimwear", "plus size one piece",
+      "curvy swimsuit", "maillot une pièce", "maillot à volants",
+      "product27"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BandageBikini — Solid Color Bandage Swimsuit",
+    "url": "/products/product28.html",
+    "keywords": [
+      "bandage bikini", "solid bikini", "sculptural swimsuit",
+      "bandagebikini", "sleek bikini", "plus size swimwear",
+      "bikini bandage", "maillot sculptant", "product28"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "ContrastOne Piece — Contrasting Color Swimwear",
+    "url": "/products/product29.html",
+    "keywords": [
+      "contrast swimsuit", "one piece", "contrasting color", "bold swimwear",
+      "green swimsuit", "plus size one piece", "contrastone",
+      "modern swimwear", "maillot contrasté", "product29"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "PremiumBikini — Plus Size Swimsuit Collection",
+    "url": "/products/product30.html",
+    "keywords": [
+      "premium bikini", "plus size swimsuit", "quality swimwear",
+      "premiumbikini", "curvy swimsuit", "supportive swimwear",
+      "bikini premium", "maillot grande taille", "product30"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "IrregularTop — Loose Round Neck Irregular Hem",
+    "url": "/products/product31.html",
+    "keywords": [
+      "irregular hem top", "loose top", "round neck top", "black top",
+      "irregular top", "summer top", "plus size top", "casual top",
+      "irregulartop", "haut irrégulier", "haut ample", "product31"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "ChristmasSweat — Casual Plus Size Sweatshirt",
+    "url": "/products/product32.html",
+    "keywords": [
+      "christmas sweatshirt", "holiday sweatshirt", "casual sweatshirt",
+      "festive top", "plus size sweatshirt", "christmassweat",
+      "cozy sweatshirt", "holiday clothing", "sweat de noël",
+      "sweatshirt décontracté", "product32"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "DalmationShorts — High Waist Print Shorts",
+    "url": "/products/product33.html",
+    "keywords": [
+      "dalmatian shorts", "high waist shorts", "print shorts",
+      "white shorts", "bold shorts", "plus size shorts", "dalmationshorts",
+      "summer shorts", "fun shorts", "short imprimé",
+      "short taille haute", "product33"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "LeopardShirt — Irregular Collar Spliced Blouse",
+    "url": "/products/product34.html",
+    "keywords": [
+      "leopard shirt", "blouse", "irregular collar", "spliced shirt",
+      "animal print top", "black blouse", "leopardshirt",
+      "bold top", "chemise léopard", "blouse col irrégulier",
+      "product34"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "DrawstringPants — Plus Size Casual with Pockets",
+    "url": "/products/product35.html",
+    "keywords": [
+      "drawstring pants", "casual pants", "plus size pants", "pockets pants",
+      "navy pants", "black pants", "gray pants", "ivory pants",
+      "relaxed pants", "drawstringpants", "comfortable pants",
+      "pantalon à cordon", "pantalon grande taille", "product35"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "CropSlimPants — Men's Drawstring Cropped Pants",
+    "url": "/products/product36.html",
+    "keywords": [
+      "cropped pants", "men pants", "drawstring pants", "slim pants",
+      "dark gray", "army green", "navy pants", "khaki pants",
+      "cropslimpants", "trendy pants", "pantalon court homme",
+      "pantalon slim", "product36"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "HaremPrints — Casual Cuff Printed Harem Trousers",
+    "url": "/products/product37.html",
+    "keywords": [
+      "harem pants", "printed pants", "cuff pants", "men trousers",
+      "loose pants", "black harem", "khaki harem", "military green",
+      "haremprints", "casual trousers", "pantalon harem",
+      "pantalon imprimé", "product37"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "LooseJeans — Men's Relaxed Fit Denim",
+    "url": "/products/product38.html",
+    "keywords": [
+      "jeans", "loose jeans", "men jeans", "relaxed fit", "denim",
+      "graphite gray jeans", "glacier blue jeans", "black jeans",
+      "loosejeans", "comfort jeans", "jean homme", "jean large",
+      "product38"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BritishLoafers — Formal Tassel Party Shoes",
+    "url": "/products/product39.html",
+    "keywords": [
+      "loafers", "formal shoes", "tassel shoes", "party shoes",
+      "wedding shoes", "british loafers", "yellow shoes", "blue shoes",
+      "black loafers", "britishloafers", "dress shoes", "men shoes",
+      "mocassins", "chaussures habillées", "product39"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "AirMesh Runners — Professional Sports Sneakers",
+    "url": "/products/product40.html",
+    "keywords": [
+      "running shoes", "sports sneakers", "air mesh shoes", "athletic shoes",
+      "gym shoes", "blue sneakers", "men sneakers", "airmesh",
+      "lightweight shoes", "breathable sneakers", "chaussures de sport",
+      "baskets running", "product40"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "LeatherCasuals — Men's Breathable Flat Sneakers",
+    "url": "/products/product41.html",
+    "keywords": [
+      "leather shoes", "casual shoes", "flat sneakers", "men casual",
+      "breathable shoes", "black leather shoes", "leathercasuals",
+      "versatile shoes", "chaussures cuir", "mocassins décontractés",
+      "product41"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BusinessDress Shoes — Classic Wedding Formal",
+    "url": "/products/product42.html",
+    "keywords": [
+      "dress shoes", "business shoes", "formal shoes", "wedding shoes",
+      "black formal", "brown formal", "businessdress", "classic shoes",
+      "men dress shoes", "chaussures business", "chaussures mariage",
+      "product42"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "HollowSneakers — Mesh Big Size Fashion Shoes",
+    "url": "/products/product43.html",
+    "keywords": [
+      "hollow sneakers", "mesh sneakers", "big size shoes", "fashion shoes",
+      "black mesh shoes", "green mesh shoes", "blue mesh shoes",
+      "hollowsneakers", "lightweight sneakers", "chaussures maille",
+      "sneakers grands pieds", "product43"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "TrendTrainers — Men's Outdoor Sport Sneakers",
+    "url": "/products/product44.html",
+    "keywords": [
+      "outdoor sneakers", "sport sneakers", "men trainers", "white sneakers",
+      "red sneakers", "black trainers", "trendtrainers", "athletic shoes",
+      "outdoor shoes", "baskets outdoor", "chaussures sport",
+      "product44"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "PatentLoafers — Luxury Party Wedding Shoes",
+    "url": "/products/product45.html",
+    "keywords": [
+      "patent loafers", "luxury shoes", "party shoes", "wedding shoes",
+      "point toe", "brown loafers", "black loafers", "patentloafers",
+      "gala shoes", "men luxury shoes", "mocassins vernis",
+      "chaussures de gala", "product45"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "CollarShirt — Men's Plus Size Button-Down",
+    "url": "/products/product46.html",
+    "keywords": [
+      "collar shirt", "button down shirt", "men shirt", "plus size shirt",
+      "black shirt", "navy shirt", "white shirt", "light blue shirt",
+      "collarshirt", "formal shirt", "chemise homme",
+      "chemise grande taille", "product46"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "GeoPolo Shirt — Geometric Print Plus Size",
+    "url": "/products/product47.html",
+    "keywords": [
+      "polo shirt", "geometric print", "men polo", "plus size polo",
+      "black polo", "white polo", "geopolo", "casual shirt",
+      "polo imprimé", "polo géométrique", "product47"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "StripedCollar Sweater — Men's Casual Knit",
+    "url": "/products/product48.html",
+    "keywords": [
+      "striped sweater", "knit sweater", "men sweater", "casual sweater",
+      "white coffee sweater", "black gray sweater", "stripedcollar",
+      "cozy sweater", "pull homme", "pull rayé", "product48"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "TurtleneckLux — Men's Long Sleeve Plus Sweater",
+    "url": "/products/product49.html",
+    "keywords": [
+      "turtleneck sweater", "long sleeve sweater", "men sweater",
+      "plus size sweater", "burgundy sweater", "royal blue sweater",
+      "turtlenecklux", "winter sweater", "col roulé homme",
+      "pull grande taille", "product49"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "HikeJacket — Waterproof Plus Size Outdoor Suit",
+    "url": "/products/product50.html",
+    "keywords": [
+      "hiking jacket", "waterproof jacket", "outdoor jacket", "couple jacket",
+      "black jacket", "blue jacket", "green jacket", "orange jacket",
+      "hikejacket", "plus size jacket", "veste randonnée",
+      "veste imperméable", "product50"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "RoundNeck Sweatshirt — Men's Plus Size Pullover",
+    "url": "/products/product51.html",
+    "keywords": [
+      "round neck sweatshirt", "men pullover", "plus size sweatshirt",
+      "brown sweatshirt", "yellow sweatshirt", "black sweatshirt",
+      "roundneck", "casual pullover", "sweat col rond",
+      "sweat grande taille", "product51"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "NailBond Glue — Strong UV Nail Tips Adhesive",
+    "url": "/products/product52.html",
+    "keywords": [
+      "nail glue", "uv nail glue", "nail tips adhesive", "rhinestone glue",
+      "nail art", "nail bond", "strong nail glue", "colle ongles",
+      "gel colle ongles", "product52"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BowNails — Manicure Long Almond Fake Nails",
+    "url": "/products/product53.html",
+    "keywords": [
+      "fake nails", "press on nails", "almond nails", "bow nails",
+      "manicure nails", "salon nails", "artificial nails",
+      "bownails", "faux ongles", "ongles amande", "product53"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "NailRepair Lotion — Gray Nail Nourishing Solution",
+    "url": "/products/product54.html",
+    "keywords": [
+      "nail repair", "nail lotion", "nail care", "nail nourishing",
+      "damaged nails", "nail brightener", "nailrepair",
+      "soin ongles", "lotion ongles", "product54"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BrowDye Pencil — Waterproof Quick-Dry Eyebrow",
+    "url": "/products/product55.html",
+    "keywords": [
+      "eyebrow pencil", "brow dye", "waterproof eyebrow", "quick dry brow",
+      "dark grey brow", "gold brow", "browdye", "3D brows",
+      "crayon sourcils", "sourcils waterproof", "product55"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "Curl & Volume Mascara — 4D Waterproof Formula",
+    "url": "/products/product56.html",
+    "keywords": [
+      "mascara", "4D mascara", "waterproof mascara", "volumizing mascara",
+      "curl mascara", "sweat resistant mascara", "mascara volume",
+      "mascara waterproof", "cils", "product56"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BrowKit Pro — Waterproof Eyebrow Stencil & Cream",
+    "url": "/products/product57.html",
+    "keywords": [
+      "eyebrow kit", "brow stencil", "eyebrow cream", "brow kit pro",
+      "waterproof brows", "natural brows", "3D brows", "browkit",
+      "kit sourcils", "pochoir sourcils", "product57"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "Obsidian Lip Balm — Warming Moisture Treatment",
+    "url": "/products/product58.html",
+    "keywords": [
+      "lip balm", "obsidian lip", "warming lip balm", "moisturizing lip",
+      "lip lines", "lip care", "soft lips", "baume lèvres",
+      "soin lèvres", "hydratation lèvres", "product58"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "TearOff Lip Gloss — 4-Color Long-Lasting Set",
+    "url": "/products/product59.html",
+    "keywords": [
+      "lip gloss", "peel off lip gloss", "long lasting lip gloss",
+      "4 color gloss", "tearoff", "vibrant lip", "moisturizing gloss",
+      "gloss lèvres", "gloss longue tenue", "product59"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "GingerClean Pads — Ginger & Lemon Makeup Remover",
+    "url": "/products/product60.html",
+    "keywords": [
+      "makeup remover", "cleansing pads", "ginger lemon", "gentle cleanser",
+      "gingeclean", "skin cleansing", "makeup wipes", "démaquillant",
+      "lingettes nettoyantes", "soin peau", "product60"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "DeepRepair Hair Mask — Moisturizing & Smoothing",
+    "url": "/products/product61.html",
+    "keywords": [
+      "hair mask", "deep repair", "moisturizing hair", "smoothing hair",
+      "damaged hair", "frizz treatment", "color damage", "deeprepair",
+      "masque cheveux", "soin cheveux", "product61"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BatanaGlow Oil — Moisturizing Hair Care Essential",
+    "url": "/products/product62.html",
+    "keywords": [
+      "batana oil", "hair oil", "moisturizing hair oil", "batanaglow",
+      "dry hair", "damaged hair", "hair care essential",
+      "huile batana", "huile cheveux", "product62"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BatanaBoost Oil — 120ml Hair Growth Conditioner",
+    "url": "/products/product63.html",
+    "keywords": [
+      "batana oil conditioner", "hair growth", "hair conditioner",
+      "batanaboost", "120ml", "stronger hair", "healthier hair",
+      "conditionneur cheveux", "pousse cheveux", "product63"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "PoreClean Gel — Deep Exfoliating Anti-Acne Gel",
+    "url": "/products/product64.html",
+    "keywords": [
+      "pore cleanser", "exfoliating gel", "anti acne", "blackheads",
+      "tighten pores", "poreclean", "skin brightening", "gel nettoyant",
+      "anti-acné", "resserrer pores", "product64"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "KnuckleWhite Serum — Hand & Joint Skin Brightener",
+    "url": "/products/product65.html",
+    "keywords": [
+      "whitening serum", "knuckle whitener", "skin brightener",
+      "dark spots", "hand serum", "knucklewhite", "melanin reducer",
+      "sérum blanchissant", "soin articulations", "taches sombres",
+      "product65"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "Propolis Glow Essence — Brightening Facial Serum",
+    "url": "/products/product66.html",
+    "keywords": [
+      "propolis serum", "glow essence", "brightening serum", "acne marks",
+      "face serum", "nicotinamide", "luminous skin", "propolisglow",
+      "sérum éclat", "sérum propolis", "product66"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "MenGlow Cream — Concealing Brightening Lazy Cream",
+    "url": "/products/product67.html",
+    "keywords": [
+      "men face cream", "concealing cream", "brightening cream",
+      "lazy cream", "pore minimizing", "menglow", "men skincare",
+      "crème homme", "crème teintée homme", "soin visage homme",
+      "product67"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "IceGlow Grid Set — Silicone Facial Cooling Tool",
+    "url": "/products/product68.html",
+    "keywords": [
+      "ice facial", "cooling tool", "silicone ice grid", "skin tightening",
+      "pore tightening", "iceglow", "face tool", "7 colors",
+      "glaçon visage", "outil beauté", "product68"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "GlamSatin Dress — Black Halter Ruched Maxi",
+    "url": "/products/product69.html",
+    "keywords": [
+      "satin dress", "halter dress", "ruched dress", "maxi dress",
+      "black gown", "deep V dress", "front slit", "glamsatin",
+      "plus size gown", "evening gown", "robe satin", "robe dos nu",
+      "product69"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "PowerSuit — Ivory Structured Skirt Suit",
+    "url": "/products/product70.html",
+    "keywords": [
+      "power suit", "skirt suit", "blazer set", "pencil skirt",
+      "ivory suit", "structured blazer", "powersuit", "professional",
+      "work outfit", "tailleur femme", "costume jupe",
+      "product70"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BohoFloral Maxi — Wrap Floral Bishop Sleeve",
+    "url": "/products/product71.html",
+    "keywords": [
+      "boho dress", "floral maxi", "wrap dress", "bishop sleeve",
+      "cream floral", "peach floral", "self tie", "bohofloral",
+      "plus size maxi", "flowing dress", "robe bohème", "robe longue fleurie",
+      "product71"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "CozyLounge Set — Cream Tank & Beige Wide-Leg",
+    "url": "/products/product72.html",
+    "keywords": [
+      "lounge set", "two piece set", "cream tank top", "wide leg pants",
+      "beige lounge", "cozylounge", "home wear", "comfort outfit",
+      "relaxed outfit", "ensemble détente", "vêtements maison",
+      "product72"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "BlushLace Gown — Lace Cap Sleeve Empire Maxi",
+    "url": "/products/product73.html",
+    "keywords": [
+      "lace gown", "empire waist", "cap sleeve gown", "blush pink",
+      "V neckline gown", "chiffon skirt", "blushLace", "wedding guest",
+      "gala gown", "plus size gown", "robe dentelle", "robe empire",
+      "product73"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "TealEmpire Gown — Sleeveless V-Neck Formal Maxi",
+    "url": "/products/product74.html",
+    "keywords": [
+      "teal gown", "empire gown", "sleeveless gown", "V neck gown",
+      "deep teal", "formal maxi", "tealempire", "ruched knot",
+      "plus size formal", "elegant gown", "robe formelle", "robe galon sarcelle",
+      "product74"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
+  },
+  {
+    "title": "JacquardPower Suit — Multicolor Floral Brocade",
+    "url": "/products/product75.html",
+    "keywords": [
+      "jacquard suit", "power suit", "floral brocade", "wide leg trousers",
+      "wrap blazer", "multicolor suit", "jacquardpower", "bold outfit",
+      "runway look", "plus size suit", "costume jacquard", "tailleur brocart",
+      "product75"
+    ],
+    "type": "product",
+    "icon": "fas fa-tag"
   }
 ]

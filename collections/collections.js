@@ -205,18 +205,88 @@
 
   function buildCategoryMap(productIds) {
     if (!productIds || productIds.length === 0) return;
-    const quarter = Math.floor(productIds.length / 4);
-    CATEGORY_MAP = {
-      all:        null,
-      slimming:   productIds.slice(0, quarter),
-      apparel:    productIds.slice(quarter, quarter * 2),
-      wellness:   productIds.slice(quarter * 2, quarter * 3),
-      essentials: productIds.slice(quarter * 3),
-      bestsellers: null,
-      new:         null
-    };
+
+    CATEGORY_MAP = { all: null, bestsellers: null, new: null };
+
+    let currentKey = null;
+    productIds.forEach(function(id) {
+      if (typeof id === 'string' && id.startsWith('--') && id.endsWith('--')) {
+        currentKey = id.replace(/--/g, '').trim().toLowerCase()
+          .replace(/\s+/g, '')
+          .replace(/[^a-z0-9]/g, '');
+        if (!CATEGORY_MAP[currentKey]) CATEGORY_MAP[currentKey] = [];
+      } else if (currentKey) {
+        if (!CATEGORY_MAP[currentKey]) CATEGORY_MAP[currentKey] = [];
+        CATEGORY_MAP[currentKey].push(id);
+      }
+    });
+
+    // Inject tabs after building the map
+    injectCatTabs();
   }
 
+
+
+  function injectCatTabs() {
+    const tabsContainer = document.getElementById('colCatTabs');
+    if (!tabsContainer) return;
+
+    // Icon map per subcategory key
+    const ICON_MAP = {
+      // Beauty
+      nails:      'fas fa-hand-sparkles',
+      eyebrow:    'fas fa-eye',
+      lip:        'fas fa-kiss-wink-heart',
+      makeup:     'fas fa-magic',
+      haircare:   'fas fa-wind',
+      skincare:   'fas fa-leaf',
+      // Woman
+      shoes:      'fas fa-shoe-prints',
+      dresses:    'fas fa-person-dress',
+      bathrobe:   'fas fa-bath',
+      sexy:       'fas fa-heart',
+      breathable: 'fas fa-wind',
+      bikini:     'fas fa-umbrella-beach',
+      tops:       'fas fa-tshirt',
+      // Men
+      pants:      'fas fa-grip-lines',
+      shirts:     'fas fa-shirt',
+      sweaters:   'fas fa-mitten',
+      // Generic
+      default:    'fas fa-tag'
+    };
+
+    // Keep only the fixed buttons (All, Best Sellers, New Arrivals)
+    const fixedTabs = Array.from(tabsContainer.querySelectorAll('.col-cat-tab'))
+      .filter(btn => ['all', 'bestsellers', 'new'].includes(btn.dataset.cat));
+
+    tabsContainer.innerHTML = '';
+    fixedTabs.forEach(btn => tabsContainer.appendChild(btn));
+
+    // Inject one button per subcategory found in JSON
+    Object.keys(CATEGORY_MAP).forEach(function(key) {
+      if (['all', 'bestsellers', 'new'].includes(key)) return;
+      if (!CATEGORY_MAP[key] || CATEGORY_MAP[key].length === 0) return;
+
+      const label = key.charAt(0).toUpperCase() + key.slice(1);
+      const icon  = ICON_MAP[key] || ICON_MAP.default;
+
+      const btn = document.createElement('button');
+      btn.className    = 'col-cat-tab';
+      btn.dataset.cat  = key;
+      btn.innerHTML    = '<i class="' + icon + '"></i> ' + label;
+
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.col-cat-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilters.category = key;
+        applyAll();
+      });
+
+      tabsContainer.appendChild(btn);
+    });
+  }
+  
   /* ================================================================
      TOAST
   ================================================================ */

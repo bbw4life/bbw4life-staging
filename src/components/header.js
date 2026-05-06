@@ -111,22 +111,15 @@
 
   /* ──────────────────────────────────────────────────────────────
      3. SEARCH MOBILE
+     Le dropdown est entièrement géré par search.js qui détecte
+     #bbwSearchInput automatiquement dans initSearch().
+     Ici on gère uniquement l'ouverture/fermeture de la barre.
   ────────────────────────────────────────────────────────────── */
   const searchToggle = document.getElementById('bbwSearchToggle');
   const searchBar    = document.getElementById('bbwSearchBar');
   const searchClose  = document.getElementById('bbwSearchClose');
   const searchInput  = document.getElementById('bbwSearchInput');
   const searchEl     = document.getElementById('bbwSearch');
-
-  function doMobileSearch() {
-    const query = searchInput ? searchInput.value.trim() : '';
-    if (!query) return;
-    if (typeof window.showErrorPopup === 'function') {
-      window.showErrorPopup(`Searching for: ${query}`);
-    } else {
-      console.log('[BBW4LIFE Search]:', query);
-    }
-  }
 
   if (searchToggle) {
     searchToggle.addEventListener('click', (e) => {
@@ -155,16 +148,22 @@
     }
   });
 
+  /* Submit mobile — navigue vers le premier résultat via window.bbwSearch */
   const searchSubmitMobile = searchBar ? searchBar.querySelector('.bbw-search__submit') : null;
-  if (searchSubmitMobile) searchSubmitMobile.addEventListener('click', doMobileSearch);
-  if (searchInput) {
-    searchInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') doMobileSearch();
+  if (searchSubmitMobile) {
+    searchSubmitMobile.addEventListener('click', () => {
+      if (window.bbwSearch && searchInput) {
+        const results = window.bbwSearch.search(searchInput.value.trim());
+        if (results.length) window.location.href = results[0].url;
+      }
     });
   }
 
   /* ──────────────────────────────────────────────────────────────
      4. SEARCH DESKTOP ALWAYS-VISIBLE
+     Le dropdown est entièrement géré par search.js qui détecte
+     #bbwSearchDesktopInput automatiquement dans initSearch().
+     Ici on gère uniquement l'affichage de la barre et le submit.
   ────────────────────────────────────────────────────────────── */
   function applySearchSetting() {
     const allProducts = window.__allProducts || [];
@@ -187,24 +186,16 @@
 
   window.addEventListener('resize', applySearchSetting, { passive: true });
 
-  function doDesktopSearch() {
-    const desktopInput = document.getElementById('bbwSearchDesktopInput');
-    const query = desktopInput ? desktopInput.value.trim() : '';
-    if (!query) return;
-    if (typeof window.showErrorPopup === 'function') {
-      window.showErrorPopup(`Searching for: ${query}`);
-    } else {
-      console.log('[BBW4LIFE Desktop Search]:', query);
-    }
-  }
-
+  /* Submit desktop — navigue vers le premier résultat via window.bbwSearch */
   const desktopSubmit = document.getElementById('bbwSearchDesktopSubmit');
   const desktopInput  = document.getElementById('bbwSearchDesktopInput');
 
-  if (desktopSubmit) desktopSubmit.addEventListener('click', doDesktopSearch);
-  if (desktopInput) {
-    desktopInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') doDesktopSearch();
+  if (desktopSubmit) {
+    desktopSubmit.addEventListener('click', () => {
+      if (window.bbwSearch && desktopInput) {
+        const results = window.bbwSearch.search(desktopInput.value.trim());
+        if (results.length) window.location.href = results[0].url;
+      }
     });
   }
 
@@ -653,3 +644,197 @@
 })();
 
 
+
+/* ──────────────────────────────────────────────────────────────
+   INACTIVE TAB CTA
+────────────────────────────────────────────────────────────── */
+(function initInactiveTabCTA() {
+
+  function run() {
+    const allProducts = window.__allProducts || [];
+    const settings    = allProducts.find(p => p.type === 'settings') || {};
+    const cfg         = settings.inactive_tab_cta || {};
+
+    if ((cfg.enabled || 'yes').toLowerCase() !== 'yes') return;
+
+    const originalTitle  = document.title;
+    const rawMessage     = cfg.message      || 'YOUR ORDER IS WAITING';
+    const animationSpeed = parseInt(cfg.speed) || 150;
+    const catchyAddon    = cfg.catchy_addon || '✨ HURRY!';
+
+    // ── Separator — premier "yes" trouvé
+    const separatorMap = {
+      space:       '\u00A0',
+      dash:        ' - ',
+      dot:         ' . ',
+      star:        ' * ',
+      none:        '',
+      pipe:        ' | ',
+      arrow:       ' → ',
+      bullet:      ' • ',
+      tilde:       ' ~ ',
+      double_dash: ' -- '
+    };
+
+    const separatorCfg = cfg.separator || { space: 'yes' };
+    const activeSep = Object.keys(separatorCfg).find(
+      k => (separatorCfg[k] || '').toLowerCase() === 'yes'
+    ) || 'space';
+    const sepChar = separatorMap[activeSep] !== undefined
+      ? separatorMap[activeSep]
+      : '\u00A0';
+
+    const customMessage = rawMessage.split(' ').join(sepChar);
+    const finalMessage  = customMessage + ' ' + catchyAddon;
+
+    // ── Animation — premier "yes" trouvé
+    const animationCfg = cfg.animation || { typewriter: 'yes' };
+    const animationType = Object.keys(animationCfg).find(
+      k => (animationCfg[k] || '').toLowerCase() === 'yes'
+    ) || 'typewriter';
+
+    let intervalId = null;
+    let isInactive = false;
+
+    // ── Animations
+    function typewriterEffect() {
+      let i = 0;
+      document.title = '';
+      intervalId = setInterval(() => {
+        if (i < finalMessage.length) {
+          document.title += finalMessage.charAt(i);
+          i++;
+        } else {
+          clearInterval(intervalId);
+        }
+      }, animationSpeed);
+    }
+
+    function fadeEffect() {
+      document.title = finalMessage;
+      intervalId = setInterval(() => {
+        document.title = document.title === '' ? finalMessage : '';
+      }, animationSpeed * 10);
+    }
+
+    function bounceEffect() {
+      document.title = finalMessage + ' ⬆️';
+      intervalId = setInterval(() => {
+        document.title = document.title.includes('⬆️')
+          ? finalMessage + ' ⬇️'
+          : finalMessage + ' ⬆️';
+      }, animationSpeed * 5);
+    }
+
+    function slideEffect() {
+      let position = 0;
+      intervalId = setInterval(() => {
+        document.title = finalMessage.substring(position) + finalMessage.substring(0, position);
+        position = (position + 1) % finalMessage.length;
+      }, animationSpeed * 2);
+    }
+
+    function rotateEffect() {
+      document.title = finalMessage;
+      intervalId = setInterval(() => {
+        document.title = document.title === finalMessage ? '...' : finalMessage;
+      }, animationSpeed * 8);
+    }
+
+    function blinkEffect() {
+      document.title = finalMessage;
+      let visible = true;
+      intervalId = setInterval(() => {
+        visible = !visible;
+        document.title = visible ? finalMessage : '';
+      }, animationSpeed * 6);
+    }
+
+    function waveEffect() {
+      const chars = finalMessage.split('');
+      let step = 0;
+      intervalId = setInterval(() => {
+        document.title = chars.map((c, i) =>
+          i === step % chars.length ? c.toUpperCase() : c.toLowerCase()
+        ).join('');
+        step++;
+      }, animationSpeed * 3);
+    }
+
+    function marqueeEffect() {
+      const padded = finalMessage + '   ';
+      let pos = 0;
+      intervalId = setInterval(() => {
+        document.title = padded.substring(pos) + padded.substring(0, pos);
+        pos = (pos + 1) % padded.length;
+      }, animationSpeed * 2);
+    }
+
+    function flashEffect() {
+      const messages = [finalMessage, '🔥 ' + finalMessage, '⚡ ' + finalMessage, finalMessage];
+      let i = 0;
+      intervalId = setInterval(() => {
+        document.title = messages[i % messages.length];
+        i++;
+      }, animationSpeed * 7);
+    }
+
+    function pingEffect() {
+      const states = [finalMessage, '🔔 ' + finalMessage, finalMessage, ''];
+      let i = 0;
+      intervalId = setInterval(() => {
+        document.title = states[i % states.length];
+        i++;
+      }, animationSpeed * 9);
+    }
+
+    function startAnimation() {
+      const effects = {
+        typewriter: typewriterEffect,
+        fade:       fadeEffect,
+        bounce:     bounceEffect,
+        slide:      slideEffect,
+        rotate:     rotateEffect,
+        blink:      blinkEffect,
+        wave:       waveEffect,
+        marquee:    marqueeEffect,
+        flash:      flashEffect,
+        ping:       pingEffect
+      };
+      const fn = effects[animationType];
+      if (fn) fn();
+    }
+
+    // ── Détection visibilité onglet
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        if (!isInactive) {
+          isInactive = true;
+          startAnimation();
+        }
+      } else {
+        if (isInactive) {
+          isInactive = false;
+          clearInterval(intervalId);
+          document.title = originalTitle;
+        }
+      }
+    });
+  }
+
+  if (window.__allProducts && window.__allProducts.length) {
+    run();
+  } else {
+    let tries = 0;
+    const wait = setInterval(() => {
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(wait);
+        run();
+      } else if (++tries > 60) {
+        clearInterval(wait);
+        run();
+      }
+    }, 100);
+  }
+
+})();

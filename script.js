@@ -2441,7 +2441,7 @@ initAnnouncementBar();
     var featClass = col.featured ? ' jrgq-gal-item--featured' : '';
 
     var featuredBadge = col.featured
-      ? '<div class="jrgq-gal-featured-badge"><i class="fas fa-trophy"></i> Best Result</div>'
+      ? '<div class="jrgq-gal-featured-badge"><i class="fas fa-heart"></i> Most Loved</div>'
       : '';
 
     var item = document.createElement('div');
@@ -2466,7 +2466,7 @@ initAnnouncementBar();
         '<p class="jrgq-gal-quote">"' + (col.quote || col.subtitle || '') + '"</p>' +
         '<a href="' + col.url + '" class="jrgq-gal-cta-btn">' + (col.cta_label || 'View Collection →') + '</a>' +
       '</div>' +
-      '<div class="jrgq-gal-badge">Verified</div>';
+      '<div class="jrgq-gal-badge">Curated</div>';
 
     mosaic.appendChild(item);
   });
@@ -3634,9 +3634,6 @@ if (window.innerWidth <= 768) {
 // ====================== END MY PERSONALIZED PRODUCT POPUP ======================
 
 
-// ══════════════════════════════════════════
-//  STORY CIRCLES — dynamique depuis settings
-// ══════════════════════════════════════════
 (function initStoryCircles() {
   const section = document.getElementById('story-circles');
   const track   = document.getElementById('storyCirclesTrack');
@@ -3646,25 +3643,38 @@ if (window.innerWidth <= 768) {
   const sc       = settings.story_circles || {};
   const ids      = sc.product_ids || [];
 
-  // Lecture du format multi-animation
+  // ── Animation
   const animations = sc.animations || { marquee: 'yes' };
   const animType = Object.keys(animations).find(
     k => (animations[k] || '').toLowerCase() === 'yes'
   ) || 'marquee';
 
   if (!ids.length) { section.style.display = 'none'; return; }
-
-  // Classe animation sur la section
   section.classList.add('anim--' + animType);
 
-  // Filtre les produits dans l'ordre des ids
+  // ── Border style
+  const borderStyles = sc.border_style || {};
+  const borderType = Object.keys(borderStyles).find(
+    k => (borderStyles[k] || '').toLowerCase() === 'yes'
+  ) || 'conic_noir';
+  section.classList.add('border--' + borderType);
+
+  // ── CSS vars
+  const borderSize  = sc.border_size  || 3;
+  const borderColor = sc.border_color || '#c0385e';
+  section.style.setProperty('--sc-border-size',  borderSize + 'px');
+  section.style.setProperty('--sc-border-color', borderColor);
+
+  // ── Fix alignement : injecter le nombre de cercles comme CSS var
   const realProducts = ids
+    .filter(id => !id.startsWith('--'))
     .map(id => products.find(p => p.id === id))
     .filter(Boolean);
 
   if (!realProducts.length) { section.style.display = 'none'; return; }
 
-  // Crée un item cercle
+  section.style.setProperty('--sc-count', realProducts.length);
+
   function makeItem(prod) {
     const url   = getProductUrl(prod.id);
     const label = prod.title.split('—')[0].split('-')[0].trim();
@@ -3686,9 +3696,8 @@ if (window.innerWidth <= 768) {
   }
 
   if (animType === 'marquee') {
-    // Calcule combien de fois répéter pour dépasser largement la largeur de l'écran
     const screenW = window.innerWidth;
-    const itemW   = 90 + 18; // width + gap
+    const itemW   = 90 + 18;
     const totalW  = realProducts.length * itemW;
     const repeats = Math.ceil((screenW * 3) / totalW) + 1;
 
@@ -3708,7 +3717,6 @@ if (window.innerWidth <= 768) {
     track.appendChild(group2);
 
   } else {
-    // Animations statiques : items directs dans le track
     realProducts.forEach(prod => track.appendChild(makeItem(prod)));
   }
 })();
@@ -6694,7 +6702,7 @@ function initStockBar(cjId) {
 
 
 /* ================================================================
-   CURVAFIT AI CHATBOT — FRONTEND JS
+   BBW4LIFE AI CHATBOT — FRONTEND JS
 ================================================================ */
 document.addEventListener('DOMContentLoaded', function () {
   (function () {
@@ -6725,7 +6733,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let conversationHistory = [];
     try { conversationHistory = JSON.parse(sessionStorage.getItem('cf_history') || '[]'); } catch(e) {}
 
-    /* ── Client-side language detection (mirrors server) ── */
+    /* ── Client-side language detection ── */
     function detectUILanguage(text) {
       const t = (text || '').toLowerCase().trim();
 
@@ -6752,13 +6760,16 @@ document.addEventListener('DOMContentLoaded', function () {
       return 'en';
     }
 
-    /* Welcome messages per language */
+    /* Welcome messages per language — Berline / BBW4LIFE */
     const welcomeMessages = {
-      fr: `Salut ! 👋 Je suis **Curva**, ta coach personnelle CurvaFit !\n\nJe suis là pour t'aider avec :\n- 🔥 Conseils minceur & perte de poids\n- 🥗 Nutrition et alimentation\n- 💪 Recommandations de produits\n- 📋 Programmes & plans de coaching\n\nComment puis-je t'aider aujourd'hui ? 😊`,
-      es: `¡Hola! 👋 Soy **Curva**, tu coach personal de CurvaFit!\n\nEstoy aquí para ayudarte con:\n- 🔥 Consejos para perder peso\n- 🥗 Orientación nutricional\n- 💪 Recomendaciones de productos\n- 📋 Programas & planes de coaching\n\n¿En qué puedo ayudarte hoy? 😊`,
-      en: `Hi! 👋 I'm **Curva**, your personal CurvaFit coach!\n\nI'm here to help you with:\n- 🔥 Weight loss tips & advice\n- 🥗 Nutrition guidance\n- 💪 Product recommendations\n- 📋 Programs & coaching plans\n\nWhat can I help you with today? 😊`
+      fr: `Salut ! 👋 Je suis **Berline**, ta styliste personnelle BBW4LIFE !\n\nJe suis là pour t'aider avec :\n- 👗 Mode & style plus size\n- 💄 Beauté & soins\n- 👟 Chaussures & accessoires\n- 🛍️ Recommandations de produits\n\nComment puis-je t'aider aujourd'hui ? 😊`,
+      es: `¡Hola! 👋 Soy **Berline**, tu estilista personal de BBW4LIFE!\n\nEstoy aquí para ayudarte con:\n- 👗 Moda & estilo plus size\n- 💄 Belleza & cuidado personal\n- 👟 Zapatos & accesorios\n- 🛍️ Recomendaciones de productos\n\n¿En qué puedo ayudarte hoy? 😊`,
+      en: `Hi! 👋 I'm **Berline**, your personal BBW4LIFE stylist!\n\nI'm here to help you with:\n- 👗 Plus size fashion & style\n- 💄 Beauty & skincare\n- 👟 Shoes & accessories\n- 🛍️ Product recommendations\n\nWhat can I help you with today? 😊`
     };
 
+    /* ══════════════════════════════════════
+       DRAG — inchangé
+    ══════════════════════════════════════ */
     (function initDrag() {
       let isDragging = false;
       let startX, startY, origLeft, origBottom, hasMoved;
@@ -6800,7 +6811,7 @@ document.addEventListener('DOMContentLoaded', function () {
         applyPosition(nl, nb);
       }
 
-      // ── Mouse ──
+      /* Mouse */
       toggle.addEventListener('mousedown', (e) => {
         startDrag(e.clientX, e.clientY);
         e.preventDefault();
@@ -6813,7 +6824,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!hasMoved) { isOpen ? closeChat() : openChat(); }
       });
 
-      // ── Touch ──
+      /* Touch */
       toggle.addEventListener('touchstart', (e) => {
         startDrag(e.touches[0].clientX, e.touches[0].clientY);
       }, { passive: false });
@@ -6887,23 +6898,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ══════════════════════════════════════
-       IMPROVEMENT #2: Format Markdown + Promo Code Highlighting
+       FORMAT MARKDOWN + Promo Code Highlighting
     ══════════════════════════════════════ */
     function formatMarkdown(text) {
+      /* Strip any raw internal product IDs that might leak */
       const internalIds = [
         'Pdg-Francenel-product1','Pdg-Francenel-product2','Pdg-Francenel-product3',
         'Pdg-Francenel-product4','Pdg-Francenel-product5','Pdg-Francenel-product6',
         'Pdg-Francenel-product7','Pdg-Francenel-product8','Pdg-Francenel-product9',
         'Pdg-Francenel-product10','Pdg-Francenel-product11','Pdg-Francenel-product12',
         'Pdg-Francenel-product13','Pdg-Francenel-product14','Pdg-Francenel-product15',
-        'Pdg-Francenel-product16'
+        'Pdg-Francenel-product16','Pdg-Francenel-product17','Pdg-Francenel-product18',
+        'Pdg-Francenel-product19','Pdg-Francenel-product20','Pdg-Francenel-product21',
+        'Pdg-Francenel-product22','Pdg-Francenel-product23','Pdg-Francenel-product24',
+        'Pdg-Francenel-product25','Pdg-Francenel-product26','Pdg-Francenel-product27',
+        'Pdg-Francenel-product28','Pdg-Francenel-product29','Pdg-Francenel-product30',
+        'Pdg-Francenel-product31','Pdg-Francenel-product32','Pdg-Francenel-product33',
+        'Pdg-Francenel-product34','Pdg-Francenel-product35','Pdg-Francenel-product36',
+        'Pdg-Francenel-product37','Pdg-Francenel-product38','Pdg-Francenel-product39',
+        'Pdg-Francenel-product40','Pdg-Francenel-product41','Pdg-Francenel-product42',
+        'Pdg-Francenel-product43','Pdg-Francenel-product44','Pdg-Francenel-product45',
+        'Pdg-Francenel-product46','Pdg-Francenel-product47','Pdg-Francenel-product48',
+        'Pdg-Francenel-product49','Pdg-Francenel-product50','Pdg-Francenel-product51',
+        'Pdg-Francenel-product52','Pdg-Francenel-product53','Pdg-Francenel-product54',
+        'Pdg-Francenel-product55','Pdg-Francenel-product56','Pdg-Francenel-product57',
+        'Pdg-Francenel-product58','Pdg-Francenel-product59','Pdg-Francenel-product60',
+        'Pdg-Francenel-product61','Pdg-Francenel-product62','Pdg-Francenel-product63',
+        'Pdg-Francenel-product64','Pdg-Francenel-product65','Pdg-Francenel-product66',
+        'Pdg-Francenel-product67','Pdg-Francenel-product68',
+        'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
+        'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
+        'Pdg-Francenel-product75'
       ];
       let out = text;
       internalIds.forEach(id => {
         out = out.replace(new RegExp('\\b' + id + '\\b', 'gi'), '');
       });
 
-      /* ── IMPROVEMENT #2: Render [[CODE]] as a highlighted promo badge ── */
+      /* Render [[CODE]] as a highlighted promo badge */
       out = out.replace(/\[\[([A-Z0-9_-]+)\]\]/g, (match, code) => {
         return `<span class="cf-promo-code" data-code="${code}" title="Click to copy">${code}<svg class="cf-promo-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span>`;
       });
@@ -6918,15 +6950,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       );
 
+      /* Auto-linkify known BBW4LIFE page paths */
       out = out.replace(
-        /(\/products\/product\d+\.html|\/contact\.html|\/shop\.html|\/programs\.html|\/checkout\.html|\/account\.html)/g,
+        /(\/products\/product\d+\.html|\/page\/contact\.html|\/collections\/bbw4life-all-product\.html|\/page\/about\.html|\/account\.html|\/page\/order-tracking\.html)/g,
         (url) => {
           const labels = {
-            '/contact.html':  'Contact us',
-            '/shop.html':     'Visit shop',
-            '/programs.html': 'See programs',
-            '/checkout/checkout.html': 'Checkout',
-            '/account.html':  'My Account'
+            '/page/contact.html':                      'Contact us',
+            '/collections/bbw4life-all-product.html':  'Shop All',
+            '/page/about.html':                        'About Us',
+            '/account.html':                           'My Account',
+            '/page/order-tracking.html':               'Order Tracking',
           };
           const label = labels[url] || 'View';
           return `<a href="${url}" class="cf-link-btn">${label} →</a>`;
@@ -6946,7 +6979,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
-    /* ── IMPROVEMENT #2: Copy promo code on click ── */
+    /* Copy promo code on click */
     function attachPromoCodeCopyEvents(container) {
       container.querySelectorAll('.cf-promo-code').forEach(el => {
         el.addEventListener('click', function (e) {
@@ -7003,7 +7036,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ══════════════════════════════════════
        ADD MESSAGE
-       pageButtons: array of { url, label, icon } — NEW param
+       pageButtons: array of { url, label, icon }
     ══════════════════════════════════════ */
     function addMessage(text, role, products, contactInfo, pageButtons) {
       const msgEl  = document.createElement('div');
@@ -7078,7 +7111,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <a href="${p.url}" class="cf-pc-btn" onclick="event.stopPropagation()">
               View Product
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12H19M13 6L19 12L13 18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
               </svg>
             </a>`;
 
@@ -7164,7 +7197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      /* ── PAGE NAVIGATION BUTTONS — NEW ── */
+      /* ── PAGE NAVIGATION BUTTONS ── */
       if (role === 'ai' && Array.isArray(pageButtons) && pageButtons.length > 0) {
         const pageWrap = document.createElement('div');
         pageWrap.className = 'cf-page-btns';
@@ -7246,7 +7279,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const products    = data.products    || [];
         const showContact = data.showContact || false;
         const contactInfo = data.contactInfo || null;
-        const pageButtons = data.pageButtons || []; /* ← NEW */
+        const pageButtons = data.pageButtons || [];
 
         addMessage(aiReply, 'ai', products, showContact ? contactInfo : null, pageButtons);
         conversationHistory.push({ role: 'assistant', content: aiReply });
@@ -7307,14 +7340,14 @@ document.addEventListener('DOMContentLoaded', function () {
       if (isOpen && !widget.contains(e.target) && !toggle.contains(e.target)) closeChat();
     });
 
-    console.log('✅ CurvaFit Chatbot ready — trilingual (EN/FR/ES)');
+    console.log('✅ BBW4LIFE Chatbot ready — Berline is online (EN/FR/ES + multilingual)');
   })();
 });
 
 
 
 /* ══════════════════════════════════════════════════════
-   CURVAFIT — COOKIE CONSENT POPUP
+   BBW4LIFE — COOKIE CONSENT POPUP
    Inject this entire block into script.js
 ══════════════════════════════════════════════════════ */
 (function () {
@@ -7380,7 +7413,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <!-- ── Body ── -->
         <div class="cfck-body">
           <p class="cfck-desc">
-            CurvaFit uses cookies to improve your experience, analyze traffic, and — with your permission — personalize content. Your data is never sold. Read our
+            BBW4LIFE uses cookies to improve your experience, analyze traffic, and — with your permission — personalize content. Your data is never sold. Read our
             <a href="/policies/privacy.html" class="cfck-link">Privacy Policy</a> for full details.
           </p>
 
@@ -7993,10 +8026,6 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
   'use strict';
 
-  /* ──────────────────────────────────────────────────────────
-     ATTENDRE QUE products.data.json SOIT CHARGÉ
-     (window.__allProducts est rempli par script.js)
-  ────────────────────────────────────────────────────────── */
   function waitForProducts(cb) {
     if (window.__allProducts && window.__allProducts.length) {
       cb(window.__allProducts);
@@ -8008,22 +8037,14 @@ document.addEventListener('DOMContentLoaded', function () {
           cb(window.__allProducts);
         } else if (++tries > 80) {
           clearInterval(poll);
-          cb([]); /* fallback sans données */
+          cb([]);
         }
       }, 100);
     }
   }
 
-  /* ──────────────────────────────────────────────────────────
-     HELPERS
-  ────────────────────────────────────────────────────────── */
   var $ = function (id) { return document.getElementById(id); };
 
-  function setStyle(el, prop, val) {
-    if (el) el.style[prop] = val;
-  }
-
-  /* Redéclenche l'animation CSS d'un élément */
   function reAnimate(els, delayMs) {
     delayMs = delayMs || 0;
     els.forEach(function (el) {
@@ -8031,7 +8052,6 @@ document.addEventListener('DOMContentLoaded', function () {
       el.style.animation = 'none';
       el.style.opacity   = '0';
       el.style.transform = 'translateY(16px)';
-      /* Force reflow */
       void el.offsetHeight;
       setTimeout(function () {
         el.style.animation = '';
@@ -8044,16 +8064,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ──────────────────────────────────────────────────────────
-     INIT PRINCIPAL
-  ────────────────────────────────────────────────────────── */
   waitForProducts(function (allProducts) {
 
-    /* Récupère le settings */
     var settings = (allProducts.find(function (p) { return p.type === 'settings'; }) || {});
     var cfg = settings.hero_banner || {};
 
-    /* ── Éléments DOM ────────────────────────────────────── */
     var mediaEl    = $('bbwHeroMedia');
     var thumbsEl   = $('bbwHeroThumbs');
     var dotsEl     = $('bbwHeroDots');
@@ -8067,9 +8082,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var btnSlide2  = $('bbwHeroBtn2');
     var btnSlide3  = $('bbwHeroBtn3');
 
-    if (!mediaEl) return; /* Section absente de la page */
+    if (!mediaEl) return;
 
-    /* ── Paramètres issus du settings ───────────────────── */
     var videoUrl         = cfg.video_url            || '';
     var images           = cfg.images               || [];
     var showThumbs       = (cfg.show_thumbnails      || 'yes').toLowerCase() === 'yes';
@@ -8085,28 +8099,36 @@ document.addEventListener('DOMContentLoaded', function () {
     var btn2Cfg          = cfg.button_2              || {};
     var btn3Cfg          = cfg.button_3              || {};
 
-    /* Couleurs CSS custom depuis settings */
     var root = document.documentElement;
     if (cfg.button_color)      root.style.setProperty('--hero-btn-bg',    cfg.button_color);
     if (cfg.button_text_color) root.style.setProperty('--hero-btn-color',  cfg.button_text_color);
     if (cfg.text_color)        root.style.setProperty('--hero-text-color', cfg.text_color);
 
-    /* ── Nombre de slides effectifs ─────────────────────── */
-    var slideCount = videoUrl ? 1 : Math.min(images.length, slides.length, 3);
+    /* ── Nombre de slides effectifs ── */
+    /* En mode vidéo : le contenu (titre/texte/bouton) slide quand même */
+    var slideCount;
+    if (videoUrl) {
+      slideCount = slides.length > 0 ? slides.length : 1;
+    } else {
+      slideCount = Math.min(
+        images.length > 0 ? images.length : 999,
+        slides.length  > 0 ? slides.length  : 999
+      );
+      if (slideCount === 999) slideCount = 1;
+    }
+
     var currentIdx = 0;
     var autoTimer  = null;
 
     /* ════════════════════════════════════════════════════════
        1. INJECTION MÉDIAS
     ════════════════════════════════════════════════════════ */
-      if (videoUrl) {
-      /* Mode vidéo → une seule vidéo, thumbs cachées, dots cachés */
-
-      /* ── Placeholder image ── */
+    if (videoUrl) {
+      /* Mode vidéo — placeholder + vidéo fixe, contenu slide normalement */
       var placeholderSrc = cfg.video_placeholder_image || '';
       var placeholderEl  = document.getElementById('bbwHeroVideoPlaceholder');
       if (placeholderEl && placeholderSrc) {
-        placeholderEl.src          = placeholderSrc;
+        placeholderEl.src           = placeholderSrc;
         placeholderEl.style.display = 'block';
       }
 
@@ -8119,7 +8141,6 @@ document.addEventListener('DOMContentLoaded', function () {
       vid.style.position = 'relative';
       vid.style.zIndex   = '2';
 
-      /* Cacher le placeholder dès que la vidéo peut jouer */
       vid.addEventListener('canplay', function () {
         if (placeholderEl) placeholderEl.style.display = 'none';
       });
@@ -8130,10 +8151,9 @@ document.addEventListener('DOMContentLoaded', function () {
       vid.appendChild(src);
       mediaEl.appendChild(vid);
 
-      /* Cacher thumbs et dots */
+      /* Thumbs et dots cachés en mode vidéo */
       if (thumbsEl) thumbsEl.style.display = 'none';
       if (dotsEl)   dotsEl.style.display   = 'none';
-      slideCount = 1;
 
     } else {
       /* Mode images */
@@ -8151,7 +8171,6 @@ document.addEventListener('DOMContentLoaded', function () {
        2. THUMBNAILS
     ════════════════════════════════════════════════════════ */
     if (showThumbs && thumbsEl && !videoUrl && images.length > 1) {
-      /* Classes de positionnement desktop / mobile */
       thumbsEl.classList.add('bbw-thumbs--' + thumbPosDesktop);
       thumbsEl.classList.add('bbw-thumbs--mobile-' + thumbPosMobile);
 
@@ -8173,8 +8192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         thumbsEl.appendChild(thumb);
       });
-    } else if (thumbsEl) {
-      /* Pas de thumbs → cacher le conteneur */
+    } else if (thumbsEl && !videoUrl) {
       thumbsEl.style.display = 'none';
     }
 
@@ -8200,7 +8218,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ════════════════════════════════════════════════════════
-       4. CONTENU TEXTUEL — initialise le premier slide
+       4. CONTENU TEXTUEL
     ════════════════════════════════════════════════════════ */
     function updateContent(idx) {
       var slide = slides[idx] || {};
@@ -8208,7 +8226,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (subtitleEl) subtitleEl.textContent = slide.subtitle || '';
       if (textEl)     textEl.textContent     = slide.text     || '';
 
-      /* Ré-anime les éléments */
       reAnimate([titleEl, subtitleEl, textEl, cdWrap, btnWrap], 0);
     }
 
@@ -8220,9 +8237,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (showCountdown && cdWrap && countdownEnd) {
       cdWrap.style.display = 'flex';
 
-      /* Labels depuis settings */
-      var lblDays    = cfg.countdown_label_days    || 'JOURS';
-      var lblHours   = cfg.countdown_label_hours   || 'HEURES';
+      var lblDays    = cfg.countdown_label_days    || 'DAYS';
+      var lblHours   = cfg.countdown_label_hours   || 'HOURS';
       var lblMinutes = cfg.countdown_label_minutes || 'MIN';
       var lblSeconds = cfg.countdown_label_seconds || 'SEC';
 
@@ -8266,7 +8282,7 @@ document.addEventListener('DOMContentLoaded', function () {
        6. BOUTONS
     ════════════════════════════════════════════════════════ */
     if (showIndivBtns) {
-      /* Mode : 1 bouton par slide */
+      /* Mode : 1 bouton par slide — valable vidéo ET images */
       [
         { el: btnSlide1, cfg: btn1Cfg, idx: 0 },
         { el: btnSlide2, cfg: btn2Cfg, idx: 1 },
@@ -8276,14 +8292,14 @@ document.addEventListener('DOMContentLoaded', function () {
         item.el.textContent = item.cfg.text || 'Shop Now';
         item.el.href        = item.cfg.url  || '#';
         /* Afficher uniquement le bouton du slide courant */
-        item.el.style.display = (item.idx === 0) ? 'inline-block' : 'none';
+        item.el.style.display = (item.idx === currentIdx) ? 'inline-block' : 'none';
       });
       if (btnMain) btnMain.style.display = 'none';
 
     } else {
-      /* Mode : bouton principal unique → ajoute les produits du pack */
+      /* Mode : bouton principal unique */
       if (btnMain) {
-        btnMain.textContent = mainBtnCfg.text || 'Ajouter le pack au panier';
+        btnMain.textContent = mainBtnCfg.text || 'Add pack to cart';
         btnMain.style.display = 'inline-block';
         btnMain.addEventListener('click', handlePackClick);
       }
@@ -8292,21 +8308,17 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* ──────────────────────────────────────────────────────
-       Handler : bouton principal → ajoute les variants au
-    ────────────────────────────────────────────────────── */
+    /* ── Handler bouton principal pack ── */
     function handlePackClick() {
       var productIds = mainBtnCfg.product_ids || [];
       if (!productIds.length) { window.location.href = '/checkout/checkout.html'; return; }
 
-      /* Récupère cart depuis script.js (exposé via window.__getCart) */
       var cart = (typeof window.__getCart === 'function') ? window.__getCart() : [];
 
       productIds.forEach(function (pid) {
         var prod = allProducts.find(function (p) { return p.id === pid; });
         if (!prod) return;
 
-        /* Premier variant disponible */
         var variant = (prod.variants && prod.variants.length) ? prod.variants[0] : null;
         var price   = variant ? parseFloat(variant.price) : parseFloat(prod.price);
         var color   = variant ? (variant.color || null) : null;
@@ -8317,7 +8329,6 @@ document.addEventListener('DOMContentLoaded', function () {
           : null;
         var image = colorObj ? (colorObj.image || prod.image) : prod.image;
 
-        /* Vérifie si déjà dans le cart */
         var existing = cart.find(function (i) {
           return i.id === pid && i.color === color && i.size === size;
         });
@@ -8343,15 +8354,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       });
 
-      /* Sauvegarde et synchronise */
       if (typeof window.__setCart === 'function') window.__setCart(cart);
       localStorage.setItem('cart', JSON.stringify(cart));
       localStorage.setItem('checkoutCart', JSON.stringify(cart));
 
-      if (typeof window.updateBadges === 'function')             window.updateBadges();
+      if (typeof window.updateBadges === 'function')              window.updateBadges();
       if (typeof window.updateCartQuantityInSheet === 'function') window.updateCartQuantityInSheet();
 
-      /* Feedback visuel */
       if (btnMain) {
         btnMain.classList.add('bbw-hero__btn--added');
         btnMain.textContent = '✓ Ajouté au panier…';
@@ -8371,32 +8380,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
       currentIdx = idx;
 
-      /* ── Images ── */
-      var imgs = mediaEl.querySelectorAll('img');
-      imgs.forEach(function (img, i) {
-        img.classList.toggle('bbw-hero--active', i === idx);
-      });
-
-      /* ── Thumbnails ── */
-      if (thumbsEl) {
-        var thumbItems = thumbsEl.querySelectorAll('.bbw-hero__thumb');
-        thumbItems.forEach(function (t, i) {
-          t.classList.toggle('bbw-hero--active', i === idx);
+      /* ── Images + Thumbs + Dots — seulement en mode image ── */
+      if (!videoUrl) {
+        var imgs = mediaEl.querySelectorAll('img');
+        imgs.forEach(function (img, i) {
+          img.classList.toggle('bbw-hero--active', i === idx);
         });
+
+        if (thumbsEl) {
+          var thumbItems = thumbsEl.querySelectorAll('.bbw-hero__thumb');
+          thumbItems.forEach(function (t, i) {
+            t.classList.toggle('bbw-hero--active', i === idx);
+          });
+        }
+
+        if (dotsEl) {
+          var dotItems = dotsEl.querySelectorAll('.bbw-hero__dot');
+          dotItems.forEach(function (d, i) {
+            d.classList.toggle('bbw-hero--active', i === idx);
+          });
+        }
       }
 
-      /* ── Dots ── */
-      if (dotsEl) {
-        var dotItems = dotsEl.querySelectorAll('.bbw-hero__dot');
-        dotItems.forEach(function (d, i) {
-          d.classList.toggle('bbw-hero--active', i === idx);
-        });
-      }
-
-      /* ── Contenu texte ── */
+      /* ── Contenu texte — toujours, vidéo ou images ── */
       updateContent(idx);
 
-      /* ── Boutons individuels ── */
+      /* ── Boutons individuels — toujours, vidéo ou images ── */
       if (showIndivBtns) {
         [btnSlide1, btnSlide2, btnSlide3].forEach(function (b, i) {
           if (b) b.style.display = (i === idx) ? 'inline-block' : 'none';

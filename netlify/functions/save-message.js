@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
     try {
         const body = JSON.parse(event.body);
-        const { firstName, lastName, email, subject, message } = body;
+        const { firstName, lastName, email, subject, program, message } = body;
 
         if (!firstName || !lastName || !email || !subject || !message) {
             throw new Error("All fields are required");
@@ -37,13 +37,14 @@ exports.handler = async (event) => {
             normalize(lastName),
             normalize(email),
             subject,
+            program || "N/A",
             message,
             formatDate()
         ]];
 
         await sheets.spreadsheets.values.append({
             spreadsheetId,
-            range: "bbw4life-contact-messages!A:F",
+            range: "bbw4life-contact-messages!A:G",
             valueInputOption: "RAW",
             insertDataOption: "INSERT_ROWS",
             resource: { values }

@@ -20,37 +20,40 @@ function formatDate() {
 // ── SAVE ──────────────────────────────────────────────────────────────
 async function saveStory(body) {
   const {
-    firstName, age, email, country, startWeight, program,
-    duration, result, waist, failedBefore, story, mentalQuote,
-    rating, photo, anonymous
+    firstName, age, email, country,
+    bodyPressureDuration, bbwHelped, discoveredWhen,
+    selfChange, wordToday, toldBefore,
+    story, mentalQuote, rating, photo, anonymous
   } = body;
 
-  if (!firstName || !email || !startWeight || !program || !story) {
+  if (!firstName || !email || !bodyPressureDuration || !bbwHelped || !story || !selfChange) {
     throw new Error('Required fields missing');
   }
 
   const auth   = getAuth();
   const sheets = google.sheets({ version: 'v4', auth });
 
-  // Colonnes : A=firstName, B=age, C=email, D=country, E=startWeight,
-  //            F=program, G=duration, H=result, I=waist, J=failedBefore,
-  //            K=story, L=mentalQuote, M=rating, N=photo, O=anonymous,
-  //            P=status, Q=date
+  // Colonnes :
+  // A=firstName, B=age, C=email, D=country,
+  // E=bodyPressureDuration, F=bbwHelped, G=discoveredWhen,
+  // H=selfChange, I=wordToday, J=toldBefore,
+  // K=story, L=mentalQuote, M=rating, N=photo, O=anonymous,
+  // P=status, Q=date
   const values = [[
     firstName.trim(),
-    age            || '',
+    age                  || '',
     email.trim().toLowerCase(),
-    country        || '',
-    startWeight,
-    program,
-    duration       || '',
-    result         || '',
-    waist          || '',
-    failedBefore   || '',
+    country              || '',
+    bodyPressureDuration || '',
+    bbwHelped            || '',
+    discoveredWhen       || '',
+    selfChange           || '',
+    wordToday            || '',
+    toldBefore           || '',
     story.trim(),
-    mentalQuote    || '',
-    rating         || '5',
-    photo          || '',
+    mentalQuote          || '',
+    rating               || '5',
+    photo                || '',
     anonymous === true || anonymous === 'true' ? 'yes' : 'no',
     'pending',
     formatDate()
@@ -79,27 +82,29 @@ async function fetchStories() {
 
   const rows = res.data.values || [];
 
-  // A=0, B=1, C=2, D=3, E=4, F=5, G=6, H=7, I=8, J=9,
-  // K=10, L=11(mentalQuote), M=12(rating), N=13(photo),
+  // A=0, B=1, C=2, D=3,
+  // E=4(bodyPressureDuration), F=5(bbwHelped), G=6(discoveredWhen),
+  // H=7(selfChange), I=8(wordToday), J=9(toldBefore),
+  // K=10(story), L=11(mentalQuote), M=12(rating), N=13(photo),
   // O=14(anonymous), P=15(status), Q=16(date)
   const stories = rows
     .slice(1)
     .filter(r => r[15] && r[15].toString().toLowerCase() === 'approved')
     .map(r => ({
-      firstName:   r[14] && r[14].toString().toLowerCase() === 'yes' ? 'Anonymous' : (r[0] || 'Anonymous'),
-      age:         r[1]  || '',
-      country:     r[3]  || '',
-      startWeight: r[4]  || '',
-      program:     r[5]  || '',
-      duration:    r[6]  || '',
-      result:      r[7]  || '',
-      waist:       r[8]  || '',
-      failedBefore:r[9]  || '',
-      story:       r[10] || '',
-      mentalQuote: r[11] || '',
-      rating:      r[12] || '5',
-      photo:       r[13] || '',
-      date:        r[16] || ''
+      firstName:           r[14] && r[14].toString().toLowerCase() === 'yes' ? 'Anonymous' : (r[0] || 'Anonymous'),
+      age:                 r[1]  || '',
+      country:             r[3]  || '',
+      bodyPressureDuration:r[4]  || '',
+      bbwHelped:           r[5]  || '',
+      discoveredWhen:      r[6]  || '',
+      selfChange:          r[7]  || '',
+      wordToday:           r[8]  || '',
+      toldBefore:          r[9]  || '',
+      story:               r[10] || '',
+      mentalQuote:         r[11] || '',
+      rating:              r[12] || '5',
+      photo:               r[13] || '',
+      date:                r[16] || ''
     }));
 
   return { success: true, stories };

@@ -1,9 +1,12 @@
-(function CurvaSearch() {
+(function BBW4LIFESearch() {
   'use strict';
 
   let searchIndex = [];
   let searchReady = false;
 
+  /* ──────────────────────────────────────────────────────────────
+     TYPE LABELS & ORDER
+  ────────────────────────────────────────────────────────────── */
   const TYPE_LABELS = {
     page:    'Page',
     product: 'Product',
@@ -14,68 +17,100 @@
     policy:  'Policy'
   };
 
-  const TYPE_ORDER = ['product', 'program', 'page', 'blog', 'feature', 'coach', 'policy'];
+  const TYPE_ORDER = ['product', 'page', 'blog', 'feature', 'coach', 'program', 'policy'];
 
+  /* ──────────────────────────────────────────────────────────────
+     LOAD INDEX
+     Merge search.data.json titles with real product titles
+     from products.data.json (window.__allProducts)
+  ────────────────────────────────────────────────────────────── */
   function loadIndex() {
-    Promise.all([
-      fetch('/search.data.json').then(r => r.json()),
-      fetch('/products.data.json').then(r => r.json())
-    ])
-    .then(([searchData, productsData]) => {
+    const fetchSearch   = fetch('/search.data.json').then(r => r.json());
+    const fetchProducts = window.__allProducts && window.__allProducts.length
+      ? Promise.resolve(window.__allProducts)
+      : fetch('/products.data.json').then(r => r.json());
 
-      // Récupérer les vrais produits (sans l'objet settings)
-      const realProducts = productsData.filter(p => !p.type);
+    Promise.all([fetchSearch, fetchProducts])
+      .then(([searchData, productsData]) => {
 
-      // Pour chaque entrée de type "product" dans search.data.json
-      // on retrouve le produit correspondant via l'URL (ex: product1.html → index 0)
-      searchIndex = searchData.map(item => {
-        if (item.type !== 'product') return item;
+        // Store in global if not already
+        if (!window.__allProducts || !window.__allProducts.length) {
+          window.__allProducts = productsData;
+        }
 
-        // Extraire le numéro depuis l'URL (ex: /products/product3.html → 3)
-        const match = (item.url || '').match(/product(\d+)\.html/);
-        if (!match) return item;
+        // Real products (exclude settings object)
+        const realProducts = productsData.filter(p => !p.type);
 
-        const productIndex = parseInt(match[1]) - 1;
-        const prod = realProducts[productIndex];
-        if (!prod) return item;
+        // Build a map: product id → product (e.g. "Pdg-Francenel-product7" → {...})
+        const productById = {};
+        realProducts.forEach(p => { productById[p.id] = p; });
 
-        // Remplacer le titre par celui de products.data.json
-        return {
-          ...item,
-          title: prod.title
-        };
+        // Merge: for type="product" entries, use the real title + image from products.data.json
+        searchIndex = searchData.map(item => {
+          if (item.type !== 'product') return item;
+
+          // Match by URL pattern: /products/productN.html → "Pdg-Francenel-productN"
+          const match = (item.url || '').match(/product(\d+)\.html/);
+          if (!match) return item;
+
+          const productId = 'Pdg-Francenel-product' + match[1];
+          const prod = productById[productId];
+          if (!prod) return item;
+
+          // Enrich with real title and additional auto-keywords
+          const autoKeywords = [
+            prod.title,
+            prod.description,
+            prod.badge && prod.badge.text,
+            ...(prod.colors || []).map(c => c.name),
+            ...(prod.sizes  || [])
+          ].filter(Boolean).map(k => k.toLowerCase());
+
+          return {
+            ...item,
+            title:    prod.title,
+            image:    prod.image  || item.image  || '',
+            price:    prod.price  || null,
+            keywords: [...(item.keywords || []), ...autoKeywords]
+          };
+        });
+
+        searchReady = true;
+        initSearch();
+      })
+      .catch(err => {
+        console.warn('[BBW4LIFE Search] Failed to load index:', err);
+        searchReady = false;
       });
-
-      searchReady = true;
-      initSearch();
-    })
-    .catch(() => {
-      searchReady = false;
-    });
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     SCORING
+  ────────────────────────────────────────────────────────────── */
   function score(item, query) {
-    const q = query.toLowerCase().trim();
-    const title = (item.title || '').toLowerCase();
+    const q        = query.toLowerCase().trim();
+    const title    = (item.title    || '').toLowerCase();
     const keywords = (item.keywords || []).join(' ').toLowerCase();
-    const type = (item.type || '').toLowerCase();
+    const type     = (item.type     || '').toLowerCase();
+    const words    = q.split(/\s+/);
 
-    if (title === q) return 100;
-    if (title.startsWith(q)) return 85;
-    if (title.includes(q)) return 70;
-    const words = q.split(/\s+/);
-    const allInTitle = words.every(w => title.includes(w));
-    if (allInTitle) return 60;
-    if (keywords.includes(q)) return 50;
-    const anyInKeywords = words.some(w => keywords.includes(w));
-    if (anyInKeywords) return 30;
-    if (type.includes(q)) return 15;
+    if (title === q)                               return 100;
+    if (title.startsWith(q))                      return 88;
+    if (title.includes(q))                        return 75;
+    if (words.every(w => title.includes(w)))      return 65;
+    if (keywords.includes(q))                     return 52;
+    if (words.some(w => keywords.includes(w)))    return 32;
+    if (type.includes(q))                         return 15;
     return 0;
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     SEARCH
+  ────────────────────────────────────────────────────────────── */
   function search(query) {
     if (!query || query.length < 2) return [];
-    const results = searchIndex
+
+    return searchIndex
       .map(item => ({ item, score: score(item, query) }))
       .filter(r => r.score > 0)
       .sort((a, b) => {
@@ -84,58 +119,73 @@
       })
       .slice(0, 8)
       .map(r => r.item);
-    return results;
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     HIGHLIGHT
+  ────────────────────────────────────────────────────────────── */
   function highlight(text, query) {
     if (!query) return text;
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     DROPDOWN — BUILD ONCE, REUSE
+  ────────────────────────────────────────────────────────────── */
   function buildDropdown() {
-    const existing = document.getElementById('curva-search-dropdown');
+    const existing = document.getElementById('bbw-search-dropdown');
     if (existing) return existing;
+
     const div = document.createElement('div');
-    div.id = 'curva-search-dropdown';
+    div.id        = 'bbw-search-dropdown';
     div.className = 'curva-search-dropdown';
     div.setAttribute('role', 'listbox');
     document.body.appendChild(div);
     return div;
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     DROPDOWN — POSITION
+  ────────────────────────────────────────────────────────────── */
   function positionDropdown(input, dropdown) {
-    const rect = input.getBoundingClientRect();
+    const rect         = input.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
-    const dropWidth = Math.min(Math.max(rect.width, 340), 500);
+    const dropWidth    = Math.min(Math.max(rect.width, 320), 520);
 
-    let left = rect.left;
+    let left = rect.left + window.scrollX;
 
     if (left + dropWidth > viewportWidth - 8) {
       left = viewportWidth - dropWidth - 8;
     }
+    if (left < 8) left = 8;
 
-    if (left < 8) {
-      left = 8;
-    }
-
-    dropdown.style.top   = (rect.bottom + 6) + 'px';
-    dropdown.style.left  = left + 'px';
-    dropdown.style.width = dropWidth + 'px';
+    dropdown.style.top    = (rect.bottom + window.scrollY + 6) + 'px';
+    dropdown.style.left   = left + 'px';
+    dropdown.style.width  = dropWidth + 'px';
+    dropdown.style.position = 'absolute';
   }
 
+  /* ──────────────────────────────────────────────────────────────
+     DROPDOWN — RENDER
+  ────────────────────────────────────────────────────────────── */
   function renderDropdown(dropdown, results, query) {
     dropdown.innerHTML = '';
+
     if (!results.length) {
-      dropdown.innerHTML = `<div class="curva-search-empty">No results for "<strong>${query}</strong>"</div>`;
+      dropdown.innerHTML =
+        `<div class="curva-search-empty">No results for "<strong>${escapeHtml(query)}</strong>"</div>`;
       return;
     }
 
     let lastType = null;
+
     results.forEach((item, idx) => {
+
+      // Section header when type changes
       if (item.type !== lastType) {
         const header = document.createElement('div');
-        header.className = 'curva-search-header';
+        header.className   = 'curva-search-header';
         header.textContent = TYPE_LABELS[item.type] || item.type;
         dropdown.appendChild(header);
         lastType = item.type;
@@ -143,38 +193,51 @@
 
       const link = document.createElement('a');
       link.className = 'curva-search-item';
-      link.href = item.url;
+      link.href      = item.url;
       link.setAttribute('role', 'option');
       link.dataset.idx = idx;
 
+      // Icon
       const icon = document.createElement('span');
       icon.className = 'curva-search-icon';
-      if (item.icon && item.icon.startsWith('fa')) {
+      if (item.icon && (item.icon.startsWith('fas ') || item.icon.startsWith('far ') || item.icon.startsWith('fab '))) {
         const i = document.createElement('i');
         i.className = item.icon;
-        i.style.color = '#e91e63';
+        i.style.color = '#c0385e';
         icon.appendChild(i);
       } else {
         icon.textContent = item.icon || '📄';
       }
 
+      // Text block
       const text = document.createElement('span');
       text.className = 'curva-search-text';
 
       const title = document.createElement('span');
       title.className = 'curva-search-title';
-      title.innerHTML = highlight(item.title, query);
+      title.innerHTML = highlight(escapeHtml(item.title), query);
 
-      text.appendChild(title);
+      // Optional price for products
+      if (item.type === 'product' && item.price) {
+        const price = document.createElement('span');
+        price.className   = 'curva-search-price';
+        price.textContent = '$' + parseFloat(item.price).toFixed(2);
+        text.appendChild(title);
+        text.appendChild(price);
+      } else {
+        text.appendChild(title);
+      }
 
+      // Badge
       const badge = document.createElement('span');
-      badge.className = 'curva-search-badge';
+      badge.className   = 'curva-search-badge';
       badge.textContent = TYPE_LABELS[item.type] || item.type;
 
       link.appendChild(icon);
       link.appendChild(text);
       link.appendChild(badge);
 
+      // Navigation on click
       link.addEventListener('mousedown', e => {
         e.preventDefault();
         window.location.href = item.url;
@@ -184,106 +247,137 @@
     });
   }
 
-  function initSearch() {
-    const searchBars = document.querySelectorAll('.search-bar');
-    if (!searchBars.length) return;
+  /* ──────────────────────────────────────────────────────────────
+     UTILITY — escape HTML
+  ────────────────────────────────────────────────────────────── */
+  function escapeHtml(str) {
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
 
-    searchBars.forEach(bar => {
-      const input = bar.querySelector('input[type="text"]');
-      if (!input || input.dataset.curvaSearch) return;
-      input.dataset.curvaSearch = '1';
+  /* ──────────────────────────────────────────────────────────────
+     BIND ONE INPUT
+  ────────────────────────────────────────────────────────────── */
+  function bindInput(input, dropdown) {
+    if (input.dataset.bbwSearch) return;
+    input.dataset.bbwSearch = '1';
 
-      input.removeAttribute('list');
-      const oldDatalist = input.getAttribute('list');
-      if (oldDatalist) {
-        const dl = document.getElementById(oldDatalist);
-        if (dl) dl.style.display = 'none';
+    // Remove native datalist
+    input.removeAttribute('list');
+    const oldList = input.getAttribute('list');
+    if (oldList) {
+      const dl = document.getElementById(oldList);
+      if (dl) dl.style.display = 'none';
+    }
+
+    let activeIdx      = -1;
+    let currentResults = [];
+    let closeTimer     = null;
+
+    const open = () => {
+      positionDropdown(input, dropdown);
+      dropdown.classList.add('open');
+    };
+
+    const close = () => {
+      dropdown.classList.remove('open');
+      activeIdx = -1;
+    };
+
+    const setActive = idx => {
+      const items = dropdown.querySelectorAll('.curva-search-item');
+      items.forEach((el, i) => el.classList.toggle('active', i === idx));
+      activeIdx = idx;
+    };
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim();
+      if (q.length < 2) { close(); return; }
+      currentResults = search(q);
+      renderDropdown(dropdown, currentResults, q);
+      positionDropdown(input, dropdown);
+      open();
+      activeIdx = -1;
+    });
+
+    input.addEventListener('keydown', e => {
+      const items = dropdown.querySelectorAll('.curva-search-item');
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActive(Math.min(activeIdx + 1, items.length - 1));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(Math.max(activeIdx - 1, 0));
+      } else if (e.key === 'Enter') {
+        if (activeIdx >= 0 && items[activeIdx]) {
+          e.preventDefault();
+          window.location.href = items[activeIdx].href;
+        } else if (currentResults.length) {
+          e.preventDefault();
+          window.location.href = currentResults[0].url;
+        }
+        close();
+      } else if (e.key === 'Escape') {
+        close();
+        input.blur();
       }
+    });
 
-      const dropdown = buildDropdown();
-      let activeIdx = -1;
-      let currentResults = [];
-      let closeTimer = null;
-
-      function open() {
-        positionDropdown(input, dropdown);
-        dropdown.classList.add('open');
-      }
-
-      function close() {
-        dropdown.classList.remove('open');
-        activeIdx = -1;
-      }
-
-      function setActive(idx) {
-        const items = dropdown.querySelectorAll('.curva-search-item');
-        items.forEach((el, i) => el.classList.toggle('active', i === idx));
-        activeIdx = idx;
-      }
-
-      input.addEventListener('input', () => {
-        const q = input.value.trim();
-        if (q.length < 2) { close(); return; }
-        currentResults = search(q);
-        renderDropdown(dropdown, currentResults, q);
+    input.addEventListener('focus', () => {
+      clearTimeout(closeTimer);
+      if (input.value.trim().length >= 2) {
         positionDropdown(input, dropdown);
         open();
-        activeIdx = -1;
-      });
-
-      input.addEventListener('keydown', e => {
-        const items = dropdown.querySelectorAll('.curva-search-item');
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          setActive(Math.min(activeIdx + 1, items.length - 1));
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          setActive(Math.max(activeIdx - 1, 0));
-        } else if (e.key === 'Enter') {
-          if (activeIdx >= 0 && items[activeIdx]) {
-            e.preventDefault();
-            window.location.href = items[activeIdx].href;
-          } else if (input.value.trim()) {
-            const first = currentResults[0];
-            if (first) window.location.href = first.url;
-          }
-          close();
-        } else if (e.key === 'Escape') {
-          close();
-          input.blur();
-        }
-      });
-
-      input.addEventListener('focus', () => {
-        clearTimeout(closeTimer);
-        if (input.value.trim().length >= 2) {
-          positionDropdown(input, dropdown);
-          open();
-        }
-      });
-
-      input.addEventListener('blur', () => {
-        closeTimer = setTimeout(close, 200);
-      });
-
-      window.addEventListener('scroll', () => {
-        if (dropdown.classList.contains('open')) {
-          positionDropdown(input, dropdown);
-        }
-      }, { passive: true });
-
-      window.addEventListener('resize', () => {
-        if (dropdown.classList.contains('open')) {
-          positionDropdown(input, dropdown);
-        }
-      });
+      }
     });
+
+    input.addEventListener('blur', () => {
+      closeTimer = setTimeout(close, 200);
+    });
+
+    window.addEventListener('scroll',  () => { if (dropdown.classList.contains('open')) positionDropdown(input, dropdown); }, { passive: true });
+    window.addEventListener('resize',  () => { if (dropdown.classList.contains('open')) positionDropdown(input, dropdown); });
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     INIT SEARCH — binds all search inputs found in the page
+     Supports: .search-bar input, #bbwSearchInput, #bbwSearchDesktopInput
+  ────────────────────────────────────────────────────────────── */
+  function initSearch() {
+    const dropdown = buildDropdown();
+
+    // 1. Classic .search-bar wrappers (original selector)
+    document.querySelectorAll('.search-bar input[type="text"]').forEach(input => {
+      bindInput(input, dropdown);
+    });
+
+    // 2. BBW header mobile search input
+    const mobileInput = document.getElementById('bbwSearchInput');
+    if (mobileInput) bindInput(mobileInput, dropdown);
+
+    // 3. BBW header desktop search input
+    const desktopInput = document.getElementById('bbwSearchDesktopInput');
+    if (desktopInput) bindInput(desktopInput, dropdown);
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     BOOTSTRAP
+  ────────────────────────────────────────────────────────────── */
+  function bootstrap() {
+    // If products already loaded, no need to re-fetch
+    loadIndex();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadIndex);
+    document.addEventListener('DOMContentLoaded', bootstrap);
   } else {
-    loadIndex();
+    bootstrap();
   }
+
+  // Expose for external use
+  window.bbwSearch = { search, highlight };
 
 })();
