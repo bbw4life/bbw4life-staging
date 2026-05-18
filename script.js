@@ -6840,7 +6840,6 @@ if (storyForm) {
     btn.textContent = 'Sending...';
     btn.disabled = true;
 
-    const fields    = storyForm.querySelectorAll('input, select, textarea');
     const fileInput = storyForm.querySelector('input[type="file"]');
 
     let photoBase64 = '';
@@ -6849,70 +6848,51 @@ if (storyForm) {
         const file = fileInput.files[0];
         const img  = new Image();
         const url  = URL.createObjectURL(file);
-
         img.onload = () => {
           const MAX = 200;
           let w = img.width, h = img.height;
           if (w > h) { if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; } }
           else       { if (h > MAX) { w = Math.round(w * MAX / h); h = MAX; } }
-
           const canvas  = document.createElement('canvas');
           canvas.width  = w;
           canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-
           const compressed = canvas.toDataURL('image/jpeg', 0.6);
           URL.revokeObjectURL(url);
           resolve(compressed);
         };
-
         img.onerror = () => { URL.revokeObjectURL(url); resolve(''); };
         img.src = url;
       });
     }
 
-    // ── Parsing firstName + age ──────────────────────────────────────
-    const nameAgeRaw = fields[0].value.trim();
+    const nameAgeRaw = storyForm.querySelector('[name="firstName"]').value.trim();
     const commaIdx   = nameAgeRaw.indexOf(',');
-    const firstName  = commaIdx !== -1
-      ? nameAgeRaw.slice(0, commaIdx).trim()
-      : nameAgeRaw;
-    const age        = commaIdx !== -1
-      ? nameAgeRaw.slice(commaIdx + 1).trim()
-      : '';
-
-    const email        = fields[1].value.trim();
-    const country      = fields[2].value.trim();
-    const startWeight  = fields[3].value.trim();
-    const program      = fields[4].value;
-    const duration     = fields[5].value.trim();
-    const result       = fields[6].value.trim();
-    const waist        = fields[7].value.trim();
-    const failedBefore = fields[8].value.trim();
-    const story        = fields[9].value.trim();
+    const firstName  = commaIdx !== -1 ? nameAgeRaw.slice(0, commaIdx).trim() : nameAgeRaw;
+    const age        = commaIdx !== -1 ? nameAgeRaw.slice(commaIdx + 1).trim() : '';
 
     const getData = (name) => {
-  const el = storyForm.querySelector(`[name="${name}"]`);
-  return el ? el.value.trim() : '';
-};
+      const el = storyForm.querySelector(`[name="${name}"]`);
+      return el ? el.value.trim() : '';
+    };
 
-const payload = {
-  firstName,
-  age,
-  email,
-  country,
-  bodyPressureDuration: getData('bodyPressureDuration'),
-  bbwHelped:            getData('bbwHelped'),
-  discoveredWhen:       getData('discoveredWhen'),
-  selfChange:           getData('selfChange'),
-  wordToday:            getData('wordToday'),
-  toldBefore:           getData('toldBefore'),
-  story:                getData('story'),
-  mentalQuote:          document.getElementById('mental-quote-input')?.value.trim() || '',
-  rating:               document.getElementById('story-rating-value')?.value || '5',
-  photo:                photoBase64,
-  anonymous:            document.getElementById('anonymous-checkbox')?.checked ? 'true' : 'false'
-};
+    const payload = {
+      firstName,
+      age,
+      email:               getData('email'),
+      country:             getData('country'),
+      bodyPressureDuration: getData('bodyPressureDuration'),
+      bbwHelped:           getData('bbwHelped'),
+      discoveredWhen:      getData('discoveredWhen'),
+      selfChange:          getData('selfChange'),
+      wordToday:           getData('wordToday'),
+      toldBefore:          getData('toldBefore'),
+      story:               getData('story'),
+      mentalQuote:         document.getElementById('mental-quote-input')?.value.trim() || '',
+      rating:              document.getElementById('story-rating-value')?.value || '5',
+      photo:               photoBase64,
+      anonymous:           document.getElementById('anonymous-checkbox')?.checked ? 'true' : 'false'
+    };
 
     try {
       const res  = await fetch('/.netlify/functions/story-share', {
@@ -6927,7 +6907,64 @@ const payload = {
         storyForm.reset();
         ratingStars.forEach(s => s.className = 'fi fi-rr-star');
         if (ratingInput) ratingInput.value = '5';
+
+        // ── Show success popup ──
+        const overlay = document.createElement('div');
+        overlay.id = 'story-success-overlay';
+        overlay.innerHTML = `
+          <div id="story-success-popup">
+            <div class="ssp-top-line"></div>
+            <div class="ssp-orb-1"></div>
+            <div class="ssp-orb-2"></div>
+            <div class="ssp-icon-wrap">💌</div>
+            <span class="ssp-label">Story Received</span>
+            <h2 class="ssp-title">
+              Thank You for<br>
+              <em>Sharing Your Story</em>
+            </h2>
+            <div class="ssp-stars">
+              <i class="fi fi-sr-star"></i>
+              <i class="fi fi-sr-star"></i>
+              <i class="fi fi-sr-star"></i>
+              <i class="fi fi-sr-star"></i>
+              <i class="fi fi-sr-star"></i>
+            </div>
+            <div class="ssp-divider">
+              <span></span>
+              <i class="fi fi-rr-heart"></i>
+              <span></span>
+            </div>
+            <p class="ssp-text">
+              Your story is <strong>powerful</strong>, and it matters more than you know.<br>
+              Every word you shared has the potential to change a woman's life.
+            </p>
+            <div class="ssp-note">
+              ✨ Your story will be <strong>reviewed by our team</strong> and published on the BBW4LIFE page once approved — so other women can read it, feel seen, and find the courage they need.
+            </div>
+            <button class="ssp-close-btn" id="ssp-close">
+              <i class="fi fi-rr-heart"></i>
+              Beautiful — I Can't Wait!
+            </button>
+          </div>`;
+
+        document.body.appendChild(overlay);
+
+        document.getElementById('ssp-close').addEventListener('click', () => {
+          overlay.style.transition = 'opacity 0.35s ease';
+          overlay.style.opacity = '0';
+          setTimeout(() => overlay.remove(), 350);
+        });
+
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            overlay.style.transition = 'opacity 0.35s ease';
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.remove(), 350);
+          }
+        });
+
         setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 4000);
+
       } else {
         throw new Error(data.error || 'Unknown error');
       }
@@ -6939,20 +6976,7 @@ const payload = {
   });
 }
 
-const PROGRAM_TAG = {
-  'Beginner — Soft Start':         { cls: 'dt-tag--beginner',     icon: '🌱' },
-  'Intermediate — Deeper Refiner': { cls: 'dt-tag--intermediate', icon: '🔥' },
-  'Maintenance — Forever Fit':     { cls: 'dt-tag--maintenance',  icon: '🌟' }
-};
-
-// ── Helper : ajoute une unité si absente ────────────────────────────
-function addUnit(value, unit) {
-  const v = String(value || '').trim();
-  if (!v) return '';
-  if (v.toLowerCase().includes(unit.toLowerCase())) return v;
-  return `${v} ${unit}`;
-}
-
+// ── LOAD COMMUNITY STORIES ──
 async function loadCommunityStories() {
   const grid = document.querySelector('#detailed-testimonials .dt-grid');
   if (!grid) return;
@@ -6964,10 +6988,10 @@ async function loadCommunityStories() {
     if (!data.success || !data.stories.length) return;
 
     data.stories.forEach(s => {
-      const country = s.country ? ` — ${s.country}` : '';
-      const nameStr = s.age ? `${s.firstName}, ${s.age}${country}` : `${s.firstName}${country}`;
+      const country      = s.country ? ` — ${s.country}` : '';
+      const nameStr      = s.age ? `${s.firstName}, ${s.age}${country}` : `${s.firstName}${country}`;
       const discoveredWhen = s.discoveredWhen ? ` · ${s.discoveredWhen}` : '';
-      const ratingInt = parseInt(s.rating || 5);
+      const ratingInt    = parseInt(s.rating || 5);
 
       const avatarHTML = s.photo
         ? `<div class="dt-avatar-wrap">
@@ -6993,7 +7017,7 @@ async function loadCommunityStories() {
            </div>`
         : '';
 
-      const progressPct = Math.min(95, 60 + (ratingInt * 7));
+      const progressPct  = Math.min(95, 60 + (ratingInt * 7));
 
       const toldBeforeHTML = s.toldBefore
         ? `<div class="dt-prev">
@@ -7012,7 +7036,10 @@ async function loadCommunityStories() {
 
       const card = document.createElement('div');
       card.className = 'dt-card';
-      card.setAttribute('data-os-reveal', 'up');
+      // ← PAS de data-os-reveal pour éviter opacity:0 bloqué
+      card.style.opacity = '1';
+      card.style.transform = 'none';
+
       card.innerHTML = `
         <div class="dt-shine"></div>
         <div class="dt-header">
@@ -7050,80 +7077,6 @@ async function loadCommunityStories() {
 }
 
 loadCommunityStories();
-
-
-
-if (data.success) {
-  btn.textContent = '✅ Story sent!';
-  storyForm.reset();
-  ratingStars.forEach(s => s.className = 'fi fi-rr-star');
-  if (ratingInput) ratingInput.value = '5';
-
-  // ── Show success popup ──
-  const overlay = document.createElement('div');
-  overlay.id = 'story-success-overlay';
-  overlay.innerHTML = `
-    <div id="story-success-popup">
-      <div class="ssp-top-line"></div>
-      <div class="ssp-orb-1"></div>
-      <div class="ssp-orb-2"></div>
-
-      <div class="ssp-icon-wrap">💌</div>
-
-      <span class="ssp-label">Story Received</span>
-
-      <h2 class="ssp-title">
-        Thank You for<br>
-        <em>Sharing Your Story</em>
-      </h2>
-
-      <div class="ssp-stars">
-        <i class="fi fi-sr-star"></i>
-        <i class="fi fi-sr-star"></i>
-        <i class="fi fi-sr-star"></i>
-        <i class="fi fi-sr-star"></i>
-        <i class="fi fi-sr-star"></i>
-      </div>
-
-      <div class="ssp-divider">
-        <span></span>
-        <i class="fi fi-rr-heart"></i>
-        <span></span>
-      </div>
-
-      <p class="ssp-text">
-        Your story is <strong>powerful</strong>, and it matters more than you know.<br>
-        Every word you shared has the potential to change a woman's life.
-      </p>
-
-      <div class="ssp-note">
-        ✨ Your story will be <strong>reviewed by our team</strong> and published on the BBW4LIFE page once approved — so other women can read it, feel seen, and find the courage they need.
-      </div>
-
-      <button class="ssp-close-btn" id="ssp-close">
-        <i class="fi fi-rr-heart"></i>
-        Beautiful — I Can't Wait!
-      </button>
-    </div>`;
-
-  document.body.appendChild(overlay);
-
-  document.getElementById('ssp-close').addEventListener('click', () => {
-    overlay.style.transition = 'opacity 0.35s ease';
-    overlay.style.opacity = '0';
-    setTimeout(() => overlay.remove(), 350);
-  });
-
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-      overlay.style.transition = 'opacity 0.35s ease';
-      overlay.style.opacity = '0';
-      setTimeout(() => overlay.remove(), 350);
-    }
-  });
-
-  setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 4000);
-}
 
 
 
