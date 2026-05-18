@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    BBW4LIFE — POLICY PAGES — ULTRA PREMIUM CSS
-   Fond : ivoire lumineux chaleureux — palette or / rose / prune
-   Banner & TOC : sombres cinématiques — textes dorés
+   Fond : ivoire lumineux chaleureux — palette or / prune
+   Banner & TOC : noir pur cinématique — textes blancs & dorés
 ═══════════════════════════════════════════════════════════════════ */
 
 /* ─────────────────────────────────────────────
@@ -14,19 +14,19 @@
   --bbw-gold:         #c9963e;
   --bbw-gold-vivid:   #FFD700;
   --bbw-gold-light:   #e8bc6a;
-  --bbw-rose:         #c0385e;
-  --bbw-rose-light:   #d4506e;
+  --bbw-rose:         #c9963e;       /* → or */
+  --bbw-rose-light:   #e8bc6a;       /* → or light */
   --bbw-white:        #ffffff;
   --bbw-white-soft:   rgba(255,255,255,0.85);
   --bbw-mist:         rgba(255,255,255,0.45);
 
   /* ═══ POLICY PAGE — IVOIRE PREMIUM ═══ */
-  --rose:           #c0385e;
-  --rose-light:     #d4506e;
-  --rose-dark:      #9b2248;
-  --rose-pale:      #fdeef2;
-  --rose-ultra:     #fff5f8;
-  --rose-mid:       rgba(192, 56, 94, 0.14);
+  --rose:           #c9963e;         /* → or */
+  --rose-light:     #e8bc6a;         /* → or light */
+  --rose-dark:      #a07828;         /* → or dark */
+  --rose-pale:      #fdf5e0;         /* → gold pale */
+  --rose-ultra:     #fefae8;         /* → gold ultra */
+  --rose-mid:       rgba(201, 150, 62, 0.14);
 
   --plum:           #7b3f6e;
   --plum-light:     #9b5a8e;
@@ -56,7 +56,7 @@
 
   /* Bordures */
   --border:         rgba(201, 150, 62, 0.18);
-  --border-rose:    rgba(192, 56, 94, 0.16);
+  --border-rose:    rgba(201, 150, 62, 0.16);  /* → gold */
   --border-mid:     rgba(201, 150, 62, 0.32);
   --border-soft:    rgba(201, 150, 62, 0.10);
 
@@ -64,7 +64,7 @@
   --shadow-soft:    0 2px 18px rgba(60, 20, 40, 0.07);
   --shadow-mid:     0 8px 36px rgba(60, 20, 40, 0.11);
   --shadow-lift:    0 20px 60px rgba(60, 20, 40, 0.15);
-  --shadow-glow:    0 0 40px rgba(192, 56, 94, 0.12);
+  --shadow-glow:    0 0 40px rgba(201, 150, 62, 0.16);  /* → gold */
   --shadow-gold:    0 0 30px rgba(201, 150, 62, 0.18);
 
   /* Typographie */
@@ -180,8 +180,6 @@
   50%       { transform: translateY(-5px) rotate(1deg); }
 }
 
-/* ── NOUVELLES ANIMATIONS ULTRA PREMIUM ── */
-
 /* Particules dorées scintillantes */
 @keyframes starDrift {
   0%   { transform: translateY(0) translateX(0) scale(0.6); opacity: 0; }
@@ -202,7 +200,6 @@
   100% { transform: translateY(-110px) translateX(20px) scale(0.9); opacity: 0; }
 }
 
-/* Scan lumineux horizontal premium */
 @keyframes scanLine {
   0%   { top: -2px; opacity: 0; }
   5%   { opacity: 0.7; }
@@ -210,7 +207,6 @@
   100% { top: 100%; opacity: 0; }
 }
 
-/* Halo doré pulsant profond */
 @keyframes deepGoldPulse {
   0%, 100% {
     box-shadow:
@@ -226,33 +222,28 @@
   }
 }
 
-/* Rotation lente du halo étoilé */
 @keyframes cosmicRotate {
   0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
   50%  { transform: translate(-50%, -50%) rotate(180deg) scale(1.12); }
   100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
 }
 
-/* Dégradé de texte doré animé */
 @keyframes goldTextFlow {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Lueur dorée des bordures TOC */
 @keyframes tocBorderGlow {
   0%, 100% { border-color: rgba(201,150,62,0.25); box-shadow: 0 0 0 0 rgba(201,150,62,0); }
   50%       { border-color: rgba(255,215,0,0.55);  box-shadow: 0 0 22px rgba(201,150,62,0.18); }
 }
 
-/* Slide-in TOC items */
 @keyframes tocItemReveal {
   from { opacity: 0; transform: translateX(-14px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Flicker subtil cinématique */
 @keyframes cinemaFlicker {
   0%, 100% { opacity: 1; }
   92%       { opacity: 1; }
@@ -262,7 +253,6 @@
   98%       { opacity: 1; }
 }
 
-/* Vague de lumière banner */
 @keyframes lightWave {
   0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
   10%  { opacity: 0.6; }
@@ -270,7 +260,6 @@
   100% { transform: translateX(400%) skewX(-15deg); opacity: 0; }
 }
 
-/* Orbe profond TOC */
 @keyframes tocOrbDrift {
   0%   { transform: translate(0, 0) scale(1); opacity: 0.7; }
   33%  { transform: translate(15px, -20px) scale(1.08); opacity: 0.9; }
@@ -284,7 +273,7 @@
 .privacy-page {
   background:
     radial-gradient(ellipse at 0% 0%, rgba(201,150,62,0.07) 0%, transparent 55%),
-    radial-gradient(ellipse at 100% 100%, rgba(192,56,94,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(201,150,62,0.06) 0%, transparent 55%),
     var(--ivory);
   padding: 10px 0 10px;
   color: var(--slate);
@@ -293,7 +282,6 @@
   overflow: hidden;
 }
 
-/* Orbes ambiants fixes */
 .privacy-page::before,
 .privacy-page::after {
   content: '';
@@ -312,7 +300,7 @@
 .privacy-page::after {
   width: 620px; height: 620px;
   bottom: -160px; right: -130px;
-  background: radial-gradient(circle, rgba(192,56,94,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(201,150,62,0.07) 0%, transparent 70%);  /* → gold */
   animation: floatOrbReverse 14s ease-in-out infinite;
 }
 
@@ -328,21 +316,13 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   PRIVACY BANNER — ULTRA PREMIUM NOIR PROFOND CINÉMATIQUE
+   PRIVACY BANNER — NOIR PUR CINÉMATIQUE — TEXTES BLANC & OR
 ═══════════════════════════════════════════════════════════════════ */
 .privacy-banner {
   background:
-    radial-gradient(ellipse at 30% 0%, rgba(201,150,62,0.13) 0%, transparent 45%),
-    radial-gradient(ellipse at 75% 100%, rgba(123,63,110,0.18) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 50%, rgba(13,5,10,0.95) 0%, transparent 100%),
-    linear-gradient(160deg,
-      #0a0208 0%,
-      #100610 18%,
-      #0d0a02 35%,
-      #12060f 52%,
-      #080508 70%,
-      #0f0b02 100%
-    );
+    radial-gradient(ellipse at 30% 0%, rgba(201,150,62,0.07) 0%, transparent 40%),
+    radial-gradient(ellipse at 75% 100%, rgba(201,150,62,0.05) 0%, transparent 40%),
+    #000000;
   padding: 20px 20px 15px;
   border-radius: var(--radius-lg);
   margin-bottom: 10px;
@@ -353,14 +333,14 @@
   overflow: hidden;
   isolation: isolate;
   border: 1px solid rgba(201,150,62,0.22);
-  animation: deepGoldPulse 6s ease-in-out infinite, cinemaFlicker 12s ease-in-out infinite;
+  animation: cinemaFlicker 12s ease-in-out infinite;
   box-shadow:
-    0 40px 100px rgba(0,0,0,0.75),
+    0 40px 100px rgba(0,0,0,0.85),
     0 0 0 1.5px rgba(201,150,62,0.28),
     0 0 80px rgba(201,150,62,0.08),
     inset 0 1px 0 rgba(255,215,0,0.14),
-    inset 0 -1px 0 rgba(123,63,110,0.15),
-    inset 0 0 120px rgba(0,0,0,0.60);
+    inset 0 -1px 0 rgba(201,150,62,0.10),
+    inset 0 0 120px rgba(0,0,0,0.70);
 }
 
 /* ── Grain texture cinématique ── */
@@ -456,10 +436,9 @@
   transform: translateX(-50%);
   width: 800px; height: 500px;
   background: radial-gradient(ellipse,
-    rgba(201,150,62,0.22) 0%,
-    rgba(255,215,0,0.10) 25%,
-    rgba(123,63,110,0.08) 55%,
-    transparent 70%
+    rgba(201,150,62,0.08) 0%,
+    rgba(255,215,0,0.03) 25%,
+    transparent 60%
   );
   pointer-events: none;
   z-index: 0;
@@ -481,7 +460,7 @@
     transparent 120deg,
     rgba(201,150,62,0.03) 150deg,
     transparent 180deg,
-    rgba(123,63,110,0.04) 210deg,
+    rgba(232,188,106,0.04) 210deg,
     transparent 240deg,
     rgba(201,150,62,0.05) 270deg,
     transparent 300deg,
@@ -515,12 +494,12 @@
   transform: translate(50%, -50%);
   width: 200px; height: 200px;
   border-radius: 50%;
-  border: 1px solid rgba(123,63,110,0.18);
+  border: 1px solid rgba(201,150,62,0.14);  /* → gold */
   pointer-events: none;
   z-index: 0;
   animation: bannerRingPulse 9s ease-in-out infinite reverse;
   animation-delay: 3s;
-  box-shadow: inset 0 0 30px rgba(123,63,110,0.06);
+  box-shadow: inset 0 0 30px rgba(201,150,62,0.05);  /* → gold */
 }
 
 /* ── Particules dorées scintillantes ── */
@@ -568,7 +547,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(135deg, rgba(201,150,62,0.18) 0%, rgba(255,215,0,0.10) 50%, rgba(123,63,110,0.12) 100%);
+  background: linear-gradient(135deg, rgba(201,150,62,0.18) 0%, rgba(255,215,0,0.10) 50%, rgba(201,150,62,0.12) 100%);
   border: 1px solid rgba(201,150,62,0.45);
   border-radius: var(--radius-full);
   padding: 7px 18px;
@@ -626,14 +605,14 @@
   filter: drop-shadow(0 0 18px rgba(255,215,0,0.70));
 }
 
-/* ── Sous-titre doré discret ── */
+/* ── Sous-titre — or discret ── */
 .privacy-subtitle {
   font-family: var(--font-body);
   font-size: 0.70rem;
   font-weight: 700;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.75);
+  color: rgba(232,188,106,0.80);   /* → or */
   margin-bottom: 12px;
   position: relative;
   z-index: 2;
@@ -662,14 +641,14 @@
   margin-top: 6px;
 }
 .policy-meta a {
-  color: rgba(255,255,255,0.55);
+  color: rgba(232,188,106,0.65);   /* → or */
   text-decoration: none;
   transition: var(--transition);
 }
 .policy-meta a:hover {
-  color: #ffffff;
+  color: #FFD700;
   text-decoration: underline;
-  text-shadow: 0 0 10px rgba(255,255,255,0.30);
+  text-shadow: 0 0 10px rgba(255,215,0,0.40);
 }
 
 /* ── Divider doré lumineux ── */
@@ -723,7 +702,7 @@
   top: 0; left: 0; right: 0;
   height: 3px;
   background: linear-gradient(90deg,
-    transparent, var(--rose), var(--gold-vivid), var(--plum), var(--gold), transparent
+    transparent, var(--gold), var(--gold-vivid), var(--plum), var(--gold), transparent
   );
   background-size: 300% 100%;
   animation: neverBarFlow 5s linear infinite;
@@ -733,7 +712,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 10% 20%, rgba(192, 56, 94, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 10% 20%, rgba(201, 150, 62, 0.06) 0%, transparent 50%),
     radial-gradient(circle at 90% 80%, rgba(201, 150, 62, 0.07) 0%, transparent 50%);
   z-index: -1;
 }
@@ -763,15 +742,15 @@
 }
 .pnb-header i {
   font-size: 1.6rem;
-  color: var(--rose);
-  filter: drop-shadow(0 0 10px rgba(192,56,94,0.28));
+  color: var(--gold);                          /* → or */
+  filter: drop-shadow(0 0 10px rgba(201,150,62,0.35));
   flex-shrink: 0;
 }
 .pnb-header h2 {
   font-family: var(--font-display);
   font-size: clamp(1.15rem, 2.2vw, 1.50rem);
   font-weight: 700;
-  color: var(--rose-dark);
+  color: var(--rose-dark);                     /* → or dark (#a07828) */
   margin: 0;
   letter-spacing: 0.01em;
 }
@@ -815,11 +794,11 @@
   background: rgba(255,255,255,0.98);
 }
 .pnb-item i {
-  color: var(--rose);
+  color: var(--gold);                          /* → or */
   font-size: 0.95rem;
   flex-shrink: 0;
   margin-top: 2px;
-  filter: drop-shadow(0 0 5px rgba(192,56,94,0.22));
+  filter: drop-shadow(0 0 5px rgba(201,150,62,0.25));
 }
 
 /* ─────────────────────────────────────────────
@@ -832,13 +811,12 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   TABLE OF CONTENTS — ULTRA PREMIUM NOIR PROFOND DORÉ
-   Fond très sombre — textes or — animations luxueuses
+   TABLE OF CONTENTS — NOIR PROFOND DORÉ
 ═══════════════════════════════════════════════════════════════════ */
 .privacy-toc {
   background:
     radial-gradient(ellipse at 20% 15%, rgba(201,150,62,0.14) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 85%, rgba(123,63,110,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 85%, rgba(201,150,62,0.08) 0%, transparent 50%),
     linear-gradient(165deg,
       #080408 0%,
       #0e0a02 20%,
@@ -861,7 +839,6 @@
   animation: tocBorderGlow 5s ease-in-out infinite;
 }
 
-/* ── Barre animée dorée en haut TOC ── */
 .privacy-toc::before {
   content: '';
   position: absolute;
@@ -883,20 +860,18 @@
   filter: blur(0.2px);
 }
 
-/* ── Orbe profond TOC ── */
 .privacy-toc::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
     radial-gradient(circle at 15% 20%, rgba(201,150,62,0.11) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(123,63,110,0.09) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(13,5,10,0.40) 0%, transparent 70%);
+    radial-gradient(circle at 85% 80%, rgba(201,150,62,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.40) 0%, transparent 70%);
   z-index: -1;
   animation: tocOrbDrift 10s ease-in-out infinite;
 }
 
-/* ── Grain texture TOC ── */
 .privacy-toc-grain {
   position: absolute;
   inset: 0;
@@ -908,7 +883,6 @@
   mix-blend-mode: overlay;
 }
 
-/* ── Lignes latérales TOC ── */
 .privacy-toc-glow-left,
 .privacy-toc-glow-right {
   position: absolute;
@@ -927,7 +901,6 @@
 .privacy-toc-glow-left  { left: 0; }
 .privacy-toc-glow-right { right: 0; animation-delay: 2.2s; }
 
-/* ── Titre TOC — blanc lumineux ── */
 .privacy-toc h2 {
   font-family: var(--font-display);
   font-size: 1.35rem;
@@ -943,7 +916,6 @@
   z-index: 2;
 }
 
-/* ── Liste TOC ── */
 .toc-list {
   list-style: none;
   padding: 0;
@@ -957,7 +929,6 @@
 }
 .toc-list li { flex: 1 1 44%; }
 
-/* Animation staggerée sur chaque item */
 .toc-list li:nth-child(1)  { animation: tocItemReveal 0.5s var(--spring) 0.05s both; }
 .toc-list li:nth-child(2)  { animation: tocItemReveal 0.5s var(--spring) 0.10s both; }
 .toc-list li:nth-child(3)  { animation: tocItemReveal 0.5s var(--spring) 0.15s both; }
@@ -987,7 +958,6 @@
   backdrop-filter: blur(8px);
 }
 
-/* Reflet sweep sur hover */
 .toc-list a::before {
   content: '';
   position: absolute;
@@ -998,7 +968,6 @@
   transition: 0.55s ease;
 }
 
-/* Soulignement doré en bas */
 .toc-list a::after {
   content: '';
   position: absolute;
@@ -1010,18 +979,18 @@
 }
 
 .toc-list a:hover {
-  color: #ffffff;
+  color: #FFD700;
   background: linear-gradient(135deg,
-    rgba(255,255,255,0.12) 0%,
-    rgba(123,63,110,0.22) 100%
+    rgba(201,150,62,0.14) 0%,
+    rgba(255,215,0,0.08) 100%
   );
-  border-color: rgba(255,255,255,0.28);
+  border-color: rgba(255,215,0,0.30);
   transform: translateY(-2px) scale(1.02);
   box-shadow:
     0 8px 28px rgba(0,0,0,0.50),
-    0 0 20px rgba(255,255,255,0.08),
-    0 0 0 1px rgba(255,255,255,0.14) inset;
-  text-shadow: 0 0 12px rgba(255,255,255,0.40);
+    0 0 20px rgba(255,215,0,0.10),
+    0 0 0 1px rgba(255,215,0,0.16) inset;
+  text-shadow: 0 0 12px rgba(255,215,0,0.40);
 }
 .toc-list a:hover::before {
   opacity: 1;
@@ -1053,7 +1022,7 @@
   top: 0; left: 0;
   width: 5px; height: 100%;
   background: linear-gradient(180deg,
-    var(--gold-vivid), var(--gold), var(--rose), var(--plum), var(--gold-light), var(--gold-vivid)
+    var(--gold-vivid), var(--gold), var(--gold-light), var(--plum), var(--gold-light), var(--gold-vivid)
   );
   background-size: 100% 400%;
   animation: articleBarFlow 8s linear infinite;
@@ -1079,17 +1048,17 @@
   margin: 0 0 14px;
 }
 .privacy-article p strong { color: var(--charcoal); font-weight: 700; }
-.privacy-article p a { color: var(--rose); font-weight: 600; transition: var(--transition); }
+.privacy-article p a { color: var(--gold); font-weight: 600; transition: var(--transition); }
 .privacy-article p a:hover { color: var(--plum); text-decoration: underline; }
 
 .privacy-article h2 {
   font-family: var(--font-display);
   font-size: clamp(1.38rem, 2.5vw, 1.82rem);
   font-weight: 700;
-  color: var(--rose) !important;
+  color: var(--gold) !important;             /* → or */
   margin: 40px 0 14px;
   padding-bottom: 10px;
-  border-bottom: 1.5px solid rgba(192,56,94,0.12);
+  border-bottom: 1.5px solid rgba(201,150,62,0.18);  /* → gold */
   position: relative;
 }
 .privacy-article h2:first-child { margin-top: 0; }
@@ -1099,7 +1068,7 @@
   position: absolute;
   bottom: -1.5px; left: 0;
   width: 36px; height: 3px;
-  background: linear-gradient(90deg, var(--rose), var(--gold-vivid), var(--gold));
+  background: linear-gradient(90deg, var(--gold), var(--gold-vivid), var(--gold-light));
   border-radius: 3px;
   animation: h2Underline 3.5s ease-in-out infinite;
   box-shadow: 0 0 8px rgba(201,150,62,0.30);
@@ -1118,28 +1087,28 @@
    CONTACT INFO BLOCK
 ───────────────────────────────────────────── */
 .contact-info {
-  background: linear-gradient(90deg, rgba(255,245,248,0.95) 0%, rgba(255,253,249,0.95) 100%);
+  background: linear-gradient(90deg, rgba(253,245,224,0.95) 0%, rgba(255,253,249,0.95) 100%);
   padding: 20px 22px;
   border-radius: var(--radius-md);
-  border-left: 4px solid var(--rose);
-  border-top: 1px solid rgba(192,56,94,0.12);
+  border-left: 4px solid var(--gold);          /* → or */
+  border-top: 1px solid rgba(201,150,62,0.18);
   border-right: 1px solid rgba(201,150,62,0.12);
   border-bottom: 1px solid rgba(201,150,62,0.10);
   margin-top: 18px;
   position: relative;
   overflow: hidden;
   transition: var(--transition);
-  box-shadow: 0 2px 16px rgba(192,56,94,0.06);
+  box-shadow: 0 2px 16px rgba(201,150,62,0.08);
 }
 .contact-info::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, var(--rose), var(--gold-mid), transparent);
+  background: linear-gradient(90deg, var(--gold), var(--gold-mid), transparent);
 }
 .contact-info:hover {
-  background: var(--rose-pale);
+  background: var(--gold-pale);                /* → gold pale */
   transform: translateX(5px);
   box-shadow: var(--shadow-soft);
 }
@@ -1149,7 +1118,7 @@
   color: var(--slate);
 }
 .contact-info a {
-  color: var(--rose);
+  color: var(--gold);                          /* → or */
   font-weight: 600;
   transition: var(--transition);
 }
@@ -1180,7 +1149,7 @@
   top: 0; left: 0; right: 0;
   height: 2.5px;
   background: linear-gradient(90deg,
-    transparent, var(--rose), var(--gold-vivid), var(--gold-light), var(--rose), transparent
+    transparent, var(--gold), var(--gold-vivid), var(--gold-light), var(--gold), transparent
   );
   background-size: 200% 100%;
   animation: tableTopBar 3.5s ease-in-out infinite;
@@ -1222,12 +1191,12 @@
 }
 
 .privacy-table tbody tr:hover td {
-  background: rgba(192,56,94,0.05);
+  background: rgba(201,150,62,0.07);           /* → gold */
   color: var(--charcoal);
 }
 
 .privacy-table a {
-  color: var(--rose);
+  color: var(--gold);                          /* → or */
   font-weight: 600;
   text-decoration: none;
 }
@@ -1263,7 +1232,7 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--rose), var(--gold-vivid), var(--plum));
+  background: linear-gradient(90deg, var(--gold), var(--gold-vivid), var(--plum));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.42s var(--spring);
@@ -1284,28 +1253,28 @@
 .privacy-right-card:hover::after  { opacity: 1; }
 .privacy-right-card:hover {
   transform: translateY(-7px);
-  border-color: rgba(192,56,94,0.28);
-  box-shadow: var(--shadow-lift), var(--shadow-glow);
+  border-color: rgba(201,150,62,0.35);         /* → gold */
+  box-shadow: var(--shadow-lift), var(--shadow-gold);
 }
 
 .prc-icon {
   width: 44px; height: 44px;
-  background: linear-gradient(135deg, var(--rose-pale), var(--gold-pale));
+  background: linear-gradient(135deg, var(--gold-pale), var(--champagne));
   border-radius: 14px;
-  border: 1px solid rgba(192,56,94,0.14);
+  border: 1px solid rgba(201,150,62,0.20);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.18rem;
-  color: var(--rose);
+  color: var(--gold);                          /* → or */
   margin-bottom: 14px;
   transition: var(--transition);
   position: relative;
   z-index: 1;
 }
 .privacy-right-card:hover .prc-icon {
-  background: linear-gradient(135deg, var(--rose), var(--plum));
+  background: linear-gradient(135deg, var(--gold), var(--plum));
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 6px 22px rgba(192,56,94,0.30);
+  box-shadow: 0 6px 22px rgba(201,150,62,0.35);
   transform: scale(1.08) rotate(-3deg);
 }
 
@@ -1372,7 +1341,7 @@
   content: counter(olcounter);
   position: absolute;
   left: 14px;
-  color: var(--rose);
+  color: var(--gold);                          /* → or */
   font-weight: 700;
   font-size: 0.80rem;
   top: 50%;
@@ -1433,12 +1402,6 @@
     font-size: 0.80rem;
     border-radius: var(--radius-sm);
   }
-  .privacy-table table,
-  .privacy-table thead,
-  .privacy-table tbody,
-  .privacy-table tr,
-  .privacy-table th,
-  .privacy-table td { }
   .privacy-table th,
   .privacy-table td {
     padding: 10px 10px;
@@ -1488,7 +1451,7 @@
     flex-shrink: 0;
     min-width: 68px;
     font-weight: 700;
-    color: var(--rose);
+    color: var(--gold);                        /* → or */
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;

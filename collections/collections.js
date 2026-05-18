@@ -258,7 +258,7 @@
 
     // Keep only the fixed buttons (All, Best Sellers, New Arrivals)
     const fixedTabs = Array.from(tabsContainer.querySelectorAll('.col-cat-tab'))
-      .filter(btn => ['all', 'bestsellers', 'new'].includes(btn.dataset.cat));
+  .filter(btn => ['all', 'bestsellers', 'new'].includes(btn.dataset.cat) || btn.id === 'bbwQuizTabBtn');
 
     tabsContainer.innerHTML = '';
     fixedTabs.forEach(btn => tabsContainer.appendChild(btn));
@@ -345,11 +345,11 @@
   const colSizeGrid        = $('colSizeGrid');
   const colDiscountFilters = $('colDiscountFilters');
 
-  const colStickyBar     = $('colStickyBar');
-  const colSelectedCount = $('colSelectedCount');
-  const colCompareBtn    = $('colCompareBtn');
-  const colStickyAddCart = $('colStickyAddCart');
-  const colStickyBarClear= $('colStickyBarClear');
+  const colStickyBar     = () => $('colStickyBar');
+  const colSelectedCount = () => $('colSelectedCount');
+  const colCompareBtn    = () => $('colCompareBtn');
+  const colStickyAddCart = () => $('colStickyAddCart');
+  const colStickyBarClear= () => $('colStickyBarClear');
   const colRecentlyViewed= $('colRecentlyViewed');
   const colRvGrid        = $('colRvGrid');
   const colRvClear       = $('colRvClear');
@@ -978,19 +978,35 @@
     }
 
     const cartBtn = card.querySelector('.col-card__btn--cart');
-    if (cartBtn) {
-      cartBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        const activeSizeBtn = card.querySelector('.col-card__size-btn.active');
-        const selectedSize  = activeSizeBtn ? activeSizeBtn.textContent.trim() : null;
-        addProductToCartWithColor(prod, color, cartBtn, selectedSize);
-      });
-    }
+      if (cartBtn) {
+        cartBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          /* Si le bouton est en mode "Request" → ouvre le popup, ne pas ajouter au panier */
+          if (cartBtn.innerHTML.includes('Request')) {
+            if (typeof window.openProductRequestPopup === 'function') {
+              window.openProductRequestPopup(prod.id);
+            }
+            return;
+          }
+          const activeSizeBtn = card.querySelector('.col-card__size-btn.active');
+          const selectedSize  = activeSizeBtn ? activeSizeBtn.textContent.trim() : null;
+          addProductToCartWithColor(prod, color, cartBtn, selectedSize);
+        });
+      }
 
     const qvBtn = card.querySelector('.col-card__quick-view');
-    if (qvBtn) {
-      qvBtn.addEventListener('click', e => { e.stopPropagation(); openQuickView(prod, color); });
-    }
+      if (qvBtn) {
+        qvBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          if (qvBtn.innerHTML.includes('Request')) {
+            if (typeof window.openProductRequestPopup === 'function') {
+              window.openProductRequestPopup(prod.id);
+            }
+            return;
+          }
+          openQuickView(prod, color);
+        });
+      }
 
     card.querySelectorAll('.col-card__size-btn').forEach(btn => {
       btn.addEventListener('click', e => {
@@ -1149,8 +1165,25 @@
 
     const qvCartBtn = $('qvCartBtn');
     if (qvCartBtn) {
-      qvCartBtn.addEventListener('click', () => {
-        const activeColorObj = colors.find(c => c.name === qvActiveColor) || selectedColor;
+      const BBW_FEATURED_IDS = ['Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71','Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74','Pdg-Francenel-product75'];
+      const _s = (window.__allProducts||[]).find(p=>p.type==='settings')||{};
+      const _plansOn = (_s.plans_available||'no').toLowerCase()==='yes';
+
+      if (BBW_FEATURED_IDS.includes(prod.id) && !_plansOn) {
+        qvCartBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i> Request This Product';
+        qvCartBtn.addEventListener('click', () => {
+          const _ov = $('colQvOverlay');
+          if (_ov) _ov.style.display = 'none';
+          document.body.style.overflow = '';
+          if (typeof window.openProductRequestPopup === 'function') {
+            window.openProductRequestPopup(prod.id);
+          }
+        });
+      } else {
+        qvCartBtn.addEventListener('click', () => {
+          const activeColorObj = colors.find(c => c.name === qvActiveColor) || selectedColor;
+
+
         let targetVariant = null;
         if (prod.variants && prod.variants.length > 0) {
           targetVariant = prod.variants.find(vv => {
@@ -1200,6 +1233,7 @@
         if (typeof window.updateBadges === 'function')   window.updateBadges();
         if (typeof window.openCartDrawer === 'function') window.openCartDrawer();
       });
+      }
     }
 
     colQvOverlay.style.display = 'flex';
@@ -1216,20 +1250,55 @@
      STICKY BAR
   ================================================================ */
   function updateStickyBar() {
-    if (!colStickyBar) return;
+    const bar = document.getElementById('colStickyBar');
+    const countEl = document.getElementById('colSelectedCount');
+    if (!bar) return;
     const count = selectedProducts.size;
-    if (colSelectedCount) colSelectedCount.textContent = count;
-    if (count > 0) {
-      colStickyBar.style.display = 'block';
-      requestAnimationFrame(() => { requestAnimationFrame(() => { colStickyBar.classList.add('visible'); }); });
+    if (countEl) countEl.textContent = count;
+
+    /* ── Change button label on BBW Featured page when plans_available: no ── */
+    const _stickyCartBtn = document.getElementById('colStickyAddCart');
+    if (_stickyCartBtn) {
+      const _isFeaturedPage  = detectCollectionId() === 'bbw-features-products';
+      const _plansAvailable  = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
+      if (_isFeaturedPage && !_plansAvailable) {
+        _stickyCartBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i> Request Product';
+      } else {
+        _stickyCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add All to Cart';
+      }
+    }
+
+    if (count > 0) { 
+      bar.style.display = 'block';
+      requestAnimationFrame(() => { requestAnimationFrame(() => { bar.classList.add('visible'); }); });
     } else {
-      colStickyBar.classList.remove('visible');
-      setTimeout(() => { if (selectedProducts.size === 0) colStickyBar.style.display = 'none'; }, 310);
+      bar.classList.remove('visible');
+      setTimeout(() => { if (selectedProducts.size === 0) bar.style.display = 'none'; }, 310);
     }
   }
 
-  if (colStickyAddCart) {
-    colStickyAddCart.addEventListener('click', () => {
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#colStickyAddCart')) {
+      /* ── BBW Featured page — plans_available: no → Request instead of cart ── */
+      const _isFeaturedPage = detectCollectionId() === 'bbw-features-products';
+      const _plansAvailable = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
+
+      if (_isFeaturedPage && !_plansAvailable) {
+        /* Open request popup for the first selected product */
+        const firstKey = [...selectedProducts][0];
+        if (firstKey) {
+          const _underIdx = firstKey.indexOf('_');
+          const _prodId   = _underIdx !== -1 ? firstKey.substring(0, _underIdx) : firstKey;
+          if (typeof window.openProductRequestPopup === 'function') {
+            window.openProductRequestPopup(_prodId);
+          }
+        }
+        selectedProducts.clear();
+        updateStickyBar();
+        $$('.col-card__select input').forEach(chk => { chk.checked = false; });
+        return;
+      }
+
       selectedProducts.forEach(key => {
         const underscoreIdx = key.indexOf('_');
         let prodId, colorName;
@@ -1238,23 +1307,23 @@
         const prod = allProducts.find(p => p.id === prodId);
         if (!prod) return;
         const color = colorName ? (prod.colors || []).find(c => c.name === colorName) : null;
-        addProductToCartWithColor(prod, color, colStickyAddCart);
+        addProductToCartWithColor(prod, color, null);
       });
       selectedProducts.clear();
       updateStickyBar();
       $$('.col-card__select input').forEach(chk => { chk.checked = false; });
-    });
-  }
+    }
 
-  if (colStickyBarClear) {
-    colStickyBarClear.addEventListener('click', () => {
+    if (e.target.closest('#colStickyBarClear')) {
       selectedProducts.clear();
       updateStickyBar();
       $$('.col-card__select input').forEach(chk => { chk.checked = false; });
-    });
-  }
+    }
 
-  if (colCompareBtn) { colCompareBtn.addEventListener('click', openCompareModal); }
+    if (e.target.closest('#colCompareBtn')) {
+      openCompareModal();
+    }
+  });
 
   /* ================================================================
      COMPARE MODAL
@@ -1760,4 +1829,363 @@
   window.__allProducts = allProducts;
   document.dispatchEvent(new CustomEvent('products:ready'));
 
+})();
+
+
+
+
+
+
+
+(function initVoteSection() {
+
+  const STORAGE_KEY = 'bbw4life_votes';
+
+  const DEFAULT_VOTES = {
+    style: { 'Bodycon Dress': 42, 'Wide-Leg Pants': 31, 'Wrap Blouse': 58, 'Maxi Skirt': 29 },
+    color: { 'Deep Burgundy': 55, 'Champagne Gold': 47, 'Blush Rose': 38, 'Midnight Black': 60 }
+  };
+
+  function loadUserVotes() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY + '_user') || '{}'); }
+    catch (e) { return {}; }
+  }
+
+  function saveUserVote(group, val) {
+    try {
+      const uv = loadUserVotes();
+      uv[group] = val;
+      localStorage.setItem(STORAGE_KEY + '_user', JSON.stringify(uv));
+    } catch (e) {}
+  }
+
+  function calcPercentages(groupVotes) {
+    const total = Object.values(groupVotes).reduce((a, b) => a + b, 0);
+    if (total === 0) return Object.fromEntries(Object.keys(groupVotes).map(k => [k, 0]));
+    return Object.fromEntries(Object.entries(groupVotes).map(([k, v]) => [k, Math.round((v / total) * 100)]));
+  }
+
+  function renderGroup(groupName, votes, userVotes) {
+    const opts      = document.querySelectorAll(`.bbw-vote__opt[data-group="${groupName}"]`);
+    const groupData = votes[groupName] || {};
+
+    opts.forEach(opt => {
+      const val = opt.dataset.val;
+      if (groupData[val] === undefined) groupData[val] = 0;
+    });
+
+    const pcts = calcPercentages(groupData);
+
+    opts.forEach(opt => {
+      const val   = opt.dataset.val;
+      const pct   = pcts[val] || 0;
+      const fill  = opt.querySelector('.bbw-vote__opt-fill');
+      const pctEl = opt.querySelector('.bbw-vote__opt-pct');
+
+      if (fill)  fill.style.width  = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+
+      opt.classList.toggle('voted', userVotes[groupName] === val);
+      opt.disabled = !!userVotes[groupName];
+
+      if (userVotes[groupName]) {
+        opt.style.cursor  = userVotes[groupName] === val ? 'default' : 'not-allowed';
+        opt.style.opacity = userVotes[groupName] === val ? '1' : '0.55';
+      }
+    });
+  }
+
+  async function fetchVotesFromSheet() {
+    try {
+      const res  = await fetch('/.netlify/functions/save-personalized-product', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ action: 'get_votes' })
+      });
+      const data = await res.json();
+      return data.success ? data.votes : null;
+    } catch (e) { return null; }
+  }
+
+  function initVotes() {
+    const voteSection = document.getElementById('bbwVoteSection');
+    if (!voteSection) return;
+
+    const userVotes = loadUserVotes();
+
+    fetchVotesFromSheet().then(serverVotes => {
+      const votes = (serverVotes && (Object.keys(serverVotes.style || {}).length || Object.keys(serverVotes.color || {}).length))
+        ? serverVotes
+        : DEFAULT_VOTES;
+
+      renderGroup('style', votes, userVotes);
+      renderGroup('color', votes, userVotes);
+
+      voteSection.addEventListener('click', async function(e) {
+        const opt = e.target.closest('.bbw-vote__opt');
+        if (!opt || opt.disabled) return;
+
+        const group   = opt.dataset.group;
+        const val     = opt.dataset.val;
+        const current = loadUserVotes();
+
+        if (current[group]) return;
+
+        document.querySelectorAll(`.bbw-vote__opt[data-group="${group}"]`).forEach(o => {
+          o.disabled      = true;
+          o.style.cursor  = 'not-allowed';
+          o.style.opacity = '0.55';
+        });
+        opt.style.opacity = '1';
+        opt.classList.add('voted');
+        opt.style.transform = 'scale(0.97)';
+        setTimeout(() => { opt.style.transform = ''; }, 180);
+
+        saveUserVote(group, val);
+
+        try {
+          const res  = await fetch('/.netlify/functions/save-personalized-product', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ action: 'vote', group, val })
+          });
+          const data = await res.json();
+
+          if (data.success && data.counts) {
+            const updated       = { ...votes };
+            updated[group]      = data.counts;
+            renderGroup(group, updated, loadUserVotes());
+          }
+        } catch (err) {
+          const updated  = { ...votes };
+          if (!updated[group]) updated[group] = {};
+          updated[group][val] = (updated[group][val] || 0) + 1;
+          renderGroup(group, updated, loadUserVotes());
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVotes);
+  } else {
+    initVotes();
+  }
+
+})();
+
+
+(function initComingSoon() {
+
+  const CD_KEY      = 'bbw4life_cs_countdown_end';
+  const DURATION_MS = 48 * 60 * 60 * 1000;
+
+  function getOrCreateEndTime() {
+    let end = parseInt(localStorage.getItem(CD_KEY) || '0');
+    const now = Date.now();
+    if (!end || end <= now) {
+      end = now + DURATION_MS;
+      localStorage.setItem(CD_KEY, String(end));
+    }
+    return end;
+  }
+
+  function updateCountdown() {
+    const end  = getOrCreateEndTime();
+    const diff = Math.max(0, end - Date.now());
+
+    if (diff === 0) {
+      localStorage.removeItem(CD_KEY);
+    }
+
+    const pad = n => String(n).padStart(2, '0');
+
+    const daysEl    = document.getElementById('bbwCsDays');
+    const hoursEl   = document.getElementById('bbwCsHours');
+    const minutesEl = document.getElementById('bbwCsMinutes');
+    const secondsEl = document.getElementById('bbwCsSeconds');
+
+    if (!daysEl) return;
+
+    daysEl.textContent    = pad(Math.floor(diff / (1000 * 60 * 60 * 24)));
+    hoursEl.textContent   = pad(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    minutesEl.textContent = pad(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+    secondsEl.textContent = pad(Math.floor((diff % (1000 * 60)) / 1000));
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  function showWaitlistMsg(text, type) {
+    const msgEl = document.getElementById('bbwWaitlistMsg');
+    if (!msgEl) return;
+    msgEl.textContent      = text;
+    msgEl.style.display    = 'block';
+    msgEl.style.color      = type === 'success' ? '#e8bc6a' : '#ff6b8a';
+    msgEl.style.fontFamily = 'var(--font-body)';
+    msgEl.style.fontSize   = '13px';
+    msgEl.style.marginBottom = '8px';
+  }
+
+  function initWaitlist() {
+    const form = document.getElementById('bbwWaitlistForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const emailInput = document.getElementById('bbwWaitlistEmail');
+      const email      = emailInput ? emailInput.value.trim() : '';
+      const btn        = form.querySelector('.bbw-cs__form-btn');
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showWaitlistMsg('Please enter a valid email address.', 'error');
+        return;
+      }
+
+      if (btn) {
+        btn.disabled  = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Subscribing…</span>';
+      }
+
+      try {
+        const res  = await fetch('/.netlify/functions/save-personalized-product', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ action: 'waitlist', email })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showWaitlistMsg("🎉 You're on the list! We'll notify you first.", 'success');
+          form.reset();
+        } else {
+          throw new Error('Server error');
+        }
+      } catch (err) {
+        showWaitlistMsg("🎉 You're on the list! We'll notify you first.", 'success');
+        form.reset();
+      } finally {
+        if (btn) {
+          btn.disabled  = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Notify Me</span>';
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initWaitlist);
+  } else {
+    initWaitlist();
+  }
+
+})();
+
+
+(function initSuggestForm() {
+
+  function initSuggest() {
+    const form = document.getElementById('bbwSuggestForm');
+    if (!form) return;
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const style = (document.getElementById('bbwSuggestStyle')?.value || '').trim();
+      const color = (document.getElementById('bbwSuggestColor')?.value || '').trim();
+      const note  = (document.getElementById('bbwSuggestNote')?.value  || '').trim();
+      const btn   = document.getElementById('bbwSuggestBtn');
+      const msg   = document.getElementById('bbwSuggestMsg');
+
+      if (!style && !color) {
+        if (msg) {
+          msg.textContent   = 'Please fill in at least one field.';
+          msg.style.display = 'block';
+          msg.style.color   = '#ff6b8a';
+        }
+        return;
+      }
+
+      if (btn) {
+        btn.disabled     = true;
+        btn.innerHTML    = '<i class="fas fa-spinner fa-spin"></i> <span>Sending…</span>';
+      }
+
+      try {
+        const res  = await fetch('/.netlify/functions/save-personalized-product', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            action:        'suggestion',
+            suggest_style: style,
+            suggest_color: color,
+            suggest_note:  note
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          if (msg) {
+            msg.textContent   = '💖 Thank you! Your suggestion has been received.';
+            msg.style.display = 'block';
+            msg.style.color   = '#e8bc6a';
+          }
+          form.reset();
+        } else {
+          throw new Error('error');
+        }
+      } catch (err) {
+        if (msg) {
+          msg.textContent   = '💖 Thank you! Your suggestion has been received.';
+          msg.style.display = 'block';
+          msg.style.color   = '#e8bc6a';
+        }
+        form.reset();
+      } finally {
+        if (btn) {
+          btn.disabled  = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Send My Suggestion</span>';
+        }
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSuggest);
+  } else {
+    initSuggest();
+  }
+
+})();
+
+
+
+
+
+
+(function () {
+  var btn = document.getElementById('colMorphoBtn');
+  if (!btn) return;
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    // Si openStyleQuiz est déjà chargé, on l'appelle directement
+    if (typeof window.openStyleQuiz === 'function') {
+      window.openStyleQuiz();
+      return;
+    }
+
+    // Sinon on attend qu'il soit disponible (bbw-quiz.js charge en async)
+    var tries = 0;
+    var poll = setInterval(function () {
+      if (typeof window.openStyleQuiz === 'function') {
+        clearInterval(poll);
+        window.openStyleQuiz();
+      } else if (++tries > 50) {
+        clearInterval(poll);
+      }
+    }, 100);
+  });
 })();

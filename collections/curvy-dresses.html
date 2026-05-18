@@ -158,6 +158,10 @@
             <span>Filters</span>
             <span class="col-filter-count" id="colFilterCount" style="display:none">0</span>
           </button>
+          <button class="col-morpho-btn" id="colMorphoBtn" data-open-quiz="true">
+            <i class="fas fa-magic"></i>
+            <span>Find Your Style</span>
+          </button>
           <div class="col-cat-tabs" id="colCatTabs">
             <button class="col-cat-tab active" data-cat="all"><i class="fas fa-th-large"></i> All</button>
             <button class="col-cat-tab" data-cat="bestsellers"><i class="fas fa-fire"></i> Best Sellers</button>
@@ -401,6 +405,7 @@
        SCRIPTS
   ═══════════════════════════════════════ -->
   <script src="/widgets-loader.js"></script>
+  <script src="/pdg-francenel.js"></script>
   <script src="/script.js"></script>
   <script src="/animations.js"></script>
   <script src="/search.js"></script>
@@ -443,6 +448,7 @@
     })
     .catch(err => console.error('Newsletter load error:', err));
 </script>
+
 
 </body>
 </html>

@@ -793,6 +793,7 @@ function applyPromoFreeItems() {
 
 
 
+
  // ====================== INJECT SITE STATS ======================
 (function injectSiteStats() {
   const settings = products.find(p => p.type === 'settings') || {};
@@ -884,6 +885,13 @@ function applyPromoFreeItems() {
 
 
       const settings = products.find(p => p.type === "settings") || {};
+
+      // ══ THEME COLOR META ══
+      const themeColor = settings.theme_color || '#c0385e';
+      const themeMeta = document.createElement('meta');
+      themeMeta.name = 'theme-color';
+      themeMeta.content = themeColor;
+      document.head.appendChild(themeMeta);
 
 
       // ══ SANAICA BANNER ══
@@ -1654,10 +1662,10 @@ function applyPromoFreeItems() {
 
         // SVG wishlist définis une seule fois
         const WISHLIST_SVG = `
-          <svg class="wishlist-icon-empty" width="30px" height="30px" viewBox="0 0 24 24" fill="none" stroke="#c0385e" stroke-width="2">
+          <svg class="wishlist-icon-empty" width="30px" height="30px" viewBox="0 0 24 24" fill="none" stroke="#d4b60c" stroke-width="2">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>
-          <svg class="wishlist-icon-filled" width="30px" height="30px" viewBox="0 0 24 24" fill="#c0385e" stroke="#c0385e" stroke-width="2">
+          <svg class="wishlist-icon-filled" width="30px" height="30px" viewBox="0 0 24 24" fill="#fffef7" stroke="#fffef7" stroke-width="2">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>`;
 
@@ -2560,16 +2568,23 @@ initAnnouncementBar();
 })();
 
 
-// ══════════════════════════════════════════════════════
-//   PLAN REQUEST RESERVATION POPUP
-// ══════════════════════════════════════════════════════
 (function initPlanReservationPopup() {
     'use strict';
+
+    /* ── Featured products collection IDs (bbw-features-products) ── */
+    const BBW_FEATURED_IDS = [
+      'Pdg-Francenel-product69',
+      'Pdg-Francenel-product70',
+      'Pdg-Francenel-product71',
+      'Pdg-Francenel-product72',
+      'Pdg-Francenel-product73',
+      'Pdg-Francenel-product74',
+      'Pdg-Francenel-product75'
+    ];
 
     const overlay     = document.getElementById('plan-popup-overlay');
     const modal       = overlay ? overlay.querySelector('.plan-popup-modal') : null;
     const closeBtn    = document.getElementById('plan-popup-close');
-    const openBtn     = document.getElementById('open-plan-popup');
     const stepForm    = document.getElementById('plan-step-form');
     const stepPayment = document.getElementById('plan-step-payment');
     const stepThanks  = document.getElementById('plan-step-thanks');
@@ -2581,310 +2596,571 @@ initAnnouncementBar();
 
     if (!overlay || !modal) return;
 
-    let clientData      = {};
-    let selectedProgram = '';
+    let clientData       = {};
+    let selectedProgram  = '';
+    let selectedProductId = '';
+    let selectedSize     = '';
+    let selectedColor    = '';
     let reservationPrice = 10;
 
-    // ── Inject price labels ──
+    /* ── Inject price labels ── */
     function injectPriceLabels(price) {
-        document.querySelectorAll('.plan-reservation-price-label').forEach(el => {
-            el.textContent = '$' + price;
-        });
+      document.querySelectorAll('.plan-reservation-price-label').forEach(el => {
+        el.textContent = '$' + price;
+      });
     }
 
-    // ── Load price from settings ──
+    /* ── Load price from settings ── */
     function loadReservationPrice() {
-        const s = (window.__allProducts || []).find(p => p.type === 'settings') || {};
-        if (s.reservation_price !== undefined) {
-            reservationPrice = parseFloat(s.reservation_price) || 10;
+      const s = (window.__allProducts || []).find(p => p.type === 'settings') || {};
+      if (s.reservation_price !== undefined) {
+        reservationPrice = parseFloat(s.reservation_price) || 10;
+        injectPriceLabels(reservationPrice);
+      } else {
+        let tries = 0;
+        const wait = setInterval(() => {
+          tries++;
+          const s2 = (window.__allProducts || []).find(p => p.type === 'settings') || {};
+          if (s2.reservation_price !== undefined) {
+            clearInterval(wait);
+            reservationPrice = parseFloat(s2.reservation_price) || 10;
             injectPriceLabels(reservationPrice);
-        } else {
-            let tries = 0;
-            const wait = setInterval(() => {
-                tries++;
-                const s2 = (window.__allProducts || []).find(p => p.type === 'settings') || {};
-                if (s2.reservation_price !== undefined) {
-                    clearInterval(wait);
-                    reservationPrice = parseFloat(s2.reservation_price) || 10;
-                    injectPriceLabels(reservationPrice);
-                } else if (tries > 60) {
-                    clearInterval(wait);
-                    injectPriceLabels(reservationPrice);
-                }
-            }, 100);
-        }
+          } else if (tries > 60) {
+            clearInterval(wait);
+            injectPriceLabels(reservationPrice);
+          }
+        }, 100);
+      }
     }
     loadReservationPrice();
 
-    // ── Spots ──
+    /* ── Spots countdown ── */
     const SPOTS_KEY = 'plan_spots_remaining';
     let spotsRemaining = parseInt(sessionStorage.getItem(SPOTS_KEY) || '27');
     if (spotsCount) spotsCount.textContent = spotsRemaining;
-
     function decreaseSpot() {
-        if (spotsRemaining > 1) {
-            spotsRemaining = Math.max(1, spotsRemaining - 1);
-            sessionStorage.setItem(SPOTS_KEY, spotsRemaining);
-            if (spotsCount) spotsCount.textContent = spotsRemaining;
-        }
+      if (spotsRemaining > 1) {
+        spotsRemaining = Math.max(1, spotsRemaining - 1);
+        sessionStorage.setItem(SPOTS_KEY, spotsRemaining);
+        if (spotsCount) spotsCount.textContent = spotsRemaining;
+      }
     }
     setInterval(decreaseSpot, Math.random() * 90000 + 90000);
 
-    // ── Open / Close ──
-    function openPopup() {
-        showStep('form');
-        clearErrors();
-        overlay.classList.add('active');
-        overlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        injectPriceLabels(reservationPrice);
-    }
-    function closePopup() {
-        overlay.classList.remove('active');
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    }
-    function showStep(step) {
-        if (stepForm)    stepForm.style.display    = step === 'form'    ? '' : 'none';
-        if (stepPayment) stepPayment.style.display = step === 'payment' ? '' : 'none';
-        if (stepThanks)  stepThanks.style.display  = step === 'thanks'  ? '' : 'none';
-    }
-    function showThanksStep(firstName, program) {
-        overlay.classList.add('active');
-        overlay.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        showStep('thanks');
-        injectPriceLabels(reservationPrice);
-        const thanksName  = document.getElementById('plan-thanks-name');
-        const thanksBadge = document.getElementById('plan-thanks-program-text');
-        if (thanksName)  thanksName.textContent  = 'Welcome, ' + firstName + '!';
-        if (thanksBadge) thanksBadge.textContent = program || '';
-        window.history.replaceState({}, '', window.location.pathname);
+    /* ══════════════════════════════════════════════
+       POPULATE PRODUCT SELECT from bbw-features-products
+    ══════════════════════════════════════════════ */
+    function populateProductSelect() {
+      const selectEl = document.getElementById('plan-program');
+      if (!selectEl) return;
+
+      const allProds = window.__allProducts || [];
+      const featuredProds = BBW_FEATURED_IDS
+        .map(id => allProds.find(p => p.id === id))
+        .filter(Boolean);
+
+      selectEl.innerHTML = '<option value="" disabled selected>Choose a product...</option>';
+      featuredProds.forEach(prod => {
+        const opt = document.createElement('option');
+        opt.value = prod.id;
+        opt.textContent = prod.title;
+        opt.dataset.productId = prod.id;
+        selectEl.appendChild(opt);
+      });
+
+      selectEl.addEventListener('change', function() {
+        const pid = this.value;
+        const prod = allProds.find(p => p.id === pid);
+        if (prod) {
+          selectedProductId = pid;
+          selectedProgram   = prod.title;
+          populateSizeSelect(prod);
+          populateColorSelect(prod);
+        }
+      });
     }
 
-    if (openBtn)     openBtn.addEventListener('click', openPopup);
-    document.querySelectorAll('.open-plan-popup-extra').forEach(btn => {
-      btn.addEventListener('click', openPopup);
-    });
+    function populateSizeSelect(prod) {
+      const sizeEl  = document.getElementById('plan-size');
+      const sizeGrp = document.getElementById('plan-size-group');
+      if (!sizeEl) return;
+
+      const sizes = prod.sizes || [];
+      sizeEl.innerHTML = '<option value="" disabled selected>Select a size...</option>';
+      sizes.forEach(sz => {
+        const opt = document.createElement('option');
+        opt.value = sz;
+        opt.textContent = sz;
+        sizeEl.appendChild(opt);
+      });
+      if (sizeGrp) sizeGrp.style.display = sizes.length > 0 ? '' : 'none';
+
+      sizeEl.onchange = function() { selectedSize = this.value; };
+    }
+
+    function populateColorSelect(prod) {
+      const colorEl    = document.getElementById('plan-color');
+      const colorGrp   = document.getElementById('plan-color-group');
+      const previewWrap = document.getElementById('plan-color-preview-wrap');
+      const previewCont = document.getElementById('plan-color-swatches-preview');
+      if (!colorEl) return;
+
+      const colors = (prod.colors || []).filter(c => c.active !== false);
+      colorEl.innerHTML = '<option value="" disabled selected>Select a color...</option>';
+      colors.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = c.name;
+        colorEl.appendChild(opt);
+      });
+      if (colorGrp) colorGrp.style.display = colors.length > 0 ? '' : 'none';
+
+      /* Swatch visual preview */
+      if (previewCont && previewWrap) {
+        previewCont.innerHTML = '';
+        colors.forEach(c => {
+          const item = document.createElement('div');
+          item.className = 'plan-color-swatch-item';
+          item.dataset.color = c.name;
+          item.innerHTML = `<span class="plan-color-swatch-dot" style="background:${c.hex || '#ccc'}"></span>${c.name}`;
+          item.addEventListener('click', () => {
+            previewCont.querySelectorAll('.plan-color-swatch-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            colorEl.value  = c.name;
+            selectedColor  = c.name;
+          });
+          previewCont.appendChild(item);
+        });
+        previewWrap.style.display = colors.length > 0 ? '' : 'none';
+      }
+
+      colorEl.onchange = function() {
+        selectedColor = this.value;
+        if (previewCont) {
+          previewCont.querySelectorAll('.plan-color-swatch-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.color === selectedColor);
+          });
+        }
+      };
+    }
+
+    /* ── Open / Close ── */
+    function openPopup(preselectedProductId) {
+      /* Populate selects when products are ready */
+      if (window.__allProducts && window.__allProducts.length) {
+        populateProductSelect();
+        if (preselectedProductId) {
+          setTimeout(() => {
+            const sel = document.getElementById('plan-program');
+            if (sel) {
+              sel.value = preselectedProductId;
+              sel.dispatchEvent(new Event('change'));
+            }
+          }, 50);
+        }
+      } else {
+        let tries = 0;
+        const wait = setInterval(() => {
+          tries++;
+          if (window.__allProducts && window.__allProducts.length) {
+            clearInterval(wait);
+            populateProductSelect();
+            if (preselectedProductId) {
+              setTimeout(() => {
+                const sel = document.getElementById('plan-program');
+                if (sel) { sel.value = preselectedProductId; sel.dispatchEvent(new Event('change')); }
+              }, 50);
+            }
+          } else if (tries > 60) clearInterval(wait);
+        }, 100);
+      }
+
+      showStep('form');
+      clearErrors();
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      injectPriceLabels(reservationPrice);
+    }
+
+    function closePopup() {
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function showStep(step) {
+      stepForm.style.display    = step === 'form'    ? '' : 'none';
+      stepPayment.style.display = step === 'payment' ? '' : 'none';
+      stepThanks.style.display  = step === 'thanks'  ? '' : 'none';
+    }
+
+    function showThanksStep(firstName, program) {
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      showStep('thanks');
+      injectPriceLabels(reservationPrice);
+      const thanksName  = document.getElementById('plan-thanks-name');
+      const thanksBadge = document.getElementById('plan-thanks-program-text');
+      if (thanksName)  thanksName.textContent  = 'Welcome, ' + firstName + '!';
+      if (thanksBadge) thanksBadge.textContent = program || '';
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    /* ── Expose openPopup globally ── */
+    window.openProductRequestPopup = openPopup;
+    window.openPlanPopup           = openPopup;
+
+    /* ── Helpers ── */
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = msg; el.style.display = 'block';
+    }
+    function clearErrors() {
+      ['plan-popup-error','plan-pay-error'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = ''; el.style.display = 'none'; }
+      });
+    }
+    function val(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+    function setBtnLoading(btn, loading) {
+      if (!btn) return;
+      btn.disabled = loading;
+      btn.innerHTML = loading
+        ? '<div class="plan-spinner"></div> Processing...'
+        : '<i class="fi fi-rr-lock"></i> Pay $' + reservationPrice + ' — Reserve My Product';
+    }
+
+    /* ── STEP 1 → STEP 2 ── */
+    if (submitBtn) {
+      submitBtn.addEventListener('click', () => {
+        clearErrors();
+        const firstName = val('plan-firstname');
+        const lastName  = val('plan-lastname');
+        const email     = val('plan-email');
+        const phone     = val('plan-phone');
+        const program   = val('plan-program');
+        const size      = val('plan-size');
+        const color     = val('plan-color');
+        const consent   = document.getElementById('plan-consent') && document.getElementById('plan-consent').checked;
+
+        /* Get product title from option text */
+        const selectEl = document.getElementById('plan-program');
+        const productTitle = selectEl && selectEl.selectedIndex > 0
+          ? selectEl.options[selectEl.selectedIndex].text
+          : program;
+
+        if (!firstName || !lastName || !email || !program) {
+          showError('plan-popup-error', 'Please fill in all required fields.');
+          return;
+        }
+        if (!email.includes('@') || !email.includes('.')) {
+          showError('plan-popup-error', 'Please enter a valid email address.');
+          return;
+        }
+        if (!consent) {
+          showError('plan-popup-error', 'Please check the consent box to continue.');
+          return;
+        }
+
+        selectedSize  = size;
+        selectedColor = color;
+        selectedProgram = productTitle;
+        selectedProductId = program;
+
+        clientData = {
+          firstName, lastName, email, phone,
+          program:    productTitle,
+          productId:  program,
+          size:       size,
+          color:      color,
+          consent:   'Yes'
+        };
+
+        const payProgramName    = document.getElementById('plan-pay-program-name');
+        const payVariantSummary = document.getElementById('plan-pay-variant-summary');
+        if (payProgramName)    payProgramName.textContent    = productTitle;
+        if (payVariantSummary) payVariantSummary.textContent =
+          (size ? 'Size: ' + size : '') + (size && color ? ' · ' : '') + (color ? 'Color: ' + color : '');
+
+        showStep('payment');
+      });
+    }
+
+    /* ── Back ── */
+    if (backBtn) backBtn.addEventListener('click', () => showStep('form'));
+
+    /* ══════════════════════════════════════════════
+       STEP 2 → PAY — système payment inchangé
+    ══════════════════════════════════════════════ */
+    if (payBtn) {
+      payBtn.addEventListener('click', async () => {
+        clearErrors();
+        const method = document.querySelector('input[name="plan-payment"]:checked');
+        if (!method) { showError('plan-pay-error', 'Please choose a payment method.'); return; }
+        setBtnLoading(payBtn, true);
+        try {
+          if (method.value === 'stripe') await handleStripe();
+          else await handlePaypal();
+        } catch (err) {
+          showError('plan-pay-error', err.message || 'Payment failed. Please try again.');
+          setBtnLoading(payBtn, false);
+        }
+      });
+    }
+
+    /* ── Stripe — inchangé, on passe juste les nouveaux champs dans customer ── */
+    async function handleStripe() {
+      const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData })
+      });
+      const data = await res.json();
+      if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');
+      sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
+      sessionStorage.setItem('plan_res_program', selectedProgram);
+      const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
+      const stripe = Stripe(window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '');
+      await stripe.redirectToCheckout({ sessionId: data.sessionId });
+    }
+
+    /* ── PayPal — inchangé ── */
+    async function handlePaypal() {
+      const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData })
+      });
+      const data = await res.json();
+      if (!data.success || !data.approvalUrl) throw new Error(data.error || 'PayPal failed.');
+      sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
+      sessionStorage.setItem('plan_res_program', selectedProgram);
+      window.location.href = data.approvalUrl;
+    }
+
+    /* ── Return Stripe ── */
+    async function checkReturnFromStripe() {
+      const params    = new URLSearchParams(window.location.search);
+      const sessionId = params.get('res_session_id');
+      if (!sessionId) return false;
+      const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
+      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
+      const firstName = pendingClient ? pendingClient.firstName : '';
+      showThanksStep(firstName, pendingProgram);
+      try {
+        const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'verify', sessionId })
+        });
+        const data = await res.json();
+        /* After payment verified, save to sheet with new fields */
+        if (data.success && pendingClient) {
+          await savePlanRequestToSheet(pendingClient);
+        }
+      } catch (err) { console.error('[ReservationPopup] Stripe verify error:', err.message); }
+      sessionStorage.removeItem('plan_res_client');
+      sessionStorage.removeItem('plan_res_program');
+      return true;
+    }
+
+    /* ── Return PayPal ── */
+    async function checkReturnFromPaypal() {
+      const params    = new URLSearchParams(window.location.search);
+      const resPaypal = params.get('res_paypal');
+      const orderID   = params.get('token');
+      if (!resPaypal || !orderID) return false;
+      const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
+      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
+      const firstName = pendingClient ? pendingClient.firstName : '';
+      showThanksStep(firstName, pendingProgram);
+      try {
+        const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'capture', orderID, clientData: pendingClient, program: pendingProgram, amount: reservationPrice })
+        });
+        const data = await res.json();
+        if (data.success && pendingClient) {
+          await savePlanRequestToSheet(pendingClient);
+        }
+      } catch (err) { console.error('[ReservationPopup] PayPal capture error:', err.message); }
+      sessionStorage.removeItem('plan_res_client');
+      sessionStorage.removeItem('plan_res_program');
+      return true;
+    }
+
+    /* ── Save to sheet — new fields included ── */
+    async function savePlanRequestToSheet(client) {
+      try {
+        await fetch('/.netlify/functions/save-plan-request', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: client.firstName,
+            lastName:  client.lastName,
+            email:     client.email,
+            phone:     client.phone     || '',
+            program:   client.program   || '',
+            productId: client.productId || '',
+            size:      client.size      || '',
+            color:     client.color     || '',
+            consent:   client.consent   || 'Yes'
+          })
+        });
+      } catch (e) { console.warn('[PlanRequest] savePlanRequestToSheet failed:', e.message); }
+    }
+
+    /* ── Close buttons ── */
     if (closeBtn)    closeBtn.addEventListener('click', closePopup);
     if (closeThanks) closeThanks.addEventListener('click', closePopup);
     overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
-    if (backBtn) backBtn.addEventListener('click', () => showStep('form'));
 
-    // ── Helpers ──
-    function showError(id, msg) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.textContent = msg;
-        el.style.display = 'block';
-    }
-    function clearErrors() {
-        ['plan-popup-error', 'plan-pay-error'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) { el.textContent = ''; el.style.display = 'none'; }
-        });
-    }
-    function val(id) {
-        const el = document.getElementById(id);
-        return el ? el.value.trim() : '';
-    }
-    function setBtnLoading(btn, loading) {
-        if (!btn) return;
-        btn.disabled = loading;
-        btn.innerHTML = loading
-            ? '<div class="plan-spinner"></div> Processing...'
-            : '<i class="fi fi-rr-lock"></i> Pay $' + reservationPrice + ' — Reserve My Spot';
-    }
+    /* ── Open via #open-plan-popup button ── */
+    const openBtn = document.getElementById('open-plan-popup');
+    if (openBtn) openBtn.addEventListener('click', () => openPopup(null));
 
-    // ── STEP 1 ──
-    if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-            clearErrors();
-            const firstName = val('plan-firstname');
-            const lastName  = val('plan-lastname');
-            const email     = val('plan-email');
-            const phone     = val('plan-phone');
-            const program   = val('plan-program');
-            const consent   = document.getElementById('plan-consent') && document.getElementById('plan-consent').checked;
+    /* ── Open via .open-plan-popup-extra ── */
+    document.querySelectorAll('.open-plan-popup-extra').forEach(btn => {
+      btn.addEventListener('click', () => openPopup(btn.dataset.productId || null));
+    });
 
-            if (!firstName || !lastName || !email || !program) {
-                showError('plan-popup-error', 'Please fill in all required fields.');
-                return;
-            }
-            if (!email.includes('@') || !email.includes('.')) {
-                showError('plan-popup-error', 'Please enter a valid email address.');
-                return;
-            }
-            if (!consent) {
-                showError('plan-popup-error', 'Please check the consent box to continue.');
-                return;
-            }
-
-            clientData      = { firstName, lastName, email, phone, program, consent: 'Yes' };
-            selectedProgram = program;
-
-            const payProgramName = document.getElementById('plan-pay-program-name');
-            if (payProgramName) payProgramName.textContent = program;
-
-            showStep('payment');
-        });
-    }
-
-    // ── STEP 2 → Pay ──
-    if (payBtn) {
-        payBtn.addEventListener('click', async () => {
-            clearErrors();
-            const method = document.querySelector('input[name="plan-payment"]:checked');
-            if (!method) {
-                showError('plan-pay-error', 'Please choose a payment method.');
-                return;
-            }
-            setBtnLoading(payBtn, true);
-            try {
-                if (method.value === 'stripe') {
-                    await handleStripe();
-                } else {
-                    await handlePaypal();
-                }
-            } catch (err) {
-                showError('plan-pay-error', err.message || 'Payment failed. Please try again.');
-                setBtnLoading(payBtn, false);
-            }
-        });
-    }
-
-    // ── Stripe : crée la session et redirige ──
-    async function handleStripe() {
-        const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({
-                action:   'create',
-                amount:   reservationPrice,
-                program:  selectedProgram,
-                customer: clientData,
-            }),
-        });
-        const data = await res.json();
-        if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');
-
-        sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
-        sessionStorage.setItem('plan_res_program', selectedProgram);
-
-        const settings  = (window.__allProducts || []).find(p => p.type === 'settings') || {};
-        const stripeKey = window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '';
-        const stripe    = Stripe(stripeKey);
-        await stripe.redirectToCheckout({ sessionId: data.sessionId });
-    }
-
-    // ── PayPal : crée l'ordre et redirige ──
-    async function handlePaypal() {
-        const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({
-                action:   'create',
-                amount:   reservationPrice,
-                program:  selectedProgram,
-                customer: clientData,
-            }),
-        });
-        const data = await res.json();
-        if (!data.success || !data.approvalUrl) throw new Error(data.error || 'PayPal failed.');
-
-        sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
-        sessionStorage.setItem('plan_res_program', selectedProgram);
-
-        window.location.href = data.approvalUrl;
-    }
-
-    // ══════════════════════════════════════════
-    //  RETOUR STRIPE — res_session_id dans l'URL
-    // ══════════════════════════════════════════
-    async function checkReturnFromStripe() {
-        const params    = new URLSearchParams(window.location.search);
-        const sessionId = params.get('res_session_id');
-        if (!sessionId) return false;
-
-        const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
-        const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
-
-        // Afficher popup remerciements immédiatement
-        const firstName = pendingClient ? pendingClient.firstName : '';
-        showThanksStep(firstName, pendingProgram);
-
-        // Vérifier paiement + sauvegarder dans le sheet (dans la même function)
-        try {
-            const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({ action: 'verify', sessionId }),
-            });
-            const data = await res.json();
-            if (!data.success) {
-                console.warn('[ReservationPopup] Stripe verify:', data.error);
-            }
-        } catch (err) {
-            console.error('[ReservationPopup] Stripe verify error:', err.message);
-        }
-
-        sessionStorage.removeItem('plan_res_client');
-        sessionStorage.removeItem('plan_res_program');
-        return true;
-    }
-
-    // ══════════════════════════════════════════
-    //  RETOUR PAYPAL — res_paypal=1&token=XXX dans l'URL
-    //  PayPal ajoute automatiquement ?token=ORDERID&PayerID=XXXX
-    // ══════════════════════════════════════════
-    async function checkReturnFromPaypal() {
-        const params    = new URLSearchParams(window.location.search);
-        const resPaypal = params.get('res_paypal');
-        const orderID   = params.get('token'); // PayPal passe l'orderID comme "token"
-
-        if (!resPaypal || !orderID) return false;
-
-        const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
-        const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
-
-        // Afficher popup remerciements immédiatement
-        const firstName = pendingClient ? pendingClient.firstName : '';
-        showThanksStep(firstName, pendingProgram);
-
-        // Capturer paiement + sauvegarder dans le sheet (dans la même function)
-        try {
-            const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
-                method:  'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body:    JSON.stringify({
-                    action:     'capture',
-                    orderID:    orderID,
-                    clientData: pendingClient,
-                    program:    pendingProgram,
-                    amount:     reservationPrice,
-                }),
-            });
-            const data = await res.json();
-            if (!data.success) {
-                console.warn('[ReservationPopup] PayPal capture:', data.error);
-            }
-        } catch (err) {
-            console.error('[ReservationPopup] PayPal capture error:', err.message);
-        }
-
-        sessionStorage.removeItem('plan_res_client');
-        sessionStorage.removeItem('plan_res_program');
-        return true;
-    }
-
-    // ── Init ──
+    /* ── Init ── */
     async function init() {
-        const stripeHandled = await checkReturnFromStripe();
-        if (!stripeHandled) await checkReturnFromPaypal();
+      const stripeHandled = await checkReturnFromStripe();
+      if (!stripeHandled) await checkReturnFromPaypal();
+    }
+    init();
+
+})();
+
+
+
+
+/* ══════════════════════════════════════════════════════════════
+   BBW4LIFE — FEATURED PRODUCTS REQUEST MODE
+   Runs after products.data.json is loaded
+══════════════════════════════════════════════════════════════ */
+(function initFeaturedRequestMode() {
+  'use strict';
+
+  const BBW_FEATURED_IDS = [
+    'Pdg-Francenel-product69',
+    'Pdg-Francenel-product70',
+    'Pdg-Francenel-product71',
+    'Pdg-Francenel-product72',
+    'Pdg-Francenel-product73',
+    'Pdg-Francenel-product74',
+    'Pdg-Francenel-product75'
+  ];
+
+  function isFeaturedProduct(id) {
+    return BBW_FEATURED_IDS.includes(id);
+  }
+
+  function run() {
+    const allProducts = window.__allProducts || [];
+    const settings    = allProducts.find(p => p.type === 'settings') || {};
+    const plansOn     = (settings.plans_available || 'no').toLowerCase() === 'yes';
+
+    /* ══ PRODUCT PAGE — detect if current page is a featured product ══ */
+    const productSection = document.querySelector('.product-section');
+    if (productSection) {
+      const pid = productSection.dataset.productId;
+      if (pid && isFeaturedProduct(pid)) {
+        if (!plansOn) {
+          /* Hide ATC / qty / buy-now, show request button */
+          productSection.classList.add('bbw-featured-request-mode');
+
+          /* Ensure request button wrapper is visible */
+          const reqWrap = document.getElementById('plan-request-trigger-wrap');
+          if (reqWrap) reqWrap.style.display = 'flex';
+
+          /* Bind the request button to open popup pre-filled with this product */
+          const reqBtn = document.getElementById('open-plan-popup');
+          if (reqBtn) {
+            reqBtn.replaceWith(reqBtn.cloneNode(true)); /* remove old listeners */
+            const newReqBtn = document.getElementById('open-plan-popup');
+            if (newReqBtn) {
+              newReqBtn.addEventListener('click', () => {
+                if (typeof window.openProductRequestPopup === 'function') {
+                  window.openProductRequestPopup(pid);
+                }
+              });
+            }
+          }
+        } else {
+          /* plans_available = yes — hide request button */
+          const reqWrap = document.getElementById('plan-request-trigger-wrap');
+          if (reqWrap) reqWrap.style.display = 'none';
+        }
+      }
     }
 
-    init();
+    /* ══ COLLECTION GRID — mark featured cards ══ */
+    function applyCollectionCards() {
+      document.querySelectorAll('.col-product-card').forEach(card => {
+        const pid = card.dataset.id;
+        if (!pid || !isFeaturedProduct(pid)) return;
+
+        if (!plansOn) {
+          card.classList.add('bbw-request-only');
+
+          /* Quick View button → open popup instead */
+          const qvBtn = card.querySelector('.col-card__quick-view');
+          if (qvBtn) {
+            qvBtn.classList.remove('bbw-qv-hidden');
+            qvBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i> Request';
+            qvBtn.onclick = (e) => {
+              e.stopPropagation();
+              if (typeof window.openProductRequestPopup === 'function') {
+                window.openProductRequestPopup(pid);
+              }
+            };
+          }
+
+          /* ATC button → open popup instead of adding to cart */
+          const atcBtn = card.querySelector('.col-card__btn--cart');
+          if (atcBtn) {
+            atcBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i> Request';
+            atcBtn.onclick = (e) => {
+              e.stopPropagation();
+              if (typeof window.openProductRequestPopup === 'function') {
+                window.openProductRequestPopup(pid);
+              }
+            };
+          }
+
+        } else {
+          /* plans_available = yes — normal behavior, hide nothing */
+          card.classList.remove('bbw-request-only');
+        }
+      });
+    }
+
+    /* Apply immediately and re-apply after each collection render */
+    applyCollectionCards();
+
+    /* Watch for dynamically rendered cards (collection.js renders async) */
+    const colGrid = document.getElementById('colGrid');
+    if (colGrid) {
+      const observer = new MutationObserver(() => { applyCollectionCards(); });
+      observer.observe(colGrid, { childList: true, subtree: false });
+    }
+  }
+
+  /* Wait for products then run */
+  if (window.__allProducts && window.__allProducts.length) {
+    run();
+  } else {
+    let tries = 0;
+    const wait = setInterval(() => {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(wait);
+        run();
+      } else if (tries > 80) clearInterval(wait);
+    }, 100);
+  }
 
 })();
 
@@ -3210,9 +3486,11 @@ if (window.innerWidth <= 768) {
 
 })();
 
+
+
 (function initRememberCartPopup() {
   const settings = (products.find(p => p.type === 'settings') || {});
-  const rc = settings.remember_cart_popup || {}; 
+  const rc = settings.remember_cart_popup || {};
 
   if ((rc.show || 'yes').toLowerCase() !== 'yes') return;
 
@@ -3230,20 +3508,16 @@ if (window.innerWidth <= 768) {
 
   if (!container || !popup) return;
 
-  // ── Position : lit les 4 clés, active celle qui a "yes"
+  // ── Position
   const positionMap = {
     'position_bottom_right': 'rc-pos-bottom-right',
     'position_bottom_left':  'rc-pos-bottom-left',
     'position_top_right':    'rc-pos-top-right',
     'position_top_left':     'rc-pos-top-left'
   };
-
   let activePos = 'rc-pos-bottom-right';
   for (const [key, cls] of Object.entries(positionMap)) {
-    if ((rc[key] || 'no').toLowerCase() === 'yes') {
-      activePos = cls;
-      break;
-    }
+    if ((rc[key] || 'no').toLowerCase() === 'yes') { activePos = cls; break; }
   }
   container.classList.add(activePos);
 
@@ -3261,7 +3535,7 @@ if (window.innerWidth <= 768) {
     avatarVid.style.display = 'none';
   }
 
-  // ── Texts fixes
+  // ── Texts
   subtitleEl.textContent = rc.subtitle_text    || "Don't forget!";
   descEl.textContent     = rc.description_text || "Complete your order before it's gone!";
   btnText.textContent    = rc.button_text      || "Complete My Purchase";
@@ -3270,16 +3544,35 @@ if (window.innerWidth <= 768) {
   const displayTime  = parseInt(rc.display_duration_ms) || 6000;
   const interval     = parseInt(rc.interval_ms)         || 30000;
 
+  // ── Persistance via sessionStorage
+  const SS_FIRST_LOAD = 'rc_first_load_at';   // timestamp du tout premier chargement
+  const SS_LAST_SHOWN = 'rc_last_shown_at';   // timestamp du dernier affichage
+
+  const now = Date.now();
+
+  // Premier chargement de la session — on enregistre le timestamp
+  if (!sessionStorage.getItem(SS_FIRST_LOAD)) {
+    sessionStorage.setItem(SS_FIRST_LOAD, now.toString());
+  }
+
+  const firstLoadAt  = parseInt(sessionStorage.getItem(SS_FIRST_LOAD));
+  const lastShownAt  = () => parseInt(sessionStorage.getItem(SS_LAST_SHOWN) || '0');
+  const setLastShown = () => sessionStorage.setItem(SS_LAST_SHOWN, Date.now().toString());
+
+  // initial_delay est-il écoulé depuis le TOUT PREMIER chargement ?
+  const initialDelayDone = () => (Date.now() - firstLoadAt) >= initialDelay;
+
+  // interval est-il écoulé depuis le dernier affichage ?
+  const intervalDone = () => (Date.now() - lastShownAt()) >= interval;
+
   let hideTimer  = null;
   let cycleTimer = null;
   let visible    = false;
 
-  // ── Calcule la quantité totale dans le cart (free inclus)
   function getCartQty() {
     return cart.reduce((sum, i) => sum + i.quantity, 0);
   }
 
-  // ── Met à jour le titre + badge + barre urgence
   function updateTitle() {
     const qty = getCartQty();
     const raw = rc.title_text || 'You have [COUNT] item(s) in your cart';
@@ -3288,28 +3581,24 @@ if (window.innerWidth <= 768) {
       .replace('[COUNT]', qty)
       .replace('item(s)', label);
 
-    // Badge count
     if (countText) {
       countText.textContent = qty + (qty > 1 ? ' items waiting' : ' item waiting');
     }
-
-    // Barre urgence — repart à 100% à chaque affichage
     if (fill) {
       fill.style.animation = 'none';
-      fill.offsetHeight; // force reflow
+      fill.offsetHeight;
       fill.style.animationDuration = displayTime + 'ms';
       fill.style.animation = `rc-urgency-drain ${displayTime}ms linear forwards`;
     }
   }
 
   function showPopup() {
-    const qty = getCartQty();
-    if (qty === 0) return;
-
+    if (getCartQty() === 0) return;
     updateTitle();
     container.style.display = 'block';
     popup.classList.remove('rc-hiding');
     visible = true;
+    setLastShown();
 
     if (hideTimer) clearTimeout(hideTimer);
     hideTimer = setTimeout(hidePopup, displayTime);
@@ -3325,12 +3614,22 @@ if (window.innerWidth <= 768) {
     }, 380);
   }
 
-  function scheduleCycle() {
-    clearInterval(cycleTimer);
+  // ── Planifie le premier affichage en tenant compte du temps déjà écoulé
+  const elapsedSinceFirstLoad = Date.now() - firstLoadAt;
+  const remainingInitialDelay = Math.max(0, initialDelay - elapsedSinceFirstLoad);
+
+  setTimeout(() => {
+    // Premier affichage : seulement si interval aussi respecté
+    if (getCartQty() > 0 && intervalDone()) showPopup();
+
+    // Puis cycle régulier
     cycleTimer = setInterval(() => {
-      if (!visible && getCartQty() > 0) showPopup();
+      if (!visible && getCartQty() > 0 && initialDelayDone() && intervalDone()) {
+        showPopup();
+      }
     }, interval);
-  }
+
+  }, remainingInitialDelay);
 
   // ── Fermeture manuelle
   closeBtn.addEventListener('click', () => {
@@ -3338,22 +3637,13 @@ if (window.innerWidth <= 768) {
     hidePopup();
   });
 
-  // ── Premier affichage après le délai initial
-  setTimeout(() => {
-    if (getCartQty() > 0) showPopup();
-    scheduleCycle();
-  }, initialDelay);
-
-  // ── Fonction globale appelée par saveCart() à chaque changement
+  // ── Appelé par saveCart() — respecte tous les délais
   window.__rcRefresh = function() {
+    if (!initialDelayDone()) return;
     const qty = getCartQty();
     updateTitle();
-    if (qty === 0) {
-      hidePopup();
-    } else if (!visible) {
-      if (hideTimer) clearTimeout(hideTimer);
-      showPopup();
-    }
+    if (qty === 0) { hidePopup(); return; }
+    if (!visible && intervalDone()) showPopup();
   };
 
 })();
@@ -3907,19 +4197,17 @@ if (window.innerWidth <= 768) {
         });
 
         // ── Trigger : afficher la barre quand on approche du footer ──
-        const footer = document.querySelector('footer.footer');
+        const footer = document.querySelector('footer.footer, footer.bbw-footer, .bbw-footer');
         const addToCartMainBtn = document.querySelector('.product-content .add-to-cart');
 
         function checkStickyVisibility() {
         if (!footer) return;
 
-        const footerTop      = footer.getBoundingClientRect().top;
-        const footerHeight   = footer.offsetHeight;
-        const windowHeight   = window.innerHeight;
+        const footerTop    = footer.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
 
-        // Afficher seulement quand on est à 50% dans le footer
-        const footerMidpoint = footerTop + (footerHeight * 0.7);
-        const atFooterMid    = footerMidpoint < windowHeight;
+        // Afficher quand le footer est à 50% de la hauteur de la fenêtre
+        const nearFooter = footerTop < windowHeight * 0.50;
 
         // Cacher si le bouton principal ATC est visible à l'écran
         let mainBtnVisible = false;
@@ -3928,7 +4216,7 @@ if (window.innerWidth <= 768) {
             mainBtnVisible = rect.top >= 0 && rect.bottom <= windowHeight;
         }
 
-        if (atFooterMid && !mainBtnVisible) {
+        if (nearFooter && !mainBtnVisible) {
             bar.classList.add('visible');
             bar.setAttribute('aria-hidden', 'false');
         } else {
@@ -4630,22 +4918,52 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (banner)      banner.style.display       = 'block';
       if (promoCodes)  promoCodes.style.display   = 'block';
 
+     const BBW_FEATURED_IDS = [
+        'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
+        'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
+        'Pdg-Francenel-product75'
+      ];
+
       cart.forEach(item => {
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
         cartItem.dataset.id = item.id;
         if (item.size  != null) cartItem.dataset.size  = item.size;
         if (item.color != null) cartItem.dataset.color = item.color;
-       const freeTag = item.isFreePromo
-        ? `<span class="free-badge">🎁 Free 0.00$</span>`
-        : '';
+
+        const settings_check = products.find(p => p.type === 'settings') || {};
+        const plansOn = (settings_check.plans_available || 'no').toLowerCase().trim() === 'yes';
+        const isFeaturedWarning = BBW_FEATURED_IDS.includes(item.id) && !plansOn;
+
+        const freeTag = item.isFreePromo
+          ? `<span class="free-badge">🎁 Free 0.00$</span>`
+          : '';
+
+        const warningDot = isFeaturedWarning
+          ? `<div class="cart-item-warning-dot">
+              <span class="cart-item-warning-tooltip">
+                ⚠️ This product is not yet validated on our site. Please submit a request.
+              </span>
+            </div>`
+          : '';
+
+        const requestBtn = isFeaturedWarning
+          ? `<button class="cart-item-request-btn" data-product-id="${item.id}">
+              <i class="fi fi-rr-shopping-bag"></i> Request this product
+            </button>`
+          : '';
+
         cartItem.innerHTML = `
-          <img src="${item.image}" alt="${item.title}">
+          <div class="cart-item-img-wrap">
+            <img src="${item.image}" alt="${item.title}">
+            ${warningDot}
+          </div>
           <div class="item-meta">
             <h4>${item.title.replace('', '')} ${freeTag}</h4>
             <p>${item.isFreePromo ? '' : '$' + parseFloat(item.price).toFixed(2)}</p>
             ${item.size  ? `<p class="item-variant">Size: ${item.size}</p>`   : ''}
             ${item.color ? `<p class="item-variant">Color: ${item.color}</p>` : ''}
+            ${requestBtn}
             <div class="quantity-row">
               <div class="quantity">
                 <button class="qty-minus">−</button>
@@ -4655,7 +4973,21 @@ document.dispatchEvent(new Event('wishlist:change'));
               <button class="remove-item"><i class="fi fi-sr-trash"></i></button>
             </div>
           </div>`;
+
         cartItemsContainer.appendChild(cartItem);
+
+        // Bind request button
+        const reqBtn = cartItem.querySelector('.cart-item-request-btn');
+        if (reqBtn) {
+          reqBtn.addEventListener('click', () => {
+            const pid = reqBtn.dataset.productId;
+            if (typeof window.openProductRequestPopup === 'function') {
+              window.openProductRequestPopup(pid);
+            } else if (typeof window.openPlanPopup === 'function') {
+              window.openPlanPopup(pid);
+            }
+          });
+        }
 
         const img   = cartItem.querySelector('img');
         const title = cartItem.querySelector('h4');
@@ -4681,37 +5013,51 @@ document.dispatchEvent(new Event('wishlist:change'));
     updateBadges(); 
   }
 
+  function normalizeVal(v) {
+  if (v === undefined || v === '' || v === 'null' || v === 'undefined') return null;
+  return v;
+}
+
   function handleQuantityChange(e) {
-    const btn = e.target, itemElement = btn.closest('.cart-item');
-    const id = itemElement.dataset.id;
-    const size  = itemElement.dataset.size  !== undefined ? itemElement.dataset.size  : null;
-    const color = itemElement.dataset.color !== undefined ? itemElement.dataset.color : null;
-    const item = cart.find(i => i.id === id && i.size === size && i.color === color);
-    if (item) {
-      if (btn.classList.contains('qty-plus')) item.quantity++;
-      else if (btn.classList.contains('qty-minus') && item.quantity > 1) item.quantity--;
-      else if (btn.classList.contains('qty-minus') && item.quantity === 1) { removeFromCart(e); return; }
-      itemElement.querySelector('.quantity span').textContent = item.quantity;
+  const btn = e.target, itemElement = btn.closest('.cart-item');
+  const id    = itemElement.dataset.id;
+  const size  = normalizeVal(itemElement.dataset.size);
+  const color = normalizeVal(itemElement.dataset.color);
+  const item  = cart.find(i => {
+    return i.id === id
+      && normalizeVal(i.size)  === size
+      && normalizeVal(i.color) === color;
+  });
+  if (item) {
+    if (btn.classList.contains('qty-plus')) item.quantity++;
+    else if (btn.classList.contains('qty-minus') && item.quantity > 1) item.quantity--;
+    else if (btn.classList.contains('qty-minus') && item.quantity === 1) { removeFromCart(e); return; }
+    itemElement.querySelector('.quantity span').textContent = item.quantity;
+    saveCart();
+    updateCartQuantityInSheet();
+    if (products && products.length > 0 && typeof applyPromoFreeItems === 'function') {
+      applyPromoFreeItems();
       saveCart();
-      updateCartQuantityInSheet();
-      if (products && products.length > 0 && typeof applyPromoFreeItems === 'function') {
-          applyPromoFreeItems();
-          saveCart();
-      }
-      updateSubtotal();
-      updateBadges();
-      renderCart();
     }
+    updateSubtotal();
+    updateBadges();
+    renderCart();
   }
+}
 
   function removeFromCart(e) {
-    const itemElement = e.target.closest('.cart-item');
-    const id = itemElement.dataset.id;
-    const size  = itemElement.dataset.size  !== undefined ? itemElement.dataset.size  : null;
-    const color = itemElement.dataset.color !== undefined ? itemElement.dataset.color : null;
-    cart = cart.filter(i => !(i.id === id && i.size === size && i.color === color));
-    saveCart(); updateCartQuantityInSheet(); updateSubtotal(); updateBadges(); renderCart();
-  }
+  const itemElement = e.target.closest('.cart-item');
+  const id    = itemElement.dataset.id;
+  const size  = normalizeVal(itemElement.dataset.size);
+  const color = normalizeVal(itemElement.dataset.color);
+  const idx   = cart.findIndex(i => {
+    return i.id === id
+      && normalizeVal(i.size)  === size
+      && normalizeVal(i.color) === color;
+  });
+  if (idx !== -1) cart.splice(idx, 1);
+  saveCart(); updateCartQuantityInSheet(); updateSubtotal(); updateBadges(); renderCart();
+}
 
   function updateSubtotal() {
     const el = cartDrawer ? cartDrawer.querySelector('.cart-drawer__footer .subtotal') : document.querySelector('.subtotal');
@@ -5161,7 +5507,56 @@ document.dispatchEvent(new Event('wishlist:change'));
   function closeCartDrawer() { cartDrawer.classList.remove('active'); overlay.classList.remove('active'); }
   function openWishlistModal() { renderWishlist(); wishlistModal.classList.add('active'); overlay.classList.add('active'); }
   function closeWishlistModal() { wishlistModal.classList.remove('active'); overlay.classList.remove('active'); }
-  function checkout() { localStorage.setItem('checkoutCart', JSON.stringify(cart)); window.location.href = '/checkout/checkout.html'; }
+  function checkout() {
+  const settings_ck = products.find(p => p.type === 'settings') || {};
+  const plansOn_ck  = (settings_ck.plans_available || 'no').toLowerCase().trim() === 'yes';
+
+  const BBW_FEATURED_IDS_CK = [
+    'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
+    'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
+    'Pdg-Francenel-product75'
+  ];
+
+  const hasFeatured = !plansOn_ck && cart.some(i => BBW_FEATURED_IDS_CK.includes(i.id));
+
+  if (hasFeatured) {
+    showCheckoutBlockPopup();
+    return;
+  }
+
+  localStorage.setItem('checkoutCart', JSON.stringify(cart));
+  window.location.href = '/checkout/checkout.html';
+}
+
+function showCheckoutBlockPopup() {
+  let popup = document.getElementById('checkout-block-popup');
+  if (popup) { popup.style.display = 'flex'; return; }
+
+  popup = document.createElement('div');
+  popup.id = 'checkout-block-popup';
+  popup.innerHTML = `
+    <div class="cbp-modal">
+      <div class="cbp-icon">🚫</div>
+      <h3 class="cbp-title">Action Required</h3>
+      <p class="cbp-msg">
+        Dear customer, your cart contains <strong>products that are not yet available</strong> on our site.<br><br>
+        Please <strong>remove the "Request" products</strong> from your cart before proceeding to checkout, or submit a request for them.
+      </p>
+      <div class="cbp-actions">
+        <button class="cbp-btn cbp-btn--close" id="cbp-close-btn">Got it, I'll remove them</button>
+      </div>
+    </div>`;
+  document.body.appendChild(popup);
+
+  document.getElementById('cbp-close-btn').addEventListener('click', () => {
+    popup.style.display = 'none';
+    openCartDrawer();
+  });
+
+  popup.addEventListener('click', e => {
+    if (e.target === popup) popup.style.display = 'none';
+  });
+}
 
   function toggleWishlist(e) {
     const icon = e.target.closest('.wishlist-toggle, .wishlist-icon-product, .mini-wishlist-icon');
@@ -6966,13 +7361,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       );
 
-      return out
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<strong>$1</strong>')
-        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.+?)\*/g,     '<em>$1</em>')
-        .replace(/`(.+?)`/g,       '<code>$1</code>')
-        .replace(/\n\n/g, '<br><br>')
-        .replace(/\n/g,   '<br>');
+     out = out.replace(/!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g, (match, alt, src) => {
+      return `<img src="${src}" alt="${alt}" class="cf-founder-img" style="width:100%;max-width:220px;border-radius:12px;display:block;margin:8px auto;border:2px solid rgba(201,150,62,0.40);">`;
+    });
+
+    return out
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<strong>$1</strong>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,     '<em>$1</em>')
+      .replace(/`(.+?)`/g,       '<code>$1</code>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g,   '<br>');
     }
 
     function getTime() {
@@ -8104,8 +8503,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (cfg.button_text_color) root.style.setProperty('--hero-btn-color',  cfg.button_text_color);
     if (cfg.text_color)        root.style.setProperty('--hero-text-color', cfg.text_color);
 
-    /* ── Nombre de slides effectifs ── */
-    /* En mode vidéo : le contenu (titre/texte/bouton) slide quand même */
+   
     var slideCount;
     if (videoUrl) {
       slideCount = slides.length > 0 ? slides.length : 1;
@@ -8124,12 +8522,14 @@ document.addEventListener('DOMContentLoaded', function () {
        1. INJECTION MÉDIAS
     ════════════════════════════════════════════════════════ */
     if (videoUrl) {
-      /* Mode vidéo — placeholder + vidéo fixe, contenu slide normalement */
-      var placeholderSrc = cfg.video_placeholder_image || '';
-      var placeholderEl  = document.getElementById('bbwHeroVideoPlaceholder');
-      if (placeholderEl && placeholderSrc) {
-        placeholderEl.src           = placeholderSrc;
-        placeholderEl.style.display = 'block';
+      /* Mode vidéo — placeholder visible jusqu'à ce que la vidéo soit prête */
+      var placeholderEl = document.getElementById('bbwHeroVideoPlaceholder');
+
+      // Affiche le placeholder immédiatement (qu'il vienne du setting ou du HTML)
+      if (placeholderEl) {
+        var placeholderSrc = cfg.video_placeholder_image || '';
+        if (placeholderSrc) placeholderEl.src = placeholderSrc; // surcharge si défini dans settings
+        placeholderEl.style.cssText = 'display:block; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; z-index:3;';
       }
 
       var vid = document.createElement('video');
@@ -8138,11 +8538,19 @@ document.addEventListener('DOMContentLoaded', function () {
       vid.loop        = true;
       vid.playsInline = true;
       vid.setAttribute('playsinline', '');
-      vid.style.position = 'relative';
-      vid.style.zIndex   = '2';
+      vid.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1; opacity:0; transition:opacity 0.5s ease;';
 
       vid.addEventListener('canplay', function () {
-        if (placeholderEl) placeholderEl.style.display = 'none';
+        // Vidéo prête — monte son opacité et cache le placeholder en fondu
+        vid.style.opacity = '1';
+        vid.style.zIndex  = '2';
+        if (placeholderEl) {
+          placeholderEl.style.transition = 'opacity 0.5s ease';
+          placeholderEl.style.opacity    = '0';
+          setTimeout(function () {
+            placeholderEl.style.display = 'none';
+          }, 500);
+        }
       });
 
       var src = document.createElement('source');
@@ -8151,10 +8559,9 @@ document.addEventListener('DOMContentLoaded', function () {
       vid.appendChild(src);
       mediaEl.appendChild(vid);
 
-      /* Thumbs et dots cachés en mode vidéo */
+      // Thumbs et dots cachés en mode vidéo
       if (thumbsEl) thumbsEl.style.display = 'none';
       if (dotsEl)   dotsEl.style.display   = 'none';
-
     } else {
       /* Mode images */
       images.forEach(function (src, i) {
@@ -8589,6 +8996,21 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 
 
+document.querySelectorAll('.bss-video-item').forEach(function(item) {
+  var vid = item.querySelector('.bss-video');
+  var placeholder = item.querySelector('.bss-video-placeholder');
+  if (!vid || !placeholder) return;
+
+  vid.addEventListener('canplay', function() {
+    vid.play().catch(function(){});
+    placeholder.classList.add('hidden');
+    setTimeout(function() {
+      placeholder.style.display = 'none';
+    }, 500);
+  }, { once: true });
+
+  vid.load();
+});
 
 /* ═══════════════════════════════════════════════════════════════════
    COLLECTION SLIDER — collection-slider.js
@@ -8748,10 +9170,15 @@ document.addEventListener('DOMContentLoaded', function () {
       prevBtn.className = 'cs-media-arrow cs-media-arrow--prev';
       prevBtn.setAttribute('aria-label', 'Image précédente');
       prevBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>`;
-      prevBtn.addEventListener('click', function (e) {
+    prevBtn.addEventListener('click', function (e) {
         e.preventDefault(); e.stopPropagation();
         goToMediaSlide(currentMediaIndex - 1);
       });
+      prevBtn.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        goToMediaSlide(currentMediaIndex - 1);
+      }, { passive: false });
 
       const nextBtn = document.createElement('button');
       nextBtn.className = 'cs-media-arrow cs-media-arrow--next';
@@ -8761,6 +9188,11 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault(); e.stopPropagation();
         goToMediaSlide(currentMediaIndex + 1);
       });
+      nextBtn.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        goToMediaSlide(currentMediaIndex + 1);
+      }, { passive: false });
 
       mediaEl.appendChild(prevBtn);
       mediaEl.appendChild(nextBtn);
@@ -8968,81 +9400,96 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* ── Variables auto-slide ── */
-    let autoSlideIndex  = 0;
-    let autoSlideTimer  = null;
-    let isHovered       = false;
-    let isUserScrolling = false;
-    let scrollSyncTimer = null;
+   /* ── Variables auto-slide ── */
+let autoSlideIndex  = 0;
+let autoSlideTimer  = null;
+let isHovered       = false;
+let isUserScrolling = false;
+let scrollSyncTimer = null;
+let manualPauseTimer = null;  // ← NOUVEAU
 
-    /* ── Scroll listener unique — sync dots + autoSlideIndex ── */
-    track.addEventListener('scroll', function () {
-      isUserScrolling = true;
-      clearTimeout(scrollSyncTimer);
-      scrollSyncTimer = setTimeout(function () {
+/* ── Scroll listener — sync dots + autoSlideIndex ── */
+track.addEventListener('scroll', function () {
+    isUserScrolling = true;
+    clearTimeout(scrollSyncTimer);
+    clearTimeout(manualPauseTimer);   // ← stop reprise immédiate
+    clearInterval(autoSlideTimer);    // ← stop auto pendant scroll
+    autoSlideTimer = null;
+
+    scrollSyncTimer = setTimeout(function () {
         const cards = track.querySelectorAll('.cs-card');
         let closest = 0, minDist = Infinity;
         cards.forEach(function (c, i) {
-          const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
-          if (dist < minDist) { minDist = dist; closest = i; }
+            const dist = Math.abs(c.getBoundingClientRect().left - track.getBoundingClientRect().left);
+            if (dist < minDist) { minDist = dist; closest = i; }
         });
         autoSlideIndex  = closest;
         isUserScrolling = false;
         updateDots(closest);
-      }, 150);
-    });
 
-    /* ── Flèches prev/next ── */
-    const CARDS_TO_SCROLL = window.innerWidth >= 768 ? 4 : 1;
+        // Reprendre l'auto-slide 4s après la fin du scroll manuel
+        manualPauseTimer = setTimeout(startAutoSlide, 4000);
+    }, 150);
+});
 
-    function scrollByDir(dir) {
-      const cards = track.querySelectorAll('.cs-card');
-      const cardW = cards[0] ? cards[0].offsetWidth + 20 : 220;
-      track.scrollBy({ left: dir * CARDS_TO_SCROLL * cardW, behavior: 'smooth' });
-    }
+/* ── Flèches prev/next ── */
+const CARDS_TO_SCROLL = window.innerWidth >= 768 ? 4 : 1;
 
-    if (prevBtn) prevBtn.addEventListener('click', function () {
-      scrollByDir(-1);
-      resetAutoSlide();
-    });
-    if (nextBtn) nextBtn.addEventListener('click', function () {
-      scrollByDir(1);
-      resetAutoSlide();
-    });
+function scrollByDir(dir) {
+    const cards = track.querySelectorAll('.cs-card');
+    const cardW = cards[0] ? cards[0].offsetWidth + 20 : 220;
+    track.scrollBy({ left: dir * CARDS_TO_SCROLL * cardW, behavior: 'smooth' });
+}
 
-    /* ── Auto-slide ── */
-    function startAutoSlide() {
-      if (autoSlideTimer) clearInterval(autoSlideTimer);
-      autoSlideTimer = setInterval(function () {
+if (prevBtn) prevBtn.addEventListener('click', function () {
+    scrollByDir(-1);
+    resetAutoSlide();
+});
+if (nextBtn) nextBtn.addEventListener('click', function () {
+    scrollByDir(1);
+    resetAutoSlide();
+});
+
+/* ── Auto-slide ── */
+function startAutoSlide() {
+    if (autoSlideTimer) clearInterval(autoSlideTimer);
+    autoSlideTimer = setInterval(function () {
         if (isHovered || isUserScrolling) return;
         const cards = track.querySelectorAll('.cs-card');
         if (!cards.length) return;
         autoSlideIndex = (autoSlideIndex + 1) % cards.length;
         scrollToCard(autoSlideIndex);
-      }, 5000);
-    }
+    }, 5000);
+}
 
-    function resetAutoSlide() {
-      clearInterval(autoSlideTimer);
-      autoSlideTimer = null;
-      setTimeout(startAutoSlide, 5000);
-    }
+function resetAutoSlide() {
+    clearInterval(autoSlideTimer);
+    clearTimeout(manualPauseTimer);
+    autoSlideTimer = null;
+    manualPauseTimer = setTimeout(startAutoSlide, 4000); // reprend 4s après
+}
 
-    /* ── Pause sur hover ── */
-    track.addEventListener('mouseenter', function () { isHovered = true; });
-    track.addEventListener('mouseleave', function () { isHovered = false; });
+/* ── Pause sur hover ── */
+track.addEventListener('mouseenter', function () { isHovered = true; });
+track.addEventListener('mouseleave', function () { isHovered = false; });
 
-    /* ── Pause sur touch manuel, reprend 5s après ── */
-    track.addEventListener('touchstart', function () {
-      isHovered = true;
-    }, { passive: true });
+/* ── Touch manuel — pause + reprise 4s après ── */
+track.addEventListener('touchstart', function () {
+    isHovered = true;
+    clearInterval(autoSlideTimer);
+    clearTimeout(manualPauseTimer);
+    autoSlideTimer = null;
+}, { passive: true });
 
-    track.addEventListener('touchend', function () {
-      setTimeout(function () { isHovered = false; }, 5000);
-    }, { passive: true });
+track.addEventListener('touchend', function () {
+    isHovered = false;
+    manualPauseTimer = setTimeout(function () {
+        startAutoSlide();
+    }, 4000);
+}, { passive: true });
 
-    /* ── Démarrage ── */
-    startAutoSlide();
+/* ── Démarrage ── */
+startAutoSlide();
 
     /* ── Synchro wishlist ── */
     document.addEventListener('wishlist:change', function () {
@@ -9129,3 +9576,206 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 
 
+
+/* ═══════════════════════════════════════════════════════
+   BBW4LIFE — IMAGE MARQUEE DOUBLE — INJECT FROM SETTINGS
+═══════════════════════════════════════════════════════ */
+(function initImageMarquee() {
+
+  /* IDs des 20 produits : 10 gauche, 10 droite
+     Modifiez librement l'ordre */
+  var LEFT_IDS = [
+    'Pdg-Francenel-product1',
+    'Pdg-Francenel-product7',
+    'Pdg-Francenel-product12',
+    'Pdg-Francenel-product4',
+    'Pdg-Francenel-product9',
+    'Pdg-Francenel-product17',
+    'Pdg-Francenel-product22',
+    'Pdg-Francenel-product35',
+    'Pdg-Francenel-product39',
+    'Pdg-Francenel-product56'
+  ];
+
+  var RIGHT_IDS = [
+    'Pdg-Francenel-product2',
+    'Pdg-Francenel-product8',
+    'Pdg-Francenel-product13',
+    'Pdg-Francenel-product5',
+    'Pdg-Francenel-product11',
+    'Pdg-Francenel-product20',
+    'Pdg-Francenel-product27',
+    'Pdg-Francenel-product46',
+    'Pdg-Francenel-product64',
+    'Pdg-Francenel-product58'
+  ];
+
+  function getImg(url, size) {
+    if (!url || typeof url !== 'string') return url;
+    if (!url.includes('cdn.shopify.com')) return url;
+    url = url.replace(/[?&]width=\d+/g, '').replace(/\?&/, '?').replace(/\?$/, '');
+    var sep = url.includes('?') ? '&' : '?';
+    return url + sep + 'width=' + (size || 600) + '&quality=90';
+  }
+
+  function buildCard(prod) {
+    if (!prod) return null;
+
+    var imgSrc      = getImg(prod.image, 600);
+    var imgHoverSrc = prod.image_hover ? getImg(prod.image_hover, 600) : '';
+    var title       = prod.title || '';
+    var price       = prod.price != null ? '$' + parseFloat(prod.price).toFixed(2) : '';
+    var badge       = (prod.badge && prod.badge.text) ? prod.badge.text : '';
+    var url         = prod.url || '#';
+
+    var card = document.createElement('a');
+    card.className = 'imq-card';
+    card.href      = url;
+
+    var badgeHTML = badge
+      ? '<span class="imq-card-badge">' + badge + '</span>'
+      : '';
+
+    var hoverHTML = imgHoverSrc
+      ? '<img class="imq-card-img-hover" src="' + imgHoverSrc + '" alt="" loading="lazy" aria-hidden="true">'
+      : '';
+
+    card.innerHTML =
+      badgeHTML +
+      '<img class="imq-card-img" src="' + imgSrc + '" alt="' + title + '" loading="lazy">' +
+      hoverHTML +
+      '<div class="imq-card-overlay"></div>' +
+      '<div class="imq-card-info">' +
+        '<span class="imq-card-title">' + title + '</span>' +
+        '<span class="imq-card-price">' + price + '</span>' +
+      '</div>';
+
+    return card;
+  }
+
+  function fillTrack(trackEl, ids, products) {
+    if (!trackEl) return;
+
+    var prods = ids
+      .map(function(id) { return products.find(function(p) { return p.id === id; }); })
+      .filter(Boolean);
+
+    if (!prods.length) return;
+
+    /* Clone double pour boucle sans fin */
+    var fragment1 = document.createDocumentFragment();
+    var fragment2 = document.createDocumentFragment();
+
+    prods.forEach(function(prod) {
+      var c1 = buildCard(prod);
+      var c2 = buildCard(prod);
+      if (c1) fragment1.appendChild(c1);
+      if (c2) fragment2.appendChild(c2);
+    });
+
+    trackEl.appendChild(fragment1);
+    trackEl.appendChild(fragment2);
+  }
+
+  function run(products) {
+    var realProducts = products.filter(function(p) { return !p.type; });
+
+    var trackLeft  = document.getElementById('imqTrackLeft');
+    var trackRight = document.getElementById('imqTrackRight');
+
+    fillTrack(trackLeft,  LEFT_IDS,  realProducts);
+    fillTrack(trackRight, RIGHT_IDS, realProducts);
+  }
+
+  /* ── Attendre que products soit chargé ── */
+  if (window.__allProducts && window.__allProducts.length) {
+    run(window.__allProducts);
+  } else {
+    var tries = 0;
+    var poll  = setInterval(function() {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(poll);
+        run(window.__allProducts);
+      } else if (tries > 80) {
+        clearInterval(poll);
+      }
+    }, 100);
+  }
+
+})();
+
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW4LIFE — VERIFY BADGE AFTER PRODUCT TITLE
+════════════════════════════════════════════════════════════ */
+
+(function initProductTitleBadge() {
+  'use strict';
+
+  function run() {
+    const allProducts = window.__allProducts || [];
+    const settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
+
+    /* ── Lire le setting ── */
+    const showBadge = (settings.product_title_badge || 'no').toLowerCase().trim() === 'yes';
+    if (!showBadge) return;
+
+    /* ── Le SVG du badge ── */
+    const BADGE_SVG = `<svg class="bbw-title-badge-svg" id="Layer_1" data-name="Layer 1"
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 116.87"
+      aria-label="Verified" role="img">
+      <defs><style>.cls-1{fill-rule:evenodd;}</style></defs>
+      <title>Verified</title>
+      <path class="cls-1" d="M61.37,8.24,80.43,0,90.88,17.78l20.27,4.54-2,20.53,13.73,
+        15.58L109.2,73.87l2,20.68L91,99,80.43,116.87l-18.92-8.25-19.06,8.25L32,
+        99.08,11.73,94.55l2-20.54L0,58.43,13.68,43,11.73,22.32l20.15-4.45L42.45,
+        0,61.37,8.24ZM37.44,64.55c-6.07-6.53,3.25-16.26,10-10.1,2.38,2.17,5.84,
+        5.34,8.24,7.49L74.18,39.18C80.62,32.53,90.79,42.3,84.43,49L61.2,76.72a7.13,
+        7.13,0,0,1-9.91.44C47.35,73.41,41.57,68,37.44,64.55Z"/>
+    </svg>`;
+    const titleBlocks = document.querySelectorAll('.paul-title-block');
+
+    titleBlocks.forEach(function(block) {
+      /* Éviter le doublon si déjà injecté */
+      if (block.querySelector('.bbw-title-badge')) return;
+
+      const titleEl = block.querySelector('.paul-main-title');
+      if (!titleEl) return;
+
+      /* Créer le wrapper badge */
+      const badgeWrap = document.createElement('span');
+      badgeWrap.className = 'bbw-title-badge';
+      badgeWrap.setAttribute('aria-label', 'Verified');
+      badgeWrap.setAttribute('title', 'Verified – Authentic Product');
+      badgeWrap.innerHTML = BADGE_SVG;
+
+      /* Insérer APRÈS le titre (avant paul-title-underline) */
+      const underline = block.querySelector('.paul-title-underline');
+      if (underline) {
+        block.insertBefore(badgeWrap, underline);
+      } else {
+        block.appendChild(badgeWrap);
+      }
+    });
+  }
+
+  /* ── Lancer quand products est prêt ── */
+  if (window.__allProducts && window.__allProducts.length) {
+    run();
+  } else {
+    var tries = 0;
+    var poll = setInterval(function() {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(poll);
+        run();
+      } else if (tries > 80) {
+        clearInterval(poll);
+      }
+    }, 100);
+  }
+
+})();

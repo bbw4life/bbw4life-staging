@@ -6,7 +6,18 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { firstName, lastName, email, phone, program, consent } = JSON.parse(event.body);
+    /* ── Parse — new fields: productId, size, color added ── */
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      program,
+      productId,
+      size,
+      color,
+      consent
+    } = JSON.parse(event.body);
 
     if (!firstName || !lastName || !email || !program) {
       return { statusCode: 400, body: JSON.stringify({ success: false, error: 'Missing required fields' }) };
@@ -28,20 +39,24 @@ exports.handler = async (event) => {
       return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear().toString().slice(-2)} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
     }
 
+    /* ── Row — 11 columns now (A:K) ── */
     const values = [[
-      formatDate(),
-      firstName,
-      lastName,
-      email,
-      phone || '',
-      program,
-      consent || 'Yes',
-      'Pending'
+      formatDate(),      /* A — Date */
+      firstName,         /* B — First Name */
+      lastName,          /* C — Last Name */
+      email,             /* D — Email */
+      phone || '',       /* E — Phone */
+      program,           /* F — Product Title */
+      productId || '',   /* G — Product ID */
+      size || '',        /* H — Size */
+      color || '',       /* I — Color */
+      consent || 'Yes',  /* J — Consent */
+      'Pending'          /* K — Status */
     ]];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range:            'bbw4life-plan-request!A:H',
+      range:            'bbw4life-plan-request!A:K',
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       resource:         { values }
@@ -50,7 +65,14 @@ exports.handler = async (event) => {
     fetch(`${process.env.URL}/.netlify/functions/send-email-auto`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trigger: 'plan_request', email, firstName, program }),
+      body: JSON.stringify({
+        trigger: 'plan_request',
+        email,
+        firstName,
+        program,
+        size:  size  || '',
+        color: color || ''
+      }),
     }).catch(e => console.warn('[Email] plan_request trigger failed:', e.message));
 
     return { statusCode: 200, body: JSON.stringify({ success: true }) };

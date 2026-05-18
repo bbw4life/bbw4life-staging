@@ -153,6 +153,10 @@
             <span>Filters</span>
             <span class="col-filter-count" id="colFilterCount" style="display:none">0</span>
           </button>
+          <button class="col-morpho-btn" id="colMorphoBtn" data-open-quiz="true">
+            <i class="fas fa-magic"></i>
+            <span>Find Your Style</span>
+          </button>
           <div class="col-cat-tabs" id="colCatTabs">
             <button class="col-cat-tab active" data-cat="all"><i class="fas fa-th-large"></i> All</button>
             <button class="col-cat-tab" data-cat="bestsellers"><i class="fas fa-fire"></i> Best Sellers</button>
@@ -388,68 +392,13 @@
   <!-- FOOTER -->
   <div id="footer-container"></div>
 
-  <!-- QUICK VIEW MODAL -->
-  <div id="colQvOverlay" style="display:none;position:fixed;inset:0;background:rgba(13,13,13,0.72);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px;">
-    <div class="col-qv-modal">
-      <button class="col-qv-close" id="colQvClose"><i class="fas fa-times"></i></button>
-      <div class="col-qv-inner" id="colQvInner"></div>
-    </div>
-  </div>
-
-  <!-- COMPARE MODAL -->
-  <div id="colCompareOverlay" style="display:none;position:fixed;inset:0;background:rgba(13,13,13,0.70);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px;">
-    <div class="col-compare-modal">
-      <div class="col-compare-modal__head">
-        <h2><i class="fas fa-balance-scale"></i> Compare Products</h2>
-        <button class="col-compare-modal__close" id="colCompareClose"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="col-compare-modal__body" id="colCompareBody"></div>
-    </div>
-  </div>
-
-  <!-- STICKY MULTI-SELECT BAR -->
-  <div class="col-sticky-bar" id="colStickyBar" style="display:none">
-    <div class="col-sticky-bar__inner">
-      <span class="col-sticky-bar__label">
-        <span id="colSelectedCount">0</span> selected
-      </span>
-      <div class="col-sticky-bar__actions">
-        <button class="col-sticky-btn col-sticky-btn--cart" id="colStickyAddCart">
-          <i class="fi fi-rr-shopping-cart"></i> Add All to Cart
-        </button>
-        <button class="col-sticky-btn col-sticky-btn--compare" id="colCompareBtn">
-          <i class="fas fa-balance-scale"></i> Compare
-        </button>
-        <button class="col-sticky-btn col-sticky-btn--clear" id="colStickyBarClear" title="Clear selection">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- EXIT INTENT POPUP -->
-  <div id="colExitOverlay" style="display:none;position:fixed;inset:0;background:rgba(13,13,13,0.72);backdrop-filter:blur(8px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
-    <div class="col-exit-popup">
-      <button class="col-exit-close" id="colExitClose"><i class="fas fa-times"></i></button>
-      <div class="col-exit-emoji"><i class="fas fa-tag"></i></div>
-      <h3 class="col-exit-title">Wait! Don't leave empty-handed</h3>
-      <p class="col-exit-sub">Get <strong>15% OFF</strong> your first order — limited time offer</p>
-      <div class="col-exit-code">
-        <span>SAVE15</span>
-        <button class="col-exit-copy" id="colExitCopy">Copy</button>
-      </div>
-      <button class="col-exit-cta" id="colExitCta">
-        <i class="fas fa-shopping-bag"></i> Shop Now &amp; Save 15%
-      </button>
-      <p class="col-exit-skip" id="colExitSkip">No thanks, I'll pay full price</p>
-    </div>
-  </div>
 
   <!-- COMPARE TOAST -->
   <div id="col-compare-toast"></div>
 
   <!-- ══ SCRIPTS ══ -->
   <script src="/widgets-loader.js"></script>
+  <script src="/pdg-francenel.js"></script>
   <script src="/script.js"></script>
   <script src="/animations.js"></script>
   <script src="/search.js"></script>

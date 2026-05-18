@@ -26,18 +26,18 @@
     }
   ],
   "featured": {
-    "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article_1.png?v=1775497369",
+    "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Card_article_featured.png?v=1779052639",
     "imageAlt": "Curvy woman building healthy habits through journaling and gentle exercise",
-    "badge": "Sustainable Habits",
-    "title": "How to Build Lasting Healthy Habits Without Overwhelm",
-    "excerpt": "Learn gentle, step-by-step strategies to create sustainable routines that nurture your body and mind, designed specifically for curvy women embracing long-term wellness.",
+    "badge": "Body Positivity",
+    "title": "Beauty Has No Sizes: The Movement That Is Redefining Beauty for Every Woman",
+    "excerpt": "Discover how thousands of BBW women around the world are reclaiming their confidence, celebrating their curves, and building a life they truly love — without changing who they are.",
     "author": {
-      "name": "Dr. Sarah Mitchell",
-      "role": "Wellness Expert",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_8.png?v=1774717607"
+      "name": "Dr. Camille Fontaine",
+      "role": "Body Positivity Coach & Wellness Expert",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Card_article_featured_1.png?v=1779052638"
     },
     "date": "March 9, 2025",
-    "views": "8.2k", 
+    "views": "8.2k",
     "readTime": "7 min read",
     "url": "/blog/article-featured.html"
   },
@@ -45,33 +45,35 @@
     {
       "id": "card-1",
       "category": "weight-loss-science",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article2.png?v=1775497367",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_1.1.png?v=1779050358",
       "imageAlt": "Curvy woman understanding sustainable weight loss through science",
-      "badge": "Weight Loss Science",
+      "badge": "Self-Care & Wellness",
       "isNew": false,
-      "title": "The Science of Sustainable Weight Loss for Curvy Bodies",
-      "excerpt": "Delve into evidence-based methods that promote gradual, healthy changes while celebrating your natural curves.",
+      "title": "Stop Dieting — Here Is How BBW Women Actually Take Care of Themselves",
+      "excerpt": "Forget crash diets and toxic fitness culture. Discover the real, science-backed approach to well-being that honors your curvy body, boosts your energy, and makes you feel unstoppable every single day.",
       "author": {
-        "name": "Jessica Ward",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_4.png?v=1774717606"
+        "name": "Isabelle Marchand",
+        "role": "Certified Nutritionist & Wellness Coach",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_1.png?v=1779050358"
       },
       "views": "4.1k",
       "date": "Feb 28, 2026",
       "readTime": "6 min",
-      "url": "/blog/article1.html" 
+      "url": "/blog/article1.html"
     },
     {
       "id": "card-2",
       "category": "nutrition-for-curvy-women",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article3.png?v=1775497371",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_2.1.png?v=1779050358",
       "imageAlt": "Curvy woman enjoying nourishing meals for her body type",
-      "badge": "Nutrition",
+      "badge": "Curvy Nutrition",
       "isNew": false,
-      "title": "Nourishing Meals That Honor Your Curves",
-      "excerpt": "Explore balanced nutrition tips that focus on satisfaction and energy, tailored for curvy figures.",
+      "title": "Nutrition for Curvy Women: Eat to Feel Amazing, Not to Shrink",
+      "excerpt": "Learn how to fuel your BBW body with the right foods that increase your energy, balance your hormones, and make you glow — no restriction, no guilt, just real nourishment.",
       "author": {
-        "name": "Rachel Greene",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Customers_10.png?v=1774717606"
+        "name": "Priya Nair",
+        "role": "Registered Dietitian & Hormone Health Specialist",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_2.png?v=1779050356"
       },
       "views": "3.8k",
       "date": "Feb 25, 2026",
@@ -81,15 +83,16 @@
     {
       "id": "card-3",
       "category": "mindset-confidence",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article4.png?v=1775497367",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_3.1.png?v=1779050358",
       "imageAlt": "Curvy woman building confidence through positive mindset practices",
-      "badge": "Mindset",
+      "badge": "Confidence & Mindset",
       "isNew": false,
-      "title": "Cultivating Body Confidence Through Daily Affirmations",
-      "excerpt": "Simple practices to shift your mindset and embrace your unique beauty with grace.",
+      "title": "7 Body Positive Affirmations That Actually Change How You See Yourself",
+      "excerpt": "Simple but powerful daily affirmations used by thousands of BBW women to silence the inner critic, rebuild self-worth, and wake up every morning feeling truly beautiful.",
       "author": {
-        "name": "Laura Bennett",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_2.png?v=1774717606"
+        "name": "Aaliyah Thompson",
+        "role": "Mindset Coach & Body Confidence Speaker",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_3.png?v=1779050357"
       },
       "views": "6.3k",
       "date": "Feb 20, 2026",
@@ -99,15 +102,16 @@
     {
       "id": "card-4",
       "category": "emotional-eating",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article5.png?v=1775497369",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_4.1.png?v=1779050358",
       "imageAlt": "Curvy woman managing emotional eating with mindfulness",
-      "badge": "Emotional Eating",
+      "badge": "Inner Strength",
       "isNew": true,
-      "title": "Understanding and Overcoming Emotional Eating Triggers",
-      "excerpt": "Gentle approaches to identify and manage emotional hunger for a healthier relationship with food.",
+      "title": "How to Stop Letting Other People's Opinions Destroy Your Body Confidence",
+      "excerpt": "Every curvy woman has faced judgment. Here is the exact mindset framework that helps BBW women build unshakeable self-confidence — so no comment, no look, and no criticism can ever touch you again.",
       "author": {
-        "name": "Claire Hudson",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_5.png?v=1774717605"
+        "name": "Fatima Al-Rashidi",
+        "role": "Psychologist & Emotional Wellness Coach",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_4.png?v=1779050355"
       },
       "views": "2.9k",
       "date": "Feb 15, 2026",
@@ -117,15 +121,16 @@
     {
       "id": "card-5",
       "category": "hormones-pcos",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article6.png?v=1775497368",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_5.1.png?v=1779050358",
       "imageAlt": "Curvy woman learning about hormone balance and PCOS management",
       "badge": "Hormones & PCOS",
       "isNew": true,
-      "title": "Managing PCOS Symptoms with Gentle Lifestyle Changes",
-      "excerpt": "Practical advice on balancing hormones through nutrition and movement for women with PCOS.",
+      "title": "PCOS and the Plus-Size Body: Understanding Your Hormones to Live Better",
+      "excerpt": "If you are a BBW woman with PCOS, your body is not broken — it just needs the right support. Discover gentle lifestyle changes that balance hormones, reduce symptoms, and help you feel in control again.",
       "author": {
-        "name": "Natalie Brooks",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_6.png?v=1774717603"
+        "name": "Dr. Leila Benali",
+        "role": "OB-GYN & Women's Hormonal Health Expert",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_5.png?v=1779050357"
       },
       "views": "7.1k",
       "date": "Feb 10, 2026",
@@ -135,15 +140,16 @@
     {
       "id": "card-6",
       "category": "beginner-guides",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article7.png?v=1775497368",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_6.1.png?v=1779050358",
       "imageAlt": "Beginner curvy woman following a gentle fitness guide",
-      "badge": "Beginner Guide",
+      "badge": "Gentle Movement",
       "isNew": false,
-      "title": "Your First Steps to Fitness: A Beginner's Guide for Curvy Women",
-      "excerpt": "Easy-to-follow tips to start your wellness journey without intimidation.",
+      "title": "Move Without Injury: Gentle Home Exercises Designed for Plus-Size Women",
+      "excerpt": "No gym required. No judgment. Just simple, low-impact movements you can do at home that build strength, improve mobility, and make your curvy body feel incredible — starting today.",
       "author": {
-        "name": "Diana Foster",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_7.png?v=1774717606"
+        "name": "Serena Williams-Blake",
+        "role": "Certified Personal Trainer & Body-Positive Fitness Coach",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_6.png?v=1779050355"
       },
       "views": "8.4k",
       "date": "Feb 5, 2026",
@@ -153,15 +159,16 @@
     {
       "id": "card-7",
       "category": "home-workouts",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article8.png?v=1775497368",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_7.1.png?v=1779050358",
       "imageAlt": "Curvy woman doing comfortable home workouts",
-      "badge": "Home Workouts",
+      "badge": "Plus-Size Fashion",
       "isNew": false,
-      "title": "Effective Home Workouts Tailored for Curvy Figures",
-      "excerpt": "Low-impact exercises you can do at home to build strength and mobility.",
+      "title": "Plus Size Fashion 2026: The Outfits That Turn Heads Without Hiding Your Curves",
+      "excerpt": "This season is all about celebrating your shape. Discover the boldest, most flattering plus-size fashion trends of 2026 — handpicked for BBW women who refuse to hide and love to shine.",
       "author": {
-        "name": "Emily Carter",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_11.png?v=1774717606"
+        "name": "Monique Duplessis",
+        "role": "Plus-Size Fashion Stylist & Creative Director",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_7.png?v=1779050357"
       },
       "views": "5.7k",
       "date": "Jan 30, 2026",
@@ -171,15 +178,16 @@
     {
       "id": "card-8",
       "category": "real-stories",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article9.png?v=1775497370",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_8.1.png?v=1779050357",
       "imageAlt": "Curvy woman sharing her real wellness journey story",
       "badge": "Real Stories",
       "isNew": false,
-      "title": "Real Journeys: How One Curvy Woman Found Balance",
-      "excerpt": "Inspiring story of transformation through patience and self-compassion.",
+      "title": "How I Stopped Being Ashamed of My Body and Started Loving It — A Real BBW Story",
+      "excerpt": "A raw, honest, and deeply inspiring story of one curvy woman who fought back against society's standards, found her confidence, and built a life she is proud of. This one will stay with you.",
       "author": {
-        "name": "Sophie Adams",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_5.png?v=1774717605"
+        "name": "Destiny Monroe",
+        "role": "BBW Lifestyle Blogger & Community Advocate",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_8.png?v=1779050358"
       },
       "views": "9.2k",
       "date": "Jan 25, 2026",
@@ -189,15 +197,16 @@
     {
       "id": "card-9",
       "category": "sustainable-habits",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article10.png?v=1775497369",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_9.1.png?v=1779050359",
       "imageAlt": "Curvy woman incorporating sustainable daily habits",
-      "badge": "Sustainable Habits",
+      "badge": "Curvy Style Guide",
       "isNew": false,
-      "title": "Creating Routines That Last: Habits for Lifelong Wellness",
-      "excerpt": "Build habits that support your well-being without the pressure of perfection.",
+      "title": "The 10 Must-Have Wardrobe Pieces for Plus-Size Women Who Own Their Style",
+      "excerpt": "Building a wardrobe as a BBW woman does not have to be hard. These 10 essential pieces will transform how you look, how you feel, and how the world sees you — every single day.",
       "author": {
-        "name": "Olivia Reed",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customer_1.png?v=1774717605"
+        "name": "Chanelle Baptiste",
+        "role": "Curvy Fashion Expert & Style Coach",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_9.png?v=1779050358"
       },
       "views": "3.5k",
       "date": "Jan 20, 2026",
@@ -207,15 +216,16 @@
     {
       "id": "card-10",
       "category": "weight-loss-science",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article16.png?v=1775497365",
-      "imageAlt": "Caloric deficit explained for plus-size women",
-      "badge": "Weight Loss Science",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_10.1.png?v=1779050358",
+      "imageAlt": "Curvy woman understanding how to dress for her body shape",
+      "badge": "BBW Style",
       "isNew": true,
-      "title": "Caloric Deficit Without Deprivation: The Safe Plus-Size Approach to Losing Weight That Actually Works",
-      "excerpt": "Understand how to create a sustainable caloric deficit that respects your metabolism, preserves muscle mass, and avoids the dangerous restrict-and-binge cycle common in crash diets.",
+      "title": "BBW Style Guide: How to Dress Confidently for Every Occasion",
+      "excerpt": "From casual days to red-carpet moments — this complete BBW style guide shows you exactly how to dress for your curves, your personality, and your lifestyle, so you always look and feel like the queen you are.",
       "author": {
-        "name": "Anna",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Coach_3.png?v=1774716188"
+        "name": "Vivienne Okafor",
+        "role": "Body-Positive Stylist & Image Consultant",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_10.png?v=1779050358"
       },
       "views": "6.8k",
       "date": "Mar 18, 2026",
@@ -225,15 +235,16 @@
     {
       "id": "card-11",
       "category": "nutrition-for-curvy-women",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article11.png?v=1775497369",
-      "imageAlt": "Protein and fiber nutrition strategy for plus-size weight loss",
-      "badge": "Nutrition",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_11.1.png?v=1779050357",
+      "imageAlt": "BBW woman choosing the right dress that flatters every curve",
+      "badge": "Dress & Curves",
       "isNew": true,
-      "title": "Why Protein and Fiber Are Your Two Most Powerful Allies for Healthy, Long-Term Weight Loss as a Curvy Woman",
-      "excerpt": "Discover the clinical evidence behind high-protein, high-fiber eating patterns, how they reduce hunger hormones, stabilize blood sugar, and accelerate fat loss without sacrificing energy or muscle.",
+      "title": "Plus-Size Dresses: How to Find the One Model That Flatters Every Single Curve",
+      "excerpt": "Not all dresses are created equal — and not all advice is made for you. This guide breaks down exactly which dress styles, cuts, and fabrics work best for BBW bodies, so you find your perfect match every time.",
       "author": {
-        "name": "Maria",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Coach_1.png?v=1774716188"
+        "name": "Nadège Laurent",
+        "role": "Fashion Designer & Plus-Size Fit Specialist",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_11.png?v=1779050354"
       },
       "views": "5.4k",
       "date": "Mar 25, 2026",
@@ -243,15 +254,16 @@
     {
       "id": "card-12",
       "category": "home-workouts",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article17.png?v=1775497370",
-      "imageAlt": "Resistance training for plus-size women metabolism boost",
-      "badge": "Home Workouts",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_12.1.png?v=1779050357",
+      "imageAlt": "BBW woman feeling confident and seductive in her curves",
+      "badge": "Love & Seduction",
       "isNew": true,
-      "title": "Resistance Training for Plus-Size Women: How to Boost Your Metabolism, Burn Fat Faster, and Build a Stronger Body from Home",
-      "excerpt": "A complete, joint-friendly resistance training guide built for curvy bodies — learn which exercises burn the most fat, how to progress safely, and why muscle is your greatest weapon against weight regain.",
+      "title": "BBW and Seduction: Why Your Body Is a Gift, Not an Obstacle",
+      "excerpt": "Confidence is the most powerful thing a curvy woman can wear. Discover how BBW women around the world are embracing their sensuality, owning their beauty, and attracting love — on their own terms.",
       "author": {
-        "name": "Lisa",
-        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Coach_2.png?v=1774716188"
+        "name": "Roxanne Pierre-Louis",
+        "role": "Relationship Coach & Body Confidence Advocate",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_12.png?v=1779050358"
       },
       "views": "8.1k",
       "date": "Apr 1, 2026",
@@ -263,129 +275,144 @@
   "popular": [
     {
       "rank": "01",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article11.png?v=1775497369",
-      "imageAlt": "5 Tips for consistent exercise",
-      "category": "Home Workouts",
-      "title": "5 Tips for Consistent Exercise as a Curvy Woman",
-      "views": "12k",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_8.1.png?v=1779050357",
+      "imageAlt": "Curvy woman sharing her real wellness journey story",
+      "category": "Real Stories",
+      "title": "How I Stopped Being Ashamed of My Body and Started Loving It — A Real BBW Story",
+      "views": "9.2k",
       "readTime": "5 min",
-      "url": "/blog/article11.html"
+      "url": "/blog/article8.html"
     },
     {
       "rank": "02",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article12.png?v=1775497369",
-      "imageAlt": "Inspiring plus-size fitness influencers",
-      "category": "Real Stories",
-      "title": "Inspiring Plus-Size Fitness Influencers to Follow",
-      "views": "10k",
-      "readTime": "4 min",
-      "url": "/blog/article12.html"
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_6.1.png?v=1779050358",
+      "imageAlt": "Beginner curvy woman following a gentle fitness guide",
+      "category": "Gentle Movement",
+      "title": "Move Without Injury: Gentle Home Exercises Designed for Plus-Size Women",
+      "views": "8.4k",
+      "readTime": "5 min",
+      "url": "/blog/article6.html"
     },
     {
       "rank": "03",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/artcle13.png?v=1775497369",
-      "imageAlt": "Curvy fitness bucket list",
-      "category": "Mindset",
-      "title": "Curvy Fitness Bucket List: Challenges to Try in 2026",
-      "views": "8k",
-      "readTime": "6 min",
-      "url": "/blog/article13.html"
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_12.1.png?v=1779050357",
+      "imageAlt": "BBW woman feeling confident and seductive in her curves",
+      "category": "Love & Seduction",
+      "title": "BBW and Seduction: Why Your Body Is a Gift, Not an Obstacle",
+      "views": "8.1k",
+      "readTime": "10 min",
+      "url": "/blog/article12.html"
     },
     {
       "rank": "04",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article14.png?v=1775497370",
-      "imageAlt": "Strength training curvy women",
-      "category": "Workouts",
-      "title": "Strength Training Essentials for Every Curvy Body",
-      "views": "7.3k",
-      "readTime": "7 min",
-      "url": "/blog/article14.html"
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_5.1.png?v=1779050358",
+      "imageAlt": "Curvy woman learning about hormone balance and PCOS management",
+      "category": "Hormones & PCOS",
+      "title": "PCOS and the Plus-Size Body: Understanding Your Hormones to Live Better",
+      "views": "7.1k",
+      "readTime": "8 min",
+      "url": "/blog/article5.html"
     }
   ],
 
-  "authors": [
-    {
-      "name": "Dr. Sarah Mitchell",
-      "title": "Wellness & Mindset Expert",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_8.png?v=1774717607",
-      "bio": "PhD in behavioral health. 12+ years helping curvy women build sustainable wellness routines through mindset and science.",
-      "articles": "24",
-      "reads": "48k",
-      "instagram": "#",
-      "twitter": "#"
-    },
-    {
-      "name": "Jessica Ward",
-      "title": "Fitness Coach & Writer",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_4.png?v=1774717606",
-      "bio": "Certified fitness coach specializing in low-impact training and body-positive movement for women of all sizes.",
-      "articles": "18",
-      "reads": "36k",
-      "instagram": "#",
-      "twitter": "#"
-    },
-    {
-      "name": "Rachel Greene",
-      "title": "Registered Nutritionist",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Customers_10.png?v=1774717606",
-      "bio": "RDN with a focus on hormone health, PCOS nutrition, and intuitive eating practices for curvy bodies.",
-      "articles": "21",
-      "reads": "41k",
-      "instagram": "#",
-      "twitter": "#"
-    }
-  ],
+    "authors": [
+      {
+        "name": "Dr. Camille Fontaine",
+        "title": "Body Positivity Coach & Wellness Expert",
+        "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_8.png?v=1774717607",
+        "bio": "PhD in behavioral health with 12+ years helping curvy women build unshakeable confidence, sustainable wellness routines, and a life they are proud of.",
+        "articles": "24",
+        "reads": "48k",
+        "instagram": "#",
+        "twitter": "#"
+      },
+      {
+        "name": "Serena Williams-Blake",
+        "title": "Certified Personal Trainer & Body-Positive Fitness Coach",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_6.png?v=1779050355",
+        "bio": "Certified fitness coach specializing in low-impact training, home workouts, and body-positive movement for plus-size women of all fitness levels.",
+        "articles": "18",
+        "reads": "36k",
+        "instagram": "#",
+        "twitter": "#"
+      },
+      {
+        "name": "Priya Nair",
+        "title": "Registered Dietitian & Hormone Health Specialist",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_2.png?v=1779050356",
+        "bio": "Registered dietitian with deep expertise in hormone health, PCOS nutrition, and intuitive eating practices tailored for curvy and plus-size women.",
+        "articles": "21",
+        "reads": "41k",
+        "instagram": "#",
+        "twitter": "#"
+      },
+      {
+        "name": "Aaliyah Thompson",
+        "title": "Mindset Coach & Body Confidence Speaker",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_3.png?v=1779050357",
+        "bio": "Renowned mindset coach and international speaker helping BBW women silence self-doubt, practice daily body-positive affirmations, and step fully into their power and beauty.",
+        "articles": "15",
+        "reads": "29k",
+        "instagram": "#",
+        "twitter": "#"
+      }
+    ],
+
   "editorsPicks": [
-  {
-   "id": "card-13",
-    "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article15.png?v=1775497367",
-    "imageAlt": "Cute plus-size workout clothes",
-    "category": "Style & Fitness",
-    "title": "Cute Workout Clothes for Curvy Gals",
-    "excerpt": "Feel confident and comfortable in gear designed for your curves.",
-    "date": "March 9, 2025",
-    "views": "8.2k",
-    "readTime": "7 min read",
-    "author": {
-      "name": "Dr. Sarah Mitchell",
-      "role": "Wellness Expert",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/customers_8.png?v=1774717607"
+    {
+      "id": "card-13",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_13.1.png?v=1779050354",
+      "imageAlt": "Cute plus-size workout clothes",
+      "category": "Style & Fashion",
+      "badge": "Style & Fashion",
+      "title": "How to Dress as a BBW and Feel BEAUTIFUL — Not Just Covered",
+      "excerpt": "Stop dressing to hide. Start dressing to shine. This guide is for every curvy woman who is ready to walk into any room and own it — with outfits that celebrate exactly who she is.",
+      "date": "March 9, 2025",
+      "views": "8.2k",
+      "readTime": "7 min read",
+      "author": {
+        "name": "Monique Duplessis",
+        "role": "Plus-Size Fashion Stylist & Creative Director",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_13.png?v=1779050356"
+      },
+      "url": "/blog/article13.html"
     },
-    "url": "/blog/article13.html"
+    {
+      "id": "card-14",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_14.1.png?v=1779050357",
+      "imageAlt": "Pilates for plus-size beginners",
+      "category": "Love & Confidence",
+      "badge": "Love & Confidence",
+      "title": "BBW and Seduction: Your Body Is a Power, Not a Problem",
+      "excerpt": "Your curves are magnetic. Your energy is irresistible. This article is a love letter to every BBW woman who has ever been made to feel like she is too much — you are exactly enough.",
+      "author": {
+        "name": "Roxanne Pierre-Louis",
+        "role": "Relationship Coach & Body Confidence Advocate",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_14.png?v=1779050358"
+      },
+      "views": "8.1k",
+      "date": "Apr 1, 2026",
+      "readTime": "10 min",
+      "url": "/blog/article14.html"
     },
-  {
-   "id": "card-14",
-    "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article16.png?v=1775497365",
-    "imageAlt": "Pilates for plus-size beginners",
-    "category": "Home Workouts",
-    "title": "Pilates for Plus-Size Beginners",
-    "excerpt": "Gentle movements to build core strength and flexibility.",
-    "author": {
-      "name": "Lisa",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Coach_2.png?v=1774716188"
-    },
-    "views": "8.1k",
-    "date": "Apr 1, 2026",
-    "readTime": "10 min",
-    "url": "/blog/article14.html"
-    },
-  {
-    "id": "card-15",
-    "category": "nutrition-for-curvy-women",
-    "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/article16.png?v=1775497365",
-    "imageAlt": "Curvy woman practising intermittent fasting and circadian eating",
-    "badge": "Nutrition",
-    "isNew": true,
-    "title": "Intermittent Fasting for Curvy Women: What the Science Actually Says",
-    "excerpt": "The complete evidence-based guide to intermittent fasting for plus-size women — what works, what doesn't, and how to do it without wrecking your hormones.",
-    "author": {
-      "name": "Anna",
-      "image": "https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Coach_3.png?v=1774716188"
-    },
-    "views": "9.3k",
-    "date": "Apr 8, 2026",
-    "readTime": "10 min",
-    "url": "/blog/article15.html"
-  }
-]
+    {
+      "id": "card-15",
+      "category": "nutrition-for-curvy-women",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_15.1.png?v=1779050358",
+      "imageAlt": "BBW woman building unshakeable confidence and self-love",
+      "badge": "Our Story",
+      "isNew": true,
+      "title": "BBW4LIFE: Why Being a Big Beautiful Woman Is a Lifestyle, a Pride, and a Family",
+      "excerpt": "This is more than a fashion brand. BBW4LIFE is a movement born from love, built for women who deserve to be seen, celebrated, and cherished. Discover the story, the mission, and why thousands of women have made it their home.",
+      "author": {
+        "name": "Dr. Camille Fontaine",
+        "role": "Body Positivity Coach & Wellness Expert",
+        "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Article_card_15.png?v=1779050360"
+      },
+      "views": "9.3k",
+      "date": "Apr 8, 2026",
+      "readTime": "10 min",
+      "url": "/blog/article15.html"
+    }
+  ]
 }

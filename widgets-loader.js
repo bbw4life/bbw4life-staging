@@ -285,6 +285,8 @@
 <!-- SNOW EFFECT -->
 <div id="snow-container" aria-hidden="true"></div>
 
+
+
 `;
 
   /* ──────────────────────────────────────────────────────────

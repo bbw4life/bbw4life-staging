@@ -4858,6 +4858,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (heroImg) { heroImg.src = cardData.image; heroImg.alt = cardData.imageAlt || cardData.title; }
 
         a7setText('a7-hero-badge',       cardData.badge);
+        a7setText('a7-hero-title',       cardData.title);
         a7setText('a7-hero-readtime',    cardData.readTime);
         a7setText('a7-hero-views',       cardData.views + ' reads');
         a7setText('a7-hero-date',        cardData.date);
@@ -5692,10 +5693,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // ── Hero title — inject author-driven title ────────────
         var heroTitle = document.getElementById('a8-hero-title');
         if (heroTitle) {
-          heroTitle.innerHTML =
-            'Real Journeys:<br>' +
-            '<em>How One Curvy Woman</em><br>' +
-            'Found Balance';
+         var heroTitle = document.getElementById('a8-hero-title');
+         if (heroTitle) heroTitle.textContent = cardData.title;
         }
 
         // New badge
@@ -7402,6 +7401,8 @@ document.addEventListener('DOMContentLoaded', function () {
         a10setText('a10-ribbon-readtime', cardData.readTime);
         a10setText('a10-ribbon-views',    cardData.views + ' reads');
         a10setText('a10-ribbon-date',     cardData.date);
+
+        
 
         // ── Related articles ───────────────────────────────────
         a10InjectRelated(data.cards, cardData.category, 'card-10');

@@ -60,6 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
 
+
+          // ══ INJECT DELAYS INTO SHIPPING MODAL ══
+            const modalDelayMap = {
+                'modal-delay-standard': settings.shipping_standard_delay || '—',
+                'modal-delay-dhl':      settings.shipping_dhl_delay      || '—',
+                'modal-delay-priority': settings.shipping_priority_delay || '—',
+                'modal-delay-economy':  settings.shipping_economy_delay  || '—',
+            };
+            Object.entries(modalDelayMap).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            });
+
+
+
           // ══ INJECT CONTACT EMAILS FROM SETTINGS ══
       (function injectContactEmails() {
         const emails = settings.contact_emails || {};

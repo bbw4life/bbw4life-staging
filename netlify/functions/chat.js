@@ -112,9 +112,8 @@ function buildProductIndex(rawData) {
 }
 
 /* ══════════════════════════════════════════════════════
-   BADGE DETECTION — strict, reads badge texts from real data
+   BADGE DETECTION
 ══════════════════════════════════════════════════════ */
-
 function buildBadgeMap(products) {
   const map = new Map();
   for (const p of products) {
@@ -135,7 +134,7 @@ function detectBadgeQuery(message, badgeMap) {
 }
 
 /* ══════════════════════════════════════════════════════
-   LANGUAGE DETECTION — 10 languages + allowed_languages filter
+   LANGUAGE DETECTION
 ══════════════════════════════════════════════════════ */
 function detectLanguage(message, allowedLanguages) {
   const text = message.toLowerCase().trim();
@@ -143,46 +142,31 @@ function detectLanguage(message, allowedLanguages) {
 
   let scores = { en: 0, fr: 0, es: 0, ar: 0, zh: 0, hi: 0, pt: 0, ru: 0, de: 0, ja: 0 };
 
-  /* Arabic — script detection */
   if (/[\u0600-\u06FF]/.test(text)) scores.ar += 10;
-
-  /* Chinese */
   if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(text)) scores.zh += 10;
-
-  /* Hindi */
   if (/[\u0900-\u097F]/.test(text)) scores.hi += 10;
-
-  /* Russian */
   if (/[\u0400-\u04FF]/.test(text)) scores.ru += 10;
-
-  /* Japanese */
   if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) scores.ja += 10;
 
-  /* French */
   if (/\b(bonjour|bonsoir|salut|merci|comment|c'est|je|vous|nous|les|des|une|pour|avec|dans|sur|mais|très|aussi|peut|plus|produit|livraison|taille|couleur|disponible|combien|où|quand|prix|acheter|réduction)\b/.test(text)) scores.fr += 3;
   if (/[àâçèêëîïôùûü]/.test(text)) scores.fr += 3;
   ['je','tu','il','elle','nous','vous','ils','elles','le','la','les','un','une','des','du','et','est','sont','avec','dans','pour','sur','pas','plus','très','bien','aussi','mais','ou','donc','car','que','qui','quoi','comment','quand','où','pourquoi','quel','quelle','bonjour','merci','oui','non'].forEach(w => { if (words.includes(w)) scores.fr += 2; });
 
-  /* Spanish */
   if (/\b(hola|buenas|buenos|cómo|como|puedo|quiero|necesito|tienes|tengo|gracias|ayuda|precio|envío|producto|comprar|descuento|talla|disponible|cuánto|dónde|también)\b/.test(text)) scores.es += 3;
   if (/[áéíóúüñ¿¡]/.test(text)) scores.es += 3;
   ['yo','él','ella','nosotros','ellos','ellas','los','las','del','al','con','por','para','sobre','más','muy','también','pero','porque','quien','cuando','donde','hola','gracias','sí','tener','ser','estar','hacer','poder','querer'].forEach(w => { if (words.includes(w)) scores.es += 2; });
 
-  /* Portuguese */
   if (/\b(olá|oi|obrigado|obrigada|como|você|produto|preço|comprar|ajuda|envio|disponível|desconto)\b/.test(text)) scores.pt += 3;
   if (/[ãõâêôáéíóúàü]/.test(text)) scores.pt += 2;
   ['você','nós','eles','elas','uma','por','para','com','mas','também','não','sim','obrigado','como','onde','quando','porque','produto','preço'].forEach(w => { if (words.includes(w)) scores.pt += 2; });
 
-  /* German */
   if (/\b(hallo|guten|danke|bitte|wie|was|wo|wann|warum|ich|sie|wir|der|die|das|und|für|mit|auf|ist|sind|haben|kaufen|produkt|preis|versand|verfügbar|rabatt)\b/.test(text)) scores.de += 3;
   if (/[äöüß]/.test(text)) scores.de += 3;
   ['ich','du','er','sie','es','wir','ihr','der','die','das','und','ist','sind','mit','auf','für','von','zu','an','ein','eine','nicht','auch','aber','oder','wie','was','wo','wann'].forEach(w => { if (words.includes(w)) scores.de += 2; });
 
-  /* English */
   if (/\b(hello|hi|hey|what|how|can|could|would|should|where|when|why|which|who|the|and|for|with|this|that|have|your|you|want|need|does|do|is|are|was|were|help|price|shipping|color|size|available|discount|product|buy|order)\b/.test(text)) scores.en += 3;
   ['i','you','he','she','it','we','they','the','a','an','is','are','was','were','have','has','had','do','does','did','will','would','can','could','should','may','might','and','or','but','for','with','at','by','from','to','in','on','of','that','this','what','how','when','where','why','who','which'].forEach(w => { if (words.includes(w)) scores.en += 1; });
 
-  /* Find best score */
   let detected = 'en';
   let best = 0;
   for (const [lang, score] of Object.entries(scores)) {
@@ -190,7 +174,6 @@ function detectLanguage(message, allowedLanguages) {
   }
   if (best === 0) detected = 'en';
 
-  /* Check against allowed list — fallback to 'en' if not allowed */
   if (allowedLanguages && allowedLanguages.length > 0) {
     if (!allowedLanguages.includes(detected)) return 'en';
   }
@@ -198,7 +181,6 @@ function detectLanguage(message, allowedLanguages) {
   return detected;
 }
 
-/* ── Language name helper for lang instruction ── */
 function getLangName(code) {
   const names = { en: 'ENGLISH', fr: 'FRENCH', es: 'SPANISH', ar: 'ARABIC', zh: 'CHINESE', hi: 'HINDI', pt: 'PORTUGUESE', ru: 'RUSSIAN', de: 'GERMAN', ja: 'JAPANESE' };
   return names[code] || 'ENGLISH';
@@ -244,6 +226,12 @@ function detectIntent(message) {
     /disclaimer|avertissement|advertencia/,
     /politique|policy|politica/,
     /cookies|tracking|pistage/,
+    /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)/i,
+    /your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)/i,
+    /tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia/i,
+    /bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)/i,
+    /marque propre|propre marque|brand propre|own brand|marca propia/i,
+    /curvafit|curva.?fit/i,
     /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc)\b/,
     /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno)\b/,
   ];
@@ -316,11 +304,19 @@ function isTopStarterRequest(message) {
 }
 
 /* ══════════════════════════════════════════════════════
-   GREETING DETECTION — suppress page buttons on pure greetings
+   GREETING DETECTION
 ══════════════════════════════════════════════════════ */
 function isGreeting(message) {
   const q = message.toLowerCase().trim();
   return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes)[\s!.,]*$/.test(q);
+}
+
+/* ══════════════════════════════════════════════════════
+   BRAND QUERY DETECTION
+══════════════════════════════════════════════════════ */
+function isBrandQuery(message) {
+  const q = message.toLowerCase();
+  return /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)|your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)|tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia|bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)|marque propre|propre marque|brand propre|own brand|marca propia/.test(q);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -347,7 +343,6 @@ function searchProducts(query, products) {
     if ((q.includes('new arrival') || q.includes('new arriv') || q.includes('nouvel') || q.includes('nouveau') || q.includes('nueva llegada')) && badgeLower.includes('new')) score += 15;
     if ((q.includes('top sale') || q.includes('top deal') || q.includes('meilleure offre') || q.includes('mejor oferta')) && (badgeLower.includes('top sale') || badgeLower.includes('best deal'))) score += 15;
 
-    /* BBW4LIFE product themes */
     const themes = [
       { words: ['glam','heel','stiletto','cross strap','sandale'],      id: 'Pdg-Francenel-product1',  boost: 12 },
       { words: ['retrorun','sneaker','chunky','street','retro'],        id: 'Pdg-Francenel-product2',  boost: 12 },
@@ -501,6 +496,7 @@ const PAGE_MAP = {
   '/collections/main-plus-size.html':         { label: 'Men Plus Size',          icon: '👔' },
   '/collections/bbw4life-pants-skirts.html':  { label: 'Pants & Shorts',         icon: '👖' },
   '/collections/most-popular.html':           { label: 'Most Popular',           icon: '🔥' },
+  '/collections/bbw-features-products.html':  { label: 'BBW Featured',           icon: '✨' },
   '/blog/blog.html':                          { label: 'Blog',                   icon: '📝' },
   '/page/our-story.html':                     { label: 'Our Story',              icon: '💖' },
   '/page/about.html':                         { label: 'About Us',               icon: 'ℹ️' },
@@ -532,14 +528,20 @@ function buildSystemPrompt(products, settings, contactInfo, searchData, blogData
     ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items`).join('\n')
     : '• No active promo codes at this time';
 
-  /* Build catalog — EXCLUDE bbw-features-products (BBW Original Coming Soon) */
-  const EXCLUDED_IDS = [
-    'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
-    'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
-    'Pdg-Francenel-product75'
-  ];
+  /* BBW Featured products — lus depuis settings, pas hardcodés */
+  const jrgqCols      = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
+  const featuredCol   = jrgqCols.find(c => c.id === 'bbw-features-products');
+  const featuredIds   = (featuredCol && featuredCol.product_ids) || [];
+  const EXCLUDED_IDS = featuredIds;
 
   const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+
+  /* Titres des produits BBW Featured pour le prompt "brand coming soon" */
+  const featuredTitles = EXCLUDED_IDS
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean)
+    .map(p => `**${p.title}**`)
+    .join(', ') || 'exclusive original designs';
 
   const catalogText = visibleProducts.map((p, i) => {
     const colorsList = p.colors.map(c => c.name).join(', ');
@@ -585,7 +587,15 @@ PRODUCT ${i + 1}:
   const searchContext = buildSearchDataContext(searchData);
   const blogContext   = buildBlogContext(blogData);
 
-  /* Collections known to Berline (BBW Featured excluded) */
+/* ── Shipping options depuis settings ── */
+  const shippingOptions = [
+    settings.shipping_standard_delay ? `• Standard (free over $${freeShipThresh}, ${settings.shipping_standard_delay})` : null,
+    settings.shipping_dhl_delay      ? `• Express DHL (${settings.shipping_dhl_delay})`                                   : null,
+    settings.shipping_priority_delay ? `• Priority (${settings.shipping_priority_delay})`                                 : null,
+    settings.shipping_economy_delay  ? `• Economy (${settings.shipping_economy_delay})`                                   : null,
+    settings.shipping_express_delay  ? `• Express (${settings.shipping_express_delay})`                                   : null,
+  ].filter(Boolean).join('\n');
+
   const collectionsContext = `
 COLLECTIONS:
   • Curvy Woman (34 styles: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
@@ -595,6 +605,53 @@ COLLECTIONS:
   • Pants & Shorts (5 styles) → /collections/bbw4life-pants-skirts.html
   • Most Popular (community favorites) → /collections/most-popular.html
   • All Products (68 styles) → /collections/bbw4life-all-product.html
+`;
+
+  /* ── Brand section — dynamique selon plans_available ── */
+  const plansAvailable = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
+
+  const brandSection = plansAvailable ? `
+═══════════════════════════════════════
+🏷️ BBW4LIFE — OWN BRAND & COLLECTION
+═══════════════════════════════════════
+YES — BBW4LIFE IS AN ESTABLISHED BRAND with its own original designs.
+
+When someone asks "do you have your own brand / your own collection / your own designs / est-ce que bbw4life a sa propre marque / tienen su propia marca":
+
+Reply as a proud and warm brand ambassador. Key points to communicate naturally:
+- **BBW4LIFE** is a real brand — not a reseller. We design our own pieces.
+- Our collection was built around one mission: **Beauty Has No Sizes**
+- Every piece is designed SPECIFICALLY for plus-size women — not adapted, but created FOR them
+- The community votes for styles, colors and cuts — we bring them to life
+- Available in **sizes S to 6XL**
+- Founded on **June 18, 2025** by **Francenel**
+- Categories available: dresses, shoes, lingerie, swimwear, beauty, tops, and more
+
+Tone: proud, inspiring, like a real brand ambassador presenting something they genuinely believe in.
+Invite them to discover the full collection.
+Add 🔗[PAGE:/collections/bbw4life-all-product.html] at the end.
+Add 🔗[PAGE:/collections/bbw-features-products.html] to show BBW Featured designs.
+` : `
+═══════════════════════════════════════
+🏷️ BBW4LIFE — NEW BRAND, BEING BUILT
+═══════════════════════════════════════
+BBW4LIFE IS A NEW BRAND currently being built with heart and purpose.
+
+When someone asks "do you have your own brand / your own collection / your own designs / est-ce que bbw4life a sa propre marque / tienen su propia marca":
+
+Reply honestly but with warmth, excitement and pride — like someone sharing something beautiful in progress.
+Key points to communicate naturally:
+- Yes, **BBW4LIFE** is a new brand born from a real, deeply personal story
+- We are going through legal procedures and brand-building steps to deliver the best possible service
+- It takes time to do things right — the mission is clear: **Beauty Has No Sizes**
+- In the meantime, our **BBW Featured** collection already presents our current original designs
+- These designs include: ${featuredTitles}
+- On each of these product pages, there is a **Request** button — clients can request one of our designs (size, color, custom details)
+- The team contacts them within **24–48 hours** to finalize the custom order
+
+Tone: genuine, optimistic, proud — never apologetic or uncertain. This is an exciting journey.
+Make them feel they are part of something being built FOR THEM.
+Add 🔗[PAGE:/collections/bbw-features-products.html] at the end so they can discover the BBW Featured collection.
 `;
 
   return `You are **Berline**, the official AI assistant and stylist of **BBW4LIFE**.
@@ -641,6 +698,7 @@ Page URLs:
   Men Plus Size → 🔗[PAGE:/collections/main-plus-size.html]
   Pants & Shorts → 🔗[PAGE:/collections/bbw4life-pants-skirts.html]
   Most Popular → 🔗[PAGE:/collections/most-popular.html]
+  BBW Featured → 🔗[PAGE:/collections/bbw-features-products.html]
   Blog → 🔗[PAGE:/blog/blog.html]
   Our Story → 🔗[PAGE:/page/our-story.html]
   About → 🔗[PAGE:/page/about.html]
@@ -665,6 +723,7 @@ WHEN TO ADD 🔗[PAGE:...]:
 ✅ account / orders / profile / password → add 🔗[PAGE:/account.html]
 ✅ track order / order tracking → add 🔗[PAGE:/page/order-tracking.html]
 ✅ faq / questions → add 🔗[PAGE:/page/faq.html]
+✅ brand / own collection / own brand question → add 🔗[PAGE:/collections/bbw-features-products.html]
 ❌ NEVER for greetings, small talk, founder questions, general style advice
 
 👇 CONTACT BUTTONS — shown when reply ends with 👇 on its own line.
@@ -732,6 +791,8 @@ Always end with 👇 on its own line for contact requests.
 
 **Francenel** — founder and CEO of **BBW4LIFE** — was in a relationship with a plus-size woman who was incredibly beautiful, radiant, and full of life. Despite her confidence in herself, the weight of others' judgment began to wear her down. Day after day, looks, remarks, and criticism started to affect her — until she began considering changing herself, not for her own happiness, but to fit into a standard imposed by others.
 
+**Founder photo:** ![PDG Francenel](https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg_Francenel.jpg?v=1778926866)
+
 That moment changed everything. **Francenel** realized she wasn't alone — thousands of women live under the same pressure. Women who are magnificent, yet filled with self-doubt because of unrealistic beauty standards.
 
 So he made a decision: create **BBW4LIFE**.
@@ -754,6 +815,8 @@ So he made a decision: create **BBW4LIFE**.
 When asked about "administrateur" or "admin" → same answer as founder. It refers to **Francenel**.
 Give a warm, inspiring 3–4 line answer. Not too long. Make it feel real and human.
 
+${brandSection}
+
 ═══════════════════════════════════════
 🎟️ PROMO CODES
 ═══════════════════════════════════════
@@ -767,10 +830,7 @@ Tax: ${taxPercent}% at checkout. Standard shipping: $${shippingCost}.
 Free shipping on orders over $${freeShipThresh}. Returns: 30 days.
 
 Shipping options available at checkout:
-• Standard (free over $${freeShipThresh}, 20–12 business days)
-• Express DHL (3–5 business days)
-• Priority (1–3 business days)
-• Economy (10–15 business days)
+${shippingOptions || '• Contact us for shipping options'}
 
 ═══════════════════════════════════════
 👤 ACCOUNT PAGE
@@ -857,7 +917,9 @@ ${blogContext || '(not available)'}
 - Never show promo codes without [[CODE]] format
 - Never answer policy questions without the relevant 🔗[PAGE:...] button
 - Never confuse badge queries (best seller, promo…) with top-starter queries
-- NEVER mention, reveal, or hint about the "BBW Featured" collection or its products (product69–75) — this section does not exist yet for you`;
+- Never confuse brand queries with product or badge queries
+- Answer brand/own collection questions using ONLY the brand section above — never invent details
+- NEVER answer questions about "CurvaFit" or "Curva Fit" — you have zero information about it. If asked, say clearly: "I don't have any information about CurvaFit." Nothing more.`;
 }
 
 /* ── Fallback / Error messages ── */
@@ -938,7 +1000,6 @@ exports.handler = async (event, context) => {
       console.error('Could not load products.data.json:', err.message);
     }
 
-    /* ── Read allowed_languages from settings ── */
     const allowedLanguages = (settings.allowed_languages && settings.allowed_languages.length > 0)
       ? settings.allowed_languages
       : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
@@ -963,20 +1024,20 @@ exports.handler = async (event, context) => {
       contactPage: '/page/contact.html'
     };
 
-    /* Exclude BBW Featured products from badge/search context */
-    const EXCLUDED_IDS = [
-      'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
-      'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
-      'Pdg-Francenel-product75'
-    ];
-    const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+    /* BBW Featured IDs — lus depuis settings */
+    const jrgqCols    = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
+    const featuredCol = jrgqCols.find(c => c.id === 'bbw-features-products');
+    const featuredIds = (featuredCol && featuredCol.product_ids) || [];
+    const EXCLUDED_IDS = featuredIds;
 
+    const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
     const badgeMap = buildBadgeMap(visibleProducts);
 
     const intent            = detectIntent(message);
     const topStarterRequest = isTopStarterRequest(message);
+    const brandRequest      = isBrandQuery(message);
 
-    const matchedBadge = !topStarterRequest ? detectBadgeQuery(message, badgeMap) : null;
+    const matchedBadge = !topStarterRequest && !brandRequest ? detectBadgeQuery(message, badgeMap) : null;
     const isBadgeQuery = !!matchedBadge;
 
     let relevantProducts = [], isVague = false;
@@ -991,13 +1052,12 @@ exports.handler = async (event, context) => {
         .map(id => visibleProducts.find(p => p.id === id))
         .filter(Boolean);
       isVague = false;
-    } else if (intent === 'product') {
+    } else if (intent === 'product' && !brandRequest) {
       const searchResult = searchProducts(message, visibleProducts);
       relevantProducts   = searchResult.results;
       isVague            = searchResult.isVague;
     }
 
-    /* ── Contact intent ── */
     const EXPLICIT_CONTACT_PATTERNS = [
       /parler\s+(à\s+)?(un\s+)?(humain|agent|conseiller|quelqu|personne)/i,
       /joindre\s+(votre|l['']|notre)?\s*(équipe|support|service)/i,
@@ -1025,7 +1085,7 @@ exports.handler = async (event, context) => {
       /su\s+(whatsapp|telegram|email)\b/i,
     ];
 
-    const isContactIntent = !topStarterRequest && !isBadgeQuery && intent !== 'product' && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
+    const isContactIntent = !topStarterRequest && !isBadgeQuery && !brandRequest && intent !== 'product' && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
 
     const systemPrompt = buildSystemPrompt(visibleProducts, settings, contactInfo, searchData, blogData, badgeMap);
 
@@ -1045,6 +1105,10 @@ exports.handler = async (event, context) => {
       ? `\n[BADGE QUERY: Backend detected badge "${matchedBadge}" and injected ONLY products with exactly this badge. Present ONLY those products. If none injected, say honestly no product has this badge right now. Translate the badge name naturally in the user's language.]`
       : '';
 
+    const brandInstruction = brandRequest
+      ? '\n[BRAND QUERY: User is asking about BBW4LIFE own brand/collection. Use ONLY the BBW4LIFE BRAND section in the system prompt to reply. Do NOT show product cards. Do NOT treat this as a product search.]'
+      : '';
+
     const langName        = getLangName(userLang);
     const otherLangs      = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE'].filter(l => l !== langName).join(', ');
     const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
@@ -1052,10 +1116,9 @@ exports.handler = async (event, context) => {
     const groqMessages = [
       { role: 'system', content: systemPrompt },
       ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
-      { role: 'user', content: `${message}\n\n[${langInstruction}]${(intent === 'product' && !topStarterRequest && !isBadgeQuery) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${contactInstruction}` }
+      { role: 'user', content: `${message}\n\n[${langInstruction}]${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}` }
     ];
 
-    /* ── Model rotation ── */
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     let groqResponse = null, usedModel = null, modelSuccess = false;
 
@@ -1098,15 +1161,14 @@ exports.handler = async (event, context) => {
       };
     }
 
-    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest}`);
+    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest}`);
 
     const data  = await groqResponse.json();
     const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);
 
-    const showContactButtons = !topStarterRequest && !isBadgeQuery && intent !== 'product' && (isContactIntent || reply.includes('👇'));
+    const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && intent !== 'product' && (isContactIntent || reply.includes('👇'));
     const cleanReply = reply.replace(/👇[\s]*/g, '').trim();
 
-    /* ── PAGE BUTTONS — suppressed for pure greetings ── */
     const suppressPages = isGreeting(message);
     const pageMatches   = suppressPages ? [] : [...cleanReply.matchAll(/🔗\[PAGE:([^\]]+)\]/g)];
     const pageButtons   = pageMatches.map(m => {
