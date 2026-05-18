@@ -90,7 +90,7 @@
 .account-main {
   background: linear-gradient(160deg, #fdf6f0 0%, #f5edf5 50%, #f0f0f7 100%);
   min-height: 100vh;
-  padding: 0 0 5px;
+  padding: 20px 0 5px;
 }
 
 .account-background {
