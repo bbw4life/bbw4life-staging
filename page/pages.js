@@ -494,9 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
 // ====================== CONTACT FORM ======================
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contact-form');

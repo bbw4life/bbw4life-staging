@@ -6953,68 +6953,6 @@ function addUnit(value, unit) {
   return `${v} ${unit}`;
 }
 
-function buildStoryCard(s) {
-  const tag     = PROGRAM_TAG[s.program] || { cls: 'dt-tag--beginner', icon: '🌱' };
-  const country = s.country ? ` — ${s.country}` : '';
-  const nameStr = s.age ? `${s.firstName}, ${s.age}${country}` : `${s.firstName}${country}`;
-
-  const avatarHTML = s.photo
-    ? `<img src="${s.photo}" alt="${s.firstName}" class="dt-header-img">`
-    : `<div class="dt-avatar-placeholder"><i class="fi fi-rr-user"></i></div>`;
-
-  const startWeightDisplay = addUnit(s.startWeight, 'kg');
-  const resultDisplay      = addUnit(s.result, 'kg');
-
-  const dur = String(s.duration || '').trim();
-  const durationDisplay = dur
-    ? (/^\d+$/.test(dur) ? `${dur} months` : dur)
-    : '';
-
-  const waistHTML = s.waist
-    ? `<div class="dt-num dt-num--waist"><span>${addUnit(s.waist, 'cm')}</span><small>Waist</small></div>`
-    : '';
-
-  const failedHTML = s.failedBefore
-    ? `<div class="dt-prev">
-        <span class="dt-prev-label">Failed before:</span>
-        ${s.failedBefore}
-       </div>`
-    : '';
-
-  // ── Bloc vert avec icône cœur — champ dédié mentalQuote ─────────
-  const mentalHTML = s.mentalQuote
-    ? `<div class="dt-mental"><i class="fi fi-rr-heart"></i><span>"${s.mentalQuote}"</span></div>`
-    : '';
-
-  return `
-    <div class="dt-card">
-      <div class="dt-header">
-        ${avatarHTML}
-        <div>
-          <h3>${nameStr}</h3>
-          <span class="dt-tag ${tag.cls}">${tag.icon} ${s.program}</span>
-        </div>
-      </div>
-      ${startWeightDisplay ? `
-      <div class="dt-numbers">
-        <div class="dt-num"><span>${startWeightDisplay}</span><small>Start</small></div>
-        ${resultDisplay ? `
-        <div class="dt-arrow">→</div>
-        <div class="dt-num dt-num--result"><span>${resultDisplay}</span><small>${durationDisplay}</small></div>` : ''}
-        ${waistHTML}
-      </div>` : ''}
-      ${failedHTML}
-      <p class="dt-quote">"${s.story}"</p>
-      ${mentalHTML}
-      <div class="rating">
-        ${[1,2,3,4,5].map(i =>
-          `<i class="${i <= parseInt(s.rating || 5) ? 'fi fi-sr-star' : 'fi fi-rr-star'}"></i>`
-        ).join('')}
-      </div>
-      ${s.date ? `<small class="dt-date">Shared on ${s.date}</small>` : ''}
-    </div>`;
-}
-
 async function loadCommunityStories() {
   const grid = document.querySelector('#detailed-testimonials .dt-grid');
   if (!grid) return;
@@ -7026,9 +6964,84 @@ async function loadCommunityStories() {
     if (!data.success || !data.stories.length) return;
 
     data.stories.forEach(s => {
-      const temp = document.createElement('div');
-      temp.innerHTML = buildStoryCard(s);
-      grid.appendChild(temp.firstElementChild);
+      const country = s.country ? ` — ${s.country}` : '';
+      const nameStr = s.age ? `${s.firstName}, ${s.age}${country}` : `${s.firstName}${country}`;
+      const discoveredWhen = s.discoveredWhen ? ` · ${s.discoveredWhen}` : '';
+      const ratingInt = parseInt(s.rating || 5);
+
+      const avatarHTML = s.photo
+        ? `<div class="dt-avatar-wrap">
+            <img src="${s.photo}" alt="${s.firstName}">
+            <div class="dt-avatar-ring"></div>
+           </div>`
+        : `<div class="dt-avatar-wrap">
+            <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#c0385e,#7b3f6e);display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:#fff;">
+              ${s.firstName ? s.firstName.charAt(0).toUpperCase() : '?'}
+            </div>
+            <div class="dt-avatar-ring"></div>
+           </div>`;
+
+      const numbersHTML = s.bodyPressureDuration
+        ? `<div class="dt-numbers">
+            <div class="dt-num"><span>${s.bodyPressureDuration}</span><small>Body pressure started</small></div>
+            <div class="dt-arrow-wrap">
+              <div class="dt-arrow-line"></div>
+              <svg class="dt-arrow-svg" viewBox="0 0 36 14" fill="none"><path d="M0 7 H30 M23 1 L30 7 L23 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="dt-num dt-num--result"><span>Today</span><small>Fully herself</small></div>
+            <div class="dt-num dt-num--waist"><span>${s.wordToday || ''}</span><small>One word today</small></div>
+           </div>`
+        : '';
+
+      const progressPct = Math.min(95, 60 + (ratingInt * 7));
+
+      const toldBeforeHTML = s.toldBefore
+        ? `<div class="dt-prev">
+            <span class="dt-prev-label">What she was told before:</span>
+            ${s.toldBefore}
+           </div>`
+        : '';
+
+      const mentalHTML = s.mentalQuote
+        ? `<div class="dt-mental"><i class="fi fi-rr-heart"></i><span>"${s.mentalQuote}"</span></div>`
+        : '';
+
+      const starsHTML = [1,2,3,4,5].map(i =>
+        `<i class="${i <= ratingInt ? 'fi fi-sr-star' : 'fi fi-rr-star'}"></i>`
+      ).join('');
+
+      const card = document.createElement('div');
+      card.className = 'dt-card';
+      card.setAttribute('data-os-reveal', 'up');
+      card.innerHTML = `
+        <div class="dt-shine"></div>
+        <div class="dt-header">
+          ${avatarHTML}
+          <div>
+            <h3>${nameStr}</h3>
+            <span class="dt-tag dt-tag--beginner"><i class="fi fi-rr-seedling"></i> Discovered BBW4LIFE${discoveredWhen}</span>
+          </div>
+        </div>
+        ${numbersHTML}
+        <div class="dt-progress-wrap">
+          <div class="dt-progress-label">
+            <span>Self-acceptance journey</span>
+            <span class="dt-progress-pct">${s.selfChange || 'Growing'} ✦</span>
+          </div>
+          <div class="dt-progress-bar">
+            <div class="dt-progress-fill" style="--fill-w: ${progressPct}%;"></div>
+          </div>
+        </div>
+        ${toldBeforeHTML}
+        <p class="dt-quote">"${s.story}"</p>
+        ${mentalHTML}
+        <div class="dt-footer">
+          <div class="rating">${starsHTML}</div>
+          <span class="dt-verified"><i class="fi fi-rr-shield-check"></i> Verified</span>
+        </div>
+        ${s.date ? `<small style="font-size:0.72rem;color:var(--os-muted);display:block;margin-top:8px;">Shared on ${s.date}</small>` : ''}`;
+
+      grid.appendChild(card);
     });
 
   } catch (err) {
@@ -7037,6 +7050,80 @@ async function loadCommunityStories() {
 }
 
 loadCommunityStories();
+
+
+
+if (data.success) {
+  btn.textContent = '✅ Story sent!';
+  storyForm.reset();
+  ratingStars.forEach(s => s.className = 'fi fi-rr-star');
+  if (ratingInput) ratingInput.value = '5';
+
+  // ── Show success popup ──
+  const overlay = document.createElement('div');
+  overlay.id = 'story-success-overlay';
+  overlay.innerHTML = `
+    <div id="story-success-popup">
+      <div class="ssp-top-line"></div>
+      <div class="ssp-orb-1"></div>
+      <div class="ssp-orb-2"></div>
+
+      <div class="ssp-icon-wrap">💌</div>
+
+      <span class="ssp-label">Story Received</span>
+
+      <h2 class="ssp-title">
+        Thank You for<br>
+        <em>Sharing Your Story</em>
+      </h2>
+
+      <div class="ssp-stars">
+        <i class="fi fi-sr-star"></i>
+        <i class="fi fi-sr-star"></i>
+        <i class="fi fi-sr-star"></i>
+        <i class="fi fi-sr-star"></i>
+        <i class="fi fi-sr-star"></i>
+      </div>
+
+      <div class="ssp-divider">
+        <span></span>
+        <i class="fi fi-rr-heart"></i>
+        <span></span>
+      </div>
+
+      <p class="ssp-text">
+        Your story is <strong>powerful</strong>, and it matters more than you know.<br>
+        Every word you shared has the potential to change a woman's life.
+      </p>
+
+      <div class="ssp-note">
+        ✨ Your story will be <strong>reviewed by our team</strong> and published on the BBW4LIFE page once approved — so other women can read it, feel seen, and find the courage they need.
+      </div>
+
+      <button class="ssp-close-btn" id="ssp-close">
+        <i class="fi fi-rr-heart"></i>
+        Beautiful — I Can't Wait!
+      </button>
+    </div>`;
+
+  document.body.appendChild(overlay);
+
+  document.getElementById('ssp-close').addEventListener('click', () => {
+    overlay.style.transition = 'opacity 0.35s ease';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 350);
+  });
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.style.transition = 'opacity 0.35s ease';
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 350);
+    }
+  });
+
+  setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 4000);
+}
 
 
 
