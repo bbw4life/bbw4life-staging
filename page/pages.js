@@ -497,7 +497,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+// ====================== CONTACT FORM ======================
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) return;
 
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(contactForm);
+        const data = {
+            firstName: formData.get('firstName'),
+            lastName:  formData.get('lastName'),
+            email:     formData.get('email'),
+            subject:   formData.get('subject'),
+            category:  formData.get('program') || 'N/A',
+            message:   formData.get('message')
+        };
+
+        const submitBtn = contactForm.querySelector('button[type="submit"]') || contactForm.querySelector('button');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/.netlify/functions/save-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                const popup = document.getElementById('contact-success-popup');
+                if (popup) {
+                    popup.classList.add('show');
+                    setTimeout(() => popup.classList.remove('show'), 8000);
+                }
+                const closeBtn = document.getElementById('contact-popup-close');
+                if (closeBtn) closeBtn.onclick = () => popup.classList.remove('show');
+                contactForm.reset();
+            } else {
+                showErrorPopup("Error: " + (result.error || "Unknown"));
+            }
+        } catch (err) {
+            showErrorPopup("Network error. Please try again.");
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+});
 
 
 

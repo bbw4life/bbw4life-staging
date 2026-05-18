@@ -6891,29 +6891,28 @@ if (storyForm) {
     const failedBefore = fields[8].value.trim();
     const story        = fields[9].value.trim();
 
-    // ── Champ mental quote dédié ─────────────────────────────────────
-    const mentalQuote  = document.getElementById('mental-quote-input')?.value.trim() || '';
+    const getData = (name) => {
+  const el = storyForm.querySelector(`[name="${name}"]`);
+  return el ? el.value.trim() : '';
+};
 
-    const rating       = document.getElementById('story-rating-value')?.value || '5';
-    const anonymous    = document.getElementById('anonymous-checkbox')?.checked ? 'true' : 'false';
-
-    const payload = {
-      firstName,
-      age,
-      email,
-      country,
-      startWeight,
-      program,
-      duration,
-      result,
-      waist,
-      failedBefore,
-      story,
-      mentalQuote,
-      rating,
-      photo: photoBase64,
-      anonymous
-    };
+const payload = {
+  firstName,
+  age,
+  email,
+  country,
+  bodyPressureDuration: getData('bodyPressureDuration'),
+  bbwHelped:            getData('bbwHelped'),
+  discoveredWhen:       getData('discoveredWhen'),
+  selfChange:           getData('selfChange'),
+  wordToday:            getData('wordToday'),
+  toldBefore:           getData('toldBefore'),
+  story:                getData('story'),
+  mentalQuote:          document.getElementById('mental-quote-input')?.value.trim() || '',
+  rating:               document.getElementById('story-rating-value')?.value || '5',
+  photo:                photoBase64,
+  anonymous:            document.getElementById('anonymous-checkbox')?.checked ? 'true' : 'false'
+};
 
     try {
       const res  = await fetch('/.netlify/functions/story-share', {

@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
     try {
         const body = JSON.parse(event.body);
-        const { firstName, lastName, email, subject, program, message } = body;
+        const { firstName, lastName, email, subject, category, message } = body;
 
         if (!firstName || !lastName || !email || !subject || !message) {
             throw new Error("All fields are required");
@@ -37,7 +37,7 @@ exports.handler = async (event) => {
             normalize(lastName),
             normalize(email),
             subject,
-            program || "N/A",
+            category || "N/A",
             message,
             formatDate()
         ]];
