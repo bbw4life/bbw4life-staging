@@ -1785,6 +1785,39 @@ main#main-content {
 }
 
 
+/* ══════════════════════════════════════════════════════════════
+   DRAWER — Country & Language dropdowns (mobile only)
+══════════════════════════════════════════════════════════════ */
+
+/* Les 2 boutons côte à côte */
+.bbw-drawer__select-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 4px 16px 0;     /* plus de padding-bottom ici */
+  position: relative;
+}
+
+/* Dropdown — par défaut caché */
+.bbw-drawer__select-dropdown {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 16px 12px;
+  max-height: 40vh;         /* ← limite hauteur */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 150, 62, 0.35) transparent;
+}
+
+.bbw-drawer__select-dropdown::-webkit-scrollbar       { width: 3px; }
+.bbw-drawer__select-dropdown::-webkit-scrollbar-track { background: transparent; }
+.bbw-drawer__select-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(201, 150, 62, 0.35);
+  border-radius: 3px;
+}
+
+.bbw-drawer__select-dropdown.is-open { display: flex; }
 
 
 

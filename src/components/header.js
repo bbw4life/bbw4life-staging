@@ -126,7 +126,7 @@
 
   if (searchClose) {
     searchClose.addEventListener('click', () => {
-      if (searchBar)  searchBar.classList.remove('is-open');
+      if (searchBar)   searchBar.classList.remove('is-open');
       if (searchInput) searchInput.value = '';
     });
   }
@@ -150,8 +150,8 @@
      4. SEARCH DESKTOP ALWAYS-VISIBLE
   ────────────────────────────────────────────────────────────── */
   function applySearchSetting() {
-    const allProducts = window.__allProducts || [];
-    const settings    = allProducts.find(p => p.type === 'settings') || {};
+    const allProducts   = window.__allProducts || [];
+    const settings      = allProducts.find(p => p.type === 'settings') || {};
     const alwaysVisible = (settings.header_search_always_visible || 'no').toLowerCase() === 'yes';
 
     if (searchEl) searchEl.setAttribute('data-always-visible', alwaysVisible ? 'yes' : 'no');
@@ -196,11 +196,15 @@
 
       if (cartEl && typeof window.openCartDrawer === 'function') {
         cartEl.addEventListener('click', window.openCartDrawer);
-        cartEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); } });
+        cartEl.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); }
+        });
       }
       if (wishlistEl && typeof window.openWishlistModal === 'function') {
         wishlistEl.addEventListener('click', window.openWishlistModal);
-        wishlistEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); } });
+        wishlistEl.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); }
+        });
       }
 
       if (typeof window.openCartDrawer === 'function' && typeof window.openWishlistModal === 'function') return;
@@ -209,8 +213,14 @@
       const wait = setInterval(() => {
         const c = document.getElementById('bbwCartTrigger');
         const w = document.getElementById('bbwWishlistTrigger');
-        if (c && typeof window.openCartDrawer === 'function')    c.addEventListener('click', window.openCartDrawer);
-        if (w && typeof window.openWishlistModal === 'function')  w.addEventListener('click', window.openWishlistModal);
+        if (c && typeof window.openCartDrawer === 'function') {
+          c.addEventListener('click', window.openCartDrawer);
+          c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); } });
+        }
+        if (w && typeof window.openWishlistModal === 'function') {
+          w.addEventListener('click', window.openWishlistModal);
+          w.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); } });
+        }
         if (typeof window.openCartDrawer === 'function' && typeof window.openWishlistModal === 'function') clearInterval(wait);
         if (++tries > 80) clearInterval(wait);
       }, 80);
@@ -249,10 +259,13 @@
     const socialLinks = settings.social_links || {};
 
     const urlMap = {
-      facebook: socialLinks.facebook, instagram: socialLinks.instagram,
-      tiktok:   socialLinks.tiktok,   youtube:   socialLinks.youtube,
-      pinterest:socialLinks.pinterest, whatsapp: socialLinks.whatsapp,
-      twitter:  socialLinks.twitter
+      facebook:  socialLinks.facebook,
+      instagram: socialLinks.instagram,
+      tiktok:    socialLinks.tiktok,
+      youtube:   socialLinks.youtube,
+      pinterest: socialLinks.pinterest,
+      whatsapp:  socialLinks.whatsapp,
+      twitter:   socialLinks.twitter
     };
 
     document.querySelectorAll('.bbw-drawer__social').forEach(a => {
@@ -284,12 +297,16 @@
   /* ──────────────────────────────────────────────────────────────
      11. LANG + COUNTRY SELECTORS
          Desktop  → #bbwHdrLang / #bbwHdrLangBtn / #bbwHdrLangDropdown
-         Mobile   → #bbwDrawerLangBtn / #bbwDrawerLangList
-                    #bbwDrawerCountryBtn / #bbwDrawerCountryList
-         Aucun ID commun avec le footer (bbwLangDrop, bbwCountryDrop…)
+                    #bbwHdrLangFlag / #bbwHdrLangLabel
+         Mobile   → chaque dropdown imbriqué dans sa propre colonne
+                    Country : #bbwDrawerCountryBtn / #bbwDrawerCountryList
+                               #bbwDrawerCountryFlag / #bbwDrawerCountryLabel
+                    Language : #bbwDrawerLangBtn / #bbwDrawerLangList
+                                #bbwDrawerLangFlag / #bbwDrawerLangLabel
+         Zéro conflit avec le footer (bbwLangDrop, bbwCountryDrop…)
   ────────────────────────────────────────────────────────────── */
 
-  /* Sync label du drawer lang quand on change de pays */
+  /* Sync label lang du drawer depuis un code langue */
   function _syncDrawerLang(code) {
     const langList = document.getElementById('bbwDrawerLangList');
     const langFlag = document.getElementById('bbwDrawerLangFlag');
@@ -303,6 +320,13 @@
     target.classList.add('active');
     if (langFlag) langFlag.textContent = target.dataset.flag  || '';
     if (langLbl)  langLbl.textContent  = target.dataset.label || '';
+  }
+
+  /* Bascule le chevron ▼ / ▲ d'un bouton */
+  function _setChevron(btn, isOpen) {
+    if (!btn) return;
+    const ch = btn.querySelector('.bbw-drawer__select-chevron');
+    if (ch) ch.textContent = isOpen ? '▲' : '▼';
   }
 
   function applyLangCountrySelectors() {
@@ -322,8 +346,6 @@
 
     /* ══════════════════════════════════════════════════════════
        A. DESKTOP — .bbw-hdr-lang
-          IDs : bbwHdrLang, bbwHdrLangBtn, bbwHdrLangDropdown
-                bbwHdrLangFlag, bbwHdrLangLabel
     ══════════════════════════════════════════════════════════ */
     const hdrLangWrap  = document.getElementById('bbwHdrLang');
     const hdrLangBtn   = document.getElementById('bbwHdrLangBtn');
@@ -333,11 +355,10 @@
 
     if (langEnabled && langOptions.length && hdrLangDrop) {
 
-      /* Injecter les options */
       hdrLangDrop.innerHTML = '';
       langOptions.forEach(opt => {
         const btn = document.createElement('button');
-        btn.className = 'bbw-hdr-lang__option' + (opt.code === defaultLang ? ' active' : '');
+        btn.className     = 'bbw-hdr-lang__option' + (opt.code === defaultLang ? ' active' : '');
         btn.dataset.lang  = opt.code;
         btn.dataset.flag  = opt.flag  || '';
         btn.dataset.label = opt.label || opt.name || '';
@@ -352,19 +373,17 @@
           btn.classList.add('active');
           if (hdrLangFlag)  hdrLangFlag.textContent  = opt.flag  || '';
           if (hdrLangLabel) hdrLangLabel.textContent = opt.label || opt.name || '';
-          /* fermer */
-          if (hdrLangWrap) hdrLangWrap.classList.remove('is-open');
-          if (hdrLangBtn)  hdrLangBtn.setAttribute('aria-expanded', 'false');
-          /* sync drawer */
+          if (hdrLangWrap)  hdrLangWrap.classList.remove('is-open');
+          const freshB = hdrLangWrap ? hdrLangWrap.querySelector('.bbw-hdr-lang__btn') : null;
+          if (freshB) freshB.setAttribute('aria-expanded', 'false');
           _syncDrawerLang(opt.code);
-          /* callback global si besoin */
           if (typeof window.translateTo === 'function') window.translateTo(opt.code);
         });
 
         hdrLangDrop.appendChild(btn);
       });
 
-      /* Afficher la valeur par défaut dans le bouton */
+      /* Valeur par défaut */
       const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
       if (defLang) {
         if (hdrLangFlag)  hdrLangFlag.textContent  = defLang.flag  || '';
@@ -372,7 +391,7 @@
       }
     }
 
-    /* ── Open / close du dropdown desktop (bind unique, cloner pour éviter doublons) ── */
+    /* Open / close desktop — clone pour éviter doublons */
     if (hdrLangBtn && hdrLangWrap) {
       const freshBtn = hdrLangBtn.cloneNode(true);
       hdrLangBtn.parentNode.replaceChild(freshBtn, hdrLangBtn);
@@ -384,7 +403,7 @@
       });
     }
 
-    /* Fermer si clic en dehors — ne touche pas aux dropdowns du footer */
+    /* Fermer desktop si clic en dehors */
     document.addEventListener('click', e => {
       if (hdrLangWrap && !hdrLangWrap.contains(e.target)) {
         hdrLangWrap.classList.remove('is-open');
@@ -395,8 +414,8 @@
 
     /* ══════════════════════════════════════════════════════════
        B. MOBILE DRAWER — COUNTRY
-          IDs : bbwDrawerCountryBtn, bbwDrawerCountryList
-                bbwDrawerCountryFlag, bbwDrawerCountryLabel
+          #bbwDrawerCountryList est imbriqué dans la colonne country
+          du HTML → s'ouvre dans sa propre colonne uniquement
     ══════════════════════════════════════════════════════════ */
     if (countryEnabled && countryOptions.length) {
       const countryList = document.getElementById('bbwDrawerCountryList');
@@ -408,11 +427,11 @@
 
         countryOptions.forEach(opt => {
           const btn = document.createElement('button');
-          btn.className        = 'bbw-drawer__select-opt' + (opt.code === defaultCountry ? ' active' : '');
-          btn.dataset.country  = opt.code;
-          btn.dataset.flag     = opt.flag  || '';
-          btn.dataset.label    = opt.label || opt.name || '';
-          btn.dataset.lang     = opt.lang  || '';
+          btn.className       = 'bbw-drawer__select-opt' + (opt.code === defaultCountry ? ' active' : '');
+          btn.dataset.country = opt.code;
+          btn.dataset.flag    = opt.flag  || '';
+          btn.dataset.label   = opt.label || opt.name || '';
+          btn.dataset.lang    = opt.lang  || '';
           btn.innerHTML = `
             <span class="opt-flag">${opt.flag || ''}</span>
             <span>${opt.name || ''}</span>
@@ -423,7 +442,11 @@
             btn.classList.add('active');
             if (countryFlag) countryFlag.textContent = opt.flag  || '';
             if (countryLbl)  countryLbl.textContent  = opt.label || opt.name || '';
+
+            /* Fermer + reset chevron */
             countryList.classList.remove('is-open');
+            _setChevron(document.getElementById('bbwDrawerCountryBtn'), false);
+
             if (opt.lang) _syncDrawerLang(opt.lang);
             if (typeof window.translateTo === 'function' && opt.lang) window.translateTo(opt.lang);
           });
@@ -431,7 +454,7 @@
           countryList.appendChild(btn);
         });
 
-        /* Défaut */
+        /* Valeur par défaut */
         const defCountry = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
         if (defCountry) {
           if (countryFlag) countryFlag.textContent = defCountry.flag  || '';
@@ -442,8 +465,7 @@
 
     /* ══════════════════════════════════════════════════════════
        C. MOBILE DRAWER — LANGUAGE
-          IDs : bbwDrawerLangBtn, bbwDrawerLangList
-                bbwDrawerLangFlag, bbwDrawerLangLabel
+          #bbwDrawerLangList est imbriqué dans la colonne lang du HTML
     ══════════════════════════════════════════════════════════ */
     if (langEnabled && langOptions.length) {
       const langList = document.getElementById('bbwDrawerLangList');
@@ -469,14 +491,18 @@
             btn.classList.add('active');
             if (langFlag) langFlag.textContent = opt.flag || '';
             if (langLbl)  langLbl.textContent  = opt.name || '';
+
+            /* Fermer + reset chevron */
             langList.classList.remove('is-open');
+            _setChevron(document.getElementById('bbwDrawerLangBtn'), false);
+
             if (typeof window.translateTo === 'function') window.translateTo(opt.code);
           });
 
           langList.appendChild(btn);
         });
 
-        /* Défaut */
+        /* Valeur par défaut */
         const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
         if (defLang) {
           if (langFlag) langFlag.textContent = defLang.flag || '';
@@ -486,7 +512,10 @@
     }
 
     /* ══════════════════════════════════════════════════════════
-       D. BIND open/close boutons drawer (cloner pour éviter doublons)
+       D. BIND open/close boutons drawer
+          — clone pour éviter doublons de listeners
+          — chevron ▼ / ▲
+          — ferme l'autre colonne quand on en ouvre une
     ══════════════════════════════════════════════════════════ */
     const drawerCountryBtn  = document.getElementById('bbwDrawerCountryBtn');
     const drawerCountryList = document.getElementById('bbwDrawerCountryList');
@@ -496,18 +525,32 @@
     if (drawerCountryBtn && drawerCountryList) {
       const freshCB = drawerCountryBtn.cloneNode(true);
       drawerCountryBtn.parentNode.replaceChild(freshCB, drawerCountryBtn);
+
       freshCB.addEventListener('click', () => {
         const isOpen = drawerCountryList.classList.toggle('is-open');
-        if (isOpen && drawerLangList) drawerLangList.classList.remove('is-open');
+        _setChevron(freshCB, isOpen);
+
+        /* Ferme lang si on ouvre country */
+        if (isOpen && drawerLangList) {
+          drawerLangList.classList.remove('is-open');
+          _setChevron(document.getElementById('bbwDrawerLangBtn'), false);
+        }
       });
     }
 
     if (drawerLangBtn && drawerLangList) {
       const freshLB = drawerLangBtn.cloneNode(true);
       drawerLangBtn.parentNode.replaceChild(freshLB, drawerLangBtn);
+
       freshLB.addEventListener('click', () => {
         const isOpen = drawerLangList.classList.toggle('is-open');
-        if (isOpen && drawerCountryList) drawerCountryList.classList.remove('is-open');
+        _setChevron(freshLB, isOpen);
+
+        /* Ferme country si on ouvre lang */
+        if (isOpen && drawerCountryList) {
+          drawerCountryList.classList.remove('is-open');
+          _setChevron(document.getElementById('bbwDrawerCountryBtn'), false);
+        }
       });
     }
   }
