@@ -494,27 +494,159 @@
     const defaultCountry = countryCfg.default_country || 'us';
     const defaultLang    = langCfg.default_lang        || 'en';
 
-    const countryEl = document.getElementById('bbwFooterCountrySelect');
-    if (countryEl && countryOptions.length) {
-      countryEl.innerHTML = '';
+    /* ── Peupler le custom dropdown Country ── */
+    const countryList = document.getElementById('bbwCountryList');
+    const countryEl   = document.getElementById('bbwFooterCountrySelect');
+    if (countryList && countryOptions.length) {
+      countryList.innerHTML = '';
+      if (countryEl) countryEl.innerHTML = '';
       countryOptions.forEach(opt => {
-        const o       = document.createElement('option');
-        o.value       = opt.code;
-        o.textContent = opt.currency ? opt.name + ' | ' + opt.currency : opt.name;
-        if (opt.code === defaultCountry) o.selected = true;
-        countryEl.appendChild(o);
+        // Custom list
+        const li = document.createElement('li');
+        li.dataset.value = opt.code;
+        li.dataset.lang  = opt.lang || 'en';
+        li.innerHTML = `
+          <span class="opt-flag">${opt.flag || ''}</span>
+          <span class="opt-name">${opt.name || ''}</span>
+          <span class="opt-currency">${opt.currency || ''}</span>`;
+        if (opt.code === defaultCountry) li.classList.add('active');
+        countryList.appendChild(li);
+        // Select caché
+        if (countryEl) {
+          const o = document.createElement('option');
+          o.value = opt.code;
+          o.textContent = opt.name;
+          if (opt.code === defaultCountry) o.selected = true;
+          countryEl.appendChild(o);
+        }
+      });
+      // Afficher le pays par défaut dans le trigger
+      const def = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
+      if (def) {
+        const flagEl  = document.getElementById('bbwCountryFlag');
+        const labelEl = document.getElementById('bbwCountryLabel');
+        if (flagEl)  flagEl.textContent  = def.flag || '';
+        if (labelEl) labelEl.textContent = def.name + (def.currency ? ' | ' + def.currency : '');
+      }
+    }
+
+    /* ── Peupler le custom dropdown Language ── */
+    const langList = document.getElementById('bbwLangList');
+    const langEl   = document.getElementById('bbwFooterLangSelect');
+    if (langList && langOptions.length) {
+      langList.innerHTML = '';
+      if (langEl) langEl.innerHTML = '';
+      langOptions.forEach(opt => {
+        // Custom list
+        const li = document.createElement('li');
+        li.dataset.value = opt.code;
+        li.innerHTML = `
+          <span class="opt-flag">${opt.flag || ''}</span>
+          <span class="opt-name">${opt.name || ''}</span>`;
+        if (opt.code === defaultLang) li.classList.add('active');
+        langList.appendChild(li);
+        // Select caché
+        if (langEl) {
+          const o = document.createElement('option');
+          o.value = opt.code;
+          o.textContent = opt.flag + ' ' + opt.name;
+          if (opt.code === defaultLang) o.selected = true;
+          langEl.appendChild(o);
+        }
+      });
+      // Afficher la langue par défaut dans le trigger
+      const defL = langOptions.find(o => o.code === defaultLang) || langOptions[0];
+      if (defL) {
+        const flagEl  = document.getElementById('bbwLangFlag2');
+        const labelEl = document.getElementById('bbwLangLabel2');
+        if (flagEl)  flagEl.textContent  = defL.flag || '';
+        if (labelEl) labelEl.textContent = defL.name || '';
+      }
+    }
+
+    /* ── Logique open/close + sélection ── */
+    initCustomSelects();
+  }
+
+  function initCustomSelects() {
+
+    // Toggle open/close
+    document.querySelectorAll('.bbw-custom-select__trigger').forEach(function(trigger) {
+      trigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const parent = trigger.closest('.bbw-custom-select');
+        const isOpen = parent.classList.contains('open');
+        document.querySelectorAll('.bbw-custom-select').forEach(d => d.classList.remove('open'));
+        if (!isOpen) parent.classList.add('open');
+      });
+    });
+
+    // Fermer si clic dehors
+    document.addEventListener('click', function() {
+      document.querySelectorAll('.bbw-custom-select').forEach(d => d.classList.remove('open'));
+    });
+
+    // Sélection pays
+    const countryList = document.getElementById('bbwCountryList');
+    if (countryList) {
+      countryList.addEventListener('click', function(e) {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const flag     = li.querySelector('.opt-flag').textContent;
+        const name     = li.querySelector('.opt-name').textContent;
+        const currency = li.querySelector('.opt-currency') ? li.querySelector('.opt-currency').textContent : '';
+        const code     = li.dataset.value;
+        const lang     = li.dataset.lang;
+        // Trigger
+        const flagEl  = document.getElementById('bbwCountryFlag');
+        const labelEl = document.getElementById('bbwCountryLabel');
+        if (flagEl)  flagEl.textContent  = flag;
+        if (labelEl) labelEl.textContent = name + (currency ? ' | ' + currency : '');
+        // Active
+        countryList.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+        li.classList.add('active');
+        // Select caché
+        const sel = document.getElementById('bbwFooterCountrySelect');
+        if (sel) sel.value = code;
+        // Fermer
+        document.getElementById('bbwCountryDrop').classList.remove('open');
+        // Traduire
+        if (lang && typeof translateTo === 'function') translateTo(lang);
       });
     }
 
-    const langEl = document.getElementById('bbwFooterLangSelect');
-    if (langEl && langOptions.length) {
-      langEl.innerHTML = '';
-      langOptions.forEach(opt => {
-        const o       = document.createElement('option');
-        o.value       = opt.code;
-        o.textContent = opt.flag + ' ' + opt.name;
-        if (opt.code === defaultLang) o.selected = true;
-        langEl.appendChild(o);
+    // Search pays
+    const search = document.getElementById('bbwCountrySearch');
+    if (search) {
+      search.addEventListener('input', function() {
+        const q = search.value.toLowerCase();
+        countryList.querySelectorAll('li').forEach(function(li) {
+          const name = li.querySelector('.opt-name').textContent.toLowerCase();
+          li.style.display = name.includes(q) ? '' : 'none';
+        });
+      });
+      search.addEventListener('click', function(e) { e.stopPropagation(); });
+    }
+
+    // Sélection langue
+    const langList = document.getElementById('bbwLangList');
+    if (langList) {
+      langList.addEventListener('click', function(e) {
+        const li = e.target.closest('li');
+        if (!li) return;
+        const code = li.dataset.value;
+        const flag = li.querySelector('.opt-flag').textContent;
+        const name = li.querySelector('.opt-name').textContent;
+        const flagEl  = document.getElementById('bbwLangFlag2');
+        const labelEl = document.getElementById('bbwLangLabel2');
+        if (flagEl)  flagEl.textContent  = flag;
+        if (labelEl) labelEl.textContent = name;
+        langList.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+        li.classList.add('active');
+        const sel = document.getElementById('bbwFooterLangSelect');
+        if (sel) sel.value = code;
+        document.getElementById('bbwLangDrop').classList.remove('open');
+        if (typeof translateTo === 'function') translateTo(code);
       });
     }
   }

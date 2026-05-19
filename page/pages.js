@@ -229,7 +229,20 @@ document.addEventListener('DOMContentLoaded', initOurStoryPage);
     requestAnimationFrame(step);
   }
 
-  function initAuCounters() {
+  
+
+function initAuCounters() {
+  function run() {
+    const s = (window.__allProducts || []).find(p => p.type === 'settings');
+    const stats = s ? (s.site_stats || {}) : {};
+
+    // 1. Injecter data-target depuis le JSON pour les cartes dynamiques
+    document.querySelectorAll('.au-nc-num[data-stat-key]').forEach(el => {
+      const key = el.getAttribute('data-stat-key');
+      if (stats[key] !== undefined) el.setAttribute('data-target', stats[key]);
+    });
+
+    // 2. Animer TOUS les .au-nc-num qui ont un data-target (dynamiques + statiques)
     const nums = document.querySelectorAll('.au-nc-num[data-target]');
     if (!nums.length) return;
 
@@ -249,6 +262,21 @@ document.addEventListener('DOMContentLoaded', initOurStoryPage);
 
     nums.forEach((el) => observer.observe(el));
   }
+
+  if (window.__allProducts && window.__allProducts.length) {
+    run();
+  } else {
+    let tries = 0;
+    const wait = setInterval(() => {
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(wait);
+        run();
+      } else if (++tries > 60) clearInterval(wait);
+    }, 100);
+  }
+}
+
+
 
   /* ──────────────────────────────────────
      3. MISSION PARTICLES

@@ -121,20 +121,48 @@
 
   <!-- BOTTOM BAR -->
  <div class="bbw-footer__bottom" id="bbwFooterBottom">
-  <div class="bbw-footer__bottom-left">
-    <div class="bbw-footer__country-selector">
-      <label>Country/region</label>
-      <select id="bbwFooterCountrySelect">
-        <!-- injecté par footer.js -->
-      </select>
+ <div class="bbw-footer__bottom-left">
+
+  <!-- Country custom dropdown -->
+  <div class="bbw-footer__country-selector">
+    <label>Country/region</label>
+    <div class="bbw-custom-select" id="bbwCountryDrop">
+      <div class="bbw-custom-select__trigger">
+        <span class="bbw-custom-select__flag" id="bbwCountryFlag">🇺🇸</span>
+        <span class="bbw-custom-select__label" id="bbwCountryLabel">United States | USD $</span>
+        <span class="bbw-custom-select__arrow"><i class="fi fi-rr-angle-small-down"></i></span>
+      </div>
+      <div class="bbw-custom-select__dropdown">
+        <input class="bbw-custom-select__search" type="text" placeholder="Search country…" id="bbwCountrySearch">
+        <ul class="bbw-custom-select__list" id="bbwCountryList">
+          <!-- injecté par footer.js -->
+        </ul>
+      </div>
     </div>
-    <div class="bbw-footer__lang-selector">
-      <label>Language</label>
-      <select id="bbwFooterLangSelect">
-        <!-- injecté par footer.js -->
-      </select>
-    </div>
+    <!-- select caché pour geo-detect.js -->
+    <select id="bbwFooterCountrySelect" style="display:none;"></select>
   </div>
+
+  <!-- Language custom dropdown -->
+  <div class="bbw-footer__lang-selector">
+    <label>Language</label>
+    <div class="bbw-custom-select" id="bbwLangDrop">
+      <div class="bbw-custom-select__trigger">
+        <span class="bbw-custom-select__flag" id="bbwLangFlag2">🇺🇸</span>
+        <span class="bbw-custom-select__label" id="bbwLangLabel2">English</span>
+        <span class="bbw-custom-select__arrow"><i class="fi fi-rr-angle-small-down"></i></span>
+      </div>
+      <div class="bbw-custom-select__dropdown">
+        <ul class="bbw-custom-select__list" id="bbwLangList">
+          <!-- injecté par footer.js -->
+        </ul>
+      </div>
+    </div>
+    <!-- select caché pour geo-detect.js -->
+    <select id="bbwFooterLangSelect" style="display:none;"></select>
+  </div>
+
+</div>
    <div class="bbw-footer__bottom-center">
       <p id="bbwCopyright">© 2026, <a href="/index.html" class="bbw-footer__brand-link">bbw4life</a> All Rights Reserved</p>
       <p class="bbw-footer__powered-by">Powered by <span class="bbw-footer__powered-name">Pdg Francenel</span></p>

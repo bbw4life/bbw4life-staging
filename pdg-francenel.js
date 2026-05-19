@@ -8,20 +8,6 @@
   ────────────────────────────────────────────────────────── */
   var WIDGETS_HTML = `
 
-<!-- BBW4LIFE PRODUCT REQUEST BUTTON -->
-<div class="plan-request-trigger-wrap" id="plan-request-trigger-wrap">
-  <button id="open-plan-popup" class="plan-request-trigger-btn">
-    <span class="plan-btn-icon">
-      <i class="fi fi-rr-shopping-bag"></i>
-    </span>
-    <span class="plan-btn-text">
-      <strong>Request This Product — Custom Order</strong>
-      <small>Choose your style, size & color · We handle the rest</small>
-    </span>
-    <span class="plan-btn-arrow"><i class="fi fi-rr-arrow-right"></i></span>
-  </button>
-</div>
-
 <!-- BBW4LIFE PRODUCT REQUEST POPUP -->
 <div id="plan-popup-overlay" class="plan-popup-overlay" aria-hidden="true">
   <div class="plan-popup-modal" role="dialog" aria-modal="true" aria-labelledby="plan-popup-title">
@@ -437,12 +423,33 @@
      2. INJECTION SYNCHRONE dans le DOM
         → les éléments existent AVANT que script.js soit lu
   ────────────────────────────────────────────────────────── */
-  var container = document.createElement('div');
-  container.id  = 'bbw-widgets-root';
-  container.innerHTML = WIDGETS_HTML;
 
-  // Injecte juste avant </body> — synchrone, pas de fetch
-  document.body.appendChild(container);
+  // 1. Le bouton → injecté au bon endroit via placeholder
+  var btnContainer = document.createElement('div');
+  btnContainer.innerHTML = `
+  <div class="plan-request-trigger-wrap" id="plan-request-trigger-wrap">
+    <button id="open-plan-popup" class="plan-request-trigger-btn">
+      <span class="plan-btn-icon">
+        <i class="fi fi-rr-shopping-bag"></i>
+      </span>
+      <span class="plan-btn-text">
+        <strong>Request This Product — Custom Order</strong>
+        <small>Choose your style, size & color · We handle the rest</small>
+      </span>
+      <span class="plan-btn-arrow"><i class="fi fi-rr-arrow-right"></i></span>
+    </button>
+  </div>`;
+
+  var placeholder = document.getElementById('plan-request-trigger-placeholder');
+  if (placeholder) {
+    placeholder.replaceWith(btnContainer.firstElementChild);
+  }
+
+  // 2. Tous les modals/popups → restent dans le body
+  var modalsContainer = document.createElement('div');
+  modalsContainer.id  = 'bbw-widgets-root';
+  modalsContainer.innerHTML = WIDGETS_HTML;
+  document.body.appendChild(modalsContainer);
 
   /* ──────────────────────────────────────────────────────────
      3. DÉLÉGATION D'ÉVÉNEMENTS

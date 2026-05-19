@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
    BBW4LIFE — HEADER.JS — FINAL FIXED
+   Préfixe dropdown : bbwHdr* → zéro conflit avec footer
 ═══════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -20,8 +21,8 @@
     ];
 
     for (let i = 0; i < 18; i++) {
-      const p = document.createElement('div');
-      p.className = 'bbw-hp';
+      const p        = document.createElement('div');
+      p.className    = 'bbw-hp';
       const size     = Math.random() * 4 + 2;
       const left     = Math.random() * 100;
       const duration = Math.random() * 4 + 3;
@@ -36,7 +37,7 @@
         border-radius:50%;
         animation-duration:${duration}s;
         animation-delay:-${delay}s;
-        box-shadow: 0 0 ${size * 2}px ${color};
+        box-shadow:0 0 ${size * 2}px ${color};
       `;
       container.appendChild(p);
     }
@@ -85,12 +86,7 @@
     document.body.style.overflow = '';
   }
 
-  if (burger) {
-    burger.addEventListener('click', () => {
-      drawer && drawer.classList.contains('is-open') ? closeDrawer() : openDrawer();
-    });
-  }
-
+  if (burger)      burger.addEventListener('click', () => drawer && drawer.classList.contains('is-open') ? closeDrawer() : openDrawer());
   if (drawerClose) drawerClose.addEventListener('click', closeDrawer);
   if (overlay)     overlay.addEventListener('click', closeDrawer);
 
@@ -100,20 +96,14 @@
 
   let touchStartX = 0;
   if (drawer) {
-    drawer.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-    }, { passive: true });
-
-    drawer.addEventListener('touchend', e => {
+    drawer.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    drawer.addEventListener('touchend',   e => {
       if (touchStartX - e.changedTouches[0].clientX > 80) closeDrawer();
     }, { passive: true });
   }
 
   /* ──────────────────────────────────────────────────────────────
      3. SEARCH MOBILE
-     Le dropdown est entièrement géré par search.js qui détecte
-     #bbwSearchInput automatiquement dans initSearch().
-     Ici on gère uniquement l'ouverture/fermeture de la barre.
   ────────────────────────────────────────────────────────────── */
   const searchToggle = document.getElementById('bbwSearchToggle');
   const searchBar    = document.getElementById('bbwSearchBar');
@@ -122,33 +112,30 @@
   const searchEl     = document.getElementById('bbwSearch');
 
   if (searchToggle) {
-    searchToggle.addEventListener('click', (e) => {
+    searchToggle.addEventListener('click', e => {
       e.stopPropagation();
       if (window.innerWidth > 768 && searchEl && searchEl.getAttribute('data-always-visible') === 'yes') {
-        const desktopInput = document.getElementById('bbwSearchDesktopInput');
-        if (desktopInput) desktopInput.focus();
+        const di = document.getElementById('bbwSearchDesktopInput');
+        if (di) di.focus();
         return;
       }
-      const isOpen = searchBar.classList.toggle('is-open');
+      const isOpen = searchBar && searchBar.classList.toggle('is-open');
       if (isOpen && searchInput) setTimeout(() => searchInput.focus(), 100);
     });
   }
 
   if (searchClose) {
     searchClose.addEventListener('click', () => {
-      if (searchBar) searchBar.classList.remove('is-open');
+      if (searchBar)  searchBar.classList.remove('is-open');
       if (searchInput) searchInput.value = '';
     });
   }
 
   document.addEventListener('click', e => {
-    if (!searchEl) return;
-    if (!searchEl.contains(e.target)) {
-      if (searchBar) searchBar.classList.remove('is-open');
-    }
+    if (!searchEl || !searchBar) return;
+    if (!searchEl.contains(e.target)) searchBar.classList.remove('is-open');
   });
 
-  /* Submit mobile — navigue vers le premier résultat via window.bbwSearch */
   const searchSubmitMobile = searchBar ? searchBar.querySelector('.bbw-search__submit') : null;
   if (searchSubmitMobile) {
     searchSubmitMobile.addEventListener('click', () => {
@@ -161,35 +148,23 @@
 
   /* ──────────────────────────────────────────────────────────────
      4. SEARCH DESKTOP ALWAYS-VISIBLE
-     Le dropdown est entièrement géré par search.js qui détecte
-     #bbwSearchDesktopInput automatiquement dans initSearch().
-     Ici on gère uniquement l'affichage de la barre et le submit.
   ────────────────────────────────────────────────────────────── */
   function applySearchSetting() {
     const allProducts = window.__allProducts || [];
-    const settings = allProducts.find(p => p.type === 'settings') || {};
+    const settings    = allProducts.find(p => p.type === 'settings') || {};
     const alwaysVisible = (settings.header_search_always_visible || 'no').toLowerCase() === 'yes';
 
-    if (searchEl) {
-      searchEl.setAttribute('data-always-visible', alwaysVisible ? 'yes' : 'no');
-    }
+    if (searchEl) searchEl.setAttribute('data-always-visible', alwaysVisible ? 'yes' : 'no');
 
     const desktopSearch = document.getElementById('bbwSearchDesktop');
     if (!desktopSearch) return;
-
-    if (alwaysVisible && window.innerWidth > 768) {
-      desktopSearch.style.display = 'flex';
-    } else {
-      desktopSearch.style.display = 'none';
-    }
+    desktopSearch.style.display = (alwaysVisible && window.innerWidth > 768) ? 'flex' : 'none';
   }
 
   window.addEventListener('resize', applySearchSetting, { passive: true });
 
-  /* Submit desktop — navigue vers le premier résultat via window.bbwSearch */
   const desktopSubmit = document.getElementById('bbwSearchDesktopSubmit');
   const desktopInput  = document.getElementById('bbwSearchDesktopInput');
-
   if (desktopSubmit) {
     desktopSubmit.addEventListener('click', () => {
       if (window.bbwSearch && desktopInput) {
@@ -200,123 +175,84 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     7. ACCOUNT TRIGGER → appelle paulTrigger (script.js)
+     5. ACCOUNT TRIGGER
   ────────────────────────────────────────────────────────────── */
   const accountTrigger = document.getElementById('bbwAccountTrigger');
   if (accountTrigger) {
     accountTrigger.addEventListener('click', () => {
       const paulTrigger = document.getElementById('paulTrigger');
-      if (paulTrigger) {
-        paulTrigger.click();
-      } else {
-        window.location.href = '/account.html';
-      }
+      if (paulTrigger) paulTrigger.click();
+      else window.location.href = '/account.html';
     });
   }
 
   /* ──────────────────────────────────────────────────────────────
-     8. CART & WISHLIST — bridge vers script.js
+     6. CART & WISHLIST — bridge vers script.js
   ────────────────────────────────────────────────────────────── */
   (function bindCartWishlist() {
     function tryBind() {
-      const cartTrigger     = document.getElementById('bbwCartTrigger');
-      const wishlistTrigger = document.getElementById('bbwWishlistTrigger');
+      const cartEl     = document.getElementById('bbwCartTrigger');
+      const wishlistEl = document.getElementById('bbwWishlistTrigger');
 
-      if (cartTrigger && typeof window.openCartDrawer === 'function') {
-        cartTrigger.addEventListener('click', window.openCartDrawer);
-        cartTrigger.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); }
-        });
+      if (cartEl && typeof window.openCartDrawer === 'function') {
+        cartEl.addEventListener('click', window.openCartDrawer);
+        cartEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); } });
+      }
+      if (wishlistEl && typeof window.openWishlistModal === 'function') {
+        wishlistEl.addEventListener('click', window.openWishlistModal);
+        wishlistEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); } });
       }
 
-      if (wishlistTrigger && typeof window.openWishlistModal === 'function') {
-        wishlistTrigger.addEventListener('click', window.openWishlistModal);
-        wishlistTrigger.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); }
-        });
-      }
-
-      if (
-        typeof window.openCartDrawer === 'function' &&
-        typeof window.openWishlistModal === 'function'
-      ) return;
+      if (typeof window.openCartDrawer === 'function' && typeof window.openWishlistModal === 'function') return;
 
       let tries = 0;
       const wait = setInterval(() => {
-        const cart     = document.getElementById('bbwCartTrigger');
-        const wishlist = document.getElementById('bbwWishlistTrigger');
-
-        if (cart && typeof window.openCartDrawer === 'function') {
-          cart.addEventListener('click', window.openCartDrawer);
-          cart.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openCartDrawer(); }
-          });
-        }
-
-        if (wishlist && typeof window.openWishlistModal === 'function') {
-          wishlist.addEventListener('click', window.openWishlistModal);
-          wishlist.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openWishlistModal(); }
-          });
-        }
-
-        if (
-          (typeof window.openCartDrawer === 'function') &&
-          (typeof window.openWishlistModal === 'function')
-        ) {
-          clearInterval(wait);
-        }
-
+        const c = document.getElementById('bbwCartTrigger');
+        const w = document.getElementById('bbwWishlistTrigger');
+        if (c && typeof window.openCartDrawer === 'function')    c.addEventListener('click', window.openCartDrawer);
+        if (w && typeof window.openWishlistModal === 'function')  w.addEventListener('click', window.openWishlistModal);
+        if (typeof window.openCartDrawer === 'function' && typeof window.openWishlistModal === 'function') clearInterval(wait);
         if (++tries > 80) clearInterval(wait);
       }, 80);
     }
-
     tryBind();
   })();
 
   /* ──────────────────────────────────────────────────────────────
-     10. SCROLL EFFECT — box-shadow header
+     7. SCROLL EFFECT
   ────────────────────────────────────────────────────────────── */
   const header = document.getElementById('bbw-header');
   if (header) {
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 10) {
-        header.style.boxShadow = '0 4px 30px rgba(0,0,0,0.60), 0 0 0 1px rgba(201,150,62,0.15)';
-      } else {
-        header.style.boxShadow = 'none';
-      }
+      header.style.boxShadow = window.scrollY > 10
+        ? '0 4px 30px rgba(0,0,0,0.60),0 0 0 1px rgba(201,150,62,0.15)'
+        : 'none';
     }, { passive: true });
   }
 
   /* ──────────────────────────────────────────────────────────────
-     11. ACTIVE LINK selon page courante
+     8. ACTIVE LINK
   ────────────────────────────────────────────────────────────── */
   function markActiveLink() {
     const currentPath = window.location.pathname;
     document.querySelectorAll('.bbw-drawer__link').forEach(link => {
       const href = link.getAttribute('href') || '';
-      link.classList.toggle('active',
-        href && (currentPath.endsWith(href) || currentPath === href)
-      );
+      link.classList.toggle('active', href && (currentPath.endsWith(href) || currentPath === href));
     });
   }
 
   /* ──────────────────────────────────────────────────────────────
-     12. SOCIALS dans le drawer depuis settings
+     9. SOCIAL LINKS dans le drawer
   ────────────────────────────────────────────────────────────── */
   function applySocialLinks() {
-    const allProducts = window.__allProducts || [];
-    const settings    = allProducts.find(p => p.type === 'settings') || {};
+    const settings    = (window.__allProducts || []).find(p => p.type === 'settings') || {};
     const socialLinks = settings.social_links || {};
 
     const urlMap = {
-      facebook:  socialLinks.facebook,
-      instagram: socialLinks.instagram,
-      tiktok:    socialLinks.tiktok,
-      youtube:   socialLinks.youtube,
-      pinterest: socialLinks.pinterest,
-      whatsapp:  socialLinks.whatsapp,
-      twitter:   socialLinks.twitter
+      facebook: socialLinks.facebook, instagram: socialLinks.instagram,
+      tiktok:   socialLinks.tiktok,   youtube:   socialLinks.youtube,
+      pinterest:socialLinks.pinterest, whatsapp: socialLinks.whatsapp,
+      twitter:  socialLinks.twitter
     };
 
     document.querySelectorAll('.bbw-drawer__social').forEach(a => {
@@ -326,231 +262,7 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     13. LANG + COUNTRY SELECTORS — injection dynamique depuis settings
-  ────────────────────────────────────────────────────────────── */
-
-  /* Helper : synchronise le sélecteur de langue du drawer vers un code donné */
-  function _syncDrawerLang(code) {
-    const langList = document.getElementById('bbwDrawerLangList');
-    const langFlag = document.getElementById('bbwDrawerLangFlag');
-    const langLbl  = document.getElementById('bbwDrawerLangLabel');
-    if (!langList) return;
-
-    const target = langList.querySelector('[data-lang="' + code + '"]');
-    if (!target) return;
-
-    langList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
-    target.classList.add('active');
-    if (langFlag) langFlag.textContent = target.dataset.flag  || '';
-    if (langLbl)  langLbl.textContent  = target.dataset.label || '';
-  }
-
-  function applyLangCountrySelectors() {
-    const allProducts = window.__allProducts || [];
-    const settings    = allProducts.find(p => p.type === 'settings') || {};
-
-    const langCfg    = settings.language_selector || {};
-    const countryCfg = settings.country_selector  || {};
-
-    const langEnabled    = (langCfg.enabled    || 'yes').toLowerCase() === 'yes';
-    const countryEnabled = (countryCfg.enabled || 'yes').toLowerCase() === 'yes';
-
-    const langOptions    = langCfg.options    || [];
-    const countryOptions = countryCfg.options || [];
-
-    const defaultLang    = langCfg.default_lang       || 'en';
-    const defaultCountry = countryCfg.default_country || 'us';
-
-    /* ══════════════════════════════════════════════════════════
-       1. DESKTOP LANG DROPDOWN
-    ══════════════════════════════════════════════════════════ */
-    if (langEnabled && langOptions.length) {
-      const dropdown = document.getElementById('bbwLangDropdown');
-      const flagEl   = document.getElementById('bbwLangFlag');
-      const labelEl  = document.getElementById('bbwLangLabel');
-
-      if (dropdown) {
-        dropdown.innerHTML = '';
-
-        langOptions.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className     = 'bbw-lang-select__option' + (opt.code === defaultLang ? ' active' : '');
-          btn.dataset.lang  = opt.code;
-          btn.dataset.flag  = opt.flag;
-          btn.dataset.label = opt.label;
-          btn.setAttribute('role', 'option');
-          btn.innerHTML = `
-            <span class="opt-flag">${opt.flag}</span>
-            <span class="opt-name">${opt.name}</span>
-            <span class="opt-check">✓</span>
-          `;
-
-          btn.addEventListener('click', () => {
-            dropdown.querySelectorAll('.bbw-lang-select__option').forEach(o => o.classList.remove('active'));
-            btn.classList.add('active');
-            if (flagEl)  flagEl.textContent  = opt.flag;
-            if (labelEl) labelEl.textContent = opt.label;
-            const langSelectEl = document.getElementById('bbwLangSelect');
-            const langBtnEl    = document.getElementById('bbwLangBtn');
-            if (langSelectEl) langSelectEl.classList.remove('is-open');
-            if (langBtnEl)    langBtnEl.setAttribute('aria-expanded', 'false');
-            _syncDrawerLang(opt.code);
-          });
-
-          dropdown.appendChild(btn);
-        });
-
-        /* Défaut affiché dans le bouton */
-        const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
-        if (defLang) {
-          if (flagEl)  flagEl.textContent  = defLang.flag;
-          if (labelEl) labelEl.textContent = defLang.label;
-        }
-      }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       2. MOBILE DRAWER — COUNTRY LIST
-    ══════════════════════════════════════════════════════════ */
-    if (countryEnabled && countryOptions.length) {
-      const countryList = document.getElementById('bbwDrawerCountryList');
-      const countryFlag = document.getElementById('bbwDrawerCountryFlag');
-      const countryLbl  = document.getElementById('bbwDrawerCountryLabel');
-
-      if (countryList) {
-        countryList.innerHTML = '';
-
-        countryOptions.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className       = 'bbw-drawer__select-opt' + (opt.code === defaultCountry ? ' active' : '');
-          btn.dataset.country = opt.code;
-          btn.dataset.flag    = opt.flag;
-          btn.dataset.label   = opt.label;
-          btn.dataset.lang    = opt.lang || '';
-          btn.innerHTML = `
-            <span class="opt-flag">${opt.flag}</span>
-            <span>${opt.name}</span>
-            <span class="opt-check">✓</span>
-          `;
-
-          btn.addEventListener('click', () => {
-            countryList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
-            btn.classList.add('active');
-            if (countryFlag) countryFlag.textContent = opt.flag;
-            if (countryLbl)  countryLbl.textContent  = opt.label;
-            countryList.classList.remove('is-open');
-            /* Sync automatique de la langue quand on change de pays */
-            if (opt.lang) _syncDrawerLang(opt.lang);
-          });
-
-          countryList.appendChild(btn);
-        });
-
-        /* Défaut */
-        const defCountry = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
-        if (defCountry) {
-          if (countryFlag) countryFlag.textContent = defCountry.flag;
-          if (countryLbl)  countryLbl.textContent  = defCountry.label;
-        }
-      }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       3. MOBILE DRAWER — LANG LIST
-    ══════════════════════════════════════════════════════════ */
-    if (langEnabled && langOptions.length) {
-      const langList = document.getElementById('bbwDrawerLangList');
-      const langFlag = document.getElementById('bbwDrawerLangFlag');
-      const langLbl  = document.getElementById('bbwDrawerLangLabel');
-
-      if (langList) {
-        langList.innerHTML = '';
-
-        langOptions.forEach(opt => {
-          const btn = document.createElement('button');
-          btn.className    = 'bbw-drawer__select-opt' + (opt.code === defaultLang ? ' active' : '');
-          btn.dataset.lang  = opt.code;
-          btn.dataset.flag  = opt.flag;
-          btn.dataset.label = opt.name;
-          btn.innerHTML = `
-            <span class="opt-flag">${opt.flag}</span>
-            <span>${opt.name}</span>
-            <span class="opt-check">✓</span>
-          `;
-
-          btn.addEventListener('click', () => {
-            langList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
-            btn.classList.add('active');
-            if (langFlag) langFlag.textContent = opt.flag;
-            if (langLbl)  langLbl.textContent  = opt.name;
-            langList.classList.remove('is-open');
-          });
-
-          langList.appendChild(btn);
-        });
-
-        /* Défaut */
-        const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
-        if (defLang) {
-          if (langFlag) langFlag.textContent = defLang.flag;
-          if (langLbl)  langLbl.textContent  = defLang.name;
-        }
-      }
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       4. BIND OPEN/CLOSE pour les boutons du drawer (mobile)
-          — on rebinde ici APRÈS avoir injecté les options
-    ══════════════════════════════════════════════════════════ */
-    const drawerCountryBtn  = document.getElementById('bbwDrawerCountryBtn');
-    const drawerCountryList = document.getElementById('bbwDrawerCountryList');
-    const drawerLangBtn     = document.getElementById('bbwDrawerLangBtn');
-    const drawerLangList    = document.getElementById('bbwDrawerLangList');
-
-    if (drawerCountryBtn && drawerCountryList) {
-      /* Retire un éventuel listener précédent en clonant */
-      const newCountryBtn = drawerCountryBtn.cloneNode(true);
-      drawerCountryBtn.parentNode.replaceChild(newCountryBtn, drawerCountryBtn);
-      newCountryBtn.addEventListener('click', () => {
-        const isOpen = drawerCountryList.classList.toggle('is-open');
-        if (isOpen && drawerLangList) drawerLangList.classList.remove('is-open');
-      });
-    }
-
-    if (drawerLangBtn && drawerLangList) {
-      const newLangBtn = drawerLangBtn.cloneNode(true);
-      drawerLangBtn.parentNode.replaceChild(newLangBtn, drawerLangBtn);
-      newLangBtn.addEventListener('click', () => {
-        const isOpen = drawerLangList.classList.toggle('is-open');
-        if (isOpen && drawerCountryList) drawerCountryList.classList.remove('is-open');
-      });
-    }
-  }
-
-  /* ──────────────────────────────────────────────────────────────
-     14. DESKTOP LANG BTN — open/close dropdown
-         (bind immédiat, les options sont injectées plus tard)
-  ────────────────────────────────────────────────────────────── */
-  const langSelectEl = document.getElementById('bbwLangSelect');
-  const langBtnEl    = document.getElementById('bbwLangBtn');
-
-  if (langBtnEl && langSelectEl) {
-    langBtnEl.addEventListener('click', (e) => {
-      e.stopPropagation();
-      langSelectEl.classList.toggle('is-open');
-      langBtnEl.setAttribute('aria-expanded', langSelectEl.classList.contains('is-open'));
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!langSelectEl.contains(e.target)) {
-        langSelectEl.classList.remove('is-open');
-        langBtnEl.setAttribute('aria-expanded', 'false');
-      }
-    });
-  }
-
-  /* ──────────────────────────────────────────────────────────────
-     15. BADGES — sync depuis localStorage
+     10. BADGES — sync depuis localStorage
   ────────────────────────────────────────────────────────────── */
   function syncBadgesFromStorage() {
     try {
@@ -570,28 +282,261 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     16. INIT
+     11. LANG + COUNTRY SELECTORS
+         Desktop  → #bbwHdrLang / #bbwHdrLangBtn / #bbwHdrLangDropdown
+         Mobile   → #bbwDrawerLangBtn / #bbwDrawerLangList
+                    #bbwDrawerCountryBtn / #bbwDrawerCountryList
+         Aucun ID commun avec le footer (bbwLangDrop, bbwCountryDrop…)
+  ────────────────────────────────────────────────────────────── */
+
+  /* Sync label du drawer lang quand on change de pays */
+  function _syncDrawerLang(code) {
+    const langList = document.getElementById('bbwDrawerLangList');
+    const langFlag = document.getElementById('bbwDrawerLangFlag');
+    const langLbl  = document.getElementById('bbwDrawerLangLabel');
+    if (!langList) return;
+
+    const target = langList.querySelector('[data-lang="' + code + '"]');
+    if (!target) return;
+
+    langList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
+    target.classList.add('active');
+    if (langFlag) langFlag.textContent = target.dataset.flag  || '';
+    if (langLbl)  langLbl.textContent  = target.dataset.label || '';
+  }
+
+  function applyLangCountrySelectors() {
+    const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
+
+    const langCfg    = settings.language_selector || {};
+    const countryCfg = settings.country_selector  || {};
+
+    const langEnabled    = (langCfg.enabled    || 'yes').toLowerCase() === 'yes';
+    const countryEnabled = (countryCfg.enabled || 'yes').toLowerCase() === 'yes';
+
+    const langOptions    = langCfg.options    || [];
+    const countryOptions = countryCfg.options || [];
+
+    const defaultLang    = langCfg.default_lang       || 'en';
+    const defaultCountry = countryCfg.default_country || 'us';
+
+    /* ══════════════════════════════════════════════════════════
+       A. DESKTOP — .bbw-hdr-lang
+          IDs : bbwHdrLang, bbwHdrLangBtn, bbwHdrLangDropdown
+                bbwHdrLangFlag, bbwHdrLangLabel
+    ══════════════════════════════════════════════════════════ */
+    const hdrLangWrap  = document.getElementById('bbwHdrLang');
+    const hdrLangBtn   = document.getElementById('bbwHdrLangBtn');
+    const hdrLangDrop  = document.getElementById('bbwHdrLangDropdown');
+    const hdrLangFlag  = document.getElementById('bbwHdrLangFlag');
+    const hdrLangLabel = document.getElementById('bbwHdrLangLabel');
+
+    if (langEnabled && langOptions.length && hdrLangDrop) {
+
+      /* Injecter les options */
+      hdrLangDrop.innerHTML = '';
+      langOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'bbw-hdr-lang__option' + (opt.code === defaultLang ? ' active' : '');
+        btn.dataset.lang  = opt.code;
+        btn.dataset.flag  = opt.flag  || '';
+        btn.dataset.label = opt.label || opt.name || '';
+        btn.setAttribute('role', 'option');
+        btn.innerHTML = `
+          <span class="opt-flag">${opt.flag || ''}</span>
+          <span class="opt-name">${opt.name || ''}</span>
+          <span class="opt-check">✓</span>`;
+
+        btn.addEventListener('click', () => {
+          hdrLangDrop.querySelectorAll('.bbw-hdr-lang__option').forEach(o => o.classList.remove('active'));
+          btn.classList.add('active');
+          if (hdrLangFlag)  hdrLangFlag.textContent  = opt.flag  || '';
+          if (hdrLangLabel) hdrLangLabel.textContent = opt.label || opt.name || '';
+          /* fermer */
+          if (hdrLangWrap) hdrLangWrap.classList.remove('is-open');
+          if (hdrLangBtn)  hdrLangBtn.setAttribute('aria-expanded', 'false');
+          /* sync drawer */
+          _syncDrawerLang(opt.code);
+          /* callback global si besoin */
+          if (typeof window.translateTo === 'function') window.translateTo(opt.code);
+        });
+
+        hdrLangDrop.appendChild(btn);
+      });
+
+      /* Afficher la valeur par défaut dans le bouton */
+      const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
+      if (defLang) {
+        if (hdrLangFlag)  hdrLangFlag.textContent  = defLang.flag  || '';
+        if (hdrLangLabel) hdrLangLabel.textContent = defLang.label || defLang.name || '';
+      }
+    }
+
+    /* ── Open / close du dropdown desktop (bind unique, cloner pour éviter doublons) ── */
+    if (hdrLangBtn && hdrLangWrap) {
+      const freshBtn = hdrLangBtn.cloneNode(true);
+      hdrLangBtn.parentNode.replaceChild(freshBtn, hdrLangBtn);
+
+      freshBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = hdrLangWrap.classList.toggle('is-open');
+        freshBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
+
+    /* Fermer si clic en dehors — ne touche pas aux dropdowns du footer */
+    document.addEventListener('click', e => {
+      if (hdrLangWrap && !hdrLangWrap.contains(e.target)) {
+        hdrLangWrap.classList.remove('is-open');
+        const b = hdrLangWrap.querySelector('.bbw-hdr-lang__btn');
+        if (b) b.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    /* ══════════════════════════════════════════════════════════
+       B. MOBILE DRAWER — COUNTRY
+          IDs : bbwDrawerCountryBtn, bbwDrawerCountryList
+                bbwDrawerCountryFlag, bbwDrawerCountryLabel
+    ══════════════════════════════════════════════════════════ */
+    if (countryEnabled && countryOptions.length) {
+      const countryList = document.getElementById('bbwDrawerCountryList');
+      const countryFlag = document.getElementById('bbwDrawerCountryFlag');
+      const countryLbl  = document.getElementById('bbwDrawerCountryLabel');
+
+      if (countryList) {
+        countryList.innerHTML = '';
+
+        countryOptions.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className        = 'bbw-drawer__select-opt' + (opt.code === defaultCountry ? ' active' : '');
+          btn.dataset.country  = opt.code;
+          btn.dataset.flag     = opt.flag  || '';
+          btn.dataset.label    = opt.label || opt.name || '';
+          btn.dataset.lang     = opt.lang  || '';
+          btn.innerHTML = `
+            <span class="opt-flag">${opt.flag || ''}</span>
+            <span>${opt.name || ''}</span>
+            <span class="opt-check">✓</span>`;
+
+          btn.addEventListener('click', () => {
+            countryList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
+            btn.classList.add('active');
+            if (countryFlag) countryFlag.textContent = opt.flag  || '';
+            if (countryLbl)  countryLbl.textContent  = opt.label || opt.name || '';
+            countryList.classList.remove('is-open');
+            if (opt.lang) _syncDrawerLang(opt.lang);
+            if (typeof window.translateTo === 'function' && opt.lang) window.translateTo(opt.lang);
+          });
+
+          countryList.appendChild(btn);
+        });
+
+        /* Défaut */
+        const defCountry = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
+        if (defCountry) {
+          if (countryFlag) countryFlag.textContent = defCountry.flag  || '';
+          if (countryLbl)  countryLbl.textContent  = defCountry.label || defCountry.name || '';
+        }
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       C. MOBILE DRAWER — LANGUAGE
+          IDs : bbwDrawerLangBtn, bbwDrawerLangList
+                bbwDrawerLangFlag, bbwDrawerLangLabel
+    ══════════════════════════════════════════════════════════ */
+    if (langEnabled && langOptions.length) {
+      const langList = document.getElementById('bbwDrawerLangList');
+      const langFlag = document.getElementById('bbwDrawerLangFlag');
+      const langLbl  = document.getElementById('bbwDrawerLangLabel');
+
+      if (langList) {
+        langList.innerHTML = '';
+
+        langOptions.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className     = 'bbw-drawer__select-opt' + (opt.code === defaultLang ? ' active' : '');
+          btn.dataset.lang  = opt.code;
+          btn.dataset.flag  = opt.flag || '';
+          btn.dataset.label = opt.name || '';
+          btn.innerHTML = `
+            <span class="opt-flag">${opt.flag || ''}</span>
+            <span>${opt.name || ''}</span>
+            <span class="opt-check">✓</span>`;
+
+          btn.addEventListener('click', () => {
+            langList.querySelectorAll('.bbw-drawer__select-opt').forEach(o => o.classList.remove('active'));
+            btn.classList.add('active');
+            if (langFlag) langFlag.textContent = opt.flag || '';
+            if (langLbl)  langLbl.textContent  = opt.name || '';
+            langList.classList.remove('is-open');
+            if (typeof window.translateTo === 'function') window.translateTo(opt.code);
+          });
+
+          langList.appendChild(btn);
+        });
+
+        /* Défaut */
+        const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
+        if (defLang) {
+          if (langFlag) langFlag.textContent = defLang.flag || '';
+          if (langLbl)  langLbl.textContent  = defLang.name || '';
+        }
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       D. BIND open/close boutons drawer (cloner pour éviter doublons)
+    ══════════════════════════════════════════════════════════ */
+    const drawerCountryBtn  = document.getElementById('bbwDrawerCountryBtn');
+    const drawerCountryList = document.getElementById('bbwDrawerCountryList');
+    const drawerLangBtn     = document.getElementById('bbwDrawerLangBtn');
+    const drawerLangList    = document.getElementById('bbwDrawerLangList');
+
+    if (drawerCountryBtn && drawerCountryList) {
+      const freshCB = drawerCountryBtn.cloneNode(true);
+      drawerCountryBtn.parentNode.replaceChild(freshCB, drawerCountryBtn);
+      freshCB.addEventListener('click', () => {
+        const isOpen = drawerCountryList.classList.toggle('is-open');
+        if (isOpen && drawerLangList) drawerLangList.classList.remove('is-open');
+      });
+    }
+
+    if (drawerLangBtn && drawerLangList) {
+      const freshLB = drawerLangBtn.cloneNode(true);
+      drawerLangBtn.parentNode.replaceChild(freshLB, drawerLangBtn);
+      freshLB.addEventListener('click', () => {
+        const isOpen = drawerLangList.classList.toggle('is-open');
+        if (isOpen && drawerCountryList) drawerCountryList.classList.remove('is-open');
+      });
+    }
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     12. INIT PRINCIPALE
   ────────────────────────────────────────────────────────────── */
   function init() {
     spawnHeaderParticles();
     markActiveLink();
     syncBadgesFromStorage();
 
-    document.addEventListener('cart:update',      syncBadgesFromStorage);
-    document.addEventListener('wishlist:change',  syncBadgesFromStorage);
+    document.addEventListener('cart:update',     syncBadgesFromStorage);
+    document.addEventListener('wishlist:change', syncBadgesFromStorage);
 
-    if (window.__allProducts && window.__allProducts.length) {
+    function applyAll() {
       applySearchSetting();
       applySocialLinks();
       applyLangCountrySelectors();
+    }
+
+    if (window.__allProducts && window.__allProducts.length) {
+      applyAll();
     } else {
       let tries = 0;
       const wait = setInterval(() => {
         if (window.__allProducts && window.__allProducts.length) {
           clearInterval(wait);
-          applySearchSetting();
-          applySocialLinks();
-          applyLangCountrySelectors();
+          applyAll();
         } else if (++tries > 60) {
           clearInterval(wait);
         }
@@ -606,6 +551,7 @@
   }
 
 })();
+
 
 
 // ── Announcement Bar ──

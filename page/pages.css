@@ -2874,7 +2874,7 @@
 .ssp-close-btn:hover {
   background-position: right center;
   transform: translateY(-2px);
-  box-shadow: 0 12px 36px rgba(201,150,62,0.55);
+  box-shadow: 0 12px 36px rgba(201,150,150,0.55);
 }
 
 .ssp-close-btn:active { transform: translateY(0); }
@@ -2908,8 +2908,36 @@
 }
 
 @media (max-width: 560px) {
-  #story-success-popup { padding: 36px 24px 32px; }
-  .ssp-title { font-size: 1.6rem; }
+  #story-success-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  #story-success-popup {
+    padding: 28px 20px 24px;
+    border-radius: 20px 20px 16px 16px;
+    max-height: 90dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ssp-title { font-size: 1.4rem; }
+
+  .ssp-icon-wrap {
+    width: 62px;
+    height: 62px;
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+
+  .ssp-divider { margin: 12px 0; }
+  .ssp-text    { font-size: 0.88rem; }
+  .ssp-note    { font-size: 0.78rem; padding: 10px 14px; margin-bottom: 20px; }
+
+  .ssp-close-btn {
+    padding: 12px 28px;
+    font-size: 0.82rem;
+  }
 }
 
 

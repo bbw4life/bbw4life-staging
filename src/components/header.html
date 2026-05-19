@@ -27,6 +27,10 @@
     </div>
   </div>
 
+<!--
+  BBW4LIFE — HEADER.HTML
+-->
+
 <header class="bbw-header" id="bbw-header">
 
   <div class="bbw-header__topline" aria-hidden="true"></div>
@@ -51,19 +55,32 @@
           <i class="fi fi-rr-search"></i>
         </button>
 
-        <!-- Language Selector — Desktop uniquement, collé à l'icône search -->
-        <div class="bbw-lang-select" id="bbwLangSelect">
-          <button class="bbw-lang-select__btn" id="bbwLangBtn" aria-haspopup="listbox" aria-expanded="false">
-            <span class="bbw-lang-select__flag" id="bbwLangFlag">🇺🇸</span>
-            <span id="bbwLangLabel">EN</span>
-            <svg class="bbw-lang-select__chevron" viewBox="0 0 24 24" fill="none" width="12" height="12">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!--
+          ══════════════════════════════════════════════════════
+          LANGUAGE SELECTOR DESKTOP — custom dropdown
+          IDs préfixés "bbwHdr" → aucun conflit avec le footer
+          ══════════════════════════════════════════════════════
+        -->
+        <div class="bbw-hdr-lang" id="bbwHdrLang">
+
+          <!-- Bouton trigger -->
+          <button class="bbw-hdr-lang__btn" id="bbwHdrLangBtn"
+                  aria-haspopup="listbox" aria-expanded="false">
+            <span class="bbw-hdr-lang__flag"  id="bbwHdrLangFlag">🇺🇸</span>
+            <span class="bbw-hdr-lang__label" id="bbwHdrLangLabel">EN</span>
+            <svg class="bbw-hdr-lang__chevron" viewBox="0 0 24 24" fill="none" width="12" height="12">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
-          <!-- Options injectées dynamiquement par header.js -->
-          <div class="bbw-lang-select__dropdown" role="listbox" id="bbwLangDropdown">
+
+          <!-- Dropdown panel — options injectées par header.js -->
+          <div class="bbw-hdr-lang__dropdown" role="listbox" id="bbwHdrLangDropdown">
+            <!-- boutons injectés dynamiquement -->
           </div>
+
         </div>
+        <!-- /bbwHdrLang -->
 
         <!-- Barre search mobile -->
         <div class="bbw-search__bar" id="bbwSearchBar">
@@ -161,7 +178,7 @@
   <div class="bbw-drawer__body">
 
     <!-- NAV LINKS -->
-     <ul class="bbw-drawer__nav">
+    <ul class="bbw-drawer__nav">
       <li class="bbw-drawer__item">
         <a href="/index.html" class="bbw-drawer__link">
           <span class="bbw-drawer__link-icon"><i class="fi fi-rr-home"></i></span>
@@ -311,10 +328,10 @@
       <!-- QUICK LINKS -->
       <div class="bbw-drawer__divider"><span>Quick Links</span></div>
       <div class="bbw-drawer__quicklinks">
-        <a href="/policies/privacy.html"  class="bbw-drawer__quicklink"><i class="fi fi-rr-document"></i> Privacy Policy</a>
-        <a href="/policies/refund.html"  class="bbw-drawer__quicklink"><i class="fi fi-rr-undo"></i> Returns Policy</a>
-        <a href="/policies/shipping.html" class="bbw-drawer__quicklink"><i class="fi fi-rr-truck-side"></i> Shipping Info</a>
-        <a href="/policies/terms.html"    class="bbw-drawer__quicklink"><i class="fi fi-rr-gavel"></i> Terms of Shop</a>
+        <a href="/policies/privacy.html"       class="bbw-drawer__quicklink"><i class="fi fi-rr-document"></i> Privacy Policy</a>
+        <a href="/policies/refund.html"        class="bbw-drawer__quicklink"><i class="fi fi-rr-undo"></i> Returns Policy</a>
+        <a href="/policies/shipping.html"      class="bbw-drawer__quicklink"><i class="fi fi-rr-truck-side"></i> Shipping Info</a>
+        <a href="/policies/terms.html"         class="bbw-drawer__quicklink"><i class="fi fi-rr-gavel"></i> Terms of Shop</a>
         <a href="/page/order-tracking.html"    class="bbw-drawer__quicklink"><i class="fi fi-rr-search"></i> Order Tracking</a>
         <a href="/page/faq.html"               class="bbw-drawer__quicklink"><i class="fi fi-rr-question"></i> FAQ</a>
       </div>
@@ -362,7 +379,7 @@
         <i class="bbw-drawer__pay-icon fa-brands fa-cc-diners-club" title="Diners Club"></i>
       </div>
 
-      <!-- COUNTRY & LANGUAGE — mobile only -->
+      <!-- COUNTRY & LANGUAGE — mobile drawer only -->
       <div class="bbw-drawer__divider bbw-drawer__divider--mobile-only"><span>Country &amp; Language</span></div>
 
       <!-- Les 2 boutons côte à côte -->
@@ -391,12 +408,10 @@
       </div>
 
       <!-- Country dropdown (mobile) — options injectées par header.js -->
-      <div class="bbw-drawer__select-dropdown" id="bbwDrawerCountryList">
-      </div>
+      <div class="bbw-drawer__select-dropdown" id="bbwDrawerCountryList"></div>
 
       <!-- Language dropdown (mobile) — options injectées par header.js -->
-      <div class="bbw-drawer__select-dropdown" id="bbwDrawerLangList">
-      </div>
+      <div class="bbw-drawer__select-dropdown" id="bbwDrawerLangList"></div>
 
       <!-- LEGAL -->
       <div class="bbw-drawer__legal">

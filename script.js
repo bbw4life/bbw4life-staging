@@ -817,6 +817,8 @@ function applyPromoFreeItems() {
     }
   });
 
+
+
   // Bars → data-fill (% calculé depuis data-stat-max)
   document.querySelectorAll('[data-stat-bar]').forEach(el => {
     const key = el.dataset.statKey;
