@@ -679,12 +679,17 @@ function applyPromoFreeItems() {
   const getQty       = cd.promo_get_quantity      || 3;
   const members      = stats.members              || 12000;
   const promoCode    = ab.promo_code              || 'PAUL81';
+  const discount     = ab.discount_label          || '40%';
 
   document.querySelectorAll('.marquee-free-shipping').forEach(el => el.textContent = freeShipping);
   document.querySelectorAll('.marquee-buy-qty').forEach(el       => el.textContent = buyQty);
   document.querySelectorAll('.marquee-get-qty').forEach(el       => el.textContent = getQty);
   document.querySelectorAll('.marquee-members').forEach(el       => el.textContent = members.toLocaleString());
   document.querySelectorAll('.marquee-promo-code').forEach(el    => el.textContent = promoCode);
+
+  document.querySelectorAll('.col-marquee-free-shipping').forEach(el => el.textContent = freeShipping);
+  document.querySelectorAll('.col-marquee-members').forEach(el       => el.textContent = members.toLocaleString());
+  document.querySelectorAll('.col-marquee-discount').forEach(el      => el.textContent = discount);
 })();
 
 

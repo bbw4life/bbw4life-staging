@@ -196,6 +196,14 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/policies/shipping.html'
     },
 
+    '/policies/terms.html': {
+        title: 'Terms & Conditions — Clear, Honest & No Legal Traps | BBW4LIFE',
+        description: 'Read the BBW4LIFE Terms & Conditions. Your rights, our responsibilities, return policy, order cancellation, payment security, and how BBW4LIFE works — explained in plain English. No surprises.',
+        keywords: 'terms and conditions BBW4LIFE, BBW4LIFE terms, legal terms BBW4LIFE, BBW4LIFE user agreement, plus size brand terms, curvy fashion terms conditions, BBW4LIFE refund terms, BBW4LIFE return policy terms, order cancellation BBW4LIFE, BBW4LIFE payment terms, BBW4LIFE legal page, curvy fashion legal terms, plus size shop terms, BBW4LIFE policies, body positive brand terms, BBW4LIFE conditions, plus size fashion agreement, curvy fashion conditions, BBW4LIFE order terms, plus size brand legal, curvy woman shopping terms, BBW4LIFE terms of use, body positive shopping terms, BBW4LIFE user rights, plus size customer rights, BBW4LIFE responsibilities, curvy fashion customer terms, BBW4LIFE shop agreement, body positive legal, plus size legal notice',
+        og_image: 'https://bbw4life.com/public/og-home.jpg',
+        canonical: 'https://bbw4life.com/policies/terms.html'
+    },
+
     // ─────────────────────────────────────────────────────
     // BLOG
     // ─────────────────────────────────────────────────────

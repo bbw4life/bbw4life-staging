@@ -294,17 +294,6 @@
     } catch (e) {}
   }
 
-  /* ──────────────────────────────────────────────────────────────
-     11. LANG + COUNTRY SELECTORS
-         Desktop  → #bbwHdrLang / #bbwHdrLangBtn / #bbwHdrLangDropdown
-                    #bbwHdrLangFlag / #bbwHdrLangLabel
-         Mobile   → chaque dropdown imbriqué dans sa propre colonne
-                    Country : #bbwDrawerCountryBtn / #bbwDrawerCountryList
-                               #bbwDrawerCountryFlag / #bbwDrawerCountryLabel
-                    Language : #bbwDrawerLangBtn / #bbwDrawerLangList
-                                #bbwDrawerLangFlag / #bbwDrawerLangLabel
-         Zéro conflit avec le footer (bbwLangDrop, bbwCountryDrop…)
-  ────────────────────────────────────────────────────────────── */
 
   /* Sync label lang du drawer depuis un code langue */
   function _syncDrawerLang(code) {
