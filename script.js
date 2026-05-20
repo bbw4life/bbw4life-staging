@@ -579,13 +579,11 @@ function applyPromoFreeItems() {
 
   // ====================== GET PRODUCT URL ======================
   function getProductUrl(id) {
-    if (!products || !Array.isArray(products) || products.length === 0) { console.warn("Products pas encore chargés → fallback shop.html"); return 'shop.html'; }
-    const productIndex = products.findIndex(p => String(p.id) === String(id));
-    if (productIndex === -1) { console.warn(`Produit ID ${id} non trouvé dans products.data.json`); return 'shop.html'; }
-    const currentPath = window.location.pathname;
-    const isInsideProductsFolder = currentPath.includes('/products/') || /product\d+\.html$/.test(currentPath);
-    return isInsideProductsFolder ? `product${productIndex + 1}.html` : `products/product${productIndex + 1}.html`;
-  }
+  if (!products || !Array.isArray(products) || products.length === 0) { return '/collections/bbw4life-all-product.html'; }
+  const productIndex = products.findIndex(p => String(p.id) === String(id));
+  if (productIndex === -1) { return '/collections/bbw4life-all-product.html'; }
+  return `/products/product${productIndex + 1}.html`;
+}
 
   // ====================== PRODUCT MEDIA ======================
   function populateMainProductMedia(media) {
@@ -887,6 +885,64 @@ function applyPromoFreeItems() {
 
 
       const settings = products.find(p => p.type === "settings") || {};
+
+      // ── Inject free_shipping_threshold into header spans ──
+(function injectFreeShippingHeader() {
+  const threshold = (settings.cart_drawer && settings.cart_drawer.free_shipping_threshold)
+    ? settings.cart_drawer.free_shipping_threshold
+    : 75;
+  document.querySelectorAll('.hdr-free-shipping-threshold').forEach(el => {
+    el.textContent = threshold;
+  });
+})();
+
+
+      // ════════════════════════════════════════════════
+//  THUMBNAILS LAYOUT — DESKTOP & MOBILE
+//  Lit les settings yes/no et applique les classes CSS
+// ════════════════════════════════════════════════
+(function initThumbnailsLayout() {
+
+    const mediaEl = document.querySelector('.product-media');
+    if (!mediaEl) return;
+
+    /* ── DESKTOP ── */
+    const desktopVertical   = (settings.thumbnails_desktop_vertical_left   || 'yes').toLowerCase().trim() === 'yes';
+    const desktopHorizontal = (settings.thumbnails_desktop_horizontal_below || 'no').toLowerCase().trim() === 'yes';
+
+    /* ── MOBILE ── */
+    const mobileHorizontal = (settings.thumbnails_mobile_horizontal   || 'yes').toLowerCase().trim() === 'yes';
+    const mobileVertical   = (settings.thumbnails_mobile_vertical_left || 'no').toLowerCase().trim() === 'yes';
+
+    /* ── Nettoyer toutes les classes ── */
+    mediaEl.classList.remove(
+        'thumbs-desktop-vertical-left',
+        'thumbs-desktop-horizontal-below',
+        'thumbs-mobile-horizontal',
+        'thumbs-mobile-vertical-left'
+    );
+
+    /* ── Appliquer DESKTOP (vertical_left prioritaire si les deux sont yes) ── */
+    if (desktopVertical) {
+        mediaEl.classList.add('thumbs-desktop-vertical-left');
+    } else if (desktopHorizontal) {
+        mediaEl.classList.add('thumbs-desktop-horizontal-below');
+    } else {
+        /* fallback si les deux sont no */
+        mediaEl.classList.add('thumbs-desktop-vertical-left');
+    }
+
+    /* ── Appliquer MOBILE (horizontal prioritaire si les deux sont yes) ── */
+    if (mobileHorizontal) {
+        mediaEl.classList.add('thumbs-mobile-horizontal');
+    } else if (mobileVertical) {
+        mediaEl.classList.add('thumbs-mobile-vertical-left');
+    } else {
+        /* fallback si les deux sont no */
+        mediaEl.classList.add('thumbs-mobile-horizontal');
+    }
+
+})();
 
       // ══ THEME COLOR META ══
       const themeColor = settings.theme_color || '#c0385e';
@@ -2915,14 +2971,20 @@ initAnnouncementBar();
 
     /* ── Stripe — inchangé, on passe juste les nouveaux champs dans customer ── */
     async function handleStripe() {
-      const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
+      // ← AJOUTER cette ligne
+      const returnUrl = window.location.href.split('?')[0];
+      
+      const res = await fetch('/.netlify/functions/create-reservation-stripe-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData })
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl }) // ← ajouter returnUrl
       });
       const data = await res.json();
       if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');
+      
       sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
       sessionStorage.setItem('plan_res_program', selectedProgram);
+      sessionStorage.setItem('plan_res_return_url', returnUrl); // ← AJOUTER cette ligne
+      
       const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
       const stripe = Stripe(window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '');
       await stripe.redirectToCheckout({ sessionId: data.sessionId });
@@ -2930,14 +2992,20 @@ initAnnouncementBar();
 
     /* ── PayPal — inchangé ── */
     async function handlePaypal() {
-      const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
+      // ← AJOUTER cette ligne
+      const returnUrl = window.location.href.split('?')[0];
+      
+      const res = await fetch('/.netlify/functions/create-reservation-paypal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData })
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl }) // ← ajouter returnUrl
       });
       const data = await res.json();
       if (!data.success || !data.approvalUrl) throw new Error(data.error || 'PayPal failed.');
+      
       sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
       sessionStorage.setItem('plan_res_program', selectedProgram);
+      sessionStorage.setItem('plan_res_return_url', returnUrl); // ← AJOUTER cette ligne
+      
       window.location.href = data.approvalUrl;
     }
 
@@ -2946,6 +3014,16 @@ initAnnouncementBar();
       const params    = new URLSearchParams(window.location.search);
       const sessionId = params.get('res_session_id');
       if (!sessionId) return false;
+
+      // ← AJOUTER ce bloc
+      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
+      if (savedReturnUrl) {
+        const currentBase = window.location.href.split('?')[0];
+        if (currentBase !== savedReturnUrl) {
+          window.location.replace(savedReturnUrl + window.location.search);
+          return false;
+        }
+      }
       const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
       const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
       const firstName = pendingClient ? pendingClient.firstName : '';
@@ -2972,6 +3050,16 @@ initAnnouncementBar();
       const resPaypal = params.get('res_paypal');
       const orderID   = params.get('token');
       if (!resPaypal || !orderID) return false;
+
+      // ← AJOUTER ce bloc
+      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
+      if (savedReturnUrl) {
+        const currentBase = window.location.href.split('?')[0];
+        if (currentBase !== savedReturnUrl) {
+          window.location.replace(savedReturnUrl + window.location.search);
+          return false;
+        }
+      }
       const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
       const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
       const firstName = pendingClient ? pendingClient.firstName : '';
@@ -4209,7 +4297,7 @@ if (window.innerWidth <= 768) {
         const windowHeight = window.innerHeight;
 
         // Afficher quand le footer est à 50% de la hauteur de la fenêtre
-        const nearFooter = footerTop < windowHeight * 0.50;
+        const nearFooter = footerTop < windowHeight * 4.5;
 
         // Cacher si le bouton principal ATC est visible à l'écran
         let mainBtnVisible = false;
@@ -6294,13 +6382,11 @@ document.addEventListener('DOMContentLoaded', () => {
           return '';
         }
 
-        function getUrlFromId(productId) {
+       function getUrlFromId(productId) {
           const prods = window.__allProducts || [];
           const idx = prods.findIndex(p => String(p.id) === String(productId));
           if (idx === -1) return null;
-          const currentPath = window.location.pathname;
-          const isInside = currentPath.includes('/products/') || /product\d+\.html$/.test(currentPath);
-          return isInside ? `product${idx + 1}.html` : `products/product${idx + 1}.html`;
+          return `/products/product${idx + 1}.html`;
         }
 
         historyContainer.innerHTML = '<h2>Order History</h2>';

@@ -1,0 +1,12 @@
+# robots.txt — BBW4LIFE
+# https://bbw4life.com/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /checkout/
+Disallow: /account.html
+Disallow: /src/
+Disallow: /public/
+Disallow: /policies/
+
+Sitemap: https://bbw4life.com/sitemap.xml

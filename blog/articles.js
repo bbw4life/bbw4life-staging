@@ -6562,9 +6562,18 @@ document.addEventListener('DOMContentLoaded', function () {
         a9setText('a9-pullquote-author',  cardData.author.name);
 
         // ── Bar ────────────────────────────────────────────────
-        a9setText('a9-bar-readtime', cardData.readTime);
-        a9setText('a9-bar-views',    cardData.views + ' reads');
-        a9setText('a9-bar-date',     cardData.date);
+        a9setText('a9-hero-readtime-meta', cardData.readTime);
+        a9setText('a9-hero-badge-readtime', cardData.readTime);
+        a9setText('a9-hero-readtime', cardData.readTime);
+        a9setText('a9-bar-badge',     cardData.badge);
+        a9setText('a9-bar-readtime',  cardData.readTime);
+        a9setText('a9-bar-views',     cardData.views + ' reads'); 
+        a9setText('a9-bar-date',      cardData.date);
+        a9setText('a9-hero-title',    cardData.title);
+        a9setText('a9-hero-subtitle', cardData.badge);
+        a9setText('a9-hero-badge-bc', cardData.badge);
+        a9setText('a9-hero-author-role', cardData.author.role || 'Style Coach');
+        a9setText('a9-sidebar-author', cardData.author.name);
 
         // ── Related articles ───────────────────────────────────
         a9InjectRelated(data.cards, cardData.category, 'card-9');
@@ -6686,6 +6695,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
       observer.observe(hero);
     }
+
+
+    function a9InitCopyButtons() {
+  ['a9-hero-copy', 'a9-bottom-copy'].forEach(function (id) {
+    var btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        var icon = btn.querySelector('i');
+        var orig = icon ? icon.className : '';
+        if (icon) icon.className = 'fi fi-rr-check';
+        setTimeout(function () {
+          if (icon) icon.className = orig;
+        }, 2000);
+      }).catch(function () {
+        var ta = document.createElement('textarea');
+        ta.value = window.location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    });
+  });
+}
 
 
     /* ════════════════════════════════════════════════════════════
@@ -7124,6 +7159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
 
+
     /* ════════════════════════════════════════════════════════════
        10.  NEWSLETTER FORMS
     ════════════════════════════════════════════════════════════ */
@@ -7251,6 +7287,32 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(el);
       });
     }
+
+
+    function a9InitCopyButtons() {
+  ['a9-hero-copy', 'a9-bottom-copy'].forEach(function (id) {
+    var btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        var icon = btn.querySelector('i');
+        var orig = icon ? icon.className : '';
+        if (icon) icon.className = 'fi fi-rr-check';
+        setTimeout(function () {
+          if (icon) icon.className = orig;
+        }, 2000);
+      }).catch(function () {
+        var ta = document.createElement('textarea');
+        ta.value = window.location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      });
+    });
+  });
+}
 
 
     /* ════════════════════════════════════════════════════════════

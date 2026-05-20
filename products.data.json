@@ -4153,6 +4153,10 @@
     "type": "settings",
     "eprolo_viewer_password": "BBW4LIFE2001",
     "product_title_badge": "yes",
+    "thumbnails_desktop_vertical_left": "yes",
+    "thumbnails_desktop_horizontal_below": "no",
+    "thumbnails_mobile_horizontal": "no",
+    "thumbnails_mobile_vertical_left": "yes",
     "theme_color": "#000000",
     "allowed_languages": ["en", "fr", "es", "ar", "zh", "ht", "hi", "pt", "ru", "de", "ja"],
     "chat_widget": {
@@ -4367,8 +4371,8 @@
     "button_labels": {
       "add_to_cart": "Add to Cart",
       "buy_now": "Buy Now",
-      "shop_now": "Shop All Now ok bb",
-      "checkout": "Checkout now and get offers",
+      "shop_now": "Shop All Now",
+      "checkout": "Checkout Now",
       "add_all_to_cart": "Add All to Cart",
       "view_product": "View Product →",
       "bundle_single": "Add 1 to Cart & Checkout",
@@ -4555,7 +4559,7 @@
     "button_2": { "text": "Promotions", "url": "/collections/soldes.html" },
     "button_3": { "text": "Our brands", "url": "/collections/marques.html" },
     "main_button": {
-      "text": "Add pack to cart",
+      "text": "Add pack to cart", 
       "product_ids": [
         "Pdg-Francenel-product1",
         "Pdg-Francenel-product2",

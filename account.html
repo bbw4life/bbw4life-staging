@@ -1,42 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- ═══════════════════════════════════════════════════════════
-     HEAD
-═══════════════════════════════════════════════════════════ -->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Your personal account - CurvaFit: Manage your profile, orders, and more in our body positive fitness community for curvy women.">
-  <meta name="author" content="CurvaFit">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="My Account - CurvaFit">
-  <meta property="og:description" content="Access your CurvaFit account: view orders, update details, and track your sustainable weight loss journey.">
-  <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0643/8263/2041/files/account_og_image.jpg?v=1771460122">
-  <meta property="og:url" content="https://www.curva-fit.com/account.html">
-  <meta property="og:type" content="website">
-
-  <title>My Account - CurvaFit</title>
-
-  <!-- Favicon -->
-  <link rel="icon" href="public/bbw4life favicon.png" type="image/x-icon">
-
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
-  <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-rounded/css/uicons-solid-rounded.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="/account.css">
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/products.css">
-  <link rel="stylesheet" href="/animations.css">
   <link rel="stylesheet" href="/src/components/header.css">
-  <link rel="stylesheet" href="/src/components/footer.css">
-  <link rel="stylesheet" href="/page/pages.css">
-
-  <!-- Preloader -->
-  <script src="/preloader-inline.js"></script>
+  <link rel="stylesheet" href="/account.css">
+  <script src="/src/components/head.js" defer></script>
 </head>
  <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
   <div id="reading-progress-bar" aria-hidden="true"></div>
@@ -269,14 +239,14 @@
       <h2 class="quick-actions-title">Quick Actions</h2>
       <div class="quick-actions-grid">
 
-        <!-- Track Order -->
-        <div class="quick-card" onclick="openAccountPopup('track-popup')">
-          <div class="quick-card-icon">
-            <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-          </div>
-          <h4>Track Order</h4>
-          <p>Check the status of your deliveries</p>
+       <!-- Track Order -->
+      <div class="quick-card" onclick="window.location.href='/page/order-tracking.html'">
+        <div class="quick-card-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
         </div>
+        <h4>Track Order</h4>
+        <p>Check the status of your deliveries</p>
+      </div>
 
         <!-- Addresses -->
         <div class="quick-card" onclick="openAccountPopup('address-popup')">
@@ -420,20 +390,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Track order popup -->
-    <div id="track-popup" class="popup-overlay">
-      <div class="popup">
-        <button class="popup-close" onclick="closeAccountPopup('track-popup')">×</button>
-        <h3>Track Your Order</h3>
-        <div class="popup-form">
-          <input type="text" id="tracking-number" placeholder="#709873" required>
-          <button type="button" onclick="trackOrder()">Track Now</button>
-          <p id="track-result" style="margin-top:10px;color:#f0b90b;"></p>
-        </div>
-      </div>
-    </div>
-    <!-- end POPUPS -->
 
 
   <!-- NEWSLETTER -->

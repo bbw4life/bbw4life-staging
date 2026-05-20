@@ -1435,13 +1435,12 @@
   /* ================================================================
      GET PRODUCT URL
   ================================================================ */
-  function getProductUrl(id) {
-    const allReal = window.__allProducts || allProducts;
-    const idx = allReal.findIndex(p => String(p.id) === String(id));
-    if (idx === -1) return 'shop.html';
-    const inProducts = window.location.pathname.includes('/products/') || /product\d+\.html$/.test(window.location.pathname);
-    return inProducts ? 'product' + (idx+1) + '.html' : 'products/product' + (idx+1) + '.html';
-  }
+ function getProductUrl(id) {
+  const allReal = window.__allProducts || allProducts;
+  const idx = allReal.findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return '/collections/bbw4life-all-product.html';
+  return '/products/product' + (idx + 1) + '.html';
+}
 
   /* ================================================================
      PAGINATION

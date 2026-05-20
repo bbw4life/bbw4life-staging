@@ -311,6 +311,30 @@ function isGreeting(message) {
   return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes)[\s!.,]*$/.test(q);
 }
 
+
+function detectGender(message) {
+  const q = message.toLowerCase();
+  
+  const malePatterns = [
+    /\b(homme|hommes|masculin|masculins|pour homme|pour les hommes|men|man|male|hombre|hombres|para hombre|masculino|garçon|garçons|boy|boys|chico|chicos|monsieur|messieurs|mec|mecs|gars)\b/,
+    /\b(men'?s|menswear|pour lui|for him|para él|pour un homme|for a man)\b/,
+    /\b(taille homme|size men|vêtement homme|clothing men|mode homme|fashion men|chaussure homme|men.?s shoe|zapatos hombre)\b/,
+  ];
+  
+  const femalePatterns = [
+    /\b(femme|femmes|féminin|pour femme|pour les femmes|women|woman|female|mujer|mujeres|para mujer|femenino|dame|dames|lady|ladies|señora|señoras)\b/,
+    /\b(women'?s|womenswear|pour elle|for her|para ella|pour une femme|for a woman)\b/,
+    /\b(taille femme|size women|vêtement femme|clothing women|mode femme|fashion women|chaussure femme|women.?s shoe|zapatos mujer)\b/,
+  ];
+
+  const hasMale   = malePatterns.some(p  => p.test(q));
+  const hasFemale = femalePatterns.some(p => p.test(q));
+
+  if (hasMale && !hasFemale) return 'male';
+  if (hasFemale && !hasMale) return 'female';
+  return null; // pas de genre détecté → pas de filtre
+}
+
 /* ══════════════════════════════════════════════════════
    BRAND QUERY DETECTION
 ══════════════════════════════════════════════════════ */
@@ -319,13 +343,82 @@ function isBrandQuery(message) {
   return /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)|your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)|tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia|bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)|marque propre|propre marque|brand propre|own brand|marca propia/.test(q);
 }
 
+
+
+const MALE_PRODUCT_IDS = [
+  'Pdg-Francenel-product35', // DrawstringPants
+  'Pdg-Francenel-product36', // CropSlimPants
+  'Pdg-Francenel-product37', // HaremPrints
+  'Pdg-Francenel-product38', // LooseJeans
+  'Pdg-Francenel-product39', // BritishLoafers
+  'Pdg-Francenel-product40', // AirMesh Runners
+  'Pdg-Francenel-product41', // LeatherCasuals
+  'Pdg-Francenel-product42', // BusinessDress Shoes
+  'Pdg-Francenel-product43', // HollowSneakers
+  'Pdg-Francenel-product44', // TrendTrainers
+  'Pdg-Francenel-product45', // PatentLoafers
+  'Pdg-Francenel-product46', // CollarShirt
+  'Pdg-Francenel-product47', // GeoPolo
+  'Pdg-Francenel-product48', // StripedCollar Sweater
+  'Pdg-Francenel-product49', // TurtleneckLux
+  'Pdg-Francenel-product50', // HikeJacket
+  'Pdg-Francenel-product51', // RoundNeck Sweatshirt
+];
+
+// Produits strictement féminins (exclure quand on demande homme)
+const FEMALE_ONLY_IDS = [
+  'Pdg-Francenel-product1',  // Glam Heels
+  'Pdg-Francenel-product2',  // RetroRun Sneakers (unisex mais design féminin)
+  'Pdg-Francenel-product3',  // BohoFlip
+  'Pdg-Francenel-product4',  // PowerHeels
+  'Pdg-Francenel-product5',  // WinterBoost Boots
+  'Pdg-Francenel-product6',  // ColorStilettos
+  'Pdg-Francenel-product7',  // NightChic Dress
+  'Pdg-Francenel-product8',  // SlitLux Dress
+  'Pdg-Francenel-product9',  // PlaidOverall
+  'Pdg-Francenel-product10', // FloralFlounce
+  'Pdg-Francenel-product11', // VintageSquare
+  'Pdg-Francenel-product12', // PaisleyBelt
+  'Pdg-Francenel-product13', // MeshDuo
+  'Pdg-Francenel-product14', // MeshGlam
+  'Pdg-Francenel-product15', // LinenBreeze
+  'Pdg-Francenel-product16', // StripedMini
+  'Pdg-Francenel-product17', // LoungeRobe
+  'Pdg-Francenel-product18', // LaceNight
+  'Pdg-Francenel-product19', // LaceThong
+  'Pdg-Francenel-product20', // SolidSexy Bikini
+  'Pdg-Francenel-product21', // CurveBikini
+  'Pdg-Francenel-product22', // LeopardNight
+  'Pdg-Francenel-product23', // SupportBra
+  'Pdg-Francenel-product24', // LaceRomper
+  'Pdg-Francenel-product25', // StripedBikini
+  'Pdg-Francenel-product26', // TubeBikini
+  'Pdg-Francenel-product27', // RuffleOne
+  'Pdg-Francenel-product28', // BandageBikini
+  'Pdg-Francenel-product29', // ContrastOne
+  'Pdg-Francenel-product30', // PremiumBikini
+  'Pdg-Francenel-product31', // IrregularTop
+  'Pdg-Francenel-product32', // ChristmasSweat
+  'Pdg-Francenel-product33', // DalmationShorts
+  'Pdg-Francenel-product34', // LeopardShirt
+];
+
+
 /* ══════════════════════════════════════════════════════
    PRODUCT SEARCH
 ══════════════════════════════════════════════════════ */
-function searchProducts(query, products) {
+function searchProducts(query, products, genderFilter) {
   if (!query) return { results: [], isVague: false };
   const q        = query.toLowerCase();
   const keywords = q.split(/\s+/).filter(k => k.length >= 2);
+
+  // ── FILTRE GENRE STRICT ──
+  let filteredProducts = products;
+  if (genderFilter === 'male') {
+    filteredProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
+  } else if (genderFilter === 'female') {
+    filteredProducts = products.filter(p => !MALE_PRODUCT_IDS.includes(p.id));
+  }
 
   const scored = products.map(p => {
     let score = 0;
@@ -336,6 +429,12 @@ function searchProducts(query, products) {
       p.colors.forEach(c => { if (c.name.toLowerCase().includes(kw)) score += 2; });
       p.sizes.forEach(s  => { if (String(s).toLowerCase().includes(kw)) score += 1; });
     });
+
+    // Boost produits avec le mieux noté quand requête "meilleur / top / best"
+if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test(q)) {
+  if (p.rating && p.rating >= 4.5) score += 8;
+  if (p.reviewsCount && p.reviewsCount >= 50) score += 5;
+}
 
     const badgeLower = (p.badge || '').toLowerCase();
     if ((q.includes('best seller') || q.includes('meilleure vente') || q.includes('meilleur vente') || q.includes('top vente') || q.includes('más vendido')) && badgeLower.includes('best seller')) score += 15;
@@ -1053,7 +1152,8 @@ exports.handler = async (event, context) => {
         .filter(Boolean);
       isVague = false;
     } else if (intent === 'product' && !brandRequest) {
-      const searchResult = searchProducts(message, visibleProducts);
+      const genderFilter = detectGender(message);
+      const searchResult = searchProducts(message, visibleProducts, genderFilter);
       relevantProducts   = searchResult.results;
       isVague            = searchResult.isVague;
     }
@@ -1109,6 +1209,13 @@ exports.handler = async (event, context) => {
       ? '\n[BRAND QUERY: User is asking about BBW4LIFE own brand/collection. Use ONLY the BBW4LIFE BRAND section in the system prompt to reply. Do NOT show product cards. Do NOT treat this as a product search.]'
       : '';
 
+      const genderFilter2 = detectGender(message);
+      const genderInstruction = genderFilter2 === 'male'
+        ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products. NEVER suggest women items — dresses, bikinis, lingerie, heels are strictly excluded.]'
+        : genderFilter2 === 'female'
+        ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products. NEVER suggest men items — shirts, jeans, men shoes are strictly excluded.]'
+        : '';
+
     const langName        = getLangName(userLang);
     const otherLangs      = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE'].filter(l => l !== langName).join(', ');
     const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
@@ -1116,7 +1223,10 @@ exports.handler = async (event, context) => {
     const groqMessages = [
       { role: 'system', content: systemPrompt },
       ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
-      { role: 'user', content: `${message}\n\n[${langInstruction}]${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}` }
+      {
+        role: 'user',
+        content: `${message}\n\n[${langInstruction}]${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
+      }
     ];
 
     const sleep = ms => new Promise(r => setTimeout(r, ms));

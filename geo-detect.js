@@ -1,6 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
-   BBW4LIFE — GEO-DETECT.JS
+   BBW4LIFE — GEO-DETECT.JS  (FIXED)
    Détecte le pays · Applique la langue · Traduit via Google
+   FIX 1 : applyGeoCountry met à jour les custom dropdowns du footer
+   FIX 2 : window.translateTo exposé globalement pour footer.js
 ═══════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -12,7 +14,6 @@
      1. GOOGLE TRANSLATE — Mode invisible
   ────────────────────────────────────────────────────────── */
   function injectGoogleTranslate() {
-    /* Cookie Google Translate pour forcer la langue */
     window.googleTranslateElementInit = function () {};
 
     var script = document.createElement('script');
@@ -20,52 +21,48 @@
     script.async = true;
     document.head.appendChild(script);
 
-    /* Injecter le div caché requis par Google */
     var hiddenDiv = document.createElement('div');
     hiddenDiv.id = 'google_translate_element';
     hiddenDiv.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none;';
     document.body.appendChild(hiddenDiv);
 
-    /* Masquer la barre Google Translate */
     var style = document.createElement('style');
-    style.textContent = `
-      .goog-te-banner-frame,
-      .goog-te-balloon-frame,
-      #goog-gt-tt,
-      .goog-tooltip,
-      .goog-tooltip:hover,
-      .goog-te-ftab-float,
-      .goog-te-menu-value:hover,
-      .goog-te-gadget,
-      .goog-te-gadget-icon,
-      .goog-logo-link,
-      .goog-te-banner-frame.skiptranslate {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-      }
-      body { top: 0 !important; }
-      iframe.goog-te-banner-frame { display: none !important; }
-    `;
+    style.textContent = [
+      '.goog-te-banner-frame,',
+      '.goog-te-balloon-frame,',
+      '#goog-gt-tt,',
+      '.goog-tooltip,',
+      '.goog-tooltip:hover,',
+      '.goog-te-ftab-float,',
+      '.goog-te-menu-value:hover,',
+      '.goog-te-gadget,',
+      '.goog-te-gadget-icon,',
+      '.goog-logo-link,',
+      '.goog-te-banner-frame.skiptranslate {',
+      '  display: none !important;',
+      '  visibility: hidden !important;',
+      '  height: 0 !important;',
+      '}',
+      'body { top: 0 !important; }',
+      'iframe.goog-te-banner-frame { display: none !important; }'
+    ].join('\n');
     document.head.appendChild(style);
   }
 
   /* ──────────────────────────────────────────────────────────
      2. APPLIQUER LA TRADUCTION
+     FIX : exposé en window.translateTo pour que footer.js puisse l'appeler
   ────────────────────────────────────────────────────────── */
   function translateTo(langCode) {
-    if (langCode === 'en') {
-      /* Retour à l'anglais — supprimer le cookie Google */
+    if (!langCode || langCode === 'en') {
       eraseCookie('googtrans');
       location.reload();
       return;
     }
 
-    /* Définir le cookie Google Translate */
     setCookie('googtrans', '/en/' + langCode, 1);
-    setCookie('googtrans', '/en/' + langCode, 1, '.'+location.hostname);
+    setCookie('googtrans', '/en/' + langCode, 1, '.' + location.hostname);
 
-    /* Forcer Google Translate à appliquer la langue */
     var tries = 0;
     var interval = setInterval(function () {
       tries++;
@@ -76,11 +73,13 @@
         clearInterval(interval);
       } else if (tries > 50) {
         clearInterval(interval);
-        /* Fallback — reload avec cookie */
         location.reload();
       }
     }, 100);
   }
+
+  /* ── Exposer globalement IMMÉDIATEMENT (avant tout appel footer.js) ── */
+  window.translateTo = translateTo;
 
   /* ──────────────────────────────────────────────────────────
      3. COOKIES HELPERS
@@ -110,8 +109,6 @@
      4. ÉCOUTER LES SÉLECTEURS DE LANGUE DU SITE
   ────────────────────────────────────────────────────────── */
   function bindLanguageSelectors() {
-
-    /* Écoute tous les clics sur les options de langue */
     document.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-lang]');
       if (!opt) return;
@@ -119,7 +116,6 @@
       if (lang) translateTo(lang);
     });
 
-    /* Écoute les <select> de langue (footer) */
     document.addEventListener('change', function (e) {
       if (e.target.id === 'bbwFooterLangSelect') {
         translateTo(e.target.value);
@@ -128,72 +124,107 @@
   }
 
   /* ──────────────────────────────────────────────────────────
-     5. APPLIQUER LE PAYS DÉTECTÉ AUX SÉLECTEURS
+     5. APPLIQUER LE PAYS DÉTECTÉ À TOUS LES SÉLECTEURS
+     FIX : met maintenant à jour les custom dropdowns du footer
+           (#bbwCountryFlag, #bbwCountryLabel, #bbwLangFlag2, #bbwLangLabel2,
+            #bbwCountryList li, #bbwLangList li)
   ────────────────────────────────────────────────────────── */
   function applyGeoCountry(countryCode) {
     countryCode = (countryCode || 'us').toLowerCase();
 
     var allProducts    = window.__allProducts || [];
-    var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
+    var settings       = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
     var countryCfg     = settings.country_selector  || {};
     var langCfg        = settings.language_selector || {};
     var countryOptions = countryCfg.options || [];
     var langOptions    = langCfg.options    || [];
 
-    var found = countryOptions.find(function(o){ return o.code === countryCode; });
-    if (!found) found = countryOptions.find(function(o){ return o.code === 'us'; });
+    var found = countryOptions.find(function (o) { return o.code === countryCode; });
+    if (!found) found = countryOptions.find(function (o) { return o.code === 'us'; });
     if (!found) return;
 
     var targetLang = found.lang || 'en';
-    var foundLang  = langOptions.find(function(o){ return o.code === targetLang; });
-    if (!foundLang) foundLang = langOptions.find(function(o){ return o.code === 'en'; });
+    var foundLang  = langOptions.find(function (o) { return o.code === targetLang; });
+    if (!foundLang) foundLang = langOptions.find(function (o) { return o.code === 'en'; });
 
-    /* ── Footer country ── */
+    /* ══ FOOTER — selects cachés ══ */
     var footerCountry = document.getElementById('bbwFooterCountrySelect');
     if (footerCountry) footerCountry.value = found.code;
 
-    /* ── Footer lang ── */
     var footerLang = document.getElementById('bbwFooterLangSelect');
     if (footerLang && foundLang) footerLang.value = foundLang.code;
 
-    /* ── Header desktop lang ── */
-    var headerFlag  = document.getElementById('bbwLangFlag');
-    var headerLabel = document.getElementById('bbwLangLabel');
-    if (foundLang) {
-      if (headerFlag)  headerFlag.textContent  = foundLang.flag;
-      if (headerLabel) headerLabel.textContent = foundLang.label;
+    /* ══ FOOTER — custom dropdown COUNTRY (FIX) ══ */
+    var footerCountryFlag  = document.getElementById('bbwCountryFlag');
+    var footerCountryLabel = document.getElementById('bbwCountryLabel');
+    if (footerCountryFlag)  footerCountryFlag.textContent  = found.flag || '';
+    if (footerCountryLabel) {
+      var currency = found.currency ? ' | ' + found.currency : '';
+      footerCountryLabel.textContent = (found.name || '') + currency;
     }
 
-    var desktopOpts = document.querySelectorAll('#bbwLangDropdown .bbw-lang-select__option');
-    desktopOpts.forEach(function(btn){
+    /* Marquer l'option active dans la liste country du footer */
+    var footerCountryList = document.getElementById('bbwCountryList');
+    if (footerCountryList) {
+      footerCountryList.querySelectorAll('li').forEach(function (li) {
+        li.classList.toggle('active', li.dataset.value === found.code);
+      });
+    }
+
+    /* ══ FOOTER — custom dropdown LANGUAGE (FIX) ══ */
+    if (foundLang) {
+      var footerLangFlag  = document.getElementById('bbwLangFlag2');
+      var footerLangLabel = document.getElementById('bbwLangLabel2');
+      if (footerLangFlag)  footerLangFlag.textContent  = foundLang.flag || '';
+      if (footerLangLabel) footerLangLabel.textContent = foundLang.name || '';
+
+      /* Marquer l'option active dans la liste lang du footer */
+      var footerLangList = document.getElementById('bbwLangList');
+      if (footerLangList) {
+        footerLangList.querySelectorAll('li').forEach(function (li) {
+          li.classList.toggle('active', li.dataset.value === foundLang.code);
+        });
+      }
+    }
+
+    /* ══ HEADER desktop lang ══ */
+    var hdrLangFlag  = document.getElementById('bbwHdrLangFlag');
+    var hdrLangLabel = document.getElementById('bbwHdrLangLabel');
+    if (foundLang) {
+      if (hdrLangFlag)  hdrLangFlag.textContent  = foundLang.flag  || '';
+      if (hdrLangLabel) hdrLangLabel.textContent = foundLang.label || foundLang.name || '';
+    }
+
+    var desktopOpts = document.querySelectorAll('#bbwHdrLangDropdown .bbw-hdr-lang__option');
+    desktopOpts.forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.lang === targetLang);
     });
 
-    /* ── Header drawer mobile country ── */
+    /* ══ HEADER drawer mobile — COUNTRY ══ */
     var drawerCountryFlag  = document.getElementById('bbwDrawerCountryFlag');
     var drawerCountryLabel = document.getElementById('bbwDrawerCountryLabel');
-    if (drawerCountryFlag)  drawerCountryFlag.textContent  = found.flag;
-    if (drawerCountryLabel) drawerCountryLabel.textContent = found.label;
+    if (drawerCountryFlag)  drawerCountryFlag.textContent  = found.flag  || '';
+    if (drawerCountryLabel) drawerCountryLabel.textContent = found.label || found.name || '';
 
     var drawerCountryOpts = document.querySelectorAll('#bbwDrawerCountryList .bbw-drawer__select-opt');
-    drawerCountryOpts.forEach(function(btn){
+    drawerCountryOpts.forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.country === found.code);
     });
 
-    /* ── Header drawer mobile lang ── */
+    /* ══ HEADER drawer mobile — LANGUAGE ══ */
     var drawerLangFlag  = document.getElementById('bbwDrawerLangFlag');
     var drawerLangLabel = document.getElementById('bbwDrawerLangLabel');
     if (foundLang) {
-      if (drawerLangFlag)  drawerLangFlag.textContent  = foundLang.flag;
-      if (drawerLangLabel) drawerLangLabel.textContent = foundLang.name;
+      if (drawerLangFlag)  drawerLangFlag.textContent  = foundLang.flag || '';
+      if (drawerLangLabel) drawerLangLabel.textContent = foundLang.name || '';
     }
 
     var drawerLangOpts = document.querySelectorAll('#bbwDrawerLangList .bbw-drawer__select-opt');
-    drawerLangOpts.forEach(function(btn){
+    drawerLangOpts.forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.lang === targetLang);
     });
 
-    /* ── Appliquer la traduction si pas déjà en cours ── */
+    /* ══ Appliquer la traduction ══ */
     var currentCookie = getCookie('googtrans');
     var currentLang   = currentCookie ? currentCookie.split('/').pop() : 'en';
 
@@ -214,35 +245,34 @@
         applyGeoCountry(cached);
         return;
       }
-    } catch(e) {}
+    } catch (e) {}
 
     /* API 1 — ipapi.co */
     fetch('https://ipapi.co/json/')
-      .then(function(res){ return res.json(); })
-      .then(function(data){
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
         var code = (data && data.country_code) ? data.country_code.toLowerCase() : null;
         if (code) {
-          try { sessionStorage.setItem('bbw_geo_country', code); } catch(e) {}
+          try { sessionStorage.setItem('bbw_geo_country', code); } catch (e) {}
           applyGeoCountry(code);
         } else {
           throw new Error('no code');
         }
       })
-      .catch(function(){
+      .catch(function () {
         /* API 2 — ip-api.com */
         fetch('http://ip-api.com/json/')
-          .then(function(res){ return res.json(); })
-          .then(function(data){
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
             var code = (data && data.countryCode) ? data.countryCode.toLowerCase() : null;
             if (code) {
-              try { sessionStorage.setItem('bbw_geo_country', code); } catch(e) {}
+              try { sessionStorage.setItem('bbw_geo_country', code); } catch (e) {}
               applyGeoCountry(code);
             } else {
               throw new Error('no code');
             }
           })
-          .catch(function(){
-            /* Fallback final — USA */
+          .catch(function () {
             applyGeoCountry('us');
           });
       });
@@ -253,10 +283,10 @@
   ────────────────────────────────────────────────────────── */
   function waitAndDetect() {
     var waited = 0;
-    var interval = setInterval(function(){
+    var interval = setInterval(function () {
       waited += 100;
       var allProducts = window.__allProducts || [];
-      var settings    = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
+      var settings    = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
       var hasCfg      = settings.country_selector && settings.country_selector.options;
 
       if (hasCfg || waited >= MAX_WAIT) {
