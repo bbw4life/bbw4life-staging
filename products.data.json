@@ -5283,6 +5283,25 @@
     "tilde":       "no",
     "double_dash": "no"
   }
-}
+},
+ "product_grid_section": {
+    "section_id": "bbw-product-grid-featured",
+    "eyebrow": "Curated For You",
+    "title": "Our Featured Picks",
+    "subtitle": "Discover our most-loved styles, designed for every curve.",
+    "view_product_btn_text": "View Product",
+    "items_per_row_desktop": 4,
+    "items_per_row_mobile": 2,
+    "product_ids": [
+      "Pdg-Francenel-product1",
+      "Pdg-Francenel-product7",
+      "Pdg-Francenel-product12",
+      "Pdg-Francenel-product13",
+      "Pdg-Francenel-product14",
+      "Pdg-Francenel-product27",
+      "Pdg-Francenel-product35",
+      "Pdg-Francenel-product69"
+    ]
+  }
 }
 ]
