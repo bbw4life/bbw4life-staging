@@ -796,253 +796,7 @@ function applyPromoFreeItems() {
 
 
 
-    /* ================================================================
-   BBW4LIFE — PRODUCT GRID SECTION 
-================================================================ */
-
-(function initBBWProductGrid() {
-  'use strict';
-
-  /* ── Attendre que products soit disponible ── */
-  function waitAndRun(cb) {
-    if (window.__allProducts && window.__allProducts.length) {
-      cb(window.__allProducts);
-    } else {
-      var tries = 0;
-      var poll = setInterval(function () {
-        tries++;
-        if (window.__allProducts && window.__allProducts.length) {
-          clearInterval(poll);
-          cb(window.__allProducts);
-        } else if (tries > 80) {
-          clearInterval(poll);
-        }
-      }, 100);
-    }
-  }
-
-  /* ── Améliorer les URLs images Shopify ── */
-  function sharpImg(url, size) {
-    if (!url || typeof url !== 'string') return url;
-    if (!url.includes('cdn.shopify.com')) return url;
-    url = url.replace(/[?&]width=\d+/g, '').replace(/\?&/, '?').replace(/\?$/, '');
-    var sep = url.includes('?') ? '&' : '?';
-    return url + sep + 'width=' + (size || 600) + '&quality=90';
-  }
-
-  /* ── Récupérer l'URL d'un produit depuis son index ── */
-  function getUrl(allProducts, id) {
-    var idx = allProducts.findIndex(function (p) { return p.id === id; });
-    if (idx === -1) return '#';
-    return '/products/product' + (idx + 1) + '.html';
-  }
-
-  /* ── Construire une card produit ── */
-  function buildCard(prod, url, btnText) {
-    /* Calcul remise */
-    var hasDiscount = prod.compare_price && prod.compare_price > prod.price;
-    var discountPct = hasDiscount
-      ? Math.round(((prod.compare_price - prod.price) / prod.compare_price) * 100)
-      : 0;
-
-    /* Badge (depuis JSON) */
-    var badgeHTML = '';
-    if (prod.badge && prod.badge.text) {
-      badgeHTML = '<span class="bbwpg-card__badge">' + prod.badge.text + '</span>';
-    }
-
-    /* Remise */
-    var discHTML = discountPct > 0
-      ? '<span class="bbwpg-card__discount">-' + discountPct + '%</span>'
-      : '';
-
-    /* Prix comparé */
-    var compareHTML = hasDiscount
-      ? '<span class="bbwpg-card__compare">$' + parseFloat(prod.compare_price).toFixed(2) + '</span>'
-      : '';
-
-    /* Image */
-    var imgSrc = sharpImg(prod.image, 600);
-    var imgHoverSrc = prod.image_hover ? sharpImg(prod.image_hover, 600) : '';
-
-    var card = document.createElement('div');
-    card.className = 'bbwpg-card';
-
-    card.innerHTML =
-      '<a class="bbwpg-card__img-link" href="' + url + '" aria-label="' + prod.title + '">' +
-        '<div class="bbwpg-card__img-wrap">' +
-          '<img class="bbwpg-card__img bbwpg-card__img--main" src="' + (imgHoverSrc || imgSrc) + '" alt="' + prod.title + '" loading="lazy">' +
-          (imgHoverSrc
-            ? '<img class="bbwpg-card__img bbwpg-card__img--hover" src="' + imgSrc + '" alt="" loading="lazy" aria-hidden="true">'
-            : '') +
-          badgeHTML +
-          discHTML +
-        '</div>' +
-      '</a>' +
-      '<div class="bbwpg-card__body">' +
-        '<a class="bbwpg-card__title" href="' + url + '">' + prod.title + '</a>' +
-        '<div class="bbwpg-card__prices">' +
-          '<span class="bbwpg-card__price">$' + parseFloat(prod.price).toFixed(2) + '</span>' +
-          compareHTML +
-        '</div>' +
-        '<a class="bbwpg-card__btn" href="' + url + '">' +
-          '<span>' + (btnText || 'View Product') + '</span>' +
-          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12H19M13 6l6 6-6 6"/></svg>' +
-        '</a>' +
-      '</div>';
-
-    return card;
-  }
-
-  /* ── Init principale ── */
-  function run(allProducts) {
-
-    var section  = document.getElementById('bbw-product-grid-featured');
-    var track    = document.getElementById('bbwpg-track');
-    var viewport = document.getElementById('bbwpg-viewport');
-    var dotsWrap = document.getElementById('bbwpg-dots');
-    var prevBtn  = document.getElementById('bbwpg-prev');
-    var nextBtn  = document.getElementById('bbwpg-next');
-
-    if (!section || !track) return;
-
-    /* ── Lire le setting ── */
-    var settings  = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
-    var cfg       = settings.product_grid_section || {};
-    var ids       = cfg.product_ids || [];
-    var btnText   = cfg.view_product_btn_text || 'View Product';
-
-    if (!ids.length) { section.style.display = 'none'; return; }
-
-    /* ── Injecter les textes d'en-tête ── */
-    var eyebrowEl  = document.getElementById('bbwpg-eyebrow');
-    var titleEl    = document.getElementById('bbwpg-title');
-    var subtitleEl = document.getElementById('bbwpg-subtitle');
-    if (eyebrowEl  && cfg.eyebrow)   eyebrowEl.textContent  = cfg.eyebrow;
-    if (titleEl    && cfg.title)     titleEl.textContent     = cfg.title;
-    if (subtitleEl && cfg.subtitle)  subtitleEl.textContent  = cfg.subtitle;
-
-    /* ── Filtrer les produits valides ── */
-    var prods = ids
-      .map(function (id) { return allProducts.find(function (p) { return p.id === id; }); })
-      .filter(Boolean);
-
-    if (!prods.length) { section.style.display = 'none'; return; }
-
-    /* ── Construire les cartes ── */
-    prods.forEach(function (prod) {
-      var url  = getUrl(allProducts, prod.id);
-      var card = buildCard(prod, url, btnText);
-      track.appendChild(card);
-    });
-
-    /* ── Slider logic ── */
-    var isMobile    = function () { return window.innerWidth < 768; };
-    var perPage     = function () { return isMobile() ? 2 : 4; };
-    var totalPages  = function () { return Math.ceil(prods.length / perPage()); };
-    var currentPage = 0;
-    var isAnimating = false;
-
-    /* Calculer la largeur d'une card (gap inclus) */
-    function getCardWidth() {
-      var cards = track.querySelectorAll('.bbwpg-card');
-      if (!cards.length) return 0;
-      var gap   = parseInt(getComputedStyle(track).gap) || 20;
-      return cards[0].offsetWidth + gap;
-    }
-
-    /* Aller à une page */
-    function goTo(page) {
-      if (isAnimating) return;
-      var tp = totalPages();
-      if (page < 0)  page = tp - 1;
-      if (page >= tp) page = 0;
-      currentPage = page;
-
-      var cardW   = getCardWidth();
-      var pp      = perPage();
-      var offset  = page * pp * cardW;
-      track.style.transform = 'translateX(-' + offset + 'px)';
-
-      isAnimating = true;
-      setTimeout(function () { isAnimating = false; }, 480);
-
-      updateDots();
-      updateArrows();
-    }
-
-    /* Dots */
-    function buildDots() {
-      if (!dotsWrap) return;
-      dotsWrap.innerHTML = '';
-      var tp = totalPages();
-      for (var i = 0; i < tp; i++) {
-        (function (idx) {
-          var dot = document.createElement('button');
-          dot.className = 'bbwpg-dot' + (idx === 0 ? ' bbwpg-dot--active' : '');
-          dot.setAttribute('role', 'tab');
-          dot.setAttribute('aria-label', 'Page ' + (idx + 1));
-          dot.addEventListener('click', function () { goTo(idx); });
-          dotsWrap.appendChild(dot);
-        })(i);
-      }
-    }
-
-    function updateDots() {
-      if (!dotsWrap) return;
-      dotsWrap.querySelectorAll('.bbwpg-dot').forEach(function (d, i) {
-        d.classList.toggle('bbwpg-dot--active', i === currentPage);
-      });
-    }
-
-    function updateArrows() {
-      var tp = totalPages();
-      if (prevBtn) prevBtn.style.display = tp <= 1 ? 'none' : '';
-      if (nextBtn) nextBtn.style.display = tp <= 1 ? 'none' : '';
-    }
-
-    /* Boutons */
-    if (prevBtn) prevBtn.addEventListener('click', function () { goTo(currentPage - 1); });
-    if (nextBtn) nextBtn.addEventListener('click', function () { goTo(currentPage + 1); });
-
-    /* Touch/swipe */
-    var touchStartX = 0;
-    if (viewport) {
-      viewport.addEventListener('touchstart', function (e) {
-        touchStartX = e.touches[0].clientX;
-      }, { passive: true });
-      viewport.addEventListener('touchend', function (e) {
-        var diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
-          diff > 0 ? goTo(currentPage + 1) : goTo(currentPage - 1);
-        }
-      }, { passive: true });
-    }
-
-    /* Resize */
-    var resizeTimer = null;
-    window.addEventListener('resize', function () {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function () {
-        currentPage = 0;
-        track.style.transition = 'none';
-        track.style.transform  = 'translateX(0)';
-        setTimeout(function () { track.style.transition = ''; }, 50);
-        buildDots();
-        updateArrows();
-      }, 200);
-    });
-
-    /* Init */
-    buildDots();
-    updateArrows();
-  }
-
-  waitAndRun(run);
-
-})();
-
-
+  
 
  // ====================== INJECT SITE STATS ======================
 (function injectSiteStats() {
@@ -2738,6 +2492,257 @@ initAnnouncementBar();
 
 
 
+
+
+/* ================================================================
+   BBW4LIFE — PRODUCT GRID SECTION 
+================================================================ */
+
+(function initBBWProductGrid() {
+  'use strict';
+
+  /* ── Attendre que products soit disponible ── */
+  function waitAndRun(cb) {
+    if (window.__allProducts && window.__allProducts.length) {
+      cb(window.__allProducts);
+    } else {
+      var tries = 0;
+      var poll = setInterval(function () {
+        tries++;
+        if (window.__allProducts && window.__allProducts.length) {
+          clearInterval(poll);
+          cb(window.__allProducts);
+        } else if (tries > 80) {
+          clearInterval(poll);
+        }
+      }, 100);
+    }
+  }
+
+  /* ── Améliorer les URLs images Shopify ── */
+  function sharpImg(url, size) {
+    if (!url || typeof url !== 'string') return url;
+    if (!url.includes('cdn.shopify.com')) return url;
+    url = url.replace(/[?&]width=\d+/g, '').replace(/\?&/, '?').replace(/\?$/, '');
+    var sep = url.includes('?') ? '&' : '?';
+    return url + sep + 'width=' + (size || 600) + '&quality=90';
+  }
+
+  /* ── Récupérer l'URL d'un produit depuis son index ── */
+  function getUrl(allProducts, id) {
+    var idx = allProducts.findIndex(function (p) { return p.id === id; });
+    if (idx === -1) return '#';
+    return '/products/product' + (idx + 1) + '.html';
+  }
+
+  /* ── Construire une card produit ── */
+  function buildCard(prod, url, btnText) {
+    /* Calcul remise */
+    var hasDiscount = prod.compare_price && prod.compare_price > prod.price;
+    var discountPct = hasDiscount
+      ? Math.round(((prod.compare_price - prod.price) / prod.compare_price) * 100)
+      : 0;
+
+    /* Badge (depuis JSON) */
+    var badgeHTML = '';
+    if (prod.badge && prod.badge.text) {
+      badgeHTML = '<span class="bbwpg-card__badge">' + prod.badge.text + '</span>';
+    }
+
+    /* Remise */
+    var discHTML = discountPct > 0
+      ? '<span class="bbwpg-card__discount">-' + discountPct + '%</span>'
+      : '';
+
+    /* Prix comparé */
+    var compareHTML = hasDiscount
+      ? '<span class="bbwpg-card__compare">$' + parseFloat(prod.compare_price).toFixed(2) + '</span>'
+      : '';
+
+    /* Image */
+    var imgSrc = sharpImg(prod.image, 600);
+    var imgHoverSrc = prod.image_hover ? sharpImg(prod.image_hover, 600) : '';
+
+    var card = document.createElement('div');
+    card.className = 'bbwpg-card';
+
+    card.innerHTML =
+      '<a class="bbwpg-card__img-link" href="' + url + '" aria-label="' + prod.title + '">' +
+        '<div class="bbwpg-card__img-wrap">' +
+          '<img class="bbwpg-card__img bbwpg-card__img--main" src="' + (imgHoverSrc || imgSrc) + '" alt="' + prod.title + '" loading="lazy">' +
+          (imgHoverSrc
+            ? '<img class="bbwpg-card__img bbwpg-card__img--hover" src="' + imgSrc + '" alt="" loading="lazy" aria-hidden="true">'
+            : '') +
+          badgeHTML +
+          discHTML +
+        '</div>' +
+      '</a>' +
+      '<div class="bbwpg-card__body">' +
+        '<a class="bbwpg-card__title" href="' + url + '">' + prod.title + '</a>' +
+        '<div class="bbwpg-card__prices">' +
+          '<span class="bbwpg-card__price">$' + parseFloat(prod.price).toFixed(2) + '</span>' +
+          compareHTML +
+        '</div>' +
+        '<a class="bbwpg-card__btn" href="' + url + '">' +
+          '<span>' + (btnText || 'View Product') + '</span>' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12H19M13 6l6 6-6 6"/></svg>' +
+        '</a>' +
+      '</div>';
+
+    return card;
+  }
+
+  /* ── Init principale ── */
+  function run(allProducts) {
+
+    var section  = document.getElementById('bbw-product-grid-featured');
+    var track    = document.getElementById('bbwpg-track');
+    var viewport = document.getElementById('bbwpg-viewport');
+    var dotsWrap = document.getElementById('bbwpg-dots');
+    var prevBtn  = document.getElementById('bbwpg-prev');
+    var nextBtn  = document.getElementById('bbwpg-next');
+
+    if (!section || !track) return;
+
+    /* ── Lire le setting ── */
+    var settings  = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
+    var cfg       = settings.product_grid_section || {};
+    var ids       = cfg.product_ids || [];
+    var btnText   = cfg.view_product_btn_text || 'View Product';
+
+    if (!ids.length) { section.style.display = 'none'; return; }
+
+    /* ── Injecter les textes d'en-tête ── */
+    var eyebrowEl  = document.getElementById('bbwpg-eyebrow');
+    var titleEl    = document.getElementById('bbwpg-title');
+    var subtitleEl = document.getElementById('bbwpg-subtitle');
+    if (eyebrowEl  && cfg.eyebrow)   eyebrowEl.textContent  = cfg.eyebrow;
+    if (titleEl    && cfg.title)     titleEl.textContent     = cfg.title;
+    if (subtitleEl && cfg.subtitle)  subtitleEl.textContent  = cfg.subtitle;
+
+    /* ── Filtrer les produits valides ── */
+    var prods = ids
+      .map(function (id) { return allProducts.find(function (p) { return p.id === id; }); })
+      .filter(Boolean);
+
+    if (!prods.length) { section.style.display = 'none'; return; }
+
+    /* ── Construire les cartes ── */
+    prods.forEach(function (prod) {
+      var url  = getUrl(allProducts, prod.id);
+      var card = buildCard(prod, url, btnText);
+      track.appendChild(card);
+    });
+
+    /* ── Slider logic ── */
+    var isMobile    = function () { return window.innerWidth < 768; };
+    var perPage     = function () { return isMobile() ? 2 : 4; };
+    var totalPages  = function () { return Math.ceil(prods.length / perPage()); };
+    var currentPage = 0;
+    var isAnimating = false;
+
+    /* Calculer la largeur d'une card (gap inclus) */
+    function getCardWidth() {
+      var cards = track.querySelectorAll('.bbwpg-card');
+      if (!cards.length) return 0;
+      var gap   = parseInt(getComputedStyle(track).gap) || 20;
+      return cards[0].offsetWidth + gap;
+    }
+
+    /* Aller à une page */
+    function goTo(page) {
+      if (isAnimating) return;
+      var tp = totalPages();
+      if (page < 0)  page = tp - 1;
+      if (page >= tp) page = 0;
+      currentPage = page;
+
+      var cardW   = getCardWidth();
+      var pp      = perPage();
+      var offset  = page * pp * cardW;
+      track.style.transform = 'translateX(-' + offset + 'px)';
+
+      isAnimating = true;
+      setTimeout(function () { isAnimating = false; }, 480);
+
+      updateDots();
+      updateArrows();
+    }
+
+    /* Dots */
+    function buildDots() {
+      if (!dotsWrap) return;
+      dotsWrap.innerHTML = '';
+      var tp = totalPages();
+      for (var i = 0; i < tp; i++) {
+        (function (idx) {
+          var dot = document.createElement('button');
+          dot.className = 'bbwpg-dot' + (idx === 0 ? ' bbwpg-dot--active' : '');
+          dot.setAttribute('role', 'tab');
+          dot.setAttribute('aria-label', 'Page ' + (idx + 1));
+          dot.addEventListener('click', function () { goTo(idx); });
+          dotsWrap.appendChild(dot);
+        })(i);
+      }
+    }
+
+    function updateDots() {
+      if (!dotsWrap) return;
+      dotsWrap.querySelectorAll('.bbwpg-dot').forEach(function (d, i) {
+        d.classList.toggle('bbwpg-dot--active', i === currentPage);
+      });
+    }
+
+    function updateArrows() {
+      var tp = totalPages();
+      if (prevBtn) prevBtn.style.display = tp <= 1 ? 'none' : '';
+      if (nextBtn) nextBtn.style.display = tp <= 1 ? 'none' : '';
+    }
+
+    /* Boutons */
+    if (prevBtn) prevBtn.addEventListener('click', function () { goTo(currentPage - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { goTo(currentPage + 1); });
+
+    /* Touch/swipe */
+    var touchStartX = 0;
+    if (viewport) {
+      viewport.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      viewport.addEventListener('touchend', function (e) {
+        var diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          diff > 0 ? goTo(currentPage + 1) : goTo(currentPage - 1);
+        }
+      }, { passive: true });
+    }
+
+    /* Resize */
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        currentPage = 0;
+        track.style.transition = 'none';
+        track.style.transform  = 'translateX(0)';
+        setTimeout(function () { track.style.transition = ''; }, 50);
+        buildDots();
+        updateArrows();
+      }, 200);
+    });
+
+    /* Init */
+    buildDots();
+    updateArrows();
+  }
+
+  waitAndRun(run);
+
+})();
+
+
+
+
 // ══════════════════════════════════════════
 //  JRGQ COLLECTIONS — inject from settings
 // ══════════════════════════════════════════
@@ -3748,6 +3753,9 @@ if (window.innerWidth <= 768) {
 
 })();
 
+
+
+
 // ═══════════════════════════════════════
 //  BREADCRUMBS
 // ═══════════════════════════════════════
@@ -3761,7 +3769,7 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  // ── Séparateur
+  // ── Séparateur : lit les 7 clés, active celle qui a "yes"
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -3781,52 +3789,53 @@ if (window.innerWidth <= 768) {
   }
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  // ── Attendre que head.js ait injecté le bon titre
-  setTimeout(function run() {
-    const currentPath  = window.location.pathname;
-    const currentTitle = document.title.split('|')[0].trim() || document.title;
+  // ── Page courante
+  const currentPath  = window.location.pathname;
+  const currentTitle = document.title.split('|')[0].trim() || document.title;
 
-    const BC_KEY = 'bc_visited';
-    const BC_MAX = 6;
+  // ── Historique localStorage (6 dernières pages)
+  const BC_KEY = 'bc_visited';
+  const BC_MAX = 6;
 
-    let visited = [];
-    try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+  let visited = [];
+  try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-    visited = visited.filter(p => p.url !== currentPath);
+  visited = visited.filter(p => p.url !== currentPath);
 
-    if (currentPath !== '/' && currentPath !== '/index.html') {
-      visited.unshift({ url: currentPath, title: currentTitle });
-    }
+  if (currentPath !== '/' && currentPath !== '/index.html') {
+    visited.unshift({ url: currentPath, title: currentTitle });
+  }
 
-    if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+  if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
 
-    try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+  try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
 
-    list.innerHTML = `
-      <li class="bc-item">
-        <a href="/index.html">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M9 21V12h6v9"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          Home
-        </a>
-      </li>`;
+  // ── Construire la liste
+  list.innerHTML = `
+    <li class="bc-item">
+      <a href="/index.html">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 21V12h6v9"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Home
+      </a>
+    </li>`;
 
-    visited.forEach(page => {
-      const isActive = page.url === currentPath;
-      const li = document.createElement('li');
-      li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-      li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-      list.appendChild(li);
-    });
+  visited.forEach(page => {
+    const isActive = page.url === currentPath;
+    const li = document.createElement('li');
+    li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+    li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+    list.appendChild(li);
+  });
 
-    nav.style.display = 'block';
-  }, 300);
+  nav.style.display = 'block';
 
 })();
+
 
 
 

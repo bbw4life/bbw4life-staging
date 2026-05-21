@@ -3,6 +3,8 @@
    Préfixe dropdown : bbwHdr* → zéro conflit avec footer
 ═══════════════════════════════════════════════════════════════ */
 
+
+
 (function () {
   'use strict';
 
@@ -811,3 +813,5 @@
   }
 
 })();
+
+
