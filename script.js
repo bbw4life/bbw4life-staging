@@ -796,10 +796,6 @@ function applyPromoFreeItems() {
 
 
 
-
-
-
-
     /* ================================================================
    BBW4LIFE — PRODUCT GRID SECTION 
 ================================================================ */
@@ -1045,9 +1041,6 @@ function applyPromoFreeItems() {
   waitAndRun(run);
 
 })();
-
-
-
 
 
 
@@ -3768,7 +3761,7 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  // ── Séparateur : lit les 7 clés, active celle qui a "yes"
+  // ── Séparateur
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -3788,50 +3781,50 @@ if (window.innerWidth <= 768) {
   }
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  // ── Page courante
-  const currentPath  = window.location.pathname;
-  const currentTitle = document.title.split('|')[0].trim() || document.title;
+  // ── Attendre que head.js ait injecté le bon titre
+  setTimeout(function run() {
+    const currentPath  = window.location.pathname;
+    const currentTitle = document.title.split('|')[0].trim() || document.title;
 
-  // ── Historique localStorage (6 dernières pages)
-  const BC_KEY = 'bc_visited';
-  const BC_MAX = 6;
+    const BC_KEY = 'bc_visited';
+    const BC_MAX = 6;
 
-  let visited = [];
-  try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+    let visited = [];
+    try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-  visited = visited.filter(p => p.url !== currentPath);
+    visited = visited.filter(p => p.url !== currentPath);
 
-  if (currentPath !== '/' && currentPath !== '/index.html') {
-    visited.unshift({ url: currentPath, title: currentTitle });
-  }
+    if (currentPath !== '/' && currentPath !== '/index.html') {
+      visited.unshift({ url: currentPath, title: currentTitle });
+    }
 
-  if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+    if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
 
-  try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+    try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
 
-  // ── Construire la liste
-  list.innerHTML = `
-    <li class="bc-item">
-      <a href="/index.html">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 21V12h6v9"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Home
-      </a>
-    </li>`;
+    list.innerHTML = `
+      <li class="bc-item">
+        <a href="/index.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Home
+        </a>
+      </li>`;
 
-  visited.forEach(page => {
-    const isActive = page.url === currentPath;
-    const li = document.createElement('li');
-    li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-    li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-    list.appendChild(li);
-  });
+    visited.forEach(page => {
+      const isActive = page.url === currentPath;
+      const li = document.createElement('li');
+      li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+      li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+      list.appendChild(li);
+    });
 
-  nav.style.display = 'block';
+    nav.style.display = 'block';
+  }, 300);
 
 })();
 
