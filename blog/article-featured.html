@@ -668,7 +668,7 @@
       })
       .catch(err => console.error('Header load error:', err));
 
-    fetch('/src/components/breadcrumb.html')
+    fetch('/src/components/breadcrumb.html') 
       .then(r => r.text())
       .then(html => {
         document.getElementById('breadcrumb-container').innerHTML = html;
