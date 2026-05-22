@@ -3760,80 +3760,97 @@ if (window.innerWidth <= 768) {
 //  BREADCRUMBS
 // ═══════════════════════════════════════
 (function initBreadcrumbs() {
-  const settings = (products.find(p => p.type === 'settings') || {});
-  const bc = settings.breadcrumbs || {};
+  function run() {
+    const settings = (products.find(p => p.type === 'settings') || {});
+    const bc = settings.breadcrumbs || {};
 
-  if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
+    if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
 
-  const nav  = document.getElementById('bc-nav');
-  const list = document.getElementById('bc-list');
-  if (!nav || !list) return;
+    const nav  = document.getElementById('bc-nav');
+    const list = document.getElementById('bc-list');
+    if (!nav || !list) return;
 
-  // ── Séparateur : lit les 7 clés, active celle qui a "yes"
-  const separatorMap = {
-    'separator_arrow':        '">"',
-    'separator_slash':        '"/"',
-    'separator_dash':         '"-"',
-    'separator_dot':          '"•"',
-    'separator_chevron':      '"»"',
-    'separator_pipe':         '"|"',
-    'separator_double_arrow': '">>"'
-  };
+    const separatorMap = {
+      'separator_arrow':        '">"',
+      'separator_slash':        '"/"',
+      'separator_dash':         '"-"',
+      'separator_dot':          '"•"',
+      'separator_chevron':      '"»"',
+      'separator_pipe':         '"|"',
+      'separator_double_arrow': '">>"'
+    };
 
-  let activeSep = '"/"';
-  for (const [key, val] of Object.entries(separatorMap)) {
-    if ((bc[key] || 'no').toLowerCase() === 'yes') {
-      activeSep = val;
-      break;
+    let activeSep = '"/"';
+    for (const [key, val] of Object.entries(separatorMap)) {
+      if ((bc[key] || 'no').toLowerCase() === 'yes') {
+        activeSep = val;
+        break;
+      }
+    }
+    document.documentElement.style.setProperty('--bc-sep', activeSep);
+
+    const currentPath = window.location.pathname;
+
+    // ── NOUVEAU : attendre seo:ready pour avoir le bon titre ──
+    function buildBreadcrumb(currentTitle) {
+      const BC_KEY = 'bc_visited';
+      const BC_MAX = 6;
+
+      let visited = [];
+      try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+
+      visited = visited.filter(p => p.url !== currentPath);
+
+      if (currentPath !== '/' && currentPath !== '/index.html') {
+        visited.unshift({ url: currentPath, title: currentTitle });
+      }
+
+      if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+
+      try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+
+      list.innerHTML = `
+        <li class="bc-item">
+          <a href="/index.html">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 21V12h6v9"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Home
+          </a>
+        </li>`;
+
+      visited.forEach(page => {
+        const isActive = page.url === currentPath;
+        const li = document.createElement('li');
+        li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+        li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+        list.appendChild(li);
+      });
+
+      nav.style.display = 'block';
+    }
+
+    // Si seo:ready a déjà été dispatché, document.title est déjà correct
+    // Sinon on l'attend
+    const alreadyTitle = document.title.split('|')[0].trim();
+
+    if (alreadyTitle && alreadyTitle !== 'BBW4LIFE' && alreadyTitle !== 'Beauty Has No Sizes') {
+      buildBreadcrumb(alreadyTitle);
+    } else {
+      document.addEventListener('seo:ready', function handler(e) {
+        document.removeEventListener('seo:ready', handler);
+        const title = (e.detail && e.detail.title)
+          ? e.detail.title.split('|')[0].trim()
+          : document.title.split('|')[0].trim();
+        buildBreadcrumb(title);
+      });
     }
   }
-  document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  // ── Page courante
-  const currentPath  = window.location.pathname;
-  const currentTitle = document.title.split('|')[0].trim() || document.title;
-
-  // ── Historique localStorage (6 dernières pages)
-  const BC_KEY = 'bc_visited';
-  const BC_MAX = 6;
-
-  let visited = [];
-  try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
-
-  visited = visited.filter(p => p.url !== currentPath);
-
-  if (currentPath !== '/' && currentPath !== '/index.html') {
-    visited.unshift({ url: currentPath, title: currentTitle });
-  }
-
-  if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
-
-  try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
-
-  // ── Construire la liste
-  list.innerHTML = `
-    <li class="bc-item">
-      <a href="/index.html">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 21V12h6v9"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Home
-      </a>
-    </li>`;
-
-  visited.forEach(page => {
-    const isActive = page.url === currentPath;
-    const li = document.createElement('li');
-    li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-    li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-    list.appendChild(li);
-  });
-
-  nav.style.display = 'block';
-
+  run();
 })();
 
 
