@@ -3759,7 +3759,17 @@ if (window.innerWidth <= 768) {
 // ═══════════════════════════════════════
 //  BREADCRUMBS
 // ═══════════════════════════════════════
+
+// Capture seo:ready dès qu'il est dispatché — même avant que run() soit appelé
+let _seoReadyTitle = null;
+document.addEventListener('seo:ready', function(e) {
+  _seoReadyTitle = (e.detail && e.detail.title)
+    ? e.detail.title.split('|')[0].trim()
+    : document.title.split('|')[0].trim();
+});
+
 (function initBreadcrumbs() {
+
   function run() {
     const settings = (products.find(p => p.type === 'settings') || {});
     const bc = settings.breadcrumbs || {};
@@ -3832,14 +3842,19 @@ if (window.innerWidth <= 768) {
       nav.style.display = 'block';
     }
 
-    // Toujours attendre seo:ready — contient le titre exact du SEO_MAP
-    document.addEventListener('seo:ready', function handler(e) {
-      document.removeEventListener('seo:ready', handler);
-      const title = (e.detail && e.detail.title)
-        ? e.detail.title.split('|')[0].trim()
-        : document.title.split('|')[0].trim();
-      buildBreadcrumb(title);
-    });
+    // Si seo:ready a déjà été dispatché → titre déjà capturé
+    // Sinon on l'attend
+    if (_seoReadyTitle) {
+      buildBreadcrumb(_seoReadyTitle);
+    } else {
+      document.addEventListener('seo:ready', function handler(e) {
+        document.removeEventListener('seo:ready', handler);
+        const title = (e.detail && e.detail.title)
+          ? e.detail.title.split('|')[0].trim()
+          : document.title.split('|')[0].trim();
+        buildBreadcrumb(title);
+      });
+    }
   }
 
   function waitForBreadcrumb(callback) {
@@ -3854,10 +3869,6 @@ if (window.innerWidth <= 768) {
       }
     });
     observer.observe(document.body, { childList: true, subtree: true });
-    setTimeout(function() {
-      observer.disconnect();
-      if (document.getElementById('bc-nav')) callback();
-    }, 5000);
   }
 
   waitForBreadcrumb(run);
@@ -8399,21 +8410,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Run after DOM ready ── */
-  function waitForBreadcrumb(callback) {
-    if (document.getElementById('bc-nav')) {
-      callback();
-      return;
-    }
-    const observer = new MutationObserver(function() {
-      if (document.getElementById('bc-nav')) {
-        observer.disconnect();
-        callback();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    setTimeout(init, 600);
   }
-
-  waitForBreadcrumb(run);
 
 })();
 

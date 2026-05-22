@@ -5,6 +5,10 @@
 
 const SEO_MAP = {
 
+    // ═══════════════════════════════════════════════════
+    //  PAGES PRINCIPALES
+    // ═══════════════════════════════════════════════════
+
     '/index.html': {
         title: 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion & Confidence',
         description: 'BBW4LIFE — Beauty Has No Size. Discover bold plus size fashion, beauty and confidence for every curvy woman. Free shipping on orders over $75.',
@@ -20,6 +24,10 @@ const SEO_MAP = {
         og_image: 'https://bbw4life.com/public/og-home.jpg',
         canonical: 'https://bbw4life.com/page/about.html'
     },
+
+    // ═══════════════════════════════════════════════════
+    //  COLLECTIONS
+    // ═══════════════════════════════════════════════════
 
     '/collections/bbw-features-products.html': {
         title: 'Featured Products — Beauty Has No Sizes | BBW4LIFE | Sizes S–6XL',
@@ -92,6 +100,10 @@ const SEO_MAP = {
         og_image: 'https://bbw4life.com/public/vrlogo bbw4life.png',
         canonical: 'https://bbw4life.com/collections/most-popular.html'
     },
+
+    // ═══════════════════════════════════════════════════
+    //  ARTICLES BLOG
+    // ═══════════════════════════════════════════════════
 
     '/blog/article-featured.html': {
         title: 'Beauty Has No Sizes: The Movement That Is Redefining Beauty for Every Woman | BBW4LIFE Journal',
@@ -286,13 +298,11 @@ function injectPageSEO() {
         };
     }
 
-    /* ── CORRECTION : si pas de map, dispatcher avec document.title (pas seo.title) ── */
+    /* Si pas de map → on dispatch quand même avec le titre existant */
     if (!seo) {
-        setTimeout(function() {
-            document.dispatchEvent(new CustomEvent('seo:ready', {
-                detail: { title: document.title }
-            }));
-        }, 500);
+        document.dispatchEvent(new CustomEvent('seo:ready', {
+            detail: { title: document.title }
+        }));
         return;
     }
 
@@ -334,12 +344,10 @@ function injectPageSEO() {
     }
     canonical.href = seo.canonical;
 
-    /* ── Dispatch seo:ready avec délai pour laisser le temps au fetch breadcrumb ── */
-    setTimeout(function() {
+    /* ── Dispatch event pour le breadcrumb ── */
         document.dispatchEvent(new CustomEvent('seo:ready', {
             detail: { title: seo.title }
         }));
-    }, 500);
 }
 
 /* ─── Lancer tout ─── */
