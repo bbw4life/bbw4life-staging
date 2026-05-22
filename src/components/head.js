@@ -352,7 +352,6 @@ function injectPageSEO() {
 }
 
 /* ─── Lancer tout ─── */
-injectGlobalHead().then(() => {
-    injectPageSEO();
-    injectBlogSchema();
-});
+injectPageSEO();
+injectBlogSchema();
+injectGlobalHead();
