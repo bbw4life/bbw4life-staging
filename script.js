@@ -3759,119 +3759,94 @@ if (window.innerWidth <= 768) {
 // ═══════════════════════════════════════
 //  BREADCRUMBS
 // ═══════════════════════════════════════
-
-// Capture seo:ready dès qu'il est dispatché — même avant que run() soit appelé
-let _seoReadyTitle = null;
-document.addEventListener('seo:ready', function(e) {
-  _seoReadyTitle = (e.detail && e.detail.title)
-    ? e.detail.title.split('|')[0].trim()
-    : document.title.split('|')[0].trim();
-});
-
 (function initBreadcrumbs() {
+  const settings = (products.find(p => p.type === 'settings') || {});
+  const bc = settings.breadcrumbs || {};
 
-  function run() {
-    const settings = (products.find(p => p.type === 'settings') || {});
-    const bc = settings.breadcrumbs || {};
+  if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
 
-    if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
+  const nav  = document.getElementById('bc-nav');
+  const list = document.getElementById('bc-list');
+  if (!nav || !list) return;
 
-    const nav  = document.getElementById('bc-nav');
-    const list = document.getElementById('bc-list');
-    if (!nav || !list) return;
+  // ── Séparateur
+  const separatorMap = {
+    'separator_arrow':        '">"',
+    'separator_slash':        '"/"',
+    'separator_dash':         '"-"',
+    'separator_dot':          '"•"',
+    'separator_chevron':      '"»"',
+    'separator_pipe':         '"|"',
+    'separator_double_arrow': '">>"'
+  };
 
-    const separatorMap = {
-      'separator_arrow':        '">"',
-      'separator_slash':        '"/"',
-      'separator_dash':         '"-"',
-      'separator_dot':          '"•"',
-      'separator_chevron':      '"»"',
-      'separator_pipe':         '"|"',
-      'separator_double_arrow': '">>"'
-    };
-
-    let activeSep = '"/"';
-    for (const [key, val] of Object.entries(separatorMap)) {
-      if ((bc[key] || 'no').toLowerCase() === 'yes') {
-        activeSep = val;
-        break;
-      }
-    }
-    document.documentElement.style.setProperty('--bc-sep', activeSep);
-
-    const currentPath = window.location.pathname;
-
-    function buildBreadcrumb(currentTitle) {
-      const BC_KEY = 'bc_visited';
-      const BC_MAX = 6;
-
-      let visited = [];
-      try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
-
-      visited = visited.filter(p => p.url !== currentPath);
-
-      if (currentPath !== '/' && currentPath !== '/index.html') {
-        visited.unshift({ url: currentPath, title: currentTitle });
-      }
-
-      if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
-
-      try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
-
-      list.innerHTML = `
-        <li class="bc-item">
-          <a href="/index.html">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9 21V12h6v9"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Home
-          </a>
-        </li>`;
-
-      visited.forEach(page => {
-        const isActive = page.url === currentPath;
-        const li = document.createElement('li');
-        li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-        li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-        list.appendChild(li);
-      });
-
-      nav.style.display = 'block';
-    }
-
-    // Si seo:ready a déjà été dispatché → titre déjà capturé
-    // Sinon on l'attend
-    if (_seoReadyTitle) {
-      buildBreadcrumb(_seoReadyTitle);
-    } else {
-      document.addEventListener('seo:ready', function handler(e) {
-        document.removeEventListener('seo:ready', handler);
-        const title = (e.detail && e.detail.title)
-          ? e.detail.title.split('|')[0].trim()
-          : document.title.split('|')[0].trim();
-        buildBreadcrumb(title);
-      });
+  let activeSep = '"/"';
+  for (const [key, val] of Object.entries(separatorMap)) {
+    if ((bc[key] || 'no').toLowerCase() === 'yes') {
+      activeSep = val;
+      break;
     }
   }
+  document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  function waitForBreadcrumb(callback) {
-    if (document.getElementById('bc-nav')) {
-      callback();
-      return;
+  function build(title) {
+    const currentPath  = window.location.pathname;
+    const currentTitle = title.split('|')[0].trim() || title;
+
+    const BC_KEY = 'bc_visited';
+    const BC_MAX = 6;
+
+    let visited = [];
+    try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+
+    visited = visited.filter(p => p.url !== currentPath);
+
+    if (currentPath !== '/' && currentPath !== '/index.html') {
+      visited.unshift({ url: currentPath, title: currentTitle });
     }
-    const observer = new MutationObserver(function() {
-      if (document.getElementById('bc-nav')) {
-        observer.disconnect();
-        callback();
-      }
+
+    if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+
+    try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+
+    list.innerHTML = `
+      <li class="bc-item">
+        <a href="/index.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Home
+        </a>
+      </li>`;
+
+    visited.forEach(page => {
+      const isActive = page.url === currentPath;
+      const li = document.createElement('li');
+      li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+      li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+      list.appendChild(li);
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    nav.style.display = 'block';
   }
 
-  waitForBreadcrumb(run);
+  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
+  if (window.__seoTitle) {
+    build(window.__seoTitle);
+  } else {
+    // ✅ On attend l'event seo:ready
+    document.addEventListener('seo:ready', function(e) {
+      build(e.detail.title);
+    }, { once: true });
+
+    // ✅ Fallback si head.js ne dispatche jamais
+    setTimeout(() => {
+      if (!window.__seoTitle) build(document.title);
+    }, 800);
+  }
 
 })();
 

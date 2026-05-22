@@ -345,9 +345,10 @@ function injectPageSEO() {
     canonical.href = seo.canonical;
 
     /* ── Dispatch event pour le breadcrumb ── */
-        document.dispatchEvent(new CustomEvent('seo:ready', {
-            detail: { title: seo.title }
-        }));
+  window.__seoTitle = seo.title;
+  document.dispatchEvent(new CustomEvent('seo:ready', {
+    detail: { title: seo.title }
+  }));
 }
 
 /* ─── Lancer tout ─── */
