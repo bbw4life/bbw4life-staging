@@ -300,9 +300,11 @@ function injectPageSEO() {
 
     /* Si pas de map → on dispatch quand même avec le titre existant */
     if (!seo) {
-        document.dispatchEvent(new CustomEvent('seo:ready', {
-            detail: { title: document.title }
-        }));
+        setTimeout(function() {
+      document.dispatchEvent(new CustomEvent('seo:ready', {
+          detail: { title: seo.title }
+      }));
+    }, 300);
         return;
     }
 
@@ -345,9 +347,11 @@ function injectPageSEO() {
     canonical.href = seo.canonical;
 
     /* ── Dispatch event pour le breadcrumb ── */
-    document.dispatchEvent(new CustomEvent('seo:ready', {
-        detail: { title: seo.title }
-    }));
+    setTimeout(function() {
+      document.dispatchEvent(new CustomEvent('seo:ready', {
+          detail: { title: document.title }
+      }));
+    }, 300);
 }
 
 /* ─── Lancer tout ─── */
