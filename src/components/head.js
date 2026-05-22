@@ -345,10 +345,11 @@ function injectPageSEO() {
     canonical.href = seo.canonical;
 
     /* ── Dispatch event pour le breadcrumb ── */
-  window.__seoTitle = seo.title;
-  document.dispatchEvent(new CustomEvent('seo:ready', {
+    window.__seoTitle = seo.title;
+    console.log('[head.js] seoTitle défini :', seo.title); // ← temporaire
+    document.dispatchEvent(new CustomEvent('seo:ready', {
     detail: { title: seo.title }
-  }));
+    }));
 }
 
 /* ─── Lancer tout ─── */

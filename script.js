@@ -3842,10 +3842,10 @@ if (window.innerWidth <= 768) {
       build(e.detail.title);
     }, { once: true });
 
-    // ✅ Fallback si head.js ne dispatche jamais
+    // ✅ Fallback plus long pour laisser le temps à head.js
     setTimeout(() => {
       if (!window.__seoTitle) build(document.title);
-    }, 800);
+    }, 2000);
   }
 
 })();
