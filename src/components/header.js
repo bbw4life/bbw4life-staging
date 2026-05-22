@@ -3,8 +3,6 @@
    Préfixe dropdown : bbwHdr* → zéro conflit avec footer
 ═══════════════════════════════════════════════════════════════ */
 
-
-
 (function () {
   'use strict';
 
@@ -405,6 +403,8 @@
 
     /* ══════════════════════════════════════════════════════════
        B. MOBILE DRAWER — COUNTRY
+          #bbwDrawerCountryList est imbriqué dans la colonne country
+          du HTML → s'ouvre dans sa propre colonne uniquement
     ══════════════════════════════════════════════════════════ */
     if (countryEnabled && countryOptions.length) {
       const countryList = document.getElementById('bbwDrawerCountryList');
@@ -502,6 +502,9 @@
 
     /* ══════════════════════════════════════════════════════════
        D. BIND open/close boutons drawer
+          — clone pour éviter doublons de listeners
+          — chevron ▼ / ▲
+          — ferme l'autre colonne quand on en ouvre une
     ══════════════════════════════════════════════════════════ */
     const drawerCountryBtn  = document.getElementById('bbwDrawerCountryBtn');
     const drawerCountryList = document.getElementById('bbwDrawerCountryList');
@@ -813,5 +816,3 @@
   }
 
 })();
-
-
