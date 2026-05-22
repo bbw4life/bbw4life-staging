@@ -8388,11 +8388,21 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Run after DOM ready ── */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    setTimeout(init, 600);
+  function waitForBreadcrumb(callback) {
+    if (document.getElementById('bc-nav')) {
+      callback();
+      return;
+    }
+    const observer = new MutationObserver(function() {
+      if (document.getElementById('bc-nav')) {
+        observer.disconnect();
+        callback();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
+
+  waitForBreadcrumb(run);
 
 })();
 
