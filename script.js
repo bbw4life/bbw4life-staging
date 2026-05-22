@@ -3791,7 +3791,6 @@ if (window.innerWidth <= 768) {
 
     const currentPath = window.location.pathname;
 
-    // ── NOUVEAU : attendre seo:ready pour avoir le bon titre ──
     function buildBreadcrumb(currentTitle) {
       const BC_KEY = 'bc_visited';
       const BC_MAX = 6;
@@ -3833,24 +3832,36 @@ if (window.innerWidth <= 768) {
       nav.style.display = 'block';
     }
 
-    // Si seo:ready a déjà été dispatché, document.title est déjà correct
-    // Sinon on l'attend
-    const alreadyTitle = document.title.split('|')[0].trim();
-
-    if (alreadyTitle && alreadyTitle !== 'BBW4LIFE' && alreadyTitle !== 'Beauty Has No Sizes') {
-      buildBreadcrumb(alreadyTitle);
-    } else {
-      document.addEventListener('seo:ready', function handler(e) {
-        document.removeEventListener('seo:ready', handler);
-        const title = (e.detail && e.detail.title)
-          ? e.detail.title.split('|')[0].trim()
-          : document.title.split('|')[0].trim();
-        buildBreadcrumb(title);
-      });
-    }
+    // Toujours attendre seo:ready — contient le titre exact du SEO_MAP
+    document.addEventListener('seo:ready', function handler(e) {
+      document.removeEventListener('seo:ready', handler);
+      const title = (e.detail && e.detail.title)
+        ? e.detail.title.split('|')[0].trim()
+        : document.title.split('|')[0].trim();
+      buildBreadcrumb(title);
+    });
   }
 
-  run();
+  function waitForBreadcrumb(callback) {
+    if (document.getElementById('bc-nav')) {
+      callback();
+      return;
+    }
+    const observer = new MutationObserver(function() {
+      if (document.getElementById('bc-nav')) {
+        observer.disconnect();
+        callback();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+    setTimeout(function() {
+      observer.disconnect();
+      if (document.getElementById('bc-nav')) callback();
+    }, 5000);
+  }
+
+  waitForBreadcrumb(run);
+
 })();
 
 
