@@ -2993,17 +2993,8 @@ initAnnouncementBar();
       const sizeGrp = document.getElementById('plan-size-group');
       if (!sizeEl) return;
 
-      const sizes = prod.sizes || [];
-      sizeEl.innerHTML = '<option value="" disabled selected>Select a size...</option>';
-      sizes.forEach(sz => {
-        const opt = document.createElement('option');
-        opt.value = sz;
-        opt.textContent = sz;
-        sizeEl.appendChild(opt);
-      });
-      if (sizeGrp) sizeGrp.style.display = sizes.length > 0 ? '' : 'none';
-
-      sizeEl.onchange = function() { selectedSize = this.value; };
+      if (sizeGrp) sizeGrp.style.display = '';
+      sizeEl.oninput = function() { selectedSize = this.value; };
     }
 
     function populateColorSelect(prod) {
@@ -3013,18 +3004,11 @@ initAnnouncementBar();
       const previewCont = document.getElementById('plan-color-swatches-preview');
       if (!colorEl) return;
 
-      const colors = (prod.colors || []).filter(c => c.active !== false);
-      colorEl.innerHTML = '<option value="" disabled selected>Select a color...</option>';
-      colors.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.name;
-        opt.textContent = c.name;
-        colorEl.appendChild(opt);
-      });
-      if (colorGrp) colorGrp.style.display = colors.length > 0 ? '' : 'none';
+      if (colorGrp) colorGrp.style.display = '';
 
       if (previewCont && previewWrap) {
         previewCont.innerHTML = '';
+        const colors = (prod.colors || []).filter(c => c.active !== false);
         colors.forEach(c => {
           const item = document.createElement('div');
           item.className = 'plan-color-swatch-item';
@@ -3041,7 +3025,7 @@ initAnnouncementBar();
         previewWrap.style.display = colors.length > 0 ? '' : 'none';
       }
 
-      colorEl.onchange = function() {
+      colorEl.oninput = function() {
         selectedColor = this.value;
         if (previewCont) {
           previewCont.querySelectorAll('.plan-color-swatch-item').forEach(item => {
