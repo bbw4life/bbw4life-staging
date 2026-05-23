@@ -451,12 +451,6 @@
     });
 
     /* ── Auto-tracking depuis l'URL ──────────────────────────────
-       Supporte :
-         ?track=XXXXXXX
-         ?tracking=XXXXXXX
-         ?number=XXXXXXX
-       Exemple depuis l'email Shopify :
-         https://monsite.com/pages/order-tracking.html?track=YT2109843921CN
     ────────────────────────────────────────────────────────────── */
     var urlParams   = new URLSearchParams(window.location.search);
     var trackParam  = urlParams.get('track')

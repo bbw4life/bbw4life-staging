@@ -8778,6 +8778,7 @@ body.disc-page {
 
 
 
+
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 /* ── Variables ── */
@@ -8967,7 +8968,7 @@ body.disc-page {
 .ot-hero__icon-core {
   width: 64px; height: 64px;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--rose), var(--plum));
+  background: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8986,13 +8987,13 @@ body.disc-page {
   font-weight: 700;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--rose);
+  color: var(--gold);
   margin-bottom: 10px;
 }
 .ot-eyebrow__dot {
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--gold);
+  background: black;
   animation: breathe 2.5s ease-in-out infinite;
   box-shadow: 0 0 8px rgba(255,215,0,0.5);
 }

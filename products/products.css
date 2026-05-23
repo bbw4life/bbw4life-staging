@@ -2873,8 +2873,6 @@ details[open] .chevron {
 
 
 
-
-
 /* ════════════════════════════════════════════════════════════
    BBW REQUEST SECTION
 ════════════════════════════════════════════════════════════ */
@@ -2940,6 +2938,10 @@ details[open] .chevron {
 .bbw-request-section--personalized .bbw-request-label {
     color: rgba(253, 249, 244, 0.70);
 }
+
+/* ── My Product Button ── */
+.my-product-section { width: 100%; }
+.my-product-section .container { display: flex; align-items: center; justify-content: center; }
 
 
 .my-product-btn {
