@@ -58,7 +58,8 @@ exports.handler = async (event) => {
       const stripePriceId = process.env.RESERVATION_STRIPE_PRICE_ID || '';
       if (!stripePriceId) throw new Error('RESERVATION_STRIPE_PRICE_ID not configured.');
 
-      const BASE_URL = process.env.BASE_URL || '';
+      const BASE_URL  = process.env.BASE_URL || '';
+      const returnUrl = body.returnUrl || `${BASE_URL}/`;
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -73,8 +74,8 @@ exports.handler = async (event) => {
           program:   program            || '',
           amount:    String(amount),
         },
-        success_url: `${BASE_URL}/programs.html?res_session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url:  `${BASE_URL}/programs.html`,
+        success_url: `${returnUrl}?res_session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url:  returnUrl,
       });
 
       return response(200, { success: true, sessionId: session.id });

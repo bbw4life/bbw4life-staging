@@ -78,6 +78,7 @@ exports.handler = async (event) => {
       const { amount, program, customer } = body;
 
       const BASE_URL     = process.env.BASE_URL || '';
+      const returnUrl    = body.returnUrl || `${BASE_URL}/`;
       const access_token = await getPaypalToken(PAYPAL_BASE);
 
       const orderBody = {
@@ -91,8 +92,8 @@ exports.handler = async (event) => {
           custom_id:   `${customer.email || ''}|${customer.firstName || ''}|${customer.lastName || ''}|${customer.phone || ''}|${program || ''}|${amount}`,
         }],
         application_context: {
-          return_url: `${BASE_URL}/programs.html?res_paypal=1`,
-          cancel_url: `${BASE_URL}/programs.html`,
+          return_url: `${returnUrl}?res_paypal=1`,
+          cancel_url: returnUrl,
           brand_name: 'CurvaFit',
           user_action: 'PAY_NOW',
         },
