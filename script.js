@@ -2886,16 +2886,6 @@ initAnnouncementBar();
 (function initPlanReservationPopup() {
     'use strict';
 
-    async function init() {
-      const stripeHandled = await checkReturnFromStripe();
-      if (!stripeHandled) await checkReturnFromPaypal();
-    }
-    init();
-
-    const overlay = document.getElementById('plan-popup-overlay');
-    const modal   = overlay ? overlay.querySelector('.plan-popup-modal') : null;
-    if (!overlay || !modal) return;
-
     const BBW_FEATURED_IDS = [
       'Pdg-Francenel-product69',
       'Pdg-Francenel-product70',
@@ -2927,34 +2917,12 @@ initAnnouncementBar();
     let selectedColor     = '';
     let reservationPrice  = 10;
 
-    /* ── Storage helpers — sessionStorage + localStorage fallback ── */
-    function storeSave(key, value) {
-      try { sessionStorage.setItem(key, value); } catch(e) {}
-      try { localStorage.setItem(key, value); }   catch(e) {}
-    }
-
-    function storeGet(key) {
-      try {
-        const v = sessionStorage.getItem(key);
-        if (v) return v;
-      } catch(e) {}
-      try { return localStorage.getItem(key); } catch(e) {}
-      return null;
-    }
-
-    function storeRemove(key) {
-      try { sessionStorage.removeItem(key); } catch(e) {}
-      try { localStorage.removeItem(key); }   catch(e) {}
-    }
-
-    /* ── Inject price labels ── */
     function injectPriceLabels(price) {
       document.querySelectorAll('.plan-reservation-price-label').forEach(el => {
         el.textContent = '$' + price;
       });
     }
 
-    /* ── Load price from settings ── */
     function loadReservationPrice() {
       const s = (window.__allProducts || []).find(p => p.type === 'settings') || {};
       if (s.reservation_price !== undefined) {
@@ -2978,20 +2946,18 @@ initAnnouncementBar();
     }
     loadReservationPrice();
 
-    /* ── Spots countdown ── */
     const SPOTS_KEY = 'plan_spots_remaining';
-    let spotsRemaining = parseInt(storeGet(SPOTS_KEY) || '27');
+    let spotsRemaining = parseInt(sessionStorage.getItem(SPOTS_KEY) || '27');
     if (spotsCount) spotsCount.textContent = spotsRemaining;
     function decreaseSpot() {
       if (spotsRemaining > 1) {
         spotsRemaining = Math.max(1, spotsRemaining - 1);
-        storeSave(SPOTS_KEY, spotsRemaining);
+        sessionStorage.setItem(SPOTS_KEY, spotsRemaining);
         if (spotsCount) spotsCount.textContent = spotsRemaining;
       }
     }
     setInterval(decreaseSpot, Math.random() * 90000 + 90000);
 
-    /* ── Populate product select ── */
     function populateProductSelect() {
       const selectEl = document.getElementById('plan-program');
       if (!selectEl) return;
@@ -3036,6 +3002,7 @@ initAnnouncementBar();
         sizeEl.appendChild(opt);
       });
       if (sizeGrp) sizeGrp.style.display = sizes.length > 0 ? '' : 'none';
+
       sizeEl.onchange = function() { selectedSize = this.value; };
     }
 
@@ -3084,14 +3051,16 @@ initAnnouncementBar();
       };
     }
 
-    /* ── Open / Close ── */
     function openPopup(preselectedProductId) {
       if (window.__allProducts && window.__allProducts.length) {
         populateProductSelect();
         if (preselectedProductId) {
           setTimeout(() => {
             const sel = document.getElementById('plan-program');
-            if (sel) { sel.value = preselectedProductId; sel.dispatchEvent(new Event('change')); }
+            if (sel) {
+              sel.value = preselectedProductId;
+              sel.dispatchEvent(new Event('change'));
+            }
           }, 50);
         }
       } else {
@@ -3141,14 +3110,11 @@ initAnnouncementBar();
       const thanksBadge = document.getElementById('plan-thanks-program-text');
       if (thanksName)  thanksName.textContent  = 'Welcome, ' + firstName + '!';
       if (thanksBadge) thanksBadge.textContent = program || '';
-      window.history.replaceState({}, '', window.location.pathname);
     }
 
-    /* ── Expose globally ── */
     window.openProductRequestPopup = openPopup;
     window.openPlanPopup           = openPopup;
 
-    /* ── Helpers ── */
     function showError(id, msg) {
       const el = document.getElementById(id);
       if (!el) return;
@@ -3169,7 +3135,6 @@ initAnnouncementBar();
         : '<i class="fi fi-rr-lock"></i> Pay $' + reservationPrice + ' — Reserve My Product';
     }
 
-    /* ── STEP 1 → STEP 2 ── */
     if (submitBtn) {
       submitBtn.addEventListener('click', () => {
         clearErrors();
@@ -3182,7 +3147,7 @@ initAnnouncementBar();
         const color     = val('plan-color');
         const consent   = document.getElementById('plan-consent') && document.getElementById('plan-consent').checked;
 
-        const selectEl     = document.getElementById('plan-program');
+        const selectEl = document.getElementById('plan-program');
         const productTitle = selectEl && selectEl.selectedIndex > 0
           ? selectEl.options[selectEl.selectedIndex].text
           : program;
@@ -3212,8 +3177,8 @@ initAnnouncementBar();
           phone,
           program:   productTitle,
           productId: program,
-          size:      size   || '',
-          color:     color  || '',
+          size:      size,
+          color:     color,
           consent:   'Yes'
         };
 
@@ -3227,10 +3192,8 @@ initAnnouncementBar();
       });
     }
 
-    /* ── Back ── */
     if (backBtn) backBtn.addEventListener('click', () => showStep('form'));
 
-    /* ── Pay button ── */
     if (payBtn) {
       payBtn.addEventListener('click', async () => {
         clearErrors();
@@ -3247,7 +3210,6 @@ initAnnouncementBar();
       });
     }
 
-    /* ── Stripe ── */
     async function handleStripe() {
       const returnUrl = window.location.origin + window.location.pathname;
 
@@ -3258,17 +3220,15 @@ initAnnouncementBar();
       const data = await res.json();
       if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');
 
-      /* ── Stocker dans sessionStorage ET localStorage (survie redirect mobile/Safari) ── */
-      storeSave('plan_res_client',     JSON.stringify(clientData));
-      storeSave('plan_res_program',    selectedProgram);
-      storeSave('plan_res_return_url', returnUrl);
+      sessionStorage.setItem('plan_res_client',     JSON.stringify(clientData));
+      sessionStorage.setItem('plan_res_program',    selectedProgram);
+      sessionStorage.setItem('plan_res_return_url', returnUrl);
 
       const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
       const stripe = Stripe(window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '');
       await stripe.redirectToCheckout({ sessionId: data.sessionId });
     }
 
-    /* ── PayPal ── */
     async function handlePaypal() {
       const returnUrl = window.location.origin + window.location.pathname;
 
@@ -3279,10 +3239,9 @@ initAnnouncementBar();
       const data = await res.json();
       if (!data.success || !data.approvalUrl) throw new Error(data.error || 'PayPal failed.');
 
-      /* ── Stocker dans sessionStorage ET localStorage ── */
-      storeSave('plan_res_client',     JSON.stringify(clientData));
-      storeSave('plan_res_program',    selectedProgram);
-      storeSave('plan_res_return_url', returnUrl);
+      sessionStorage.setItem('plan_res_client',     JSON.stringify(clientData));
+      sessionStorage.setItem('plan_res_program',    selectedProgram);
+      sessionStorage.setItem('plan_res_return_url', returnUrl);
 
       window.location.href = data.approvalUrl;
     }
@@ -3293,7 +3252,7 @@ initAnnouncementBar();
       const sessionId = params.get('res_session_id');
       if (!sessionId) return false;
 
-      const savedReturnUrl = storeGet('plan_res_return_url');
+      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
       if (savedReturnUrl) {
         const currentBase = window.location.href.split('?')[0];
         if (currentBase !== savedReturnUrl) {
@@ -3302,11 +3261,13 @@ initAnnouncementBar();
         }
       }
 
-      /* ── Lire depuis sessionStorage avec fallback localStorage ── */
-      const pendingClient  = JSON.parse(storeGet('plan_res_client')  || 'null');
-      const pendingProgram = storeGet('plan_res_program') || '';
-      const firstName      = pendingClient ? pendingClient.firstName : '';
+      // ← LIRE avant tout
+      const rawClient      = sessionStorage.getItem('plan_res_client');
+      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
+      let pendingClient    = null;
+      try { pendingClient = rawClient ? JSON.parse(rawClient) : null; } catch(e) {}
 
+      const firstName = pendingClient ? pendingClient.firstName : '';
       showThanksStep(firstName, pendingProgram);
 
       try {
@@ -3316,16 +3277,18 @@ initAnnouncementBar();
         });
         const data = await res.json();
         if (data.success && pendingClient) {
+          pendingClient.program = pendingClient.program || pendingProgram;
           await savePlanRequestToSheet(pendingClient);
         }
       } catch (err) {
         console.error('[ReservationPopup] Stripe verify error:', err.message);
       }
 
-      /* ── Nettoyer les deux storages ── */
-      storeRemove('plan_res_client');
-      storeRemove('plan_res_program');
-      storeRemove('plan_res_return_url');
+      // ← NETTOYER seulement après la sauvegarde
+      sessionStorage.removeItem('plan_res_client');
+      sessionStorage.removeItem('plan_res_program');
+      sessionStorage.removeItem('plan_res_return_url');
+      window.history.replaceState({}, '', window.location.pathname);
       return true;
     }
 
@@ -3336,7 +3299,7 @@ initAnnouncementBar();
       const orderID   = params.get('token');
       if (!resPaypal || !orderID) return false;
 
-      const savedReturnUrl = storeGet('plan_res_return_url');
+      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
       if (savedReturnUrl) {
         const currentBase = window.location.href.split('?')[0];
         if (currentBase !== savedReturnUrl) {
@@ -3345,11 +3308,13 @@ initAnnouncementBar();
         }
       }
 
-      /* ── Lire depuis sessionStorage avec fallback localStorage ── */
-      const pendingClient  = JSON.parse(storeGet('plan_res_client')  || 'null');
-      const pendingProgram = storeGet('plan_res_program') || '';
-      const firstName      = pendingClient ? pendingClient.firstName : '';
+      // ← LIRE avant tout
+      const rawClient      = sessionStorage.getItem('plan_res_client');
+      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
+      let pendingClient    = null;
+      try { pendingClient = rawClient ? JSON.parse(rawClient) : null; } catch(e) {}
 
+      const firstName = pendingClient ? pendingClient.firstName : '';
       showThanksStep(firstName, pendingProgram);
 
       try {
@@ -3359,48 +3324,51 @@ initAnnouncementBar();
         });
         const data = await res.json();
         if (data.success && pendingClient) {
+          pendingClient.program = pendingClient.program || pendingProgram;
           await savePlanRequestToSheet(pendingClient);
         }
       } catch (err) {
         console.error('[ReservationPopup] PayPal capture error:', err.message);
       }
 
-      /* ── Nettoyer les deux storages ── */
-      storeRemove('plan_res_client');
-      storeRemove('plan_res_program');
-      storeRemove('plan_res_return_url');
+      // ← NETTOYER seulement après la sauvegarde
+      sessionStorage.removeItem('plan_res_client');
+      sessionStorage.removeItem('plan_res_program');
+      sessionStorage.removeItem('plan_res_return_url');
+      window.history.replaceState({}, '', window.location.pathname);
       return true;
     }
 
     /* ── Save to sheet ── */
     async function savePlanRequestToSheet(client) {
       try {
-        await fetch('/.netlify/functions/save-plan-request', {
+        const res = await fetch('/.netlify/functions/save-plan-request', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            firstName: client.firstName,
-            lastName:  client.lastName,
-            email:     client.email,
-            phone:     client.phone     || '',
-            program:   client.program   || '',
-            productId: client.productId || '',
-            size:      client.size      || '',
-            color:     client.color     || '',
-            consent:   client.consent   || 'Yes'
+            firstName: client.firstName  || '',
+            lastName:  client.lastName   || '',
+            email:     client.email      || '',
+            phone:     client.phone      || '',
+            program:   client.program    || '',
+            productId: client.productId  || '',
+            size:      client.size       || '',
+            color:     client.color      || '',
+            consent:   client.consent    || 'Yes'
           })
         });
+        const data = await res.json();
+        console.log('[savePlanRequestToSheet] Response:', data);
+        if (!data.success) console.error('[savePlanRequestToSheet] Failed:', data.error);
       } catch (e) {
         console.warn('[PlanRequest] savePlanRequestToSheet failed:', e.message);
       }
     }
 
-    /* ── Close buttons ── */
     if (closeBtn)    closeBtn.addEventListener('click', closePopup);
     if (closeThanks) closeThanks.addEventListener('click', closePopup);
     overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-    /* ── Open via button ── */
     const openBtn = document.getElementById('open-plan-popup');
     if (openBtn) openBtn.addEventListener('click', () => openPopup(null));
 
@@ -3408,7 +3376,6 @@ initAnnouncementBar();
       btn.addEventListener('click', () => openPopup(btn.dataset.productId || null));
     });
 
-    /* ── Init ── */
     async function init() {
       const stripeHandled = await checkReturnFromStripe();
       if (!stripeHandled) await checkReturnFromPaypal();
