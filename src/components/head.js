@@ -17,7 +17,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/index.html'
     },
 
-    '/page/about.html': {
+    '/page/about': {
         title: 'About Us — BBW4LIFE · Beauty Has No Sizes',
         description: 'Discover who we are at BBW4LIFE. Our mission, our values, and why we believe Beauty Has No Sizes. A brand born from love for every curvy woman.',
         keywords: 'about BBW4LIFE, BBW4LIFE mission, plus size brand story, curvy woman brand, body positive brand, BBW4LIFE values, who is BBW4LIFE, plus size fashion brand, beauty has no sizes, BBW4LIFE story, curvy fashion brand, body positive mission, BBW4LIFE team, plus size empowerment brand, curvy woman community',
@@ -29,7 +29,7 @@ const SEO_MAP = {
     //  COLLECTIONS
     // ═══════════════════════════════════════════════════
 
-    '/collections/bbw-features-products.html': {
+    '/collections/bbw-features-products': {
         title: 'Featured Products — Beauty Has No Sizes | BBW4LIFE | Sizes S–6XL',
         description: 'Shop BBW4LIFE\'s Featured Products — hand-picked curvy fashion, beauty, and wellness for plus-size and BBW women. Sizes S to 6XL. Free shipping. 30-day returns. Secure checkout.',
         keywords: 'BBW4LIFE featured products, plus size fashion, curvy women, BBW best picks, body positive, size 6XL, plus size collection, curvy fashion featured, BBW4LIFE picks, plus size best sellers',
@@ -37,7 +37,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/bbw-features-products.html'
     },
 
-    '/collections/bbw4life-all-collections.html': {
+    '/collections/bbw4life-all-collections': {
         title: 'All Collections — Beauty Has No Sizes | BBW4LIFE',
         description: 'Explore all BBW4LIFE collections — curvy dresses, plus-size fashion, beauty, and wellness for BBW women. Sizes S to 6XL. Free shipping. 30-day returns.',
         keywords: 'BBW4LIFE collections, plus size fashion, curvy women, BBW dresses, body positive, size 6XL, all collections BBW4LIFE, curvy fashion collections, plus size collections, BBW4LIFE all styles',
@@ -45,7 +45,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/bbw4life-all-collections.html'
     },
 
-    '/collections/bbw4life-all-product.html': {
+    '/collections/bbw4life-all-product': {
         title: 'All Products — Beauty Has No Sizes | BBW4LIFE | Sizes S–6XL',
         description: 'Shop the complete BBW4LIFE catalog — curvy fashion, beauty, and wellness for plus-size and BBW women. Sizes S to 6XL. Free shipping. 30-day returns. Secure checkout.',
         keywords: 'BBW4LIFE all products, plus size fashion, curvy women, BBW catalog, body positive, size 6XL, plus size collection, curvy fashion catalog, BBW4LIFE shop, plus size complete collection',
@@ -53,7 +53,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/bbw4life-all-product.html'
     },
 
-    '/collections/bbw4life-pants-skirts.html': {
+    '/collections/bbw4life-pants-skirts': {
         title: 'Pants & Skirts — Beauty Has No Sizes | BBW4LIFE | Sizes S–6XL',
         description: 'Shop BBW4LIFE\'s Pants & Skirts collection — curvy fashion for plus-size and BBW women. Sizes S to 6XL. Free shipping. 30-day returns. Secure checkout.',
         keywords: 'BBW4LIFE pants skirts, plus size pants, curvy skirts, BBW fashion, body positive, size 6XL, plus size bottoms, curvy woman pants, BBW skirts, plus size pants collection',
