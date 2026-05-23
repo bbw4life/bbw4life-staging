@@ -4721,7 +4721,7 @@
       "quote": "Made for your curves, not against them."
     },
     {
-      "id": "main-plus-size",
+      "id": "men-plus-size",
       "title": "Men Plus Size",
       "subtitle": "Our biggest plus-size selection for men & women",
       "url": "/collections/men-plus-size.html",
@@ -5015,7 +5015,7 @@
     "jrgq_index": 0
   },
   {
-    "id": "main-plus-size",
+    "id": "men-plus-size",
     "settings_key": "jrgq_collections",
     "jrgq_index": 1
   },

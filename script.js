@@ -3228,8 +3228,8 @@ initAnnouncementBar();
 
     /* ── Stripe — inchangé, on passe juste les nouveaux champs dans customer ── */
     async function handleStripe() {
-      // ← AJOUTER cette ligne
-      const returnUrl = window.location.href.split('?')[0];
+      // return
+      const returnUrl = window.location.origin + window.location.pathname;
       
       const res = await fetch('/.netlify/functions/create-reservation-stripe-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3240,7 +3240,7 @@ initAnnouncementBar();
       
       sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
       sessionStorage.setItem('plan_res_program', selectedProgram);
-      sessionStorage.setItem('plan_res_return_url', returnUrl); // ← AJOUTER cette ligne
+      sessionStorage.setItem('plan_res_return_url', returnUrl);
       
       const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
       const stripe = Stripe(window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '');
@@ -3249,8 +3249,7 @@ initAnnouncementBar();
 
     /* ── PayPal — inchangé ── */
     async function handlePaypal() {
-      // ← AJOUTER cette ligne
-      const returnUrl = window.location.href.split('?')[0];
+      const returnUrl = window.location.origin + window.location.pathname;
       
       const res = await fetch('/.netlify/functions/create-reservation-paypal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
