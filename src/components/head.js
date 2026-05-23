@@ -207,7 +207,7 @@ const SEO_MAP = {
     // ─────────────────────────────────────────────────────
     // BLOG
     // ─────────────────────────────────────────────────────
-    '/blog/blog.html': {
+    '/blog/blog': {
         title: 'BBW4LIFE Journal — Style, Beauty & Confidence for Curvy Women',
         description: 'The BBW4LIFE Journal: expert articles on plus size fashion, body confidence, curvy beauty tips, BBW lifestyle, self-love stories and the Beauty Has No Sizes movement. Updated every week.',
         keywords: 'BBW4LIFE blog, plus size fashion blog, curvy woman confidence blog, body positive articles, BBW beauty tips, plus size outfit ideas, self love curvy women, BBW lifestyle blog, beauty has no sizes, plus size fashion 2026, curvy woman empowerment articles, BBW community blog, body positive mindset, plus size dress guide, curvy beauty routine, BBW4LIFE journal, self acceptance plus size, big beautiful women lifestyle, curvy woman seduction, plus size swimwear tips, body positive blog, curvy woman style articles, BBW wellness blog, plus size confidence articles, curvy fashion tips blog, BBW4LIFE articles, body positive inspiration, curvy woman health blog, BBW4LIFE fashion advice, plus size real stories',
@@ -215,7 +215,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/blog.html'
     },
 
-    '/blog/article-featured.html': {
+    '/blog/article-featured': {
         title: 'Beauty Has No Sizes: The Movement That Is Redefining Beauty for Every Woman | BBW4LIFE Journal',
         description: 'Discover how thousands of BBW women around the world are reclaiming their confidence, celebrating their curves, and building a life they truly love — without changing who they are. Beauty Has No Sizes.',
         keywords: 'BBW beauty movement, plus size confidence, body positive curvy women, beauty has no sizes, BBW4LIFE, curvy woman self love, plus size body confidence, BBW movement 2026, body positive revolution, curvy woman empowerment, BBW self acceptance, plus size women confidence, beauty has no size movement, body positive identity, curvy woman pride, BBW4LIFE movement, body acceptance curvy, plus size self esteem, BBW women empowerment, curvy body confidence, body positive inspiration, plus size movement, BBW4LIFE featured, body confidence women, curvy woman movement, BBW movement article, body positive story, plus size revolution, curvy woman representation, BBW4LIFE confidence',
@@ -223,7 +223,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article-featured.html'
     },
 
-    '/blog/article1.html': {
+    '/blog/article1': {
         title: 'Stop Dieting — Here Is How BBW Women Actually Take Care of Themselves | BBW4LIFE Journal',
         description: 'Forget crash diets and toxic fitness culture. Discover the real, science-backed approach to well-being that honors your curvy body, boosts your energy, and makes you feel unstoppable every single day.',
         keywords: 'BBW wellness, plus size self care, curvy women health, stop dieting BBW, body positive wellness, BBW4LIFE wellness, anti-diet plus size, curvy woman health tips, BBW self care routine, plus size wellness guide, body positive health, curvy woman body care, BBW diet free, plus size energy boost, curvy woman vitality, BBW4LIFE health, body positive self care, plus size fitness, curvy wellness tips, BBW4LIFE self care, body acceptance wellness, curvy woman self care, plus size health tips, BBW anti-diet movement, curvy body positive health, plus size healthy lifestyle, BBW wellness routine, body positive nutrition, curvy woman wellness guide, BBW4LIFE healthy living',
@@ -231,7 +231,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article1.html'
     },
 
-    '/blog/article2.html': {
+    '/blog/article2': {
         title: 'Nutrition for Curvy Women: Eat to Feel Amazing, Not to Shrink | BBW4LIFE Journal',
         description: 'Learn how to fuel your BBW body with the right foods that increase your energy, balance your hormones, and make you glow — no restriction, no guilt, just real nourishment for curvy women.',
         keywords: 'nutrition curvy women, balanced diet BBW, healthy eating curvy body, intuitive eating BBW, BBW4LIFE nutrition, plus size nutrition guide, curvy woman diet, BBW balanced meals, hormone balance diet, plus size food guide, body positive nutrition, curvy woman nourishment, BBW4LIFE food guide, plus size intuitive eating, curvy woman healthy eating, BBW hormone health, body positive eating, plus size meal plan, curvy woman energy food, BBW glow nutrition, body positive food guide, plus size wellness nutrition, curvy woman gut health, BBW4LIFE healthy eating, body positive meal, curvy nutrition tips, plus size hormone diet, BBW food freedom, curvy woman meal ideas, body positive anti-diet',
@@ -239,7 +239,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article2.html'
     },
 
-    '/blog/article3.html': {
+    '/blog/article3': {
         title: '7 Body Positive Affirmations That Actually Change How You See Yourself | BBW4LIFE Journal',
         description: 'Simple but powerful daily affirmations used by thousands of BBW women to silence the inner critic, rebuild self-worth, and wake up every morning feeling truly beautiful and confident.',
         keywords: 'body positive affirmations, daily affirmations plus size, self love curvy, body image BBW, BBW4LIFE mindset, affirmations curvy woman, plus size self worth, BBW morning affirmations, body confidence affirmations, curvy woman self esteem, BBW4LIFE affirmations, body positive mindset affirmations, plus size inner peace, curvy woman positivity, BBW self talk, body acceptance affirmations, plus size mental health, curvy woman confidence affirmations, BBW4LIFE self love, body positive daily practice, curvy woman empowerment affirmations, plus size self image, BBW confidence boost, body positive self worth, curvy woman inner critic, plus size affirmation list, BBW morning routine, body positive inner work, curvy woman healing, BBW4LIFE mindset shift',
@@ -247,7 +247,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article3.html'
     },
 
-    '/blog/article4.html': {
+    '/blog/article4': {
         title: 'How to Stop Letting Other People\'s Opinions Destroy Your Body Confidence | BBW4LIFE Journal',
         description: 'Every curvy woman has faced judgment. Here is the exact mindset framework that helps BBW women build unshakeable self-confidence — so no comment, no look, and no criticism can ever touch you again.',
         keywords: 'BBW body confidence, body shaming plus size, self confidence curvy women, emotional resilience BBW, BBW4LIFE mindset, stop caring opinions curvy, body shaming recovery, plus size confidence building, curvy woman resilience, BBW4LIFE confidence, body positive mindset shift, curvy woman emotional strength, BBW stop body shaming, plus size thick skin, curvy woman confidence tips, BBW inner strength, body positive emotional resilience, plus size self defense mindset, curvy woman unshakeable, BBW4LIFE emotional health, body shaming response, plus size mental strength, curvy woman judgment proof, BBW confidence framework, body positive confidence building, curvy woman social judgment, plus size thick skin tips, BBW4LIFE resilience, body positive strength, curvy woman body image healing',
@@ -255,7 +255,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article4.html'
     },
 
-    '/blog/article5.html': {
+    '/blog/article5': {
         title: 'PCOS and the Plus-Size Body: Understanding Your Hormones to Live Better | BBW4LIFE Journal',
         description: 'If you are a BBW woman with PCOS, your body is not broken — it just needs the right support. Discover gentle lifestyle changes that balance hormones, reduce symptoms, and help you feel in control again.',
         keywords: 'PCOS plus size women, BBW hormones, hormone balance BBW, PCOS nutrition, PCOS lifestyle BBW4LIFE, polycystic ovary syndrome plus size, PCOS curvy women, hormone health BBW, PCOS diet plus size, curvy woman PCOS, BBW4LIFE PCOS guide, PCOS body positive, plus size hormone health, curvy woman hormones, BBW PCOS symptoms, PCOS lifestyle changes, plus size PCOS management, curvy PCOS wellness, BBW hormone balance tips, body positive PCOS, plus size endocrine health, curvy woman hormonal health, BBW4LIFE hormone guide, PCOS self care plus size, curvy PCOS diet, body positive hormone balance, plus size PCOS tips, BBW wellness PCOS, curvy woman endocrine, BBW4LIFE wellness hormone',
@@ -263,7 +263,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article5.html'
     },
 
-    '/blog/article6.html': {
+    '/blog/article6': {
         title: 'Move Without Injury: Gentle Home Exercises for Plus-Size Women | BBW4LIFE Journal',
         description: 'No gym required. No judgment. Just simple, low-impact movements you can do at home that build strength, improve mobility, and make your curvy body feel incredible — starting today.',
         keywords: 'plus size home exercises, gentle workout curvy women, BBW fitness, low impact exercise, home workout no equipment, curvy woman exercise, BBW4LIFE fitness, plus size workout guide, gentle exercise plus size, body positive fitness, curvy woman home workout, BBW beginner exercise, low impact plus size, curvy fitness routine, BBW4LIFE workout, body positive movement, plus size strength training, curvy woman mobility, BBW gentle movement, low impact fitness curvy, plus size exercise at home, curvy woman fitness tips, BBW4LIFE movement guide, body positive exercise, plus size mobility workout, curvy woman strength, BBW fitness routine, body positive workout, curvy beginner workout, BBW4LIFE gentle fitness',
@@ -271,7 +271,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article6.html'
     },
 
-    '/blog/article7.html': {
+    '/blog/article7': {
         title: 'Plus Size Fashion 2026: The Outfits That Turn Heads Without Hiding Your Curves | BBW4LIFE Journal',
         description: 'This season is all about celebrating your shape. Discover the boldest, most flattering plus size fashion trends of 2026 — handpicked for BBW women who refuse to hide and love to shine.',
         keywords: 'plus size fashion 2026, curvy women outfits, BBW style guide, plus size trends, flattering curvy fashion, BBW4LIFE style, curvy fashion 2026, plus size outfit ideas 2026, BBW fashion trends, body positive fashion 2026, curvy woman style 2026, plus size trends 2026, BBW4LIFE fashion 2026, curvy fashion trends, plus size looks 2026, BBW outfit guide, curvy fashion inspiration, plus size style 2026, BBW trends this season, body positive style 2026, curvy woman outfit ideas, BBW4LIFE 2026 looks, plus size bold fashion, curvy fashion bold, BBW fashion season, body positive outfit ideas, curvy woman bold style, plus size flattering outfits, BBW style tips 2026, curvy woman fashion 2026',
@@ -279,7 +279,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article7.html'
     },
 
-    '/blog/article8.html': {
+    '/blog/article8': {
         title: 'How I Stopped Being Ashamed of My Body and Started Loving It | BBW4LIFE Journal',
         description: 'A raw, honest, and deeply inspiring story of one curvy woman who fought back against society\'s standards, found her confidence, and built a life she is proud of. A BBW4LIFE real story.',
         keywords: 'BBW real story, plus size body confidence, curvy woman self love, body positive transformation, BBW4LIFE real stories, body shame recovery, plus size confidence story, curvy woman journey, BBW4LIFE inspiration, body positive real story, curvy woman body acceptance, BBW transformation story, body shame healing, plus size personal story, curvy woman empowerment story, BBW4LIFE community story, body positive journey, curvy woman real life, BBW body love story, plus size love your body, curvy woman pride story, BBW4LIFE testimonial, body positive healing, curvy woman shame free, BBW real life story, plus size true story, body acceptance journey, curvy woman raw story, BBW4LIFE member story, body love journey',
@@ -287,7 +287,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article8.html'
     },
 
-    '/blog/article9.html': {
+    '/blog/article9': {
         title: 'The 10 Must-Have Wardrobe Pieces for Plus-Size Women Who Own Their Style | BBW4LIFE Journal',
         description: 'Building a wardrobe as a BBW woman doesn\'t have to be hard. These 10 essential pieces will transform how you look, how you feel, and how the world sees you — every single day.',
         keywords: 'BBW wardrobe essentials, plus size fashion must-haves, curvy woman style, BBW4LIFE fashion, plus size outfit ideas, curvy wardrobe guide, BBW essential clothing, plus size capsule wardrobe, curvy woman closet essentials, BBW4LIFE wardrobe, body positive wardrobe, curvy fashion essentials, plus size style staples, BBW closet must haves, curvy woman outfit essentials, BBW4LIFE style list, body positive closet, plus size wardrobe building, curvy fashion staples, BBW style essentials, body positive fashion staples, curvy woman fashion list, plus size style guide, BBW wardrobe building, curvy woman clothing must haves, BBW4LIFE clothing guide, body positive outfit guide, curvy closet essentials, plus size wardrobe basics, BBW fashion essentials',
@@ -295,7 +295,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article9.html'
     },
 
-    '/blog/article10.html': {
+    '/blog/article10': {
         title: 'BBW Style Guide: How to Dress Confidently for Every Occasion | BBW4LIFE Journal',
         description: 'From casual days to red-carpet moments — this complete BBW style guide shows you exactly how to dress for your curves, your personality, and your lifestyle, so you always look and feel like the queen you are.',
         keywords: 'BBW style guide, plus size fashion occasions, curvy woman dress code, BBW4LIFE fashion, plus size confident dressing, curvy woman every occasion, BBW outfit guide, plus size formal wear, curvy casual outfit, BBW party outfit, plus size work outfit, curvy woman style every occasion, BBW4LIFE dress guide, body positive style guide, curvy woman casual style, BBW formal outfit, plus size daily style, curvy fashion guide, BBW night out outfit, plus size event outfit, curvy date night outfit, BBW4LIFE complete style guide, body positive outfit guide, curvy woman confidence dressing, plus size brunch outfit, BBW weekend outfit, curvy fashion every day, plus size queen style, BBW4LIFE style tips, curvy woman fashion guide',
@@ -303,7 +303,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article10.html'
     },
 
-    '/blog/article11.html': {
+    '/blog/article11': {
         title: 'Plus-Size Dresses: How to Find the One Model That Flatters Every Single Curve | BBW4LIFE Journal',
         description: 'Not all dresses are created equal — and not all advice is made for you. This guide breaks down exactly which dress styles, cuts, and fabrics work best for BBW bodies, so you find your perfect match every time.',
         keywords: 'plus size dresses BBW, curvy woman dress guide, flattering dresses plus size, how to dress curvy body, BBW dress styles, plus size dress cuts, curvy dress shape guide, BBW4LIFE dress guide, best dresses for curves, plus size dress fit guide, curvy woman flattering dress, BBW dress types, body positive dress guide, plus size dress shape, curvy fashion dress tips, BBW4LIFE dress styles, body type dress guide, curvy woman best dress, plus size body type dress, BBW dress fabric guide, curvy woman dress shopping, BBW4LIFE flattering dress, body positive dress styles, curvy dress shopping guide, plus size dress buying guide, BBW dress recommendations, curvy woman dress cuts, body positive outfit dress, plus size dress tips, BBW fashion dress guide',
@@ -311,7 +311,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article11.html'
     },
 
-    '/blog/article12.html': {
+    '/blog/article12': {
         title: 'BBW and Seduction: Why Your Body Is a Gift, Not an Obstacle | BBW4LIFE Journal',
         description: 'Confidence is the most powerful thing a curvy woman can wear. Discover how BBW women around the world are embracing their sensuality, owning their beauty, and attracting love — on their own terms.',
         keywords: 'BBW seduction, curvy woman confidence, plus size sensuality, body confidence BBW, BBW4LIFE self love, curvy woman attractiveness, plus size beauty, BBW attraction, curvy woman seduction tips, BBW4LIFE confidence, body positive seduction, curvy woman love yourself, BBW body gift, plus size self worth, curvy woman beauty power, BBW4LIFE attraction, body positive love, curvy woman own your body, BBW confidence love, plus size attractive, curvy woman sensuality, BBW body acceptance seduction, body positive attractiveness, curvy woman magnetic, BBW4LIFE love story, body positive own your curves, curvy woman charm, BBW seduction confidence, plus size love life, BBW4LIFE body is a gift',
@@ -319,7 +319,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article12.html'
     },
 
-    '/blog/article13.html': {
+    '/blog/article13': {
         title: 'How to Dress as a BBW and Feel BEAUTIFUL — Not Just Covered | BBW4LIFE Journal',
         description: 'Stop dressing to hide. Start dressing to shine. This guide is for every curvy woman who is ready to walk into any room and own it — with outfits that celebrate exactly who she is.',
         keywords: 'how to dress BBW women, plus size fashion guide, curvy woman style, BBW outfit ideas, dress for your curves, body positive fashion, BBW4LIFE dress guide, stop hiding plus size, curvy woman beautiful outfits, BBW confidence dressing, body positive outfit ideas, curvy woman shine outfit, BBW4LIFE how to dress, plus size bold outfits, curvy woman own your style, BBW dress to impress, body positive fashion guide, curvy woman fashion confidence, BBW don\'t hide, plus size dress to shine, curvy woman bold fashion, BBW4LIFE confidence outfits, body positive style guide, curvy woman flattering outfits, BBW beautiful fashion, plus size shine outfits, curvy woman dress boldly, BBW4LIFE style confidence, body positive dressing tips, curvy woman fashion boldly',
@@ -327,7 +327,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article13.html'
     },
 
-    '/blog/article14.html': {
+    '/blog/article14': {
         title: 'BBW and Seduction: Your Body Is a Power, Not a Problem | BBW4LIFE Journal',
         description: 'Your curves are magnetic. Your energy is irresistible. This article is a love letter to every BBW woman who has ever been made to feel like she is too much — you are exactly enough.',
         keywords: 'BBW seduction, curvy women confidence, plus size seduction, body confidence BBW, BBW4LIFE, curvy women power, BBW self-love, plus size attraction, body is not a problem BBW, curvy woman power, BBW magnetic energy, plus size love yourself, curvy woman irresistible, BBW4LIFE empowerment, body positive power, curvy woman enough, BBW too much, body positive love letter, curvy woman self worth, BBW4LIFE curves power, body positive magnetic, curvy woman energy, BBW confidence power, plus size you are enough, curvy woman love letter, BBW4LIFE body power, body positive attraction, curvy woman body love, BBW strength curves, plus size magnetic beauty',
@@ -335,7 +335,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/blog/article14.html'
     },
 
-    '/blog/article15.html': {
+    '/blog/article15': {
         title: 'BBW4LIFE: Why Being a Big Beautiful Woman Is a Lifestyle, a Pride, and a Family | BBW4LIFE Journal',
         description: 'This is more than a fashion brand. BBW4LIFE is a movement born from love, built for women who deserve to be seen, celebrated, and cherished. Discover the story, the mission, and why thousands of women have made it their home.',
         keywords: 'BBW4LIFE movement, big beautiful woman lifestyle, plus size pride, BBW community, body positive movement, curvy woman confidence, BBW lifestyle, big beautiful woman community, BBW4LIFE family, plus size pride identity, curvy woman lifestyle, BBW4LIFE brand story, body positive family, big beautiful woman identity, curvy woman community, BBW4LIFE mission story, body positive lifestyle brand, curvy woman pride, BBW4LIFE love story, body positive identity, curvy woman family, BBW lifestyle brand, plus size family community, BBW4LIFE sisterhood, curvy woman sisterhood, body positive sisterhood, BBW4LIFE belonging, curvy woman belonging, plus size movement identity, BBW big beautiful woman',
