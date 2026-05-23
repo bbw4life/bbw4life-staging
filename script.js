@@ -3261,7 +3261,6 @@ initAnnouncementBar();
         }
       }
 
-      // ← LIRE avant tout
       const rawClient      = sessionStorage.getItem('plan_res_client');
       const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
       let pendingClient    = null;
@@ -3270,21 +3269,12 @@ initAnnouncementBar();
       const firstName = pendingClient ? pendingClient.firstName : '';
       showThanksStep(firstName, pendingProgram);
 
-      try {
-        const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'verify', sessionId })
-        });
-        const data = await res.json();
-        if (data.success && pendingClient) {
-          pendingClient.program = pendingClient.program || pendingProgram;
-          await savePlanRequestToSheet(pendingClient);
-        }
-      } catch (err) {
-        console.error('[ReservationPopup] Stripe verify error:', err.message);
+      // ← SAUVEGARDE IMMÉDIATE — sans attendre verify
+      if (pendingClient) {
+        pendingClient.program = pendingClient.program || pendingProgram;
+        await savePlanRequestToSheet(pendingClient);
       }
 
-      // ← NETTOYER seulement après la sauvegarde
       sessionStorage.removeItem('plan_res_client');
       sessionStorage.removeItem('plan_res_program');
       sessionStorage.removeItem('plan_res_return_url');
@@ -3308,7 +3298,6 @@ initAnnouncementBar();
         }
       }
 
-      // ← LIRE avant tout
       const rawClient      = sessionStorage.getItem('plan_res_client');
       const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
       let pendingClient    = null;
@@ -3317,21 +3306,22 @@ initAnnouncementBar();
       const firstName = pendingClient ? pendingClient.firstName : '';
       showThanksStep(firstName, pendingProgram);
 
+      // ← CAPTURE PAYPAL
       try {
-        const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
+        await fetch('/.netlify/functions/create-reservation-paypal', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'capture', orderID, clientData: pendingClient, program: pendingProgram, amount: reservationPrice })
         });
-        const data = await res.json();
-        if (data.success && pendingClient) {
-          pendingClient.program = pendingClient.program || pendingProgram;
-          await savePlanRequestToSheet(pendingClient);
-        }
       } catch (err) {
-        console.error('[ReservationPopup] PayPal capture error:', err.message);
+        console.error('[PayPal Return] capture error:', err.message);
       }
 
-      // ← NETTOYER seulement après la sauvegarde
+      // ← SAUVEGARDE IMMÉDIATE
+      if (pendingClient) {
+        pendingClient.program = pendingClient.program || pendingProgram;
+        await savePlanRequestToSheet(pendingClient);
+      }
+
       sessionStorage.removeItem('plan_res_client');
       sessionStorage.removeItem('plan_res_program');
       sessionStorage.removeItem('plan_res_return_url');
@@ -3341,6 +3331,7 @@ initAnnouncementBar();
 
     /* ── Save to sheet ── */
     async function savePlanRequestToSheet(client) {
+      if (!client) return;
       try {
         const res = await fetch('/.netlify/functions/save-plan-request', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3360,7 +3351,7 @@ initAnnouncementBar();
         console.log('[savePlanRequestToSheet] Response:', data);
         if (!data.success) console.error('[savePlanRequestToSheet] Failed:', data.error);
       } catch (e) {
-        console.warn('[PlanRequest] savePlanRequestToSheet failed:', e.message);
+        console.error('[savePlanRequestToSheet] failed:', e.message);
       }
     }
 
