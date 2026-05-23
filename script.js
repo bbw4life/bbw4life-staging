@@ -903,7 +903,7 @@ function applyPromoFreeItems() {
 })();
 
 
-      // ════════════════════════════════════════════════
+    // ════════════════════════════════════════════════
 //  THUMBNAILS LAYOUT — DESKTOP & MOBILE
 //  Lit les settings yes/no et applique les classes CSS
 // ════════════════════════════════════════════════

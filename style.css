@@ -7203,7 +7203,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .featured-spotlight-section { padding: 10px 0px !important; }
+  .featured-spotlight-section { padding: 10px 10px !important; }
   .fs-main-img { height: 280px; }
   .fs-thumb    { height: 62px; }
   .fs-features { grid-template-columns: 1fr; }

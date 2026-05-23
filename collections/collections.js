@@ -546,6 +546,7 @@
   fetch('/products.data.json')
     .then(r => r.json())
     .then(data => {
+      window.__allProducts = data.filter(p => !p.type);
       settings = data.find(p => p.type === 'settings') || {};
 
       if (document.getElementById('all-collections-grid')) {
@@ -1436,9 +1437,9 @@
      GET PRODUCT URL
   ================================================================ */
  function getProductUrl(id) {
-  const allReal = window.__allProducts || allProducts;
-  const idx = allReal.findIndex(p => String(p.id) === String(id));
-  if (idx === -1) return '/collections/bbw4life-all-product.html';
+  const pool = window.__allProducts || [];
+  const idx = pool.findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return '#';
   return '/products/product' + (idx + 1) + '.html';
 }
 
