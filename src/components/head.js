@@ -75,7 +75,7 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/bbw4life-pants-skirts.html'
     },
 
-    '/collections/men-plus-size': {
+    '/collections/men-plus-size.html': {
         title: 'Men Plus Size Collection — Men | BBW4LIFE | Sizes M–5XL',
         description: 'The biggest plus size selection at BBW4LIFE for men. Pants, shoes, shirts, sweaters, accessories — sizes M to 5XL. Bold, comfortable and made for real bodies. Free shipping. 30-day returns.',
         keywords: 'plus size fashion, BBW clothing, plus size men, plus size women, big sizes, 5XL clothing, main plus size collection, BBW4LIFE main, plus size men clothing, curvy women main collection, plus size shirts, BBW sweaters, plus size shoes, curvy fashion main, body positive men fashion, BBW4LIFE men women, size M to 5XL, plus size accessories, BBW4LIFE big sizes, size inclusive men women, plus size pants men, BBW4LIFE unisex, curvy fashion plus, big beautiful fashion, body positive brand men, plus size casual wear, BBW fashion M 5XL, plus size workwear, curvy daily wear, body positive everyday fashion',
