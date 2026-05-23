@@ -670,7 +670,7 @@ body {
   height: 100vh;
   height: 100dvh;
   background: var(--bbw-black-soft);
-  z-index: 1100;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   overflow: hidden;
