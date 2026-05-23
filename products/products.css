@@ -121,13 +121,12 @@
 }
 
 .product-section {
-    padding: 15px 0px;
+    padding: 5px 0px;
 }
 
 
 /* ════════════════════════════
    PRODUCT SECTION WRAPPER
-   → Même fond ivoire que jrgq-section
 ════════════════════════════ */
 .product-section {
     position: relative;
@@ -974,7 +973,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; margin-top: -10px !important;
+    width: 100%; margin-top: 0px !important;
     cursor: pointer;
 }
 .bundle-content {
@@ -2696,6 +2695,27 @@ details[open] .chevron {
 }
 
 
+/* ── STICKY MEDIA MOBILE FIX ── */
+@media (max-width: 768px) {
+  .product-media.sticky-media-mobile {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 120px !important;
+    z-index: 50 !important;
+    align-self: flex-start !important;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #ffe1a9 !important;
+    border-radius: 10px !important;
+  }
+
+  .product-layout,
+  .product-section,
+  body,
+  html {
+    overflow: visible !important;
+    overflow-x: clip !important;
+  }
+}
 
 
 /* ════════════════════════════════════════════════════════════

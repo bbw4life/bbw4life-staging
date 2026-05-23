@@ -2492,6 +2492,21 @@ initAnnouncementBar();
 
 
 
+(function initStickyMediaMobile() {
+  const stickyOn = (settings.sticky_media_mobile || 'no').toLowerCase().trim() === 'yes';
+  if (!stickyOn) return;
+  if (window.innerWidth > 768) return;
+
+  const mediaEl = document.querySelector('.product-media');
+  if (!mediaEl) return;
+
+  // Supprimer les styles inline bloquants
+  mediaEl.style.removeProperty('position');
+  mediaEl.style.removeProperty('overflow');
+  mediaEl.style.removeProperty('top');
+
+  mediaEl.classList.add('sticky-media-mobile');
+})();
 
 
 /* ================================================================

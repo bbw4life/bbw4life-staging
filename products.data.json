@@ -4157,6 +4157,7 @@
     "thumbnails_desktop_horizontal_below": "no",
     "thumbnails_mobile_horizontal": "no",
     "thumbnails_mobile_vertical_left": "yes",
+    "sticky_media_mobile": "yes",
     "theme_color": "#000000",
     "allowed_languages": ["en", "fr", "es", "ar", "zh", "ht", "hi", "pt", "ru", "de", "ja"],
     "chat_widget": {
@@ -5011,7 +5012,7 @@
   "subtitle": "Every step tells your story — bold, beautiful footwear designed for curvy women who refuse to be invisible.",
   "url": "/collections/shoes-sandals.html",
   "eyebrow": "Plus Size Footwear",
-  "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Curvy_Woman.png?v=1777936945",
+  "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/shoes_sandals.png?v=1779556056",
   "hero_title": "Walk Like the Queen You Are",
   "hero_subtitle": "Every step tells your story — bold, beautiful footwear for curvy women who refuse to be invisible.",
   "hero_eyebrow": "Plus Size Footwear",
@@ -5060,10 +5061,6 @@
     "jrgq_index": 3
   },
   {
-  "id": "shoes-sandals",
-    "settings_key": "shoes-sandals"
-  },
-  {
     "id": "bbw-features-products",
     "settings_key": "jrgq_collections",
     "jrgq_index": 4
@@ -5072,7 +5069,12 @@
   "id": "bbw4life-pants-skirts",
   "settings_key": "jrgq_collections",
   "jrgq_index": 5
-}
+},
+ {
+  "id": "shoes-sandals",
+    "settings_key": "shoes-sandals",
+    "jrgq_index": 6
+  }
 ],
 "language_selector": {
   "enabled": "yes",
