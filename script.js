@@ -2886,7 +2886,6 @@ initAnnouncementBar();
 (function initPlanReservationPopup() {
     'use strict';
 
-    /* ── Featured products collection IDs (bbw-features-products) ── */
     const BBW_FEATURED_IDS = [
       'Pdg-Francenel-product69',
       'Pdg-Francenel-product70',
@@ -2911,12 +2910,32 @@ initAnnouncementBar();
 
     if (!overlay || !modal) return;
 
-    let clientData       = {};
-    let selectedProgram  = '';
+    let clientData        = {};
+    let selectedProgram   = '';
     let selectedProductId = '';
-    let selectedSize     = '';
-    let selectedColor    = '';
-    let reservationPrice = 10;
+    let selectedSize      = '';
+    let selectedColor     = '';
+    let reservationPrice  = 10;
+
+    /* ── Storage helpers — sessionStorage + localStorage fallback ── */
+    function storeSave(key, value) {
+      try { sessionStorage.setItem(key, value); } catch(e) {}
+      try { localStorage.setItem(key, value); }   catch(e) {}
+    }
+
+    function storeGet(key) {
+      try {
+        const v = sessionStorage.getItem(key);
+        if (v) return v;
+      } catch(e) {}
+      try { return localStorage.getItem(key); } catch(e) {}
+      return null;
+    }
+
+    function storeRemove(key) {
+      try { sessionStorage.removeItem(key); } catch(e) {}
+      try { localStorage.removeItem(key); }   catch(e) {}
+    }
 
     /* ── Inject price labels ── */
     function injectPriceLabels(price) {
@@ -2951,20 +2970,18 @@ initAnnouncementBar();
 
     /* ── Spots countdown ── */
     const SPOTS_KEY = 'plan_spots_remaining';
-    let spotsRemaining = parseInt(sessionStorage.getItem(SPOTS_KEY) || '27');
+    let spotsRemaining = parseInt(storeGet(SPOTS_KEY) || '27');
     if (spotsCount) spotsCount.textContent = spotsRemaining;
     function decreaseSpot() {
       if (spotsRemaining > 1) {
         spotsRemaining = Math.max(1, spotsRemaining - 1);
-        sessionStorage.setItem(SPOTS_KEY, spotsRemaining);
+        storeSave(SPOTS_KEY, spotsRemaining);
         if (spotsCount) spotsCount.textContent = spotsRemaining;
       }
     }
     setInterval(decreaseSpot, Math.random() * 90000 + 90000);
 
-    /* ══════════════════════════════════════════════
-       POPULATE PRODUCT SELECT from bbw-features-products
-    ══════════════════════════════════════════════ */
+    /* ── Populate product select ── */
     function populateProductSelect() {
       const selectEl = document.getElementById('plan-program');
       if (!selectEl) return;
@@ -3009,13 +3026,12 @@ initAnnouncementBar();
         sizeEl.appendChild(opt);
       });
       if (sizeGrp) sizeGrp.style.display = sizes.length > 0 ? '' : 'none';
-
       sizeEl.onchange = function() { selectedSize = this.value; };
     }
 
     function populateColorSelect(prod) {
-      const colorEl    = document.getElementById('plan-color');
-      const colorGrp   = document.getElementById('plan-color-group');
+      const colorEl     = document.getElementById('plan-color');
+      const colorGrp    = document.getElementById('plan-color-group');
       const previewWrap = document.getElementById('plan-color-preview-wrap');
       const previewCont = document.getElementById('plan-color-swatches-preview');
       if (!colorEl) return;
@@ -3030,7 +3046,6 @@ initAnnouncementBar();
       });
       if (colorGrp) colorGrp.style.display = colors.length > 0 ? '' : 'none';
 
-      /* Swatch visual preview */
       if (previewCont && previewWrap) {
         previewCont.innerHTML = '';
         colors.forEach(c => {
@@ -3041,8 +3056,8 @@ initAnnouncementBar();
           item.addEventListener('click', () => {
             previewCont.querySelectorAll('.plan-color-swatch-item').forEach(i => i.classList.remove('active'));
             item.classList.add('active');
-            colorEl.value  = c.name;
-            selectedColor  = c.name;
+            colorEl.value = c.name;
+            selectedColor = c.name;
           });
           previewCont.appendChild(item);
         });
@@ -3061,16 +3076,12 @@ initAnnouncementBar();
 
     /* ── Open / Close ── */
     function openPopup(preselectedProductId) {
-      /* Populate selects when products are ready */
       if (window.__allProducts && window.__allProducts.length) {
         populateProductSelect();
         if (preselectedProductId) {
           setTimeout(() => {
             const sel = document.getElementById('plan-program');
-            if (sel) {
-              sel.value = preselectedProductId;
-              sel.dispatchEvent(new Event('change'));
-            }
+            if (sel) { sel.value = preselectedProductId; sel.dispatchEvent(new Event('change')); }
           }, 50);
         }
       } else {
@@ -3123,7 +3134,7 @@ initAnnouncementBar();
       window.history.replaceState({}, '', window.location.pathname);
     }
 
-    /* ── Expose openPopup globally ── */
+    /* ── Expose globally ── */
     window.openProductRequestPopup = openPopup;
     window.openPlanPopup           = openPopup;
 
@@ -3134,7 +3145,7 @@ initAnnouncementBar();
       el.textContent = msg; el.style.display = 'block';
     }
     function clearErrors() {
-      ['plan-popup-error','plan-pay-error'].forEach(id => {
+      ['plan-popup-error', 'plan-pay-error'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.textContent = ''; el.style.display = 'none'; }
       });
@@ -3161,8 +3172,7 @@ initAnnouncementBar();
         const color     = val('plan-color');
         const consent   = document.getElementById('plan-consent') && document.getElementById('plan-consent').checked;
 
-        /* Get product title from option text */
-        const selectEl = document.getElementById('plan-program');
+        const selectEl     = document.getElementById('plan-program');
         const productTitle = selectEl && selectEl.selectedIndex > 0
           ? selectEl.options[selectEl.selectedIndex].text
           : program;
@@ -3180,17 +3190,20 @@ initAnnouncementBar();
           return;
         }
 
-        selectedSize  = size;
-        selectedColor = color;
-        selectedProgram = productTitle;
+        selectedSize      = size;
+        selectedColor     = color;
+        selectedProgram   = productTitle;
         selectedProductId = program;
 
         clientData = {
-          firstName, lastName, email, phone,
-          program:    productTitle,
-          productId:  program,
-          size:       size,
-          color:      color,
+          firstName,
+          lastName,
+          email,
+          phone,
+          program:   productTitle,
+          productId: program,
+          size:      size   || '',
+          color:     color  || '',
           consent:   'Yes'
         };
 
@@ -3207,9 +3220,7 @@ initAnnouncementBar();
     /* ── Back ── */
     if (backBtn) backBtn.addEventListener('click', () => showStep('form'));
 
-    /* ══════════════════════════════════════════════
-       STEP 2 → PAY — système payment inchangé
-    ══════════════════════════════════════════════ */
+    /* ── Pay button ── */
     if (payBtn) {
       payBtn.addEventListener('click', async () => {
         clearErrors();
@@ -3226,42 +3237,43 @@ initAnnouncementBar();
       });
     }
 
-    /* ── Stripe — inchangé, on passe juste les nouveaux champs dans customer ── */
+    /* ── Stripe ── */
     async function handleStripe() {
-      // return
       const returnUrl = window.location.origin + window.location.pathname;
-      
+
       const res = await fetch('/.netlify/functions/create-reservation-stripe-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl }) // ← ajouter returnUrl
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl })
       });
       const data = await res.json();
       if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');
-      
-      sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
-      sessionStorage.setItem('plan_res_program', selectedProgram);
-      sessionStorage.setItem('plan_res_return_url', returnUrl);
-      
+
+      /* ── Stocker dans sessionStorage ET localStorage (survie redirect mobile/Safari) ── */
+      storeSave('plan_res_client',     JSON.stringify(clientData));
+      storeSave('plan_res_program',    selectedProgram);
+      storeSave('plan_res_return_url', returnUrl);
+
       const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
       const stripe = Stripe(window.STRIPE_PUBLIC_KEY || settings.stripe_public_key || '');
       await stripe.redirectToCheckout({ sessionId: data.sessionId });
     }
 
-    /* ── PayPal — inchangé ── */
+    /* ── PayPal ── */
     async function handlePaypal() {
       const returnUrl = window.location.origin + window.location.pathname;
-      
+
       const res = await fetch('/.netlify/functions/create-reservation-paypal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl }) // ← ajouter returnUrl
+        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl })
       });
       const data = await res.json();
       if (!data.success || !data.approvalUrl) throw new Error(data.error || 'PayPal failed.');
-      
-      sessionStorage.setItem('plan_res_client',  JSON.stringify(clientData));
-      sessionStorage.setItem('plan_res_program', selectedProgram);
-      sessionStorage.setItem('plan_res_return_url', returnUrl); // ← AJOUTER cette ligne
-      
+
+      /* ── Stocker dans sessionStorage ET localStorage ── */
+      storeSave('plan_res_client',     JSON.stringify(clientData));
+      storeSave('plan_res_program',    selectedProgram);
+      storeSave('plan_res_return_url', returnUrl);
+
       window.location.href = data.approvalUrl;
     }
 
@@ -3271,8 +3283,7 @@ initAnnouncementBar();
       const sessionId = params.get('res_session_id');
       if (!sessionId) return false;
 
-      // ← AJOUTER ce bloc
-      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
+      const savedReturnUrl = storeGet('plan_res_return_url');
       if (savedReturnUrl) {
         const currentBase = window.location.href.split('?')[0];
         if (currentBase !== savedReturnUrl) {
@@ -3280,23 +3291,31 @@ initAnnouncementBar();
           return false;
         }
       }
-      const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
-      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
-      const firstName = pendingClient ? pendingClient.firstName : '';
+
+      /* ── Lire depuis sessionStorage avec fallback localStorage ── */
+      const pendingClient  = JSON.parse(storeGet('plan_res_client')  || 'null');
+      const pendingProgram = storeGet('plan_res_program') || '';
+      const firstName      = pendingClient ? pendingClient.firstName : '';
+
       showThanksStep(firstName, pendingProgram);
+
       try {
         const res  = await fetch('/.netlify/functions/create-reservation-stripe-session', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'verify', sessionId })
         });
         const data = await res.json();
-        /* After payment verified, save to sheet with new fields */
         if (data.success && pendingClient) {
           await savePlanRequestToSheet(pendingClient);
         }
-      } catch (err) { console.error('[ReservationPopup] Stripe verify error:', err.message); }
-      sessionStorage.removeItem('plan_res_client');
-      sessionStorage.removeItem('plan_res_program');
+      } catch (err) {
+        console.error('[ReservationPopup] Stripe verify error:', err.message);
+      }
+
+      /* ── Nettoyer les deux storages ── */
+      storeRemove('plan_res_client');
+      storeRemove('plan_res_program');
+      storeRemove('plan_res_return_url');
       return true;
     }
 
@@ -3307,8 +3326,7 @@ initAnnouncementBar();
       const orderID   = params.get('token');
       if (!resPaypal || !orderID) return false;
 
-      // ← AJOUTER ce bloc
-      const savedReturnUrl = sessionStorage.getItem('plan_res_return_url');
+      const savedReturnUrl = storeGet('plan_res_return_url');
       if (savedReturnUrl) {
         const currentBase = window.location.href.split('?')[0];
         if (currentBase !== savedReturnUrl) {
@@ -3316,10 +3334,14 @@ initAnnouncementBar();
           return false;
         }
       }
-      const pendingClient  = JSON.parse(sessionStorage.getItem('plan_res_client')  || 'null');
-      const pendingProgram = sessionStorage.getItem('plan_res_program') || '';
-      const firstName = pendingClient ? pendingClient.firstName : '';
+
+      /* ── Lire depuis sessionStorage avec fallback localStorage ── */
+      const pendingClient  = JSON.parse(storeGet('plan_res_client')  || 'null');
+      const pendingProgram = storeGet('plan_res_program') || '';
+      const firstName      = pendingClient ? pendingClient.firstName : '';
+
       showThanksStep(firstName, pendingProgram);
+
       try {
         const res  = await fetch('/.netlify/functions/create-reservation-paypal', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -3329,13 +3351,18 @@ initAnnouncementBar();
         if (data.success && pendingClient) {
           await savePlanRequestToSheet(pendingClient);
         }
-      } catch (err) { console.error('[ReservationPopup] PayPal capture error:', err.message); }
-      sessionStorage.removeItem('plan_res_client');
-      sessionStorage.removeItem('plan_res_program');
+      } catch (err) {
+        console.error('[ReservationPopup] PayPal capture error:', err.message);
+      }
+
+      /* ── Nettoyer les deux storages ── */
+      storeRemove('plan_res_client');
+      storeRemove('plan_res_program');
+      storeRemove('plan_res_return_url');
       return true;
     }
 
-    /* ── Save to sheet — new fields included ── */
+    /* ── Save to sheet ── */
     async function savePlanRequestToSheet(client) {
       try {
         await fetch('/.netlify/functions/save-plan-request', {
@@ -3352,7 +3379,9 @@ initAnnouncementBar();
             consent:   client.consent   || 'Yes'
           })
         });
-      } catch (e) { console.warn('[PlanRequest] savePlanRequestToSheet failed:', e.message); }
+      } catch (e) {
+        console.warn('[PlanRequest] savePlanRequestToSheet failed:', e.message);
+      }
     }
 
     /* ── Close buttons ── */
@@ -3361,11 +3390,10 @@ initAnnouncementBar();
     overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-    /* ── Open via #open-plan-popup button ── */
+    /* ── Open via button ── */
     const openBtn = document.getElementById('open-plan-popup');
     if (openBtn) openBtn.addEventListener('click', () => openPopup(null));
 
-    /* ── Open via .open-plan-popup-extra ── */
     document.querySelectorAll('.open-plan-popup-extra').forEach(btn => {
       btn.addEventListener('click', () => openPopup(btn.dataset.productId || null));
     });
