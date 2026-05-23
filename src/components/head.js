@@ -91,6 +91,14 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/most-popular.html'
     },
 
+    '/collections/shoes-sandals': {
+        title: 'Plus Size Shoes & Sandals — Heels, Sandals & Sneakers for Curvy Women | BBW4LIFE',
+        description: 'Step into confidence with BBW4LIFE\'s plus size footwear collection. Stiletto heels, platform sandals, sneakers, ankle boots and loafers — designed for curvy women in sizes 3 to 12. Free shipping on $50+. 30-day returns.',
+        keywords: 'plus size shoes, curvy women shoes, BBW heels, plus size sandals, wide width shoes, curvy woman heels, BBW4LIFE shoes, plus size stiletto, curvy sandals, BBW sneakers, plus size ankle boots, curvy woman footwear, BBW4LIFE footwear, wide fit shoes, plus size platforms, curvy woman sandals, BBW loafers, plus size wide shoes, curvy heels collection, BBW4LIFE heels, plus size dress shoes, curvy woman sneakers, BBW boots, plus size casual shoes, body positive footwear, curvy woman shoe guide, BBW4LIFE sandals, plus size flat shoes, curvy fashion shoes, size 3 to 12 women shoes, BBW wide fit, plus size stylish shoes, curvy woman stiletto, BBW4LIFE wide shoes, size inclusive footwear, curvy woman comfort shoes, BBW comfortable heels, plus size party heels, curvy fashion boots, BBW4LIFE collection shoes',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_1.png?v=1778102174',
+        canonical: 'https://bbw4life.com/collections/shoes-sandals.html'
+    },
+
     // ─────────────────────────────────────────────────────
     // PAGES
     // ─────────────────────────────────────────────────────
