@@ -2886,6 +2886,16 @@ initAnnouncementBar();
 (function initPlanReservationPopup() {
     'use strict';
 
+    async function init() {
+      const stripeHandled = await checkReturnFromStripe();
+      if (!stripeHandled) await checkReturnFromPaypal();
+    }
+    init();
+
+    const overlay = document.getElementById('plan-popup-overlay');
+    const modal   = overlay ? overlay.querySelector('.plan-popup-modal') : null;
+    if (!overlay || !modal) return;
+
     const BBW_FEATURED_IDS = [
       'Pdg-Francenel-product69',
       'Pdg-Francenel-product70',

@@ -16,7 +16,7 @@
     );
     const w = size || 800;
     const sep = url.includes('?') ? '&' : '?';
-    return url + sep + 'width=' + w + '&quality=90';
+    return url + sep + 'width=' + w + '&quality=90'; 
   }
 
   /* ================================================================
