@@ -2427,8 +2427,8 @@ main#main-content {
 .plan-request-trigger-wrap {
   display: flex;
   justify-content: center;
-  padding: 10px 20px;
-  margin: -30px 0 10px;
+  padding: 5px 20px;
+  margin: -30px 0 10px !important;
   box-sizing: border-box;
   width: 100%;
 }

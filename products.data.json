@@ -15,8 +15,8 @@
     "single_discount": 5,
     "duo_discount": 10,
     "trio_discount": 20,
-    "rating": 4.2,
-    "reviews_count": 29,
+    "rating": 4.8,
+    "reviews_count": 46,
     "badge": { "icon": "fi-rr-flame", "text": "Best Seller" },
     "title": "Glam Heels — Cross Strap Stiletto Sandals",
     "description": "You slip them on and heads turn instantly. Bold cross-strap design, thick heel comfort, available in Red, Black & Pink.",
@@ -4398,7 +4398,7 @@
     "collapsible_order_summary": "No",
     "header_search_always_visible": "yes",
     "flash_deal": {
-      "hours": 8
+      "hours": 12
     },
     "top_starter_products": {
       "label": "Best products to start your weight loss journey",

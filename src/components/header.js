@@ -149,16 +149,23 @@
   /* ──────────────────────────────────────────────────────────────
      4. SEARCH DESKTOP ALWAYS-VISIBLE
   ────────────────────────────────────────────────────────────── */
+  /* ──────────────────────────────────────────────────────────────
+     4. SEARCH DESKTOP ALWAYS-VISIBLE
+  ────────────────────────────────────────────────────────────── */
   function applySearchSetting() {
-    const allProducts   = window.__allProducts || [];
-    const settings      = allProducts.find(p => p.type === 'settings') || {};
-    const alwaysVisible = (settings.header_search_always_visible || 'no').toLowerCase() === 'yes';
+    fetch('/products.data.json')
+      .then(r => r.json())
+      .then(data => {
+        const settings      = data.find(p => p.type === 'settings') || {};
+        const alwaysVisible = (settings.header_search_always_visible || 'no').toLowerCase() === 'yes';
 
-    if (searchEl) searchEl.setAttribute('data-always-visible', alwaysVisible ? 'yes' : 'no');
+        if (searchEl) searchEl.setAttribute('data-always-visible', alwaysVisible ? 'yes' : 'no');
 
-    const desktopSearch = document.getElementById('bbwSearchDesktop');
-    if (!desktopSearch) return;
-    desktopSearch.style.display = (alwaysVisible && window.innerWidth > 768) ? 'flex' : 'none';
+        const desktopSearch = document.getElementById('bbwSearchDesktop');
+        if (!desktopSearch) return;
+        desktopSearch.style.display = (alwaysVisible && window.innerWidth > 768) ? 'flex' : 'none';
+      })
+      .catch(() => {});
   }
 
   window.addEventListener('resize', applySearchSetting, { passive: true });
