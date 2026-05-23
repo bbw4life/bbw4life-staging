@@ -2708,6 +2708,14 @@ details[open] .chevron {
     border-radius: 10px !important;
   }
 
+  .product-media.sticky-media-mobile .main-image img {
+    height: 300px !important;
+  }
+
+  .product-media.sticky-media-mobile .thumbnails {
+    max-height: 300px !important;
+  }
+
   .product-layout,
   .product-section,
   body,
