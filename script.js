@@ -5826,7 +5826,10 @@ document.dispatchEvent(new Event('wishlist:change'));
     if (!body) return;
     const slides   = cd.banner_slides || [];
     const duration = cd.banner_slide_duration_ms || 5000;
-    if (!slides.length) return;
+    const videoUrl = cd.banner_video_url || '';
+
+    if (!videoUrl && !slides.length) return;
+
     let banner = body.querySelector('.cart-drawer__paul-banner');
     if (!banner) {
       banner = document.createElement('div');
@@ -5835,23 +5838,98 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (itemsDiv) itemsDiv.insertAdjacentElement('beforebegin', banner);
       else body.insertAdjacentElement('afterbegin', banner);
     }
-    if (!banner.dataset.built) {
-      banner.dataset.built = '1';
-      const slidesHTML = slides.map((s, i) => `
-        <div class="paul-banner-slide${i === 0 ? ' active' : ''}">
-          <img src="${upgradeShopifyImageUrl(s.image)}" alt="${s.text}" class="paul-banner-image" loading="lazy">
-          <h2 class="paul-banner-title">${s.text}</h2>
-        </div>`).join('');
-      const dotsHTML = slides.map((s, i) =>
-        `<span class="paul-banner-indicator${i === 0 ? ' active' : ''}" data-slide="${i}"></span>`
-      ).join('');
-      banner.innerHTML = `
-        <div class="paul-banner-slider-container">${slidesHTML}</div>
-        <div class="paul-banner-indicators dots">${dotsHTML}</div>`;
-      banner.querySelectorAll('.paul-banner-indicator').forEach(dot => {
-        dot.addEventListener('click', () => { bannerGoTo(banner, parseInt(dot.dataset.slide)); restartBannerTimer(banner, duration); });
-      });
+
+    if (banner.dataset.built) return;
+    banner.dataset.built = '1';
+
+    // ── MODE VIDÉO + textes rotatifs par-dessus ──
+    if (videoUrl) {
+      banner.classList.add('paul-banner--video-mode');
+
+      const video = document.createElement('video');
+      video.autoplay    = true;
+      video.muted       = true;
+      video.loop        = true;
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+      video.className   = 'paul-banner-video';
+      if (slides.length) video.poster = slides[0].image;
+
+      const source = document.createElement('source');
+      source.src  = videoUrl;
+      source.type = 'video/mp4';
+      video.appendChild(source);
+      banner.appendChild(video);
+
+      video.load();
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          document.addEventListener('click', function tryPlay() {
+            video.play().catch(() => {});
+            document.removeEventListener('click', tryPlay);
+          }, { once: true });
+        });
+      }
+
+      // ── Textes rotatifs + dots par-dessus la vidéo ──
+      if (slides.length) {
+        const textsHTML = slides.map((s, i) => `
+          <div class="paul-banner-video-text${i === 0 ? ' active' : ''}" data-index="${i}">
+            ${s.text}
+          </div>`).join('');
+
+        const dotsHTML = slides.map((s, i) =>
+          `<span class="paul-banner-indicator${i === 0 ? ' active' : ''}" data-slide="${i}"></span>`
+        ).join('');
+
+        const overlay = document.createElement('div');
+        overlay.className = 'paul-banner-video-overlay';
+        overlay.innerHTML = `
+          <div class="paul-banner-video-texts">${textsHTML}</div>
+          <div class="paul-banner-indicators dots">${dotsHTML}</div>`;
+        banner.appendChild(overlay);
+
+        overlay.querySelectorAll('.paul-banner-indicator').forEach(dot => {
+          dot.addEventListener('click', () => {
+            bannerVideoGoTo(banner, parseInt(dot.dataset.slide));
+            restartBannerTimer(banner, duration);
+          });
+        });
+
+        if (_bannerTimer) clearInterval(_bannerTimer);
+        _bannerTimer = setInterval(() => {
+          const allTexts = banner.querySelectorAll('.paul-banner-video-text');
+          const active = Array.from(allTexts).findIndex(t => t.classList.contains('active'));
+          bannerVideoGoTo(banner, (active + 1) % allTexts.length);
+        }, duration);
+      }
+
+      return;
     }
+
+    // ── MODE IMAGES ──
+    const slidesHTML = slides.map((s, i) => `
+      <div class="paul-banner-slide${i === 0 ? ' active' : ''}">
+        <img src="${upgradeShopifyImageUrl(s.image)}" alt="${s.text}" class="paul-banner-image" loading="lazy">
+        <h2 class="paul-banner-title">${s.text}</h2>
+      </div>`).join('');
+
+    const dotsHTML = slides.map((s, i) =>
+      `<span class="paul-banner-indicator${i === 0 ? ' active' : ''}" data-slide="${i}"></span>`
+    ).join('');
+
+    banner.innerHTML = `
+      <div class="paul-banner-slider-container">${slidesHTML}</div>
+      <div class="paul-banner-indicators dots">${dotsHTML}</div>`;
+
+    banner.querySelectorAll('.paul-banner-indicator').forEach(dot => {
+      dot.addEventListener('click', () => {
+        bannerGoTo(banner, parseInt(dot.dataset.slide));
+        restartBannerTimer(banner, duration);
+      });
+    });
+
     if (_bannerTimer) clearInterval(_bannerTimer);
     _bannerTimer = setInterval(() => {
       const allSlides = banner.querySelectorAll('.paul-banner-slide');
@@ -5860,16 +5938,29 @@ document.dispatchEvent(new Event('wishlist:change'));
     }, duration);
   }
 
+  function bannerVideoGoTo(banner, idx) {
+    banner.querySelectorAll('.paul-banner-video-text').forEach((t, i) => t.classList.toggle('active', i === idx));
+    banner.querySelectorAll('.paul-banner-indicator').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
   function bannerGoTo(banner, idx) {
     banner.querySelectorAll('.paul-banner-slide').forEach((s, i) => s.classList.toggle('active', i === idx));
     banner.querySelectorAll('.paul-banner-indicator').forEach((d, i) => d.classList.toggle('active', i === idx));
   }
+
   function restartBannerTimer(banner, duration) {
     if (_bannerTimer) clearInterval(_bannerTimer);
     _bannerTimer = setInterval(() => {
-      const allSlides = banner.querySelectorAll('.paul-banner-slide');
-      const active = Array.from(allSlides).findIndex(s => s.classList.contains('active'));
-      bannerGoTo(banner, (active + 1) % allSlides.length);
+      const isVideo = banner.classList.contains('paul-banner--video-mode');
+      if (isVideo) {
+        const allTexts = banner.querySelectorAll('.paul-banner-video-text');
+        const active = Array.from(allTexts).findIndex(t => t.classList.contains('active'));
+        bannerVideoGoTo(banner, (active + 1) % allTexts.length);
+      } else {
+        const allSlides = banner.querySelectorAll('.paul-banner-slide');
+        const active = Array.from(allSlides).findIndex(s => s.classList.contains('active'));
+        bannerGoTo(banner, (active + 1) % allSlides.length);
+      }
     }, duration);
   }
 

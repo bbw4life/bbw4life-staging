@@ -112,6 +112,27 @@ function buildProductIndex(rawData) {
 }
 
 /* ══════════════════════════════════════════════════════
+   GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
+══════════════════════════════════════════════════════ */
+function buildGenderIds(settings) {
+  const jrgqCols = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
+
+  /* IDs hommes : collection "men-plus-size" */
+  const menCol = jrgqCols.find(c => c.id === 'men-plus-size');
+  const MALE_PRODUCT_IDS = menCol
+    ? menCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
+    : [];
+
+  /* IDs femmes : collection "curvy-woman" */
+  const womanCol = jrgqCols.find(c => c.id === 'curvy-woman');
+  const FEMALE_ONLY_IDS = womanCol
+    ? womanCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
+    : [];
+
+  return { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS };
+}
+
+/* ══════════════════════════════════════════════════════
    BADGE DETECTION
 ══════════════════════════════════════════════════════ */
 function buildBadgeMap(products) {
@@ -138,15 +159,20 @@ function detectBadgeQuery(message, badgeMap) {
 ══════════════════════════════════════════════════════ */
 function detectLanguage(message, allowedLanguages) {
   const text = message.toLowerCase().trim();
-  const words = text.split(/\s+/).map(w => w.replace(/[^a-záàâçèêëéíîïóôùûüñú]/gi, ''));
+  const words = text.split(/\s+/).map(w => w.replace(/[^a-záàâçèêëéíîïóôùûüñúkouwòèe]/gi, ''));
 
-  let scores = { en: 0, fr: 0, es: 0, ar: 0, zh: 0, hi: 0, pt: 0, ru: 0, de: 0, ja: 0 };
+  let scores = { en: 0, fr: 0, es: 0, ar: 0, zh: 0, hi: 0, pt: 0, ru: 0, de: 0, ja: 0, ht: 0 };
 
   if (/[\u0600-\u06FF]/.test(text)) scores.ar += 10;
   if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(text)) scores.zh += 10;
   if (/[\u0900-\u097F]/.test(text)) scores.hi += 10;
   if (/[\u0400-\u04FF]/.test(text)) scores.ru += 10;
   if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) scores.ja += 10;
+
+  /* Créole haïtien — détection renforcée */
+  if (/\b(bonjou|bonswa|mesi|kijan|koman|ki|sa|ou|mwen|nou|yo|ak|nan|pou|sou|gen|pa|fe|di|ale|vini|achte|pri|livrezon|koulè|gwosè|disponib|konbyen|kote|ki lè|ki sa|pwodwi|bèl|chèk|kado|rabi|promo|kòd|réduksyon|kite|rete|deja|toujou|ansanm|zanmi|fanmi|ede|sipò|ekip|kontak|whatsapp|telegram|wap|map|pap|tap)\b/.test(text)) scores.ht += 5;
+  if (/\b(m pa|m vle|m bezwen|m renmen|m ap|ou a|li a|nou yo|yo pa|sa a|kisa|poukisa|eske|wi|non|oui|mersi|tanpri|plis|mwens|gwo|piti|bèl|cho|fre)\b/.test(text)) scores.ht += 3;
+  ['bonjou','bonswa','mesi','kijan','mwen','nou','ak','nan','pou','sou','gen','pa','fe','di','ale','vini','wi','non'].forEach(w => { if (words.includes(w)) scores.ht += 2; });
 
   if (/\b(bonjour|bonsoir|salut|merci|comment|c'est|je|vous|nous|les|des|une|pour|avec|dans|sur|mais|très|aussi|peut|plus|produit|livraison|taille|couleur|disponible|combien|où|quand|prix|acheter|réduction)\b/.test(text)) scores.fr += 3;
   if (/[àâçèêëîïôùûü]/.test(text)) scores.fr += 3;
@@ -174,15 +200,24 @@ function detectLanguage(message, allowedLanguages) {
   }
   if (best === 0) detected = 'en';
 
+  /* Si la langue détectée est dans la liste autorisée → on l'utilise */
   if (allowedLanguages && allowedLanguages.length > 0) {
-    if (!allowedLanguages.includes(detected)) return 'en';
+    if (allowedLanguages.includes(detected)) return detected;
+    /* Langue non autorisée → anglais par défaut (si disponible) */
+    if (allowedLanguages.includes('en')) return 'en';
+    /* Sinon on prend la première langue autorisée */
+    return allowedLanguages[0];
   }
 
   return detected;
 }
 
 function getLangName(code) {
-  const names = { en: 'ENGLISH', fr: 'FRENCH', es: 'SPANISH', ar: 'ARABIC', zh: 'CHINESE', hi: 'HINDI', pt: 'PORTUGUESE', ru: 'RUSSIAN', de: 'GERMAN', ja: 'JAPANESE' };
+  const names = {
+    en: 'ENGLISH', fr: 'FRENCH', es: 'SPANISH', ar: 'ARABIC',
+    zh: 'CHINESE', hi: 'HINDI', pt: 'PORTUGUESE', ru: 'RUSSIAN',
+    de: 'GERMAN', ja: 'JAPANESE', ht: 'HAITIAN CREOLE'
+  };
   return names[code] || 'ENGLISH';
 }
 
@@ -232,8 +267,10 @@ function detectIntent(message) {
     /bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)/i,
     /marque propre|propre marque|brand propre|own brand|marca propia/i,
     /curvafit|curva.?fit/i,
-    /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc)\b/,
-    /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno)\b/,
+    /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|bonjou|bonswa)\b/,
+    /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno|mesi|wi|non|oke|dakò)\b/,
+    /* Petites réponses courtes de confirmation/acquiescement */
+    /^(ok|okay|k|ok|oke|ugh|ah|oh|wow|nice|cool|perfect|parfait|super|bien|good|great|noted|noted|got it|compris|noté|alright|sure|yep|yup|nope|nah|true|exactly|right|correct|absolutely|definitely|of course|bien sûr|exactement|précisément|merci|thanks|thx|ty|np|no problem|no worries|pas de problème|d'accord|c'est bon|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰)[\s!.,]*$/i,
   ];
 
   for (const pattern of generalPatterns) {
@@ -304,23 +341,33 @@ function isTopStarterRequest(message) {
 }
 
 /* ══════════════════════════════════════════════════════
-   GREETING DETECTION
+   GREETING DETECTION (court message sans intention produit)
 ══════════════════════════════════════════════════════ */
 function isGreeting(message) {
   const q = message.toLowerCase().trim();
-  return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes)[\s!.,]*$/.test(q);
+  return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes|bonjou|bonswa)[\s!.,]*$/.test(q);
 }
 
+/* ══════════════════════════════════════════════════════
+   SHORT ACK DETECTION
+══════════════════════════════════════════════════════ */
+function isShortAck(message) {
+  const q = message.toLowerCase().trim();
+  /* Message de moins de 5 mots ET correspond à un acquiescement */
+  const wordCount = q.split(/\s+/).filter(w => w.length > 0).length;
+  if (wordCount > 5) return false;
+  return /^(ok|okay|k|oui|non|wi|non|merci|mesi|thanks|thx|ty|super|parfait|génial|great|bien|bueno|nice|cool|perfect|noted|got it|compris|alright|sure|yep|yup|nope|d'accord|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰|ah|oh|wow|true|right|correct|exactly|absolutely|definitely|of course|bien sûr|exactement|np|no problem|no worries|pas de problème|c'est bon)[\s!.,🙏❤️😊🥰]*$/.test(q);
+}
 
 function detectGender(message) {
   const q = message.toLowerCase();
-  
+
   const malePatterns = [
     /\b(homme|hommes|masculin|masculins|pour homme|pour les hommes|men|man|male|hombre|hombres|para hombre|masculino|garçon|garçons|boy|boys|chico|chicos|monsieur|messieurs|mec|mecs|gars)\b/,
     /\b(men'?s|menswear|pour lui|for him|para él|pour un homme|for a man)\b/,
     /\b(taille homme|size men|vêtement homme|clothing men|mode homme|fashion men|chaussure homme|men.?s shoe|zapatos hombre)\b/,
   ];
-  
+
   const femalePatterns = [
     /\b(femme|femmes|féminin|pour femme|pour les femmes|women|woman|female|mujer|mujeres|para mujer|femenino|dame|dames|lady|ladies|señora|señoras)\b/,
     /\b(women'?s|womenswear|pour elle|for her|para ella|pour une femme|for a woman)\b/,
@@ -332,7 +379,7 @@ function detectGender(message) {
 
   if (hasMale && !hasFemale) return 'male';
   if (hasFemale && !hasMale) return 'female';
-  return null; // pas de genre détecté → pas de filtre
+  return null;
 }
 
 /* ══════════════════════════════════════════════════════
@@ -343,84 +390,23 @@ function isBrandQuery(message) {
   return /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)|your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)|tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia|bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)|marque propre|propre marque|brand propre|own brand|marca propia/.test(q);
 }
 
-
-
-const MALE_PRODUCT_IDS = [
-  'Pdg-Francenel-product35', // DrawstringPants
-  'Pdg-Francenel-product36', // CropSlimPants
-  'Pdg-Francenel-product37', // HaremPrints
-  'Pdg-Francenel-product38', // LooseJeans
-  'Pdg-Francenel-product39', // BritishLoafers
-  'Pdg-Francenel-product40', // AirMesh Runners
-  'Pdg-Francenel-product41', // LeatherCasuals
-  'Pdg-Francenel-product42', // BusinessDress Shoes
-  'Pdg-Francenel-product43', // HollowSneakers
-  'Pdg-Francenel-product44', // TrendTrainers
-  'Pdg-Francenel-product45', // PatentLoafers
-  'Pdg-Francenel-product46', // CollarShirt
-  'Pdg-Francenel-product47', // GeoPolo
-  'Pdg-Francenel-product48', // StripedCollar Sweater
-  'Pdg-Francenel-product49', // TurtleneckLux
-  'Pdg-Francenel-product50', // HikeJacket
-  'Pdg-Francenel-product51', // RoundNeck Sweatshirt
-];
-
-// Produits strictement féminins (exclure quand on demande homme)
-const FEMALE_ONLY_IDS = [
-  'Pdg-Francenel-product1',  // Glam Heels
-  'Pdg-Francenel-product2',  // RetroRun Sneakers (unisex mais design féminin)
-  'Pdg-Francenel-product3',  // BohoFlip
-  'Pdg-Francenel-product4',  // PowerHeels
-  'Pdg-Francenel-product5',  // WinterBoost Boots
-  'Pdg-Francenel-product6',  // ColorStilettos
-  'Pdg-Francenel-product7',  // NightChic Dress
-  'Pdg-Francenel-product8',  // SlitLux Dress
-  'Pdg-Francenel-product9',  // PlaidOverall
-  'Pdg-Francenel-product10', // FloralFlounce
-  'Pdg-Francenel-product11', // VintageSquare
-  'Pdg-Francenel-product12', // PaisleyBelt
-  'Pdg-Francenel-product13', // MeshDuo
-  'Pdg-Francenel-product14', // MeshGlam
-  'Pdg-Francenel-product15', // LinenBreeze
-  'Pdg-Francenel-product16', // StripedMini
-  'Pdg-Francenel-product17', // LoungeRobe
-  'Pdg-Francenel-product18', // LaceNight
-  'Pdg-Francenel-product19', // LaceThong
-  'Pdg-Francenel-product20', // SolidSexy Bikini
-  'Pdg-Francenel-product21', // CurveBikini
-  'Pdg-Francenel-product22', // LeopardNight
-  'Pdg-Francenel-product23', // SupportBra
-  'Pdg-Francenel-product24', // LaceRomper
-  'Pdg-Francenel-product25', // StripedBikini
-  'Pdg-Francenel-product26', // TubeBikini
-  'Pdg-Francenel-product27', // RuffleOne
-  'Pdg-Francenel-product28', // BandageBikini
-  'Pdg-Francenel-product29', // ContrastOne
-  'Pdg-Francenel-product30', // PremiumBikini
-  'Pdg-Francenel-product31', // IrregularTop
-  'Pdg-Francenel-product32', // ChristmasSweat
-  'Pdg-Francenel-product33', // DalmationShorts
-  'Pdg-Francenel-product34', // LeopardShirt
-];
-
-
 /* ══════════════════════════════════════════════════════
    PRODUCT SEARCH
 ══════════════════════════════════════════════════════ */
-function searchProducts(query, products, genderFilter) {
+function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS) {
   if (!query) return { results: [], isVague: false };
   const q        = query.toLowerCase();
   const keywords = q.split(/\s+/).filter(k => k.length >= 2);
 
-  // ── FILTRE GENRE STRICT ──
-  let filteredProducts = products;
+  /* ── FILTRE GENRE STRICT depuis settings ── */
+  let baseProducts = products;
   if (genderFilter === 'male') {
-    filteredProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
+    baseProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
   } else if (genderFilter === 'female') {
-    filteredProducts = products.filter(p => !MALE_PRODUCT_IDS.includes(p.id));
+    baseProducts = products.filter(p => FEMALE_ONLY_IDS.includes(p.id));
   }
 
-  const scored = products.map(p => {
+  const scored = baseProducts.map(p => {
     let score = 0;
     const searchText = `${p.title} ${p.description}`.toLowerCase();
     keywords.forEach(kw => {
@@ -430,11 +416,11 @@ function searchProducts(query, products, genderFilter) {
       p.sizes.forEach(s  => { if (String(s).toLowerCase().includes(kw)) score += 1; });
     });
 
-    // Boost produits avec le mieux noté quand requête "meilleur / top / best"
-if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test(q)) {
-  if (p.rating && p.rating >= 4.5) score += 8;
-  if (p.reviewsCount && p.reviewsCount >= 50) score += 5;
-}
+    /* Boost meilleur noté */
+    if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test(q)) {
+      if (p.rating && p.rating >= 4.5) score += 8;
+      if (p.reviewsCount && p.reviewsCount >= 50) score += 5;
+    }
 
     const badgeLower = (p.badge || '').toLowerCase();
     if ((q.includes('best seller') || q.includes('meilleure vente') || q.includes('meilleur vente') || q.includes('top vente') || q.includes('más vendido')) && badgeLower.includes('best seller')) score += 15;
@@ -442,6 +428,7 @@ if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test
     if ((q.includes('new arrival') || q.includes('new arriv') || q.includes('nouvel') || q.includes('nouveau') || q.includes('nueva llegada')) && badgeLower.includes('new')) score += 15;
     if ((q.includes('top sale') || q.includes('top deal') || q.includes('meilleure offre') || q.includes('mejor oferta')) && (badgeLower.includes('top sale') || badgeLower.includes('best deal'))) score += 15;
 
+    /* Boosts thématiques par mots-clés */
     const themes = [
       { words: ['glam','heel','stiletto','cross strap','sandale'],      id: 'Pdg-Francenel-product1',  boost: 12 },
       { words: ['retrorun','sneaker','chunky','street','retro'],        id: 'Pdg-Francenel-product2',  boost: 12 },
@@ -584,6 +571,7 @@ function buildBlogContext(blogData) {
 
 /* ══════════════════════════════════════════════════════
    PAGE NAVIGATION MAP — BBW4LIFE
+   Labels adaptés — "Disclaimer" simplifié (pas "Medical")
 ══════════════════════════════════════════════════════ */
 const PAGE_MAP = {
   '/index.html':                              { label: 'Home',                   icon: '🏠' },
@@ -607,13 +595,14 @@ const PAGE_MAP = {
   '/policies/refund.html':                    { label: 'Refund Policy',          icon: '↩️' },
   '/policies/shipping.html':                  { label: 'Shipping Info',          icon: '🚚' },
   '/policies/terms.html':                     { label: 'Terms & Conditions',     icon: '📄' },
-  '/page/disclaimer.html':                    { label: 'Medical Disclaimer',     icon: '⚕️' },
+  '/page/disclaimer.html':                    { label: 'Disclaimer',             icon: '📋' },
+  '/page/products-care.html':                 { label: 'Product Care Guide',     icon: '✨' },
 };
 
 /* ══════════════════════════════════════════════════════
    BUILD SYSTEM PROMPT — BBW4LIFE
 ══════════════════════════════════════════════════════ */
-function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap) {
+function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
   const contactEmails  = settings.contact_emails || {};
   const emailsText     = Object.entries(contactEmails).map(([k, v]) => `• ${k}: ${v}`).join('\n') || '• No emails configured';
   const promos         = settings.promos      || [];
@@ -627,15 +616,15 @@ function buildSystemPrompt(products, settings, contactInfo, searchData, blogData
     ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items`).join('\n')
     : '• No active promo codes at this time';
 
-  /* BBW Featured products — lus depuis settings, pas hardcodés */
+  /* BBW Featured products — lus depuis settings */
   const jrgqCols      = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
   const featuredCol   = jrgqCols.find(c => c.id === 'bbw-features-products');
   const featuredIds   = (featuredCol && featuredCol.product_ids) || [];
-  const EXCLUDED_IDS = featuredIds;
+  const EXCLUDED_IDS  = featuredIds;
 
   const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
 
-  /* Titres des produits BBW Featured pour le prompt "brand coming soon" */
+  /* Titres des produits BBW Featured */
   const featuredTitles = EXCLUDED_IDS
     .map(id => products.find(p => p.id === id))
     .filter(Boolean)
@@ -686,27 +675,35 @@ PRODUCT ${i + 1}:
   const searchContext = buildSearchDataContext(searchData);
   const blogContext   = buildBlogContext(blogData);
 
-/* ── Shipping options depuis settings ── */
+  /* ── Shipping options depuis settings ── */
   const shippingOptions = [
     settings.shipping_standard_delay ? `• Standard (free over $${freeShipThresh}, ${settings.shipping_standard_delay})` : null,
-    settings.shipping_dhl_delay      ? `• Express DHL (${settings.shipping_dhl_delay})`                                   : null,
-    settings.shipping_priority_delay ? `• Priority (${settings.shipping_priority_delay})`                                 : null,
-    settings.shipping_economy_delay  ? `• Economy (${settings.shipping_economy_delay})`                                   : null,
-    settings.shipping_express_delay  ? `• Express (${settings.shipping_express_delay})`                                   : null,
+    settings.shipping_dhl_delay      ? `• Express DHL (${settings.shipping_dhl_delay})`                                  : null,
+    settings.shipping_priority_delay ? `• Priority (${settings.shipping_priority_delay})`                                : null,
+    settings.shipping_economy_delay  ? `• Economy (${settings.shipping_economy_delay})`                                  : null,
+    settings.shipping_express_delay  ? `• Express (${settings.shipping_express_delay})`                                  : null,
   ].filter(Boolean).join('\n');
+
+  /* ── Collections depuis settings ── */
+  const menCol    = jrgqCols.find(c => c.id === 'men-plus-size');
+  const womanCol  = jrgqCols.find(c => c.id === 'curvy-woman');
+  const beautyCol = jrgqCols.find(c => c.id === 'curvy-beauty');
+  const menCount    = menCol    ? menCol.stat_value    : 'several styles';
+  const womanCount  = womanCol  ? womanCol.stat_value  : 'several styles';
+  const beautyCount = beautyCol ? beautyCol.stat_value : 'several styles';
 
   const collectionsContext = `
 COLLECTIONS:
-  • Curvy Woman (34 styles: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
-  • Men Plus Size (18 styles: pants, shoes, shirts, sweaters) → /collections/main-plus-size.html
-  • Curvy Beauty (17 styles: nails, eyebrow, lip, makeup, haircare, skincare) → /collections/curvy-beauty.html
+  • Curvy Woman (${womanCount}: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
+  • Men Plus Size (${menCount}: pants, shoes, shirts, sweaters) → /collections/main-plus-size.html
+  • Curvy Beauty (${beautyCount}: nails, eyebrow, lip, makeup, haircare, skincare) → /collections/curvy-beauty.html
   • Curvy Dresses (dresses, bathrobe, sexy, breathable) → /collections/curvy-dresses.html
   • Pants & Shorts (5 styles) → /collections/bbw4life-pants-skirts.html
   • Most Popular (community favorites) → /collections/most-popular.html
-  • All Products (68 styles) → /collections/bbw4life-all-product.html
+  • All Products (68+ styles) → /collections/bbw4life-all-product.html
 `;
 
-  /* ── Brand section — dynamique selon plans_available ── */
+  /* ── Brand section ── */
   const plansAvailable = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
 
   const brandSection = plansAvailable ? `
@@ -753,6 +750,9 @@ Make them feel they are part of something being built FOR THEM.
 Add 🔗[PAGE:/collections/bbw-features-products.html] at the end so they can discover the BBW Featured collection.
 `;
 
+  /* ── Langues autorisées pour instruction ── */
+  const allowedLangNames = (allowedLanguages || []).map(l => getLangName(l)).join(', ');
+
   return `You are **Berline**, the official AI assistant and stylist of **BBW4LIFE**.
 
 ═══════════════════════════════════════
@@ -764,9 +764,14 @@ You feel like a real friend who knows everything about BBW4LIFE.
 Use emojis naturally — not on every sentence, only when it feels right.
 KEEP RESPONSES SHORT — max 4-5 lines. No walls of text.
 
-GREETINGS — when someone says hi, yow, hello, salut, hola, wesh, cc:
+GREETINGS — when someone says hi, yow, hello, salut, hola, wesh, cc, bonjou, bonswa:
 Reply warmly and naturally. Ask how you can help. No buttons, no lists. Just a human hello.
 NEVER show contact or page buttons for simple greetings or small talk.
+
+SHORT ACKNOWLEDGEMENTS — when someone says "ok", "merci", "super", "👍", "oke", "dakò", "mesi", "great", "thanks", or any very short positive reaction (1-4 words):
+Reply with ONE warm, friendly sentence only. No product suggestions. No page buttons. No explanations. Just a natural human response like a friend would.
+Examples: "Avec plaisir ! 😊", "Happy to help!", "Mesi ampil ! 🙏", "Toujou la pou ou !"
+NEVER expand, NEVER add products, NEVER add pages for these short messages.
 
 ═══════════════════════════════════════
 🌍 LANGUAGE RULE — ABSOLUTE — NO EXCEPTION
@@ -774,6 +779,12 @@ NEVER show contact or page buttons for simple greetings or small talk.
 The backend has already detected the user's language and tells you which one to use.
 You MUST reply in exactly that language — no mixing, no switching, no exception.
 NEVER mix languages in your response.
+
+The languages allowed on this store are: ${allowedLangNames}
+If the user writes in a language NOT in this list, reply in ENGLISH (or the store's primary language).
+If the user writes in HAITIAN CREOLE (ht), you MUST reply 100% in Haitian Creole.
+If the user writes in FRENCH, reply in FRENCH. If in SPANISH, reply in SPANISH. Etc.
+NEVER reply in English if the user wrote in another allowed language.
 
 ═══════════════════════════════════════
 ✏️ FORMATTING RULES
@@ -810,6 +821,7 @@ Page URLs:
   Shipping Info → 🔗[PAGE:/policies/shipping.html]
   Terms & Conditions → 🔗[PAGE:/policies/terms.html]
   Disclaimer → 🔗[PAGE:/page/disclaimer.html]
+  Product Care Guide → 🔗[PAGE:/page/products-care.html]
   Product N → 🔗[PAGE:/products/productN.html]
 
 WHEN TO ADD 🔗[PAGE:...]:
@@ -818,12 +830,13 @@ WHEN TO ADD 🔗[PAGE:...]:
 ✅ refund / return / remboursement / reembolso / cancel → add 🔗[PAGE:/policies/refund.html]
 ✅ shipping / livraison / envío → add 🔗[PAGE:/policies/shipping.html]
 ✅ terms / conditions / CGV / términos → add 🔗[PAGE:/policies/terms.html]
-✅ disclaimer / medical / avertissement → add 🔗[PAGE:/page/disclaimer.html]
+✅ disclaimer / legal notice / avertissement / mentions légales → add 🔗[PAGE:/page/disclaimer.html]
+✅ care / entretien / comment laver / how to wash / how to care / prendre soin → add 🔗[PAGE:/page/products-care.html]
 ✅ account / orders / profile / password → add 🔗[PAGE:/account.html]
 ✅ track order / order tracking → add 🔗[PAGE:/page/order-tracking.html]
 ✅ faq / questions → add 🔗[PAGE:/page/faq.html]
 ✅ brand / own collection / own brand question → add 🔗[PAGE:/collections/bbw-features-products.html]
-❌ NEVER for greetings, small talk, founder questions, general style advice
+❌ NEVER for greetings, small talk, short acks (ok/merci/super), founder questions, general style advice
 
 👇 CONTACT BUTTONS — shown when reply ends with 👇 on its own line.
 Backend uses this to show WhatsApp / Telegram / Contact page buttons.
@@ -842,13 +855,13 @@ WHEN TO ADD 👇 — EVERY TIME one of these is detected, add 👇 NO EXCEPTION:
 
 IMPORTANT: Even if the user asked about contact before → ALWAYS add 👇 again.
 The frontend needs it EVERY TIME to show the buttons. Never skip it.
-❌ NEVER add 👇 for: greetings, founder info, products, style advice, policies.
+❌ NEVER add 👇 for: greetings, short acks, founder info, products, style advice, policies, ok/merci/thanks.
 
 ═══════════════════════════════════════
 🚦 PRODUCT DISPLAY RULES
 ═══════════════════════════════════════
 Show products ONLY when user explicitly asks to buy or names a specific product type.
-NEVER suggest products for: greetings, contact, policies, general style info.
+NEVER suggest products for: greetings, contact, policies, general style info, short acks (ok/merci/thanks/super).
 Specific → show 1 product only.
 Vague (dress, shoes, something nice) → show up to 4, ask which one they mean.
 
@@ -964,12 +977,45 @@ When asked → 2–3 line clear answer + 🔗[PAGE:/policies/refund.html]
 When asked → 2–3 line clear answer + 🔗[PAGE:/policies/terms.html]
 
 ═══════════════════════════════════════
-⚕️ DISCLAIMER
+📋 DISCLAIMER — BBW4LIFE LEGAL NOTICE
 ═══════════════════════════════════════
-- Educational content only — NOT medical treatment.
-- Consult a doctor if needed.
-- BBW4LIFE NEVER sells pills, detox teas, or unregulated supplements.
-When asked → 2–3 line caring answer + 🔗[PAGE:/page/disclaimer.html]
+This page explains who BBW4LIFE is, our commitments, and our legal position.
+Key points:
+- BBW4LIFE is a FASHION & BEAUTY store — NOT a medical brand, NOT a health provider.
+- We do NOT sell pills, detox products, or unregulated health supplements.
+- Style and beauty recommendations are editorial suggestions, not professional prescriptions.
+- BBW4LIFE is a new brand (founded June 18, 2025), currently completing official brand registration.
+- We work with trusted partner platforms while our own label matures.
+- All BBW4LIFE content (texts, visuals, brand identity) is protected intellectual property © 2025.
+- Third-party links on the site are provided for convenience — BBW4LIFE is not responsible for external sites.
+- This disclaimer may be updated as the brand grows. Current version: v3.0 — May 2026.
+When asked about disclaimer / legal notice / mentions légales / avertissement légal:
+→ Give a 2–3 line clear answer + 🔗[PAGE:/page/disclaimer.html]
+
+═══════════════════════════════════════
+✨ PRODUCT CARE GUIDE — /page/products-care.html
+═══════════════════════════════════════
+BBW4LIFE has a dedicated Product Care Guide page with advice for all product categories.
+Key care tips by category:
+- **Lingerie & Lace** (LaceNight, LaceRomper, LaceThong Set, LeopardNight, SupportBra): Hand wash cold (30°C max), delicate bag if machine, no tumble dry, air dry flat, store folded flat. Never iron lace or mesh.
+- **Clothing & Dresses** (all dresses, tops, men's shirts): Cold wash printed pieces, steam MeshGlam/GlamSatin, iron LinenBreeze inside out on low, hang dresses on padded hangers, fold knit sweaters flat.
+- **Swimwear & Bikinis** (all bikinis, one-pieces): Rinse in cold fresh water immediately after every swim, hand wash with mild soap, lay flat to dry in shade. No machine wash, no wringing.
+- **Shoes & Heels** (Glam Heels, PowerHeels, PatentLoafers, BritishLoafers): Wipe with soft cloth after wear, monthly leather conditioner, store in dust bags with tissue inside, no direct sunlight.
+- **Sneakers** (RetroRun, AirMesh Runners, TrendTrainers): Clean with damp brush, remove insoles to air dry, no machine wash, no direct heat.
+- **Beauty & Skincare** (PoreClean, KnuckleWhite, Propolis Essence, MenGlow Cream, IceGlow): Apply on clean dry skin, store in cool dark drawer away from sunlight and humidity, never freeze serums.
+- **Hair Care** (DeepRepair Mask, BatanaGlow Oil, BatanaBoost): Apply mask on damp hair, warm towel 10 min for better results, oil on dry ends only. No heat styling right after mask.
+- **Nail Products** (NailBond Glue, BowNails, NailRepair Lotion): Apply glue on oil-free nails, hold press-ons 30 sec, remove nails with warm water gently, use NailRepair Lotion after removal.
+
+Care label symbols quick guide:
+- Wash tub (number) = machine washable at that temperature
+- Tub + line = gentle/delicate cycle only
+- X in square = no tumble dry
+- Iron symbol (dots) = heat level (1=low, 2=medium, 3=high)
+- Circle crossed = no dry clean
+- Triangle = bleaching (crossed = no bleach)
+
+When asked how to care for / wash / maintain / entretenir / laver any BBW4LIFE product:
+→ Give specific care tips for that product type + 🔗[PAGE:/page/products-care.html]
 
 ═══════════════════════════════════════
 🗂️ COLLECTIONS
@@ -1010,15 +1056,18 @@ ${blogContext || '(not available)'}
 - Never write raw URLs or phone numbers in text
 - Never invent prices, emails, or data
 - Never promise guaranteed results
-- Never reply in wrong language
+- Never reply in wrong language — always use the language detected by the backend
+- CRITICAL: If the user writes in Haitian Creole, French, Spanish or any allowed language — NEVER reply in English
 - Never show products for non-product requests
-- Never add 👇 for greetings, policies, or general info
+- Never add 👇 for: greetings, short acks, policies, or general info
 - Never show promo codes without [[CODE]] format
 - Never answer policy questions without the relevant 🔗[PAGE:...] button
 - Never confuse badge queries (best seller, promo…) with top-starter queries
 - Never confuse brand queries with product or badge queries
 - Answer brand/own collection questions using ONLY the brand section above — never invent details
-- NEVER answer questions about "CurvaFit" or "Curva Fit" — you have zero information about it. If asked, say clearly: "I don't have any information about CurvaFit." Nothing more.`;
+- NEVER answer questions about "CurvaFit" or "Curva Fit" — you have zero information about it. If asked, say clearly: "I don't have any information about CurvaFit." Nothing more.
+- For SHORT ACK messages (ok, merci, super, 👍, thanks, mesi, oke, etc.): ONE short warm sentence ONLY. No products, no pages, no explanations.
+- The Disclaimer page is about BBW4LIFE's legal commitments as a FASHION store — not medical. Never call it "Medical Disclaimer".`;
 }
 
 /* ── Fallback / Error messages ── */
@@ -1033,6 +1082,7 @@ function getFallbackMessage(lang) {
     hi: "मैं अभी बहुत व्यस्त हूँ 😅 कृपया कुछ सेकंड बाद पुनः प्रयास करें!",
     ru: "Я сейчас очень занята 😅 Пожалуйста, повторите попытку через несколько секунд!",
     ja: "ただいま混み合っています 😅 数秒後にもう一度お試しください！",
+    ht: "Mwen trè okipe kounye a 😅 Tanpri eseye ankò nan kèk segonn!",
   };
   return msgs[lang] || "I'm a bit overloaded right now 😅 Please try again in a few seconds!";
 }
@@ -1048,6 +1098,7 @@ function getErrorMessage(lang) {
     hi: "क्षमा करें, मुझे एक छोटी तकनीकी समस्या है। कृपया पुनः प्रयास करें! 🙏",
     ru: "Извините, у меня небольшая техническая проблема. Пожалуйста, попробуйте снова! 🙏",
     ja: "申し訳ありません、少し技術的な問題が発生しています。もう一度お試しください！🙏",
+    ht: "Eskize mwen, gen yon ti pwoblèm teknik. Tanpri eseye ankò! 🙏",
   };
   return msgs[lang] || "Sorry, I'm having a little trouble right now. Please try again in a moment! 🙏";
 }
@@ -1099,6 +1150,7 @@ exports.handler = async (event, context) => {
       console.error('Could not load products.data.json:', err.message);
     }
 
+    /* Langues autorisées depuis settings */
     const allowedLanguages = (settings.allowed_languages && settings.allowed_languages.length > 0)
       ? settings.allowed_languages
       : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
@@ -1123,7 +1175,7 @@ exports.handler = async (event, context) => {
       contactPage: '/page/contact.html'
     };
 
-    /* BBW Featured IDs — lus depuis settings */
+    /* BBW Featured IDs depuis settings */
     const jrgqCols    = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
     const featuredCol = jrgqCols.find(c => c.id === 'bbw-features-products');
     const featuredIds = (featuredCol && featuredCol.product_ids) || [];
@@ -1132,30 +1184,37 @@ exports.handler = async (event, context) => {
     const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
     const badgeMap = buildBadgeMap(visibleProducts);
 
+    /* IDs genre depuis settings — plus de hardcode */
+    const { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS } = buildGenderIds(settings);
+
     const intent            = detectIntent(message);
     const topStarterRequest = isTopStarterRequest(message);
     const brandRequest      = isBrandQuery(message);
+    const shortAck          = isShortAck(message);
 
-    const matchedBadge = !topStarterRequest && !brandRequest ? detectBadgeQuery(message, badgeMap) : null;
+    /* Si c'est un acquiescement court → pas de produits, pas de badges */
+    const matchedBadge = (!topStarterRequest && !brandRequest && !shortAck) ? detectBadgeQuery(message, badgeMap) : null;
     const isBadgeQuery = !!matchedBadge;
 
     let relevantProducts = [], isVague = false;
 
-    if (isBadgeQuery) {
-      relevantProducts = visibleProducts.filter(p => (p.badge || '').toLowerCase().trim() === matchedBadge);
-      isVague = false;
-    } else if (topStarterRequest) {
-      const topStarterIds = (settings.top_starter_products || {}).product_ids || [];
-      relevantProducts = topStarterIds
-        .filter(id => !EXCLUDED_IDS.includes(id))
-        .map(id => visibleProducts.find(p => p.id === id))
-        .filter(Boolean);
-      isVague = false;
-    } else if (intent === 'product' && !brandRequest) {
-      const genderFilter = detectGender(message);
-      const searchResult = searchProducts(message, visibleProducts, genderFilter);
-      relevantProducts   = searchResult.results;
-      isVague            = searchResult.isVague;
+    if (!shortAck) {
+      if (isBadgeQuery) {
+        relevantProducts = visibleProducts.filter(p => (p.badge || '').toLowerCase().trim() === matchedBadge);
+        isVague = false;
+      } else if (topStarterRequest) {
+        const topStarterIds = (settings.top_starter_products || {}).product_ids || [];
+        relevantProducts = topStarterIds
+          .filter(id => !EXCLUDED_IDS.includes(id))
+          .map(id => visibleProducts.find(p => p.id === id))
+          .filter(Boolean);
+        isVague = false;
+      } else if (intent === 'product' && !brandRequest) {
+        const genderFilter = detectGender(message);
+        const searchResult = searchProducts(message, visibleProducts, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS);
+        relevantProducts   = searchResult.results;
+        isVague            = searchResult.isVague;
+      }
     }
 
     const EXPLICIT_CONTACT_PATTERNS = [
@@ -1185,9 +1244,13 @@ exports.handler = async (event, context) => {
       /su\s+(whatsapp|telegram|email)\b/i,
     ];
 
-    const isContactIntent = !topStarterRequest && !isBadgeQuery && !brandRequest && intent !== 'product' && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
+    const isContactIntent = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
+      && intent !== 'product'
+      && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
 
-    const systemPrompt = buildSystemPrompt(visibleProducts, settings, contactInfo, searchData, blogData, badgeMap);
+    const systemPrompt = buildSystemPrompt(
+      visibleProducts, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages
+    );
 
     const contactInstruction = isContactIntent
       ? '\n[CONTACT REQUEST: User wants to reach the team. You MUST end your reply with 👇 on its own line — no exception.]'
@@ -1209,15 +1272,21 @@ exports.handler = async (event, context) => {
       ? '\n[BRAND QUERY: User is asking about BBW4LIFE own brand/collection. Use ONLY the BBW4LIFE BRAND section in the system prompt to reply. Do NOT show product cards. Do NOT treat this as a product search.]'
       : '';
 
-      const genderFilter2 = detectGender(message);
-      const genderInstruction = genderFilter2 === 'male'
-        ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products. NEVER suggest women items — dresses, bikinis, lingerie, heels are strictly excluded.]'
-        : genderFilter2 === 'female'
-        ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products. NEVER suggest men items — shirts, jeans, men shoes are strictly excluded.]'
-        : '';
+    /* Instruction acquiescement court */
+    const shortAckInstruction = shortAck
+      ? '\n[SHORT ACK: The user sent a very short acknowledgement (ok, merci, thanks, super, 👍, mesi, oke, etc.). Reply with EXACTLY ONE short warm friendly sentence in their language. NO products. NO page buttons. NO explanations. NO lists. Just a warm human response like a friend would say. Maximum 10 words.]'
+      : '';
 
-    const langName        = getLangName(userLang);
-    const otherLangs      = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE'].filter(l => l !== langName).join(', ');
+    const genderFilter2 = detectGender(message);
+    const genderInstruction = genderFilter2 === 'male'
+      ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products from the Men Plus Size collection. NEVER suggest women items — dresses, bikinis, lingerie, heels are strictly excluded.]'
+      : genderFilter2 === 'female'
+      ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products from the Curvy Woman collection. NEVER suggest men items — shirts, jeans, men shoes are strictly excluded.]'
+      : '';
+
+    const langName    = getLangName(userLang);
+    const otherLangs  = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE','HAITIAN CREOLE']
+      .filter(l => l !== langName).join(', ');
     const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
 
     const groqMessages = [
@@ -1225,7 +1294,7 @@ exports.handler = async (event, context) => {
       ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
       {
         role: 'user',
-        content: `${message}\n\n[${langInstruction}]${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
+        content: `${message}\n\n[${langInstruction}]${shortAckInstruction}${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
       }
     ];
 
@@ -1267,19 +1336,24 @@ exports.handler = async (event, context) => {
     if (!modelSuccess) {
       return {
         statusCode: 200, headers,
-        body: JSON.stringify({ reply: getFallbackMessage(userLang), products: [], intent: 'general', isVague: false, showContact: false, contactInfo: null, pageButtons: [] })
+        body: JSON.stringify({
+          reply: getFallbackMessage(userLang), products: [], intent: 'general',
+          isVague: false, showContact: false, contactInfo: null, pageButtons: []
+        })
       };
     }
 
-    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest}`);
+    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest} | ShortAck: ${shortAck}`);
 
     const data  = await groqResponse.json();
     const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);
 
-    const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && intent !== 'product' && (isContactIntent || reply.includes('👇'));
+    const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
+      && intent !== 'product'
+      && (isContactIntent || reply.includes('👇'));
     const cleanReply = reply.replace(/👇[\s]*/g, '').trim();
 
-    const suppressPages = isGreeting(message);
+    const suppressPages = isGreeting(message) || isShortAck(message);
     const pageMatches   = suppressPages ? [] : [...cleanReply.matchAll(/🔗\[PAGE:([^\]]+)\]/g)];
     const pageButtons   = pageMatches.map(m => {
       const url = m[1].trim();

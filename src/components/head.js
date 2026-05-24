@@ -177,6 +177,14 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/checkout/checkout.html'
     },
 
+    '/cart': {
+        title: 'Your Cart — BBW4LIFE | Plus Size Fashion & Beauty',
+        description: 'Review your BBW4LIFE cart. Plus size fashion, beauty, shoes and accessories for every curvy woman. Free shipping on orders over $350. Secure checkout guaranteed.',
+        keywords: 'BBW4LIFE cart, shopping cart BBW4LIFE, plus size cart checkout, curvy fashion cart, BBW4LIFE order review, plus size checkout, BBW cart page, curvy fashion order, BBW4LIFE bag, plus size fashion bag',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/BBW4LIFE_All_Products.png?v=1777936945',
+        canonical: 'https://bbw4life.com/cart.html'
+    },
+
     // ─────────────────────────────────────────────────────
     // POLICIES
     // ─────────────────────────────────────────────────────

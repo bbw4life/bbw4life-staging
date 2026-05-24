@@ -90,7 +90,7 @@
 .account-main {
   background: linear-gradient(160deg, #fdf6f0 0%, #f5edf5 50%, #f0f0f7 100%);
   min-height: 100vh;
-  padding: 40px 0 30px;
+  padding: 40px 0 0px;
 }
 
 .account-background {
@@ -943,7 +943,7 @@ a.stat-wishlist-link:visited {
 .quick-actions-section {
   margin-top: 0 !important;
   padding-top: 0 !important;
-  border-top: none !important;
+  padding-bottom: 20px !important;
 }
 
 .quick-actions-title {

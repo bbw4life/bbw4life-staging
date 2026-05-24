@@ -2279,7 +2279,6 @@ body {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 55px;
-    /* ✦ fondu ivoire chaud au lieu de blanc terne */
     background: linear-gradient(to top,
         rgba(250, 246, 240, 0.70),
         transparent);
@@ -2300,7 +2299,6 @@ body {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.05rem; font-weight: 700;
     text-align: center; width: 88%;
-    /* ✦ fond brun profond chaud au lieu de noir froid */
     background: rgba(30, 15, 8, 0.65);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(201,150,62,0.35);
@@ -2334,6 +2332,115 @@ body {
     transform: scale(1.45);
     box-shadow: 0 0 10px rgba(201,150,62,0.75);
 }
+
+/* ── Overlay textes vidéo ── */
+.paul-banner-video-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 10px;
+    pointer-events: none;
+}
+
+.paul-banner-video-overlay .paul-banner-indicators {
+    pointer-events: all;
+}
+
+.paul-banner-video-texts {
+    position: relative;
+    width: 92%;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+.paul-banner-video-text {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    color: #fff;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    background: rgba(30, 15, 8, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(201, 150, 62, 0.35);
+    padding: 6px 14px;
+    border-radius: 10px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    line-height: 1.3;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+}
+
+.paul-banner-video-text.active {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+}
+
+/* ── Vidéo (drawer + cart page) ── */
+.paul-banner-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 2;
+    filter: brightness(0.88) saturate(1.05);
+}
+
+/* ── Mode vidéo drawer ── */
+.cart-drawer__paul-banner.paul-banner--video-mode {
+    height: 140px;
+    background: #0d0a08;
+}
+
+/* ── Mode image drawer ── */
+.cart-drawer__paul-banner {
+    height: 130px;
+}
+
+/* ── Cart PAGE — mode image ── */
+#cp-paul-banner {
+    height: 180px;
+}
+
+/* ── Cart PAGE — mode vidéo ── */
+#cp-paul-banner.paul-banner--video-mode {
+    height: 200px;
+    background: #0d0a08;
+}
+
+/* ── Réduire padding block banner cart PAGE ── */
+#cp-paul-banner {
+    margin-top: -20px !important;
+    margin-bottom: -10px !important;
+}
+
+#cp-paul-banner .paul-banner-title {
+    bottom: 18px;
+    font-size: 1.15rem;
+    padding: 8px 20px;
+}
+
+#cp-paul-banner .paul-banner-video-text.active {
+    font-size: 1.15rem;
+    padding: 8px 20px;
+}
+
+#cp-paul-banner .paul-banner-indicators {
+    bottom: 6px;
+}
+
 
 /* ================================================================
    PROMO CODE SLIDER — inchangé

@@ -43,12 +43,35 @@
       <i class="fab fa-google-pay"></i>
       <i class="fab fa-cc-stripe"></i>
     </div>
-  </div>
+
+    <!-- EXTRA PRODUCTS — CART DRAWER -->
+    <div class="drawer-extra-section" id="drawer-extra-section" style="display:none;">
+      <div class="drawer-extra-header">
+        <span>You May Also Like</span>
+      </div>
+      <div class="drawer-extra-slider-wrap">
+        <button class="drawer-extra-arrow drawer-extra-arrow--prev" id="drawer-extra-prev" aria-label="Previous">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="drawer-extra-viewport" id="drawer-extra-viewport">
+          <div class="drawer-extra-track" id="drawer-extra-track"></div>
+        </div>
+        <button class="drawer-extra-arrow drawer-extra-arrow--next" id="drawer-extra-next" aria-label="Next">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div class="drawer-extra-dots" id="drawer-extra-dots"></div>
+    </div>
+
+  </div><!-- /cart-drawer__body -->
+
   <div class="cart-drawer__footer">
     <p class="subtotal">Subtotal: $0.00</p>
     <button class="checkout">Checkout</button>
   </div>
+
 </div>
+
 
 <!-- WISHLIST MODAL -->
 <div class="wishlist-modal">

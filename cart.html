@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/cart.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <script src="/src/components/head.js"></script>
+</head>
+<body>
+
+<!-- Reading Progress Bar -->
+<div id="reading-progress-bar" aria-hidden="true"></div>
+
+<!-- Header -->
+<div id="header-container"></div>
+
+<!-- Breadcrumb -->
+<div id="breadcrumb-container"></div>
+
+<!-- ════════════════════════════════════════
+     CART PAGE MAIN
+════════════════════════════════════════ -->
+<main class="cart-page" id="cart-page-main">
+
+  <!-- ── CART HEADER ── -->
+  <div class="cp-header">
+    <div class="cp-header__inner">
+      <div class="cp-header__left">
+        <a href="/collections/bbw4life-all-product.html" class="cp-back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Continue Shopping
+        </a>
+      </div>
+      <div class="cp-header__center">
+        <h1 class="cp-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Your Cart
+          <span class="cp-title__count" id="cp-item-count">0 items</span>
+        </h1>
+      </div>
+      <div class="cp-header__right">
+        <button class="cp-share-cart-btn" id="cpShareCartBtn" title="Share your cart">
+          <i class="fi fi-rr-share"></i>
+          Share Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COUNTDOWN ── -->
+  <div class="cp-countdown-wrap" id="cp-countdown" style="display:none;">
+    <span class="cart-drawer__countdown-text" id="cp-countdown-text"></span>
+    <span class="cart-drawer__countdown-time" id="cp-countdown-time"></span>
+  </div>
+
+  <!-- ── PROGRESS BAR SHIPPING ── -->
+  <div class="cp-progress-wrap" id="cp-progress-container" style="display:none;">
+    <span class="cart-drawer__progress-message" id="cp-progress-message"></span>
+    <div class="cp-progress-bar-track">
+      <div class="cp-progress-bar-fill" id="cp-progress-fill"></div>
+      <span class="cp-progress-truck" id="cp-progress-truck">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── PROMO MESSAGE ── -->
+  <div class="cp-promo-msg-wrap" id="cp-promo-message-wrap" style="display:none;">
+    <span class="promo-text initial" id="cp-promo-text-span"></span>
+  </div>
+
+  <!-- ── LAYOUT PRINCIPAL ── -->
+  <div class="cp-layout" id="cp-layout">
+
+    <!-- ════ LEFT COLUMN : ITEMS ════ -->
+    <div class="cp-items-col">
+
+      <!-- PAUL BANNER SLIDER -->
+      <div class="cart-drawer__paul-banner cp-banner" id="cp-paul-banner"></div>
+
+      <!-- ITEMS WRAP -->
+      <div class="cp-items-wrap" id="cp-items-wrap">
+        <div class="cp-items-header">
+          <span>Product</span>
+          <span>Price</span>
+          <span>Quantity</span>
+          <span>Total</span>
+        </div>
+        <div class="cp-cart-items" id="cp-cart-items-container">
+          <!-- Skeleton loader -->
+          <div class="cp-item-skeleton" id="cp-skeleton-1">
+            <div class="cp-skeleton-img"></div>
+            <div class="cp-skeleton-body">
+              <div class="cp-skeleton-line"></div>
+              <div class="cp-skeleton-line cp-skeleton-line--short"></div>
+              <div class="cp-skeleton-line cp-skeleton-line--tiny"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UPSELL -->
+      <div class="cp-upsell-section" id="cp-upsell-section">
+        <div class="cp-upsell-header">
+          <span class="cp-upsell-badge" id="cp-upsell-badge"></span>
+          <div>
+            <h3>Complete Your Order</h3>
+            <p>Customers save more by adding these</p>
+          </div>
+        </div>
+        <div class="cp-upsell-items" id="cp-upsell-items-container"></div>
+        <div class="cp-upsell-footer">
+          <span class="cp-upsell-total">Add: <strong id="cp-upsell-total-display">+ $0.00</strong></span>
+          <button class="cp-upsell-btn" id="cp-upsell-add-btn" disabled>
+            <i class="fas fa-plus-circle"></i> Add Selected to Cart
+          </button>
+        </div>
+      </div>
+
+      <!-- PROMO CODE SLIDER -->
+      <div class="cp-promo-codes" id="cp-promo-codes-container"></div>
+
+      <!-- SOCIAL PROOF -->
+      <div class="cp-social-proof" id="cp-social-proof">
+        <div class="cp-sp-header">
+          <i class="fas fa-star" style="color:#c9963e;"></i>
+          <span>What Our Community Says</span>
+        </div>
+        <div class="cp-reviews-carousel" id="cp-reviews-carousel"></div>
+      </div>
+
+      <!-- ── SHARE CART SECTION ── -->
+      <div class="cp-share-section" id="cp-share-section">
+        <div class="cp-share-inner">
+          <span class="cp-share-title">
+            <i class="fi fi-rr-share"></i>
+            Share your cart with friends
+          </span>
+          <div class="cp-share-actions">
+            <button class="cp-share-btn cp-share-btn--copy" id="cp-copy-link">
+              <i class="fi fi-rr-copy"></i> Copy Link
+            </button>
+            <button class="cp-share-btn cp-share-btn--wa" data-cart-share="whatsapp" title="WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </button>
+            <button class="cp-share-btn cp-share-btn--fb" data-cart-share="facebook" title="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+            <button class="cp-share-btn cp-share-btn--tw" data-cart-share="twitter" title="X / Twitter">
+              <i class="fab fa-x-twitter"></i>
+            </button>
+            <button class="cp-share-btn cp-share-btn--pi" data-cart-share="pinterest" title="Pinterest">
+              <i class="fab fa-pinterest-p"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cp-items-col -->
+
+    <!-- ════ RIGHT COLUMN : ORDER SUMMARY ════ -->
+    <div class="cp-summary-col" id="cp-summary-col">
+
+      <div class="cp-summary-box">
+        <div class="cp-summary-shine"></div>
+        <h2 class="cp-summary-title">Order Summary</h2>
+
+        <div class="cp-summary-lines">
+          <div class="cp-summary-line">
+            <span>Subtotal (<span id="cp-qty-label">0 items</span>)</span>
+            <span id="cp-subtotal-val">$0.00</span>
+          </div>
+          <div class="cp-summary-line">
+            <span>Shipping</span>
+            <span id="cp-shipping-val" class="cp-free-tag">Calculated at checkout</span>
+          </div>
+          <div class="cp-summary-line">
+            <span>Estimated Tax</span>
+            <span id="cp-tax-val">$0.00</span>
+          </div>
+          <div class="cp-summary-line cp-savings-line" id="cp-savings-line" style="display:none;">
+            <span><i class="fas fa-tag"></i> You Save</span>
+            <span id="cp-savings-val" class="cp-savings-amount">-$0.00</span>
+          </div>
+        </div>
+
+        <div class="cp-summary-divider"></div>
+
+        <div class="cp-summary-total">
+          <span>Total</span>
+          <span id="cp-total-val" class="cp-total-amount">$0.00</span>
+        </div>
+
+        <!-- LOYALTY POINTS -->
+        <div class="cp-loyalty" id="cp-loyalty">
+          <div class="cp-loyalty-inner">
+            <i class="fas fa-star" style="color:#c9963e;" aria-hidden="true"></i>
+            <div>
+              <strong>Earn <span id="cp-loyalty-points">0</span> BBW Points</strong>
+              <span>Redeemable on your next order</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHECKOUT BUTTON -->
+        <button class="checkout cp-checkout-btn" id="cp-checkout-btn">
+          <i class="fi fi-rr-arrow-right"></i>
+          Checkout Now
+        </button>
+
+        <!-- PAYMENT ICONS -->
+        <div class="payment-icons cp-payment-icons">
+          <i class="fab fa-cc-visa" title="Visa"></i>
+          <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+          <i class="fab fa-cc-paypal" title="PayPal"></i>
+          <i class="fab fa-cc-amex" title="American Express"></i>
+          <i class="fab fa-cc-apple-pay" title="Apple Pay"></i>
+          <i class="fab fa-google-pay" title="Google Pay"></i>
+          <i class="fab fa-cc-stripe" title="Stripe"></i>
+        </div>
+
+        <!-- TRUST BADGES -->
+        <div class="cp-trust-badges">
+          <div class="cp-trust-item">
+            <i class="fas fa-lock" aria-hidden="true"></i>
+            <span>Secure SSL</span>
+          </div>
+          <div class="cp-trust-item">
+            <i class="fas fa-rotate-left" aria-hidden="true"></i>
+            <span>30-Day Returns</span>
+          </div>
+          <div class="cp-trust-item">
+            <i class="fas fa-truck" aria-hidden="true"></i>
+            <span>Free Shipping $<span class="hdr-free-shipping-threshold">350</span>+</span>
+          </div>
+          <div class="cp-trust-item">
+            <i class="fas fa-headset" aria-hidden="true"></i>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+
+      </div><!-- /cp-summary-box -->
+
+    </div><!-- /cp-summary-col -->
+
+  </div><!-- /cp-layout -->
+
+  <!-- ── EMPTY CART STATE ── -->
+  <div class="cp-empty" id="cp-empty" style="display:none;">
+    <div class="cp-empty-inner">
+      <div class="empty-cart__icon-wrap">
+        <div class="empty-cart__icon-bg">
+          <span class="empty-cart__icon"><i class="fas fa-shopping-bag"></i></span>
+          <span class="empty-cart__badge">0</span>
+        </div>
+      </div>
+      <h3>Your cart is <span>empty</span></h3>
+      <div class="empty-cart__divider"></div>
+      <p>You haven't added anything yet.<br>Let's find something beautiful for you!</p>
+      <a href="/collections/bbw4life-all-product.html" class="flash-deal__cta">
+        Shop All Products <i class="fi fi-rr-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── MARQUEE ── -->
+  <div class="cart-marquee cp-marquee-strip" id="cp-marquee-strip">
+    <div class="marquee-content">
+      <span>Free Shipping on Orders Over $<span class="marquee-free-shipping"></span></span>
+      <span>✦</span>
+      <span>Secure Checkout Guaranteed</span>
+      <span>✦</span>
+      <span>30-Day Money Back Guarantee</span>
+      <span>✦</span>
+      <span>Buy <span class="marquee-buy-qty"></span> Get <span class="marquee-get-qty"></span> FREE</span>
+      <span>✦</span>
+      <span>Free Shipping on Orders Over $<span class="marquee-free-shipping"></span></span>
+      <span>✦</span>
+      <span>Secure Checkout Guaranteed</span>
+      <span>✦</span>
+      <span>30-Day Money Back Guarantee</span>
+      <span>✦</span>
+      <span>Buy <span class="marquee-buy-qty"></span> Get <span class="marquee-get-qty"></span> FREE</span>
+      <span>✦</span>
+    </div>
+  </div>
+
+    <!-- EXTRA PRODUCTS SECTION — CART PAGE -->
+    <div class="cp-extra-section" id="cp-extra-section" style="display:none;">
+    <div class="cp-extra-header">
+        <span class="cp-extra-badge" id="cp-extra-badge">You May Also Like</span>
+        <div>
+        <h3>Suggested For You</h3>
+        <p>Handpicked products to complete your order</p>
+        </div>
+    </div>
+    <div class="cp-extra-slider-wrap">
+        <button class="cp-extra-arrow cp-extra-arrow--prev" id="cp-extra-prev" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="cp-extra-viewport" id="cp-extra-viewport">
+        <div class="cp-extra-track" id="cp-extra-track"></div>
+        </div>
+        <button class="cp-extra-arrow cp-extra-arrow--next" id="cp-extra-next" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
+    <div class="cp-extra-dots" id="cp-extra-dots"></div>
+    </div>
+
+  <!-- Newsletter -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<!-- ── STICKY CHECKOUT BAR — mobile ── -->
+<div class="cp-sticky-bar" id="cp-sticky-bar">
+  <div class="cp-sticky-bar__inner">
+    <div class="cp-sticky-bar__info">
+      <span id="cp-sticky-qty">0 items</span>
+      <strong id="cp-sticky-total">$0.00</strong>
+    </div>
+    <button class="checkout cp-sticky-checkout" id="cp-sticky-checkout">
+      Checkout <i class="fi fi-rr-arrow-right"></i>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SHARE CART MODAL — système propre, AUCUNE référence wishlist
+══════════════════════════════════════════════════════ -->
+<div class="cp-share-modal" id="cp-share-modal" aria-modal="true" role="dialog" style="display:none;">
+  <div class="cp-share-modal__backdrop" id="cp-share-modal-backdrop"></div>
+  <div class="cp-share-modal__box">
+
+    <button class="cp-share-modal__close" id="cp-share-modal-close" aria-label="Close">
+      <i class="fi fi-rr-cross"></i>
+    </button>
+
+    <div class="cp-share-modal__icon-wrap">
+      <i class="fas fa-shopping-cart cp-share-modal__icon"></i>
+    </div>
+
+    <h3><i class="fi fi-rr-share"></i> Share Your Cart</h3>
+    <p>Let your friends discover what you're shopping!</p>
+    <div class="cp-share-modal__link-row">
+      <input type="text" id="cp-share-link-input" readonly placeholder="Generating link…">
+      <button class="cp-share-modal__copy" id="cp-share-modal-copy">
+        <i class="fi fi-rr-copy"></i> Copy
+      </button>
+    </div>
+
+    <!-- Social buttons — data-cart-share (PAS data-wishlist-share) -->
+    <div class="cp-share-modal__socials">
+      <button data-cart-share="whatsapp">
+        <i class="fab fa-whatsapp"></i> WhatsApp
+      </button>
+      <button data-cart-share="facebook">
+        <i class="fab fa-facebook-f"></i> Facebook
+      </button>
+      <button data-cart-share="twitter">
+        <i class="fab fa-x-twitter"></i> X
+      </button>
+      <button data-cart-share="pinterest">
+        <i class="fab fa-pinterest-p"></i> Pinterest
+      </button>
+    </div>
+
+    <p class="cp-share-modal__note">
+      <i class="fas fa-info-circle"></i>
+      When your friend clicks the link, the products will be automatically added to their cart.
+    </p>
+
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="cp-toast" id="cp-toast"></div>
+
+<!-- Error popup -->
+<div id="error-popup" class="error-popup" style="display:none;">
+  <div class="error-popup__box">
+    <p id="popup-message"></p>
+    <button id="popup-close">OK</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<div id="footer-container"></div>
+
+<div id="popups-container"></div>
+
+<!-- ════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════ -->
+<script src="/widgets-loader.js"></script>
+<script src="/script.js"></script>
+<script src="/search.js"></script>
+<script src="/cart-page.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+</body>
+</html>

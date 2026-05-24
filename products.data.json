@@ -4210,6 +4210,7 @@
       "promo_progress_message": "Add {remaining} more, get {get} FREE!",
       "promo_complete_message": "🎁 Congrats! You get {get} FREE item!",
       "promo_count_free_items": "Yes",
+      "banner_video_url": "https://cdn.shopify.com/videos/c/o/v/58f611b6bf2b4782900c6066616b4c1a.mp4",
       "banner_slides": [
         {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/bb4.jpg?v=1768321817","text": "You are BEAUTIFUL just as you are!"},
         {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/bb_3.jpg?v=1768321816","text": "Your confidence is your superpower."},
@@ -4527,6 +4528,24 @@
           { "product_id": "Pdg-Francenel-product7" }
         ]
       }
+    },
+    "cart_page_upsell": {
+      "discount_percent": 15,
+      "items": [
+        { "product_id": "Pdg-Francenel-product1" },
+        { "product_id": "Pdg-Francenel-product7" },
+        { "product_id": "Pdg-Francenel-product35" }
+      ]
+    },
+    "cart_extra_products": {
+      "btn_text": "Add to Cart",
+      "product_ids": [
+        "Pdg-Francenel-product2",
+        "Pdg-Francenel-product7",
+        "Pdg-Francenel-product12",
+        "Pdg-Francenel-product35",
+        "Pdg-Francenel-product56"
+      ]
     },
     "footer_new_gems": {
       "collection_ids": [
