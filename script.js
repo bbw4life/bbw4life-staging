@@ -3805,6 +3805,8 @@ if (window.innerWidth <= 768) {
     visited.unshift({ url: currentPath, title: currentTitle });
   }
 
+  const displayVisited = visited.filter(p => p.url !== currentPath);
+
   if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
 
   try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
@@ -3823,7 +3825,7 @@ if (window.innerWidth <= 768) {
       </a>
     </li>`;
 
-  visited.forEach(page => {
+  displayVisited.forEach(page => {
     const isActive = page.url === currentPath;
     const li = document.createElement('li');
     li.className = 'bc-item' + (isActive ? ' bc-active' : '');
