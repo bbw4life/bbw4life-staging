@@ -790,7 +790,6 @@
 
 /* ════════════════════════════
    URGENCY BAR
-   → Style jrgq-gallery-stats-strip, sans barre animée
 ════════════════════════════ */
 .pp-urgency-bar {
     display: flex;
@@ -2217,6 +2216,9 @@ button.buy-now.cta:hover {
 .paul_story_overlay.active { opacity: 1; display: block !important; }
 
 
+
+
+
 /* ════════════════════════════
    ACCORDION
    → Style ivoire et noir/or cohérent
@@ -2229,7 +2231,8 @@ button.buy-now.cta:hover {
     padding: 2px 0; margin-bottom: -3px; margin-top: -3px;
 }
 .accordion-item {
-    border-radius: 16px; overflow: hidden;
+    border-radius: 16px;
+    overflow: visible; /* ← CHANGÉ de hidden à visible */
     box-shadow: 0 3px 14px rgba(0,0,0,0.05);
     transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
@@ -2241,6 +2244,7 @@ button.buy-now.cta:hover {
     cursor: pointer; user-select: none;
     display: flex; align-items: center;
     justify-content: space-between;
+    gap: 10px;
     width: 100%; text-align: left;
     font-weight: 700;
     transition: background 0s, color 0s, opacity 0.18s;
@@ -2253,6 +2257,7 @@ button.buy-now.cta:hover {
     );
     color: #1a1005;
     font-size: 14px;
+    box-sizing: border-box;
 }
 .accordion-summary:hover {
     background: rgba(253,249,244,0.95);
@@ -2269,9 +2274,22 @@ details[open] > .accordion-summary .custom-icon { color: #c9963e !important; }
 details[open] > .accordion-summary .toggle-icon {
     transform: rotate(45deg);
     color: #c9963e !important;
+    background: rgba(201,150,62,0.15);
 }
-.summary-content { display: flex; align-items: center; gap: 12px; flex: 1; }
-.accordion-title-text { flex: 1; font-size: 14px; }
+.summary-content {
+    display: flex; align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+.accordion-title-text {
+    flex: 1; font-size: 14px;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .custom-icon {
     display: inline-flex; align-items: center; justify-content: center;
     flex-shrink: 0; border-radius: 9px;
@@ -2281,11 +2299,16 @@ details[open] > .accordion-summary .toggle-icon {
 }
 .custom-icon svg { width: 100%; height: 100%; fill: currentColor; }
 .toggle-icon {
-    line-height: 1; width: 1.3em; height: 1.3em;
+    line-height: 1;
+    width: 28px; height: 28px;
+    min-width: 28px; /* ← AJOUTÉ */
     display: flex; align-items: center; justify-content: center;
     transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-    flex-shrink: 0; border-radius: 50%;
-    font-size: 22px; color: rgba(30,15,5,0.35);
+    flex-shrink: 0;
+    border-radius: 50%;
+    font-size: 20px;
+    color: rgba(30,15,5,0.35);
+    background: rgba(201,150,62,0.10);
 }
 .accordion-panel {
     padding: 14px 18px 16px;
@@ -3308,10 +3331,6 @@ details[open] .chevron {
     font-size: 10.5px;
   }
 }
-
-
-
-
 
 
 

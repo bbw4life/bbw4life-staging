@@ -940,4 +940,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+// ====================== URGENCY BAR — MISE À JOUR DYNAMIQUE ======================
+(function() {
+    const urgencyBar = document.querySelector('.pp-urgency-bar span');
+    if (!urgencyBar) return;
+
+    // Valeur de départ extraite du HTML ou définie ici
+    let currentCount = 48;
+
+    function updateUrgencyBar() {
+        // Variation aléatoire entre -3 et +5
+        const delta = Math.floor(Math.random() * 9) - 3;
+        currentCount = Math.max(20, Math.min(120, currentCount + delta));
+
+        urgencyBar.innerHTML = `<strong>${currentCount} BBW queens</strong> added these heels to cart today — Grab yours before they're gone!`;
+    }
+
+    // Mise à jour toutes les 15 secondes
+    setInterval(updateUrgencyBar, 15000);
+})();
+
 

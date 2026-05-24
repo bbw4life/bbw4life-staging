@@ -892,15 +892,20 @@ function applyPromoFreeItems() {
 
       const settings = products.find(p => p.type === "settings") || {};
 
+      const accordionDays = document.getElementById('accordion-delivery-days');
+      if (accordionDays && settings.shipping_standard_delay) {
+        accordionDays.textContent = settings.shipping_standard_delay;
+      }
+
       // ── Inject free_shipping_threshold into header spans ──
-(function injectFreeShippingHeader() {
-  const threshold = (settings.cart_drawer && settings.cart_drawer.free_shipping_threshold)
-    ? settings.cart_drawer.free_shipping_threshold
-    : 75;
-  document.querySelectorAll('.hdr-free-shipping-threshold').forEach(el => {
-    el.textContent = threshold;
-  });
-})();
+    (function injectFreeShippingHeader() {
+      const threshold = (settings.cart_drawer && settings.cart_drawer.free_shipping_threshold)
+        ? settings.cart_drawer.free_shipping_threshold
+        : 75;
+      document.querySelectorAll('.hdr-free-shipping-threshold').forEach(el => {
+        el.textContent = threshold;
+      });
+    })();
 
 
     // ════════════════════════════════════════════════
@@ -5124,30 +5129,61 @@ if (carousel) {
   if (playOverlay) playOverlay.addEventListener('click', () => { showErrorPopup('Video playback started'); });
 
   // ====================== NEWSLETTER ======================
-  const newsletterForm = document.getElementById('newsletter-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const emailInput = document.getElementById('newsletter-email');
-      const email = emailInput.value.trim();
-      if (!email || !email.includes('@')) { showErrorPopup("Please enter a valid email"); return; }
-      const submitBtn = newsletterForm.querySelector('button');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = "Saving..."; submitBtn.disabled = true;
-      try {
-        const res = await fetch('/.netlify/functions/save-account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'newsletter-subscribe', email }) });
-        const data = await res.json();
-        if (data.success) {
-          const popup = document.getElementById('newsletter-popup');
+ const newsletterForm = document.getElementById('newsletter-form');
+if (newsletterForm) {
+  newsletterForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const emailInput = document.getElementById('newsletter-email');
+    const email = emailInput.value.trim();
+    if (!email || !email.includes('@')) {
+      showErrorPopup("Please enter a valid email");
+      return;
+    }
+
+    const submitBtn = newsletterForm.querySelector('.nl-btn');
+    const originalHTML = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fi fi-rr-spinner"></i><span>Sending...</span>';
+    submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/.netlify/functions/save-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'newsletter-subscribe', email })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        // Cacher le form, afficher le message de succès inline
+        const formWrap = document.getElementById('nl-form-wrap');
+        const successMsg = document.getElementById('nl-success-msg');
+        if (formWrap)    formWrap.style.display    = 'none';
+        if (successMsg)  successMsg.style.display  = 'flex';
+
+        // Afficher le popup thank you
+        const popup = document.getElementById('newsletter-popup');
+        if (popup) {
           popup.classList.add('show');
-          setTimeout(() => { popup.classList.remove('show'); }, 10000);
-          document.getElementById('popup-close-btn').onclick = () => { popup.classList.remove('show'); };
-          emailInput.value = '';
-        } else { showErrorPopup("Error: " + (data.error || "Unknown")); }
-      } catch (err) { showErrorPopup("Network error. Please try again."); }
-      finally { submitBtn.textContent = originalText; submitBtn.disabled = false; }
-    });
-  }
+          const closeBtn = document.getElementById('popup-close-btn');
+          if (closeBtn) closeBtn.onclick = () => popup.classList.remove('show');
+          setTimeout(() => popup.classList.remove('show'), 8000);
+        }
+
+        emailInput.value = '';
+
+      } else {
+        showErrorPopup("Error: " + (data.error || "Unknown"));
+        submitBtn.innerHTML = originalHTML;
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      showErrorPopup("Network error. Please try again.");
+      submitBtn.innerHTML = originalHTML;
+      submitBtn.disabled = false;
+    }
+  });
+}
 
   // ====================== PROGRESS CURVE ======================
   const ctxCurve = document.getElementById('progress-curve');
