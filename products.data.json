@@ -4315,12 +4315,12 @@
       "src": "https://cdn.shopify.com/s/files/1/0643/8263/2041/files/audio_glowing_1.mp3?v=1771468630",
       "autoplay": "no"
     },
-    "newsletter_popup": {
-      "icon": "fi-rr-party-bell",
-      "title": "Welcome to the CurvaFit Family!",
-      "message": "You'll receive weekly tips, real meal plans, and exclusive member offers.",
-      "close_btn": "Close"
-    },
+   "newsletter_popup": {
+    "icon": "fi-rr-party-bell",
+    "title": "Welcome to the BBW4LIFE Family! 👑",
+    "message": "You'll receive exclusive offers, new arrivals, and love notes made for queens like you.",
+    "close_btn": "Close"
+  },
     "announcement_bar": {
       "items": [
         { "text": "Free Shipping Worldwide", "icon": "fi fi-rr-globe" },
