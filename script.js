@@ -5195,6 +5195,62 @@ if (newsletterForm) {
   });
 }
 
+
+
+// ══ NEWSLETTER — handler global avec délégation ══
+document.addEventListener('submit', async function(e) {
+  const form = e.target;
+  if (form.id !== 'newsletter-form') return;
+  e.preventDefault();
+
+  const emailInput = form.querySelector('#newsletter-email');
+  const email = emailInput ? emailInput.value.trim() : '';
+  if (!email || !email.includes('@')) return;
+
+  const btn = form.querySelector('.nl-btn, button[type="submit"]');
+  const originalHTML = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fi fi-rr-spinner"></i><span>Sending...</span>';
+  }
+
+  try {
+    const res = await fetch('/.netlify/functions/save-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'newsletter-subscribe', email: email })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      // Cache le form, affiche succès inline
+      const formWrap = document.getElementById('nl-form-wrap');
+      const successMsg = document.getElementById('nl-success-msg');
+      if (formWrap) formWrap.style.display = 'none';
+      if (successMsg) successMsg.style.display = 'flex';
+
+      // Popup thank you
+      const popup = document.getElementById('newsletter-popup');
+      if (popup) {
+        popup.classList.add('show');
+        setTimeout(() => popup.classList.remove('show'), 8000);
+        const closeBtn = document.getElementById('popup-close-btn');
+        if (closeBtn) closeBtn.onclick = () => popup.classList.remove('show');
+      }
+
+      emailInput.value = '';
+
+    } else {
+      if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+      alert('Error: ' + (data.error || 'Unknown'));
+    }
+
+  } catch (err) {
+    if (btn) { btn.disabled = false; btn.innerHTML = originalHTML; }
+    console.error('Newsletter error:', err);
+  }
+});
+
   // ====================== PROGRESS CURVE ======================
   const ctxCurve = document.getElementById('progress-curve');
   if (ctxCurve) {
