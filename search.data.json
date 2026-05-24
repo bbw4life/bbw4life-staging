@@ -12,6 +12,17 @@
     "icon": "fas fa-home"
   },
   {
+    "title": "Your Cart",
+    "url": "/cart.html",
+    "keywords": [
+      "cart", "my cart", "shopping cart", "panier", "mon panier",
+      "items in cart", "checkout", "order", "buy", "purchase",
+      "view cart", "see cart", "cart page", "commander", "acheter"
+    ],
+    "type": "page",
+    "icon": "fas fa-shopping-cart"
+  },
+  {
     "title": "Shop — All Products",
     "url": "/collections/bbw4life-all-product.html",
     "keywords": [
