@@ -11626,7 +11626,7 @@ body {
   z-index: 10;
   animation: pulse-warning 1.8s ease-in-out infinite;
 }
-
+ 
 @keyframes pulse-warning {
   0%, 100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5); }
   50%       { box-shadow: 0 0 0 5px rgba(229, 57, 53, 0); }
