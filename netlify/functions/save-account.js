@@ -214,25 +214,29 @@ exports.handler = async (event) => {
   const { allAffiliates } = body;
   if (rowIndex === -1) throw new Error("User not found");
 
-  // Lire ce qui existe déjà dans le sheet
-  const currentRow = rows[rowIndex] || [];
-  let existingAffiliates = [];
-  try { existingAffiliates = JSON.parse(currentRow[18] || '[]'); } catch(e) {}
+  const newAff = allAffiliates && allAffiliates[allAffiliates.length - 1];
+  if (!newAff) throw new Error("No affiliate data");
 
-  // Fusionner sans écraser les données existantes
-  const merged = [...existingAffiliates];
-  (allAffiliates || []).forEach(function(newAff) {
-    const idx = merged.findIndex(function(a) { return a.username === newAff.username; });
-    if (idx === -1) {
-      merged.push(newAff);
-    }
-  });
+  // Vérifier si username déjà présent (colonne S)
+  const existingUsername = (rows[rowIndex][18] || '').toLowerCase().trim();
+  if (existingUsername && existingUsername === newAff.username.toLowerCase().trim()) {
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  }
 
+  // S=Username, T=Clicks, U=Earnings, V=Orders, W=OrderValue, X=WithdrawStatus, Y=CreatedAt
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `bbw4life-accounts!S${rowNum}`,
+    range: `bbw4life-accounts!S${rowNum}:Y${rowNum}`,
     valueInputOption: 'RAW',
-    resource: { values: [[JSON.stringify(merged)]] }
+    resource: { values: [[
+      newAff.username,
+      newAff.clicks || 0,
+      newAff.totalMoney || 0,
+      newAff.totalOrders || 0,
+      newAff.totalOrderValue || 0,
+      newAff.withdrawStatus || 'none',
+      newAff.createdAt || formatDate()
+    ]] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }
@@ -240,19 +244,18 @@ exports.handler = async (event) => {
 if (action === 'aff-get-stats') {
   if (!email) throw new Error("Email required");
   if (rowIndex === -1) return { statusCode: 200, body: JSON.stringify({ success: true, affiliates: [] }) };
-  
+
   const currentRow = rows[rowIndex] || [];
-  
-  // Lire depuis les colonnes séparées S à Y
-  const username      = currentRow[18] || '';
-  const clicks        = parseInt(currentRow[19]  || 0);
-  const totalMoney    = parseFloat(currentRow[20] || 0);
-  const totalOrders   = parseInt(currentRow[21]  || 0);
+
+  // S=Username(18), T=Clicks(19), U=Earnings(20), V=Orders(21), W=OrderValue(22), X=WithdrawStatus(23), Y=CreatedAt(24)
+  const username        = currentRow[18] || '';
+  const clicks          = parseInt(currentRow[19]  || 0);
+  const totalMoney      = parseFloat(currentRow[20] || 0);
+  const totalOrders     = parseInt(currentRow[21]  || 0);
   const totalOrderValue = parseFloat(currentRow[22] || 0);
   const withdrawStatus  = currentRow[23] || 'none';
   const createdAt       = currentRow[24] || '';
 
-  // Si pas d'username → pas d'affilié
   if (!username) {
     return { statusCode: 200, body: JSON.stringify({ success: true, affiliates: [] }) };
   }
@@ -267,28 +270,28 @@ if (action === 'aff-get-stats') {
     createdAt
   }];
 
-  return { 
-    statusCode: 200, 
-    body: JSON.stringify({ 
-      success: true, 
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      success: true,
       affiliates,
       withdrawStatus
-    }) 
+    })
   };
 }
 
 if (action === 'aff-track-click') {
   const { username } = body;
   if (!username) throw new Error("Username required");
-  
+
   for (let i = 1; i < rows.length; i++) {
     const rowUsername = (rows[i][18] || '').toLowerCase().trim();
     if (rowUsername !== username.toLowerCase().trim()) continue;
-    
-    // Incrémenter clicks dans colonne T (index 19)
+
+    // T = Clicks (index 19)
     const currentClicks = parseInt(rows[i][19] || 0);
     const newClicks = currentClicks + 1;
-    
+
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `bbw4life-accounts!T${i + 1}`,
@@ -304,15 +307,16 @@ if (action === 'aff-record-order') {
   const { username, orderAmount } = body;
   if (!username || !orderAmount) throw new Error("Missing data");
   const commission = parseFloat(orderAmount) * 0.05;
-  
+
   for (let i = 1; i < rows.length; i++) {
     const rowUsername = (rows[i][18] || '').toLowerCase().trim();
     if (rowUsername !== username.toLowerCase().trim()) continue;
-    
+
+    // U=Earnings(20), V=Orders(21), W=OrderValue(22)
     const newMoney    = parseFloat((parseFloat(rows[i][20] || 0) + commission)).toFixed(2);
     const newOrders   = parseInt(rows[i][21] || 0) + 1;
     const newOrderVal = parseFloat((parseFloat(rows[i][22] || 0) + parseFloat(orderAmount))).toFixed(2);
-    
+
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `bbw4life-accounts!U${i + 1}:W${i + 1}`,
@@ -328,14 +332,13 @@ if (action === 'aff-withdraw-request') {
   const { paypalName, paypalEmail } = body;
   if (!email || !paypalName || !paypalEmail) throw new Error("Missing data");
   if (rowIndex === -1) throw new Error("User not found");
-  let affiliates = [];
-  try { affiliates = JSON.parse(rows[rowIndex][18] || '[]'); } catch(e) {}
-  affiliates.forEach(function(a) { a.withdrawStatus = 'pending'; });
+
+  // X=WithdrawStatus(23), Z=PaypalName(25), AA=PaypalEmail(26)
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `bbw4life-accounts!S${rowNum}:V${rowNum}`,
+    range: `bbw4life-accounts!X${rowNum}:AA${rowNum}`,
     valueInputOption: 'RAW',
-    resource: { values: [[JSON.stringify(affiliates), 'pending', paypalName, paypalEmail]] }
+    resource: { values: [['pending', '', paypalName, paypalEmail]] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }
@@ -343,18 +346,19 @@ if (action === 'aff-withdraw-request') {
 if (action === 'aff-approve-withdraw') {
   const { targetEmail } = body;
   if (!targetEmail) throw new Error("targetEmail required");
-  const normalize2 = (s) => s ? s.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase() : "";
-  const targetIdx = rows.findIndex(r => normalize2(r[2]||'') === normalize2(targetEmail));
+
+  const normalize2 = (s) => s ? s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase() : "";
+  const targetIdx = rows.findIndex(r => normalize2(r[2] || '') === normalize2(targetEmail));
   if (targetIdx === -1) throw new Error("User not found");
+
   const targetRowNum = targetIdx + 1;
-  let affiliates = [];
-  try { affiliates = JSON.parse(rows[targetIdx][18] || '[]'); } catch(e) {}
-  affiliates.forEach(function(a) { a.withdrawStatus = 'approved'; });
+
+  // X=WithdrawStatus(23)
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `bbw4life-accounts!S${targetRowNum}:T${targetRowNum}`,
+    range: `bbw4life-accounts!X${targetRowNum}`,
     valueInputOption: 'RAW',
-    resource: { values: [[JSON.stringify(affiliates), 'approved']] }
+    resource: { values: [['approved']] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }
