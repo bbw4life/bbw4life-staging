@@ -1,3 +1,35 @@
+// ← ICI en premier, avant tout
+(function captureAffiliateRef() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const refParam  = urlParams.get('ref');
+  
+  if (refParam) {
+    localStorage.setItem('aff_ref', refParam);
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `aff_ref=${encodeURIComponent(refParam)};expires=${expires};path=/;SameSite=Lax`;
+    
+    fetch('/.netlify/functions/save-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'aff-track-click', username: refParam }),
+      keepalive: true
+    })
+    .then(r => r.json())
+    .then(d => console.log('[AFF] Click tracked:', d))
+    .catch(e => console.warn('[AFF] Track failed:', e.message));
+  }
+
+  window.getAffRef = function() {
+    const fromStorage = localStorage.getItem('aff_ref');
+    if (fromStorage) return fromStorage;
+    const match = document.cookie.match(/(?:^|;\s*)aff_ref=([^;]+)/);
+    if (match) return decodeURIComponent(match[1]);
+    return null;
+  };
+})();
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   (function () {
     'use strict';
@@ -7338,19 +7370,6 @@ function loadProfilePhoto() {
         renderHistory(affiliatesFromSheet);
       }
     } catch(e) { console.warn('[Affiliation] sync failed:', e.message); }
-  }
-
-  // ── Tracking du lien ref (depuis n'importe quel navigateur) ──
-  const urlParams = new URLSearchParams(window.location.search);
-  const refParam  = urlParams.get('ref');
-  if (refParam) {
-    // Stocker pour le checkout
-    localStorage.setItem('aff_ref', refParam);
-    // Enregistrer le clic dans le sheet
-    fetch('/.netlify/functions/save-account', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'aff-track-click', username: refParam })
-    }).catch(function() {});
   }
 
   // ── Init ──

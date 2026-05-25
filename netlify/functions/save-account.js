@@ -264,9 +264,13 @@ if (action === 'aff-get-stats') {
 if (action === 'aff-track-click') {
   const { username } = body;
   if (!username) throw new Error("Username required");
-  for (let i = 0; i < rows.length; i++) {
+  for (let i = 1; i < rows.length; i++) {
     let affiliates = [];
-    try { affiliates = JSON.parse(rows[i][18] || '[]'); } catch(e) {}
+    try { 
+      const raw = rows[i][18] || '';
+      if (!raw || !raw.startsWith('[')) continue;
+      affiliates = JSON.parse(raw); 
+    } catch(e) { continue; }
     const idx = affiliates.findIndex(function(a) { 
       return a.username && a.username.toLowerCase() === username.toLowerCase(); 
     });
