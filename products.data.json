@@ -4212,7 +4212,7 @@
       "promo_count_free_items": "Yes",
       "banner_video_url": "https://cdn.shopify.com/videos/c/o/v/58f611b6bf2b4782900c6066616b4c1a.mp4",
       "banner_slides": [
-        {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/bb4.jpg?v=1768321817","text": "You are BEAUTIFUL just as you are!"},
+        {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/cart_banner.png?v=1779734995","text": "You are BEAUTIFUL just as you are!"},
         {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/bb_3.jpg?v=1768321816","text": "Your confidence is your superpower."},
         {"image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/bb_1.jpg?v=1768321816","text": "BBW = Bold, Beautiful, Worthy!"}
       ],
@@ -4532,9 +4532,9 @@
     "cart_page_upsell": {
       "discount_percent": 15,
       "items": [
-        { "product_id": "Pdg-Francenel-product1" },
-        { "product_id": "Pdg-Francenel-product7" },
-        { "product_id": "Pdg-Francenel-product35" }
+        { "product_id": "Pdg-Francenel-product60" },
+        { "product_id": "Pdg-Francenel-product56" },
+        { "product_id": "Pdg-Francenel-product54" }
       ]
     },
     "cart_extra_products": {
@@ -4544,19 +4544,33 @@
         "Pdg-Francenel-product7",
         "Pdg-Francenel-product12",
         "Pdg-Francenel-product35",
-        "Pdg-Francenel-product56"
+        "Pdg-Francenel-product56",
+        "Pdg-Francenel-product51",
+        "Pdg-Francenel-product49",
+        "Pdg-Francenel-product47",
+        "Pdg-Francenel-product62",
+        "Pdg-Francenel-product54",
+        "Pdg-Francenel-product68",
+        "Pdg-Francenel-product57"
       ]
     },
     "footer_new_gems": {
       "collection_ids": [
         "bbw-features-products",
-        "main-plus-size",
-        "curvy-beauty"
+        "men-plus-size",
+        "curvy-woman",
+        "shoes-sandals",
+        "curvy-beauty",
+        "curvy-dresses"
       ],
       "product_ids": [
-        "Pdg-Francenel-product13",
-        "Pdg-Francenel-product22",
-        "Pdg-Francenel-product45"
+        "Pdg-Francenel-product47",
+        "Pdg-Francenel-product32",
+        "Pdg-Francenel-product11",
+        "Pdg-Francenel-product5",
+        "Pdg-Francenel-product46",
+        "Pdg-Francenel-product34",
+        "Pdg-Francenel-product26"
       ]
     },
     "mobile_links_behavior": {
@@ -5096,6 +5110,8 @@
   }
 ],
 "language_selector": {
+  "auto_translate": "no",
+  "auto_currency": "no",
   "enabled": "yes",
   "default_lang": "en",
   "options": [
@@ -5123,8 +5139,6 @@
   ]
 },
 "country_selector": {
-  "auto_translate": "yes",
-  "auto_currency": "yes",
   "enabled": "yes",
   "default_country": "us",
   "options": [
@@ -5350,14 +5364,26 @@
     "items_per_row_desktop": 4,
     "items_per_row_mobile": 2,
     "product_ids": [
-      "Pdg-Francenel-product1",
-      "Pdg-Francenel-product7",
-      "Pdg-Francenel-product12",
-      "Pdg-Francenel-product13",
-      "Pdg-Francenel-product14",
-      "Pdg-Francenel-product27",
-      "Pdg-Francenel-product35",
-      "Pdg-Francenel-product69"
+      "Pdg-Francenel-product30",
+      "Pdg-Francenel-product31",
+      "Pdg-Francenel-product45",
+      "Pdg-Francenel-product61",
+      "Pdg-Francenel-product47",
+      "Pdg-Francenel-product22",
+      "Pdg-Francenel-product64",
+      "Pdg-Francenel-product69",
+      "Pdg-Francenel-product43",
+      "Pdg-Francenel-product17",
+      "Pdg-Francenel-product58",
+      "Pdg-Francenel-product16",
+      "Pdg-Francenel-product15",
+      "Pdg-Francenel-product38",
+      "Pdg-Francenel-product22",
+      "Pdg-Francenel-product52",
+      "Pdg-Francenel-product9",
+      "Pdg-Francenel-product10",
+      "Pdg-Francenel-product40",
+      "Pdg-Francenel-product67"
     ]
   }
 }

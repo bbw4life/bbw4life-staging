@@ -5,12 +5,6 @@
 (function () {
   'use strict';
 
-  // ── CURRENCY SYSTEM ──
-var _exchangeRates   = null;
-var _currentCurrency = 'USD';
-var _currentSymbol   = '$';
-var _ratesFetched    = false;
-
   var STORAGE_LANG    = 'bbw_lang';
   var STORAGE_COUNTRY = 'bbw_country';
   var MAX_WAIT        = 6000;
@@ -235,204 +229,6 @@ var _ratesFetched    = false;
     return null;
   }
 
-
-
-  /* ══════════════════════════════════════════════════════════════
-   CURRENCY — Fetch rates (une seule fois, cache localStorage 6h)
-══════════════════════════════════════════════════════════════ */
-function fetchExchangeRates(callback) {
-  try {
-    var cached   = localStorage.getItem('bbw_rates');
-    var cachedAt = parseInt(localStorage.getItem('bbw_rates_at') || '0');
-    var now      = Date.now();
-    if (cached && (now - cachedAt) < 6 * 3600 * 1000) {
-      _exchangeRates = JSON.parse(cached);
-      _ratesFetched  = true;
-      if (callback) callback(_exchangeRates);
-      return;
-    }
-  } catch (e) {}
-
-  fetch('/.netlify/functions/get-exchange-rates')
-    .then(function (r) { return r.json(); })
-    .then(function (data) {
-      if (data.success && data.rates) {
-        _exchangeRates = data.rates;
-        _ratesFetched  = true;
-        try {
-          localStorage.setItem('bbw_rates',    JSON.stringify(data.rates));
-          localStorage.setItem('bbw_rates_at', Date.now().toString());
-        } catch (e) {}
-        if (callback) callback(_exchangeRates);
-      }
-    })
-    .catch(function () {
-      _exchangeRates = {
-        USD: 1,    EUR: 0.92,  GBP: 0.79,  CAD: 1.36,  AUD: 1.53,
-        DOP: 58.9, HTG: 132,   MXN: 17.2,  BRL: 4.97,  COP: 3950,
-        NGN: 1580, GHS: 14.8,  KES: 129,   XOF: 604,   XAF: 604,
-        MAD: 10.1, DZD: 134,   TND: 3.09,  EGP: 30.9,  AED: 3.67,
-        SAR: 3.75, INR: 83.1,  CNY: 7.24,  JPY: 149,   KRW: 1330,
-        SGD: 1.34, MYR: 4.72,  IDR: 15600, THB: 35.1,  VND: 24400,
-        PLN: 4.02, RON: 4.57,  TRY: 32.3,  RUB: 91.5,  PKR: 278,
-        BDT: 110,  PEN: 3.72,  ARS: 877,   CLP: 952,   NZD: 1.63,
-        ZAR: 18.7, CDF: 2750
-      };
-      _ratesFetched = true;
-      if (callback) callback(_exchangeRates);
-    });
-}
-
-/* Convertir un montant USD → devise cible */
-function convertPrice(usdAmount, currencyCode) {
-  if (!_exchangeRates || !currencyCode || currencyCode === 'USD') return usdAmount;
-  var rate = _exchangeRates[currencyCode];
-  if (!rate) return usdAmount;
-  return Math.round(usdAmount * rate * 100) / 100;
-}
-
-/* Formater un prix avec le bon symbole */
-function formatPrice(amount, currencyCode, symbol) {
-  var sym      = symbol || _currentSymbol || '$';
-  var cur      = currencyCode || _currentCurrency || 'USD';
-  var rtl      = ['ar', 'he', 'fa', 'ur'];
-  var savedLang = loadSavedLang() || 'en';
-  var isRtl    = rtl.indexOf(savedLang) !== -1;
-  var decimals = ['JPY', 'KRW', 'IDR', 'VND', 'HTG', 'NGN', 'CDF'].indexOf(cur) !== -1 ? 0 : 2;
-  var formatted = amount.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return isRtl ? formatted + ' ' + sym : sym + formatted;
-}
-
-/* ── Extraire le montant USD depuis un élément ── */
-function extractUsd(el) {
-  var usd = parseFloat(el.dataset.usdOriginal);
-  if (!isNaN(usd) && usd > 0) return usd;
-  return null;
-}
-
-/* ── Mettre à jour TOUS les prix dans TOUTES les pages ── */
-function updateAllPrices(currencyCode, symbol) {
-  _currentCurrency = currencyCode;
-  _currentSymbol   = symbol;
-
-  if (!_ratesFetched) {
-    fetchExchangeRates(function () { updateAllPrices(currencyCode, symbol); });
-    return;
-  }
-
-  /* ── Pattern $XX.XX simple ── */
-  document.querySelectorAll('*').forEach(function (el) {
-    if (el.children.length > 0) return;
-    if (el.tagName === 'INPUT' || el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
-    var txt = (el.textContent || '').trim();
-    if (!/^\$[\d,]+(\.\d{1,2})?$/.test(txt)) return;
-
-    var usd = extractUsd(el);
-    if (usd === null) {
-      usd = parseFloat(txt.replace(/[$,]/g, ''));
-      if (!isNaN(usd) && usd > 0) el.dataset.usdOriginal = usd;
-    }
-    if (isNaN(usd) || usd <= 0) return;
-    el.textContent = formatPrice(convertPrice(usd, currencyCode), currencyCode, symbol);
-  });
-
-  /* ── Pattern "Subtotal: $XX.XX" ── */
-  document.querySelectorAll('*').forEach(function (el) {
-    if (el.children.length > 0) return;
-    var txt   = (el.textContent || '').trim();
-    var match = txt.match(/^(Subtotal:\s*)\$([0-9,]+(\.[0-9]{1,2})?)$/);
-    if (!match) return;
-
-    var usd = extractUsd(el);
-    if (usd === null) {
-      usd = parseFloat(match[2].replace(/,/g, ''));
-      if (!isNaN(usd) && usd > 0) el.dataset.usdOriginal = usd;
-    }
-    if (isNaN(usd) || usd <= 0) return;
-    el.textContent = match[1] + formatPrice(convertPrice(usd, currencyCode), currencyCode, symbol);
-  });
-
-  /* ── Pattern "+$XX.XX" (upsell) ── */
-  document.querySelectorAll('*').forEach(function (el) {
-    if (el.children.length > 0) return;
-    var txt   = (el.textContent || '').trim();
-    var match = txt.match(/^(\+\s*)\$([0-9,]+(\.[0-9]{1,2})?)$/);
-    if (!match) return;
-
-    var usd = extractUsd(el);
-    if (usd === null) {
-      usd = parseFloat(match[2].replace(/,/g, ''));
-      if (!isNaN(usd) && usd > 0) el.dataset.usdOriginal = usd;
-    }
-    if (isNaN(usd) || usd <= 0) return;
-    el.textContent = match[1] + formatPrice(convertPrice(usd, currencyCode), currencyCode, symbol);
-  });
-
-  /* ── Pattern "-$XX.XX" (savings) ── */
-  document.querySelectorAll('*').forEach(function (el) {
-    if (el.children.length > 0) return;
-    var txt   = (el.textContent || '').trim();
-    var match = txt.match(/^(-\s*)\$([0-9,]+(\.[0-9]{1,2})?)$/);
-    if (!match) return;
-
-    var usd = extractUsd(el);
-    if (usd === null) {
-      usd = parseFloat(match[2].replace(/,/g, ''));
-      if (!isNaN(usd) && usd > 0) el.dataset.usdOriginal = usd;
-    }
-    if (isNaN(usd) || usd <= 0) return;
-    el.textContent = match[1] + formatPrice(convertPrice(usd, currencyCode), currencyCode, symbol);
-  });
-
-  /* ── Pattern "Add: +$XX.XX" (cart page upsell footer) ── */
-  document.querySelectorAll('*').forEach(function (el) {
-    if (el.children.length > 0) return;
-    var txt   = (el.textContent || '').trim();
-    var match = txt.match(/^(Add:\s*\+\s*)\$([0-9,]+(\.[0-9]{1,2})?)$/);
-    if (!match) return;
-
-    var usd = extractUsd(el);
-    if (usd === null) {
-      usd = parseFloat(match[2].replace(/,/g, ''));
-      if (!isNaN(usd) && usd > 0) el.dataset.usdOriginal = usd;
-    }
-    if (isNaN(usd) || usd <= 0) return;
-    el.textContent = match[1] + formatPrice(convertPrice(usd, currencyCode), currencyCode, symbol);
-  });
-
-  /* ── Recalculer le sous-total depuis le panier (source de vérité) ── */
-  updateCartSubtotal(currencyCode, symbol);
-}
-
-/* Recalculer le sous-total depuis localStorage */
-function updateCartSubtotal(currencyCode, symbol) {
-  try {
-    var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    var total = cart.reduce(function (sum, item) {
-      return sum + (parseFloat(item.price) * item.quantity);
-    }, 0);
-    var converted = convertPrice(total, currencyCode);
-    var formatted = formatPrice(converted, currencyCode, symbol);
-
-    /* Drawer */
-    var subtotalEl = document.querySelector('.subtotal');
-    if (subtotalEl) subtotalEl.textContent = 'Subtotal: ' + formatted;
-
-    /* Cart page */
-    var cpSubtotal = document.getElementById('cp-subtotal-val');
-    var cpTotal    = document.getElementById('cp-total-val');
-    var cpSticky   = document.getElementById('cp-sticky-total');
-    if (cpSubtotal) cpSubtotal.textContent = formatted;
-    if (cpTotal)    cpTotal.textContent    = formatted;
-    if (cpSticky)   cpSticky.textContent   = formatted;
-  } catch (e) {}
-}
-
-/* Exposer pour utilisation externe */
-window.convertPrice    = convertPrice;
-window.formatPrice     = formatPrice;
-window.updateAllPrices = updateAllPrices;
-
   /* ══════════════════════════════════════════════════════════════
      3. GOOGLE TRANSLATE — injection + appel via combo select
   ══════════════════════════════════════════════════════════════ */
@@ -459,18 +255,12 @@ window.updateAllPrices = updateAllPrices;
 
   /* ══════════════════════════════════════════════════════════════
      4. TRADUIRE — cœur de la logique
+        • Sauvegarde la langue
+        • Applique via le combo Google Translate
+        • Si pas prêt, réessaie pendant 8 s avant reload
   ══════════════════════════════════════════════════════════════ */
- function translateTo(langCode) {
-  if (!langCode) return;
-
-  var settings3    = (window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {};
-  var autoTranslate = (settings3.auto_translate || 'yes').toLowerCase();
-
-  if (autoTranslate === 'no' && window._geoAutoTranslating) {
-    return;
-  }
-
-
+  function translateTo(langCode) {
+    if (!langCode) return;
     langCode = langCode.toLowerCase().trim();
 
     /* Sauvegarder en premier — même avant le reload */
@@ -625,19 +415,6 @@ window.updateAllPrices = updateAllPrices;
 
     syncAllSelectors(langToUse, found.code);
 
-        // ── CURRENCY CONVERT ──
-        var settings2   = (window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {};
-        var autoCurrency = (settings2.auto_currency || 'yes').toLowerCase() === 'yes';
-        if (autoCurrency && found.currency) {
-        // Extraire code et symbole depuis "USD $" ou "EUR €"
-        var parts2   = found.currency.trim().split(' ');
-        var curCode2 = parts2[0] || 'USD';
-        var curSym2  = parts2[1] || '$';
-        fetchExchangeRates(function () {
-            updateAllPrices(curCode2, curSym2);
-        });
-        }
-
     /* Traduire seulement si pas encore traduit dans cette langue */
     if (forceLangTranslate || !savedLang) {
       var currentCookie = getCookie('googtrans');
@@ -754,12 +531,8 @@ window.updateAllPrices = updateAllPrices;
     }
 
     function apply(code) {
-    saveCountry(code);
-    var settings4    = (window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {};
-    var autoTranslate = (settings4.auto_translate || 'yes').toLowerCase();
-    window._geoAutoTranslating = (autoTranslate === 'no');
-    applyCountry(code, true);
-    window._geoAutoTranslating = false;
+      saveCountry(code);
+      applyCountry(code, true);
     }
 
     fetch('https://ipapi.co/json/')
@@ -812,22 +585,6 @@ window.updateAllPrices = updateAllPrices;
         bindAllSelectors();
         restoreSavedState();
         detectGeo();
-        fetchExchangeRates(function (rates) {
-        // Appliquer la devise sauvegardée si elle existe
-        var savedCountry2 = loadSavedCountry();
-        if (savedCountry2) {
-            var allP      = window.__allProducts || [];
-            var sett      = allP.find(function(p){ return p.type === 'settings'; }) || {};
-            var cOpts     = (sett.country_selector || {}).options || [];
-            var found2    = cOpts.find(function(o){ return o.code === savedCountry2; });
-            if (found2 && found2.currency) {
-            var parts3  = found2.currency.trim().split(' ');
-            var code3   = parts3[0] || 'USD';
-            var sym3    = parts3[1] || '$';
-            updateAllPrices(code3, sym3);
-            }
-        }
-        });
       }
     }, 100);
   }
@@ -838,4 +595,4 @@ window.updateAllPrices = updateAllPrices;
     waitAndInit();
   }
 
-})();
+})(); 

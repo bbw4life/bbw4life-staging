@@ -167,6 +167,31 @@ exports.handler = async (event) => {
       });
     }
 
+
+    
+
+
+    const affRef = shipping.affRef || null;
+    if (affRef) {
+      try {
+        await fetch(`${BASE_URL}/.netlify/functions/save-account`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action:      "aff-record-order",
+            username:    affRef,
+            orderAmount: totalAmount
+          })
+        });
+        console.log(`[AFFILIATION] Commission enregistrée pour @${affRef} — commande $${totalAmount}`);
+      } catch(e) {
+        console.warn("[AFFILIATION] Erreur commission:", e.message);
+      }
+    }
+
+
+
+
     console.log("=== DÉBUT FULFILLMENT SÉQUENTIEL ===");
     const cartMap = {};
     cart.forEach(item => {

@@ -45,7 +45,7 @@
       { text: 'Support 7/24',   url: 'page/contact.html' },
       { text: 'order-tracking',  url: '/page/order-tracking.html' },
       { text: 'Prodducts care',  url: '/page/products-care.html' },
-      { text: 'My account',      url: '/account.html' },
+      { text: 'Affiliation/Earn %',      url: '/account.html' },
       { text: 'Privacy policy',  url: '/policies/privacy.html' },
       { text: 'Shipping Info',   url: '/policies/shipping.html' },
       { text: 'Terms shop',      url: '/policies/terms.html' }

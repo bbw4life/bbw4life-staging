@@ -200,6 +200,305 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
 
+
+
+
+
+
+
+    // ================================================================
+//   AFFILIATION — Nouveaux handlers pour save-account.js
+//   À insérer AVANT la ligne : throw new Error("Action inconnue");
+// ================================================================
+
+// ==================== AFF-CREATE ====================
+if (action === 'aff-create') {
+  const { affiliateData, allAffiliates } = body;
+  if (!email || !affiliateData) throw new Error("Données manquantes");
+
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+  // Essayer d'écrire dans l'onglet "Affiliates"
+  try {
+    const affRange = "Affiliates!A:Z";
+    let affRows = [];
+    try {
+      const affRes = await sheets.spreadsheets.values.get({ spreadsheetId, range: affRange });
+      affRows = affRes.data.values || [];
+    } catch(e) {
+      // Onglet peut-être absent — on crée la ligne quand même
+    }
+
+    // Chercher si l'affilié existe déjà
+    const existingRowIdx = affRows.findIndex(r => normalize(r[0]||'') === normalize(email) && normalize(r[1]||'') === normalize(affiliateData.username));
+
+    const newRow = [
+      email,
+      affiliateData.username,
+      affiliateData.clicks || 0,
+      affiliateData.totalMoney || 0,
+      affiliateData.totalOrders || 0,
+      affiliateData.totalOrderValue || 0,
+      affiliateData.withdrawStatus || 'none',
+      affiliateData.createdAt || formatDate(),
+      JSON.stringify(allAffiliates || [])
+    ];
+
+    if (existingRowIdx === -1) {
+      // Nouvelle ligne
+      await sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: "Affiliates!A:A",
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS',
+        resource: { values: [newRow] }
+      });
+    } else {
+      // Mise à jour ligne existante
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Affiliates!A${existingRowIdx + 1}:I${existingRowIdx + 1}`,
+        valueInputOption: 'RAW',
+        resource: { values: [newRow] }
+      });
+    }
+  } catch(e) {
+    console.error('[AFF-CREATE] Sheet error:', e.message);
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
+
+// ==================== AFF-GET-STATS ====================
+if (action === 'aff-get-stats') {
+  if (!email) throw new Error("Email requis");
+
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+  let affiliates = [];
+
+  try {
+    const affRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!A:I"
+    });
+    const rows = affRes.data.values || [];
+
+    rows.forEach(function(row) {
+      if (normalize(row[0] || '') === normalize(email)) {
+        affiliates.push({
+          username:        row[1] || '',
+          clicks:          parseInt(row[2]) || 0,
+          totalMoney:      parseFloat(row[3]) || 0,
+          totalOrders:     parseInt(row[4]) || 0,
+          totalOrderValue: parseFloat(row[5]) || 0,
+          withdrawStatus:  row[6] || 'none',
+          createdAt:       row[7] || ''
+        });
+      }
+    });
+  } catch(e) {
+    console.error('[AFF-GET-STATS] Sheet error:', e.message);
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true, affiliates }) };
+}
+
+// ==================== AFF-TRACK-CLICK ====================
+if (action === 'aff-track-click') {
+  const { username } = body;
+  if (!username) throw new Error("Username requis");
+
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+  try {
+    const affRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!A:I"
+    });
+    const rows = affRes.data.values || [];
+
+    const rowIdx = rows.findIndex(r => normalize(r[1] || '') === normalize(username));
+    if (rowIdx !== -1) {
+      const currentClicks = parseInt(rows[rowIdx][2]) || 0;
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Affiliates!C${rowIdx + 1}`,
+        valueInputOption: 'RAW',
+        resource: { values: [[currentClicks + 1]] }
+      });
+    }
+  } catch(e) {
+    console.error('[AFF-TRACK-CLICK] Sheet error:', e.message);
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
+
+// ==================== AFF-RECORD-ORDER ====================
+// Appelé depuis verify-payment.js quand une commande est passée via un lien affilié
+// Paramètres : username (ref), orderAmount
+if (action === 'aff-record-order') {
+  const { username, orderAmount } = body;
+  if (!username || !orderAmount) throw new Error("Données manquantes");
+
+  const commission     = parseFloat(orderAmount) * 0.05;
+  const spreadsheetId  = process.env.GOOGLE_SHEET_ID;
+
+  try {
+    const affRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!A:I"
+    });
+    const rows = affRes.data.values || [];
+
+    const rowIdx = rows.findIndex(r => normalize(r[1] || '') === normalize(username));
+    if (rowIdx !== -1) {
+      const currentOrders     = parseInt(rows[rowIdx][4])   || 0;
+      const currentMoney      = parseFloat(rows[rowIdx][3]) || 0;
+      const currentOrderValue = parseFloat(rows[rowIdx][5]) || 0;
+
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: `Affiliates!D${rowIdx + 1}:F${rowIdx + 1}`,
+        valueInputOption: 'RAW',
+        resource: {
+          values: [[
+            (currentMoney + commission).toFixed(2),
+            currentOrders + 1,
+            (currentOrderValue + parseFloat(orderAmount)).toFixed(2)
+          ]]
+        }
+      });
+    }
+  } catch(e) {
+    console.error('[AFF-RECORD-ORDER] Sheet error:', e.message);
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
+
+// ==================== AFF-WITHDRAW-REQUEST ====================
+if (action === 'aff-withdraw-request') {
+  const { paypalName, paypalEmail } = body;
+  if (!email || !paypalName || !paypalEmail) throw new Error("Données manquantes");
+
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+  try {
+    // 1. Mettre à jour le statut dans Affiliates
+    const affRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!A:I"
+    });
+    const rows = affRes.data.values || [];
+
+    rows.forEach(async function(row, idx) {
+      if (normalize(row[0] || '') === normalize(email)) {
+        await sheets.spreadsheets.values.update({
+          spreadsheetId,
+          range: `Affiliates!G${idx + 1}`,
+          valueInputOption: 'RAW',
+          resource: { values: [['pending']] }
+        });
+      }
+    });
+
+    // 2. Enregistrer la demande de retrait dans un onglet dédié
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range: "AffWithdrawals!A:A",
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      resource: {
+        values: [[
+          email,
+          paypalName,
+          paypalEmail,
+          'pending',
+          new Date().toISOString(),
+          '' // date approbation (vide au départ)
+        ]]
+      }
+    });
+  } catch(e) {
+    console.error('[AFF-WITHDRAW-REQUEST] Sheet error:', e.message);
+    throw new Error('Impossible d\'enregistrer la demande');
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
+
+// ==================== AFF-APPROVE-WITHDRAW ====================
+// Appelé manuellement par l'admin via votre dashboard Google Sheet ou un outil admin
+if (action === 'aff-approve-withdraw') {
+  const { targetEmail } = body;
+  if (!targetEmail) throw new Error("targetEmail requis");
+
+  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+
+  try {
+    // 1. Mettre à jour Affiliates
+    const affRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Affiliates!A:I"
+    });
+    const affRows = affRes.data.values || [];
+
+    const updatePromises = [];
+    affRows.forEach(function(row, idx) {
+      if (normalize(row[0] || '') === normalize(targetEmail)) {
+        updatePromises.push(
+          sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `Affiliates!G${idx + 1}`,
+            valueInputOption: 'RAW',
+            resource: { values: [['approved']] }
+          })
+        );
+      }
+    });
+    await Promise.all(updatePromises);
+
+    // 2. Mettre à jour AffWithdrawals
+    const wRes = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "AffWithdrawals!A:F"
+    });
+    const wRows = wRes.data.values || [];
+
+    const wPromises = [];
+    wRows.forEach(function(row, idx) {
+      if (normalize(row[0] || '') === normalize(targetEmail) && (row[3] || '').toLowerCase() === 'pending') {
+        wPromises.push(
+          sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `AffWithdrawals!D${idx + 1}:F${idx + 1}`,
+            valueInputOption: 'RAW',
+            resource: { values: [['approved', new Date().toISOString()]] }
+          })
+        );
+      }
+    });
+    await Promise.all(wPromises);
+  } catch(e) {
+    console.error('[AFF-APPROVE-WITHDRAW] Sheet error:', e.message);
+    throw new Error('Impossible d\'approuver le retrait');
+  }
+
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
+
+// ================================================================
+//   FIN AFFILIATION HANDLERS
+// ================================================================
+
+
+
+
+
+
+
+
     throw new Error("Action inconnue");
   } catch (error) {
     console.error("SAVE ERROR:", error.message);

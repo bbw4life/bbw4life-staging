@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/src/components/header.css">
+  <script src="/preloader-inline.js"></script>
   <script src="/src/components/head.js" defer></script>
 </head>
    <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
@@ -858,6 +859,7 @@
    <script src="/widgets-loader.js"></script>
    <script src="/script.js"></script>
   <script src="/search.js"></script>
+  <script src="/pdg-francenel.js"></script>
   <script src="/geo-detect.js"></script>
   <script src="/blog/article-featured.js"></script>
 
@@ -898,14 +900,6 @@
       document.getElementById('newsletter-container').innerHTML = html;
     })
     .catch(err => console.error('Newsletter load error:', err));
-
-
-    fetch('/src/components/opups.html')
-  .then(r => r.text())
-  .then(html => {
-    document.getElementById('popups-container').innerHTML = html;
-  })
-  .catch(err => console.error('Popups load error:', err));
 </script>
 
 </body>

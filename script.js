@@ -7102,6 +7102,399 @@ function loadProfilePhoto() {
     localStorage.clear();
     window.location.href = 'index.html';
   };
+
+
+
+
+
+
+
+  // ================================================================
+//   AFFILIATION SYSTEM — BBW4LIFE
+//   À insérer dans le DOMContentLoaded, après window.logout
+// ================================================================
+(function initAffiliationSystem() {
+  'use strict';
+
+  // ── Éléments DOM ──
+  const usernameInput = document.getElementById('aff-username-input');
+  const createBtn     = document.getElementById('aff-create-btn');
+  const createError   = document.getElementById('aff-create-error');
+  const tableCard     = document.getElementById('aff-table-card');
+  const tableBody     = document.getElementById('aff-table-body');
+  const historyCard   = document.getElementById('aff-history-card');
+  const historyList   = document.getElementById('aff-history-list');
+  const cleanBtn      = document.getElementById('aff-clean-btn');
+  const rewardCard    = document.getElementById('aff-reward-card');
+  const promoCodeVal  = document.getElementById('aff-promo-code-val');
+  const copyPromoBtn  = document.getElementById('aff-copy-promo-btn');
+  const withdrawForm  = document.getElementById('aff-withdraw-form');
+  const withdrawStatus= document.getElementById('aff-withdraw-status');
+  const withdrawBtn   = document.getElementById('aff-withdraw-btn');
+  const withdrawError = document.getElementById('aff-withdraw-error');
+  const statusBadge   = document.getElementById('aff-status-badge');
+  const statusMsg     = document.getElementById('aff-status-msg');
+
+  if (!createBtn) return; // page non-affiliation
+
+  const userEmail = localStorage.getItem('userEmail') || '';
+  if (!userEmail) return;
+
+  // ── Clés localStorage ──
+  const STORAGE_KEY  = 'bbw_affiliates_' + btoa(userEmail).replace(/=/g,'');
+  const HISTORY_KEY  = 'bbw_aff_history_' + btoa(userEmail).replace(/=/g,'');
+
+  // ── Charger les affiliés ──
+  function loadAffiliates() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+
+  function saveAffiliates(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  // ── Charger l'historique ──
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+
+  function saveHistory(arr) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(arr));
+  }
+
+  // ── Générer le lien d'affiliation ──
+  function buildAffLink(username) {
+    const base = window.location.origin;
+    return base + '/shop.html?ref=' + encodeURIComponent(username);
+  }
+
+  // ── Valider le username ──
+  function validateUsername(name) {
+    if (!name || name.length < 3) return 'Minimum 3 caractères requis.';
+    if (!/^[a-zA-Z0-9_-]+$/.test(name)) return 'Lettres, chiffres, tirets et _ seulement.';
+    if (name.length > 30) return 'Maximum 30 caractères.';
+    return null;
+  }
+
+  // ── Afficher le tableau ──
+  function renderTable() {
+    const affiliates = loadAffiliates();
+    if (!affiliates.length) {
+      tableCard.style.display = 'none';
+      return;
+    }
+    tableCard.style.display = 'block';
+    tableBody.innerHTML = '';
+
+    affiliates.forEach(function(aff) {
+      const pct        = aff.totalMoney > 0 ? ((aff.totalMoney / Math.max(aff.totalOrderValue, 1)) * 100).toFixed(1) : '0.0';
+      const isJackpot  = parseFloat(pct) >= 50;
+      const jackpotTxt = isJackpot ? '🏆 JACKPOT' : '-';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
+        '<td>' + (aff.clicks || 0) + '</td>' +
+        '<td><span class="aff-badge-pct' + (isJackpot ? ' jackpot' : '') + '">' + pct + '%</span></td>' +
+        '<td><strong style="color:#1a6b3c;-webkit-text-fill-color:#1a6b3c;">$' + parseFloat(aff.totalMoney || 0).toFixed(2) + '</strong></td>' +
+        '<td>' + (aff.totalOrders || 0) + '</td>' +
+        '<td class="aff-td-jackpot">' + jackpotTxt + '</td>';
+      tableBody.appendChild(tr);
+
+      // Vérifier si jackpot → afficher récompense
+      if (isJackpot) showReward(aff);
+    });
+  }
+
+  // ── Afficher l'historique ──
+  function renderHistory() {
+    const history = loadHistory();
+    if (!history.length) {
+      historyCard.style.display = 'none';
+      return;
+    }
+    historyCard.style.display = 'block';
+    historyList.innerHTML = '';
+
+    history.slice().reverse().forEach(function(item) {
+      const div = document.createElement('div');
+      div.className = 'aff-history-item';
+      div.innerHTML =
+        '<span class="aff-history-user">@' + escHtml(item.username) + '</span>' +
+        '<span class="aff-history-link">' + escHtml(item.link) + '</span>' +
+        '<span class="aff-history-date">' + escHtml(item.date) + '</span>' +
+        '<button class="aff-copy-link-btn" data-link="' + escHtml(item.link) + '">' +
+          '<i class="fi fi-rr-copy"></i> Copier' +
+        '</button>';
+      historyList.appendChild(div);
+    });
+
+    // Bind copy buttons
+    historyList.querySelectorAll('.aff-copy-link-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const link = btn.dataset.link;
+        navigator.clipboard.writeText(link).then(function() {
+          const orig = btn.innerHTML;
+          btn.innerHTML = '<i class="fi fi-rr-check"></i> Copié !';
+          setTimeout(function() { btn.innerHTML = orig; }, 1800);
+        });
+      });
+    });
+
+    // Vider l'historique
+    if (cleanBtn) {
+      cleanBtn.onclick = function() {
+        if (!confirm('Vider tout l\'historique des liens ?')) return;
+        saveHistory([]);
+        renderHistory();
+      };
+    }
+  }
+
+  // ── Afficher la récompense Jackpot 50% ──
+  function showReward(aff) {
+    if (!rewardCard) return;
+    rewardCard.style.display = 'block';
+
+    // Générer un code promo basé sur le username
+    const promoCode = 'AFF50-' + aff.username.toUpperCase().slice(0, 6);
+    if (promoCodeVal) promoCodeVal.textContent = promoCode;
+
+    // Vérifier statut retrait
+    if (aff.withdrawStatus && aff.withdrawStatus !== 'none') {
+      if (withdrawForm)  withdrawForm.style.display  = 'none';
+      if (withdrawStatus) withdrawStatus.style.display = 'block';
+      const approved = aff.withdrawStatus === 'approved';
+      if (statusBadge) {
+        statusBadge.textContent = approved ? '✅ Approuvé' : '⏳ En attente';
+        statusBadge.className   = 'aff-status-badge' + (approved ? ' approved' : '');
+      }
+      if (statusMsg) {
+        statusMsg.textContent = approved
+          ? 'Votre retrait a été approuvé ! Vous allez recevoir votre paiement sous peu.'
+          : 'Votre demande de retrait est en cours de traitement par notre équipe.';
+      }
+    }
+  }
+
+  // ── Copier le code promo ──
+  if (copyPromoBtn) {
+    copyPromoBtn.addEventListener('click', function() {
+      const code = promoCodeVal ? promoCodeVal.textContent : '';
+      navigator.clipboard.writeText(code).then(function() {
+        const orig = copyPromoBtn.innerHTML;
+        copyPromoBtn.innerHTML = '<i class="fi fi-rr-check"></i> Copié !';
+        setTimeout(function() { copyPromoBtn.innerHTML = orig; }, 2000);
+      });
+    });
+  }
+
+  // ── Créer un lien d'affiliation ──
+  if (createBtn) {
+    createBtn.addEventListener('click', function() {
+      if (!usernameInput) return;
+      const username = usernameInput.value.trim().toLowerCase();
+      const err = validateUsername(username);
+      if (err) {
+        createError.textContent = err;
+        createError.style.display = 'block';
+        return;
+      }
+      createError.style.display = 'none';
+
+      const affiliates = loadAffiliates();
+      const existing   = affiliates.find(function(a) { return a.username === username; });
+
+      if (!existing) {
+        // Nouveau affilié
+        const newAff = {
+          username:       username,
+          clicks:         0,
+          totalMoney:     0,
+          totalOrders:    0,
+          totalOrderValue:0,
+          withdrawStatus: 'none',
+          createdAt:      new Date().toLocaleDateString('fr-FR')
+        };
+        affiliates.push(newAff);
+        saveAffiliates(affiliates);
+
+        // Sauvegarder côté serveur
+        saveAffiliateToSheet(userEmail, newAff, affiliates);
+      }
+
+      // Ajouter à l'historique
+      const link    = buildAffLink(username);
+      const history = loadHistory();
+      const already = history.find(function(h) { return h.username === username && h.link === link; });
+      if (!already) {
+        history.push({
+          username: username,
+          link:     link,
+          date:     new Date().toLocaleDateString('fr-FR')
+        });
+        saveHistory(history);
+      }
+
+      usernameInput.value = '';
+
+      // Copier automatiquement le lien
+      navigator.clipboard.writeText(link).then(function() {
+        const orig = createBtn.innerHTML;
+        createBtn.innerHTML = '<i class="fi fi-rr-check"></i> Lien copié !';
+        setTimeout(function() { createBtn.innerHTML = orig; }, 2500);
+      }).catch(function() {});
+
+      renderTable();
+      renderHistory();
+    });
+  }
+
+  // ── Demande de retrait PayPal ──
+  if (withdrawBtn) {
+    withdrawBtn.addEventListener('click', async function() {
+      const paypalName  = document.getElementById('aff-paypal-name')?.value.trim()  || '';
+      const paypalEmail = document.getElementById('aff-paypal-email')?.value.trim() || '';
+
+      if (!paypalName || !paypalEmail) {
+        withdrawError.textContent = 'Veuillez remplir tous les champs PayPal.';
+        withdrawError.style.display = 'block';
+        return;
+      }
+
+      if (!paypalEmail.includes('@')) {
+        withdrawError.textContent = 'Email PayPal invalide.';
+        withdrawError.style.display = 'block';
+        return;
+      }
+
+      withdrawError.style.display = 'none';
+      withdrawBtn.disabled = true;
+      withdrawBtn.innerHTML = '<i class="fi fi-rr-loading"></i> Envoi en cours...';
+
+      try {
+        const res  = await fetch('/.netlify/functions/save-account', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            action:       'aff-withdraw-request',
+            email:        userEmail,
+            paypalName:   paypalName,
+            paypalEmail:  paypalEmail
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          // Mettre à jour le statut local
+          const affiliates = loadAffiliates();
+          affiliates.forEach(function(a) { a.withdrawStatus = 'pending'; });
+          saveAffiliates(affiliates);
+
+          // Afficher le statut
+          if (withdrawForm)  withdrawForm.style.display  = 'none';
+          if (withdrawStatus) {
+            withdrawStatus.style.display = 'block';
+            if (statusBadge) { statusBadge.textContent = '⏳ En attente'; statusBadge.className = 'aff-status-badge'; }
+            if (statusMsg)   statusMsg.textContent = 'Votre demande est en cours de traitement par notre équipe.';
+          }
+        } else {
+          throw new Error(data.error || 'Erreur inconnue');
+        }
+      } catch (err) {
+        withdrawError.textContent = 'Erreur : ' + err.message;
+        withdrawError.style.display = 'block';
+        withdrawBtn.disabled = false;
+        withdrawBtn.innerHTML = '<i class="fi fi-rr-paper-plane"></i> Envoyer la demande';
+      }
+    });
+  }
+
+  // ── Sauvegarder l'affilié côté serveur ──
+  async function saveAffiliateToSheet(email, affData, allAffiliates) {
+    try {
+      await fetch('/.netlify/functions/save-account', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          action:         'aff-create',
+          email:          email,
+          affiliateData:  affData,
+          allAffiliates:  allAffiliates
+        })
+      });
+    } catch(e) {
+      console.warn('[Affiliation] saveAffiliateToSheet failed:', e.message);
+    }
+  }
+
+  // ── Échapper le HTML ──
+  function escHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  // ── Charger les stats depuis le serveur (temps réel) ──
+  async function syncAffiliateStats() {
+    if (!userEmail) return;
+    try {
+      const res  = await fetch('/.netlify/functions/save-account', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ action: 'aff-get-stats', email: userEmail })
+      });
+      const data = await res.json();
+      if (data.success && data.affiliates && data.affiliates.length) {
+        saveAffiliates(data.affiliates);
+        renderTable();
+        renderHistory();
+      }
+    } catch(e) {
+      // Silence — on utilise le local storage comme fallback
+    }
+  }
+
+  // ── Init ──
+  renderTable();
+  renderHistory();
+  syncAffiliateStats(); // Sync avec le serveur au chargement
+
+  // Rafraîchir toutes les 60 secondes (temps réel)
+  setInterval(syncAffiliateStats, 60000);
+
+  // ── Tracker les clics sur les liens d'affiliation ──
+  // (côté visiteur, à mettre dans script.js global)
+  const urlParams = new URLSearchParams(window.location.search);
+  const refParam  = urlParams.get('ref');
+  if (refParam && window.location.pathname !== '/account.html') {
+    localStorage.setItem('aff_ref', refParam);
+    // Enregistrer le clic côté serveur
+    fetch('/.netlify/functions/save-account', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        action:   'aff-track-click',
+        username: refParam
+      })
+    }).catch(function() {});
+  }
+
+})();
+// ================================================================
+//   FIN AFFILIATION SYSTEM
+// ================================================================
+
+
+
+
+
+
 });
 
 window.addEventListener('load', () => {
