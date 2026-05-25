@@ -3790,7 +3790,19 @@ if (window.innerWidth <= 768) {
 
   // ── Page courante
   const currentPath  = window.location.pathname;
-  const currentTitle = document.title.split('|')[0].trim() || document.title;
+  
+  function getBreadcrumbTitle() {
+  const path = window.location.pathname;
+  // Chercher dans SEO_MAP si disponible
+  if (window.__SEO_MAP && window.__SEO_MAP[path]) {
+    return window.__SEO_MAP[path].title.split('|')[0].trim();
+  }
+  // Fallback : document.title après nettoyage
+  return document.title.split('|')[0].trim() 
+      || document.querySelector('h1')?.textContent?.trim() 
+      || path.split('/').pop().replace('.html','').replace(/-/g,' ');
+}
+const currentTitle = getBreadcrumbTitle();
 
   // ── Historique localStorage (6 dernières pages)
   const BC_KEY = 'bc_visited';
@@ -3804,8 +3816,6 @@ if (window.innerWidth <= 768) {
   if (currentPath !== '/' && currentPath !== '/index.html') {
     visited.unshift({ url: currentPath, title: currentTitle });
   }
-
-  const displayVisited = visited.filter(p => p.url !== currentPath);
 
   if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
 
@@ -3825,7 +3835,7 @@ if (window.innerWidth <= 768) {
       </a>
     </li>`;
 
-  displayVisited.forEach(page => {
+  visited.forEach(page => {
     const isActive = page.url === currentPath;
     const li = document.createElement('li');
     li.className = 'bc-item' + (isActive ? ' bc-active' : '');

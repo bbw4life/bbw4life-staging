@@ -1,7 +1,5 @@
 /* ================================================================
    BBW4LIFE — CART PAGE (cart.css)
-   Tous les sélecteurs sont préfixés cp- pour éviter
-   tout conflit avec les classes du cart drawer
 ================================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
@@ -707,6 +705,44 @@
   color: #22a06b;
 }
 
+
+
+
+@media (max-width: 768px) {
+  .cp-upsell-section .p2-upsell-item {
+    display: grid;
+    grid-template-columns: 20px 80px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    box-sizing: border-box;  /* ← fix */
+    max-width: 100%;          /* ← fix */
+    overflow: hidden;         /* ← fix */
+  }
+
+  /* Prix — empêcher débordement */
+  .cp-upsell-section .p2-upsell-price-col {
+    grid-column: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    min-width: 0;      /* ← fix */
+    flex-shrink: 1;    /* ← fix */
+  }
+
+  .cp-upsell-section .p2-upsell-old {
+    font-size: 0.65rem;
+    white-space: nowrap;  /* ← fix */
+  }
+
+  .cp-upsell-section .p2-upsell-new {
+    font-size: 0.88rem;
+    white-space: nowrap;  /* ← fix */
+  }
+}
+
+
 /* ================================================================
    PROMO CODE SLIDER
 ================================================================ */
@@ -772,8 +808,8 @@
   padding: 10px 10px;
   position: relative;
   overflow: hidden;
-  margin-bottom: -30px !important;
-  margin-top: -20px !important;
+  margin-bottom: -40px !important;
+  margin-top: -10px !important;
 }
 .cp-share-section::before {
   content: '';
@@ -1019,9 +1055,10 @@
 ================================================================ */
 .cp-empty {
   max-width: 1340px;
-  margin: 40px auto;
+  margin: 10px auto !important;
   padding: 0 28px;
   display: none;
+  margin-bottom: -30px !important;
 }
 .cp-empty-inner {
   background: #fffdf9;
@@ -1981,4 +2018,16 @@
   width: 16px;
   border-radius: 100px;
   background: #c9963e;
+}
+
+@media (max-width: 768px) {
+  .cp-layout {
+    padding: 5px !important;
+  }
+  .cp-empty {
+    padding: 0 !important;
+  }
+  .cp-empty-inner {
+    border-radius: 0 !important;
+  }
 }

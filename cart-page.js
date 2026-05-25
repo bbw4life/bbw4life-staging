@@ -1344,14 +1344,20 @@
     }
 
     function goTo(page) {
-      currentPage = Math.max(0, Math.min(page, totalPages - 1));
+        currentPage = Math.max(0, Math.min(page, totalPages - 1));
 
-      /* Calculate offset: page * perPage * (cardWidth + gap) */
-      var card    = track.querySelector('[class$="-card"]');
-      var gap     = parseInt(getComputedStyle(track).gap) || 14;
-      var cardW   = card ? card.offsetWidth : 0;
-      var offset  = currentPage * perPage * (cardW + gap);
-      track.style.transform = 'translateX(-' + offset + 'px)';
+        var card    = track.querySelector('[class$="-card"]');
+        var gap     = parseInt(getComputedStyle(track).gap) || 14;
+        var cardW   = card ? card.offsetWidth : 0;
+
+        /* ── MAX offset = largeur totale du contenu - largeur viewport ── */
+        var viewport   = track.parentElement;
+        var totalW     = cards.length * (cardW + gap) - gap;
+        var maxOffset  = Math.max(0, totalW - viewport.offsetWidth);
+        var rawOffset  = currentPage * perPage * (cardW + gap);
+        var offset     = Math.min(rawOffset, maxOffset);  // ← ici le fix
+
+        track.style.transform = 'translateX(-' + offset + 'px)';
 
       /* Update dots */
       var dots = dotsContainer.querySelectorAll('[class$="-dot"]');

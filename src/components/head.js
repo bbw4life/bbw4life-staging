@@ -486,6 +486,7 @@ function injectPageSEO() {
     canonical.href = seo.canonical;
 }
 
+window.__SEO_MAP = SEO_MAP;
 
 /* ─── Lancer tout ─── */
 injectGlobalHead().then(() => {
