@@ -209,29 +209,30 @@ exports.handler = async (event) => {
     
 
 
-   if (action === 'aff-create') {
+  if (action === 'aff-create') {
   if (!email) throw new Error("Email required");
   const { allAffiliates } = body;
   if (rowIndex === -1) throw new Error("User not found");
 
-  const aff = (allAffiliates || [])[0] || {};
-  const affRow = [
-    aff.username || '',
-    aff.clicks || 0,
-    parseFloat(aff.totalMoney || 0).toFixed(2),
-    aff.totalOrders || 0,
-    parseFloat(aff.totalOrderValue || 0).toFixed(2),
-    aff.withdrawStatus || 'none',
-    '',
-    '',
-    JSON.stringify(allAffiliates || [])
-  ];
+  // Lire ce qui existe déjà dans le sheet
+  const currentRow = rows[rowIndex] || [];
+  let existingAffiliates = [];
+  try { existingAffiliates = JSON.parse(currentRow[18] || '[]'); } catch(e) {}
+
+  // Fusionner sans écraser les données existantes
+  const merged = [...existingAffiliates];
+  (allAffiliates || []).forEach(function(newAff) {
+    const idx = merged.findIndex(function(a) { return a.username === newAff.username; });
+    if (idx === -1) {
+      merged.push(newAff);
+    }
+  });
 
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: `bbw4life-accounts!S${rowNum}`,
     valueInputOption: 'RAW',
-    resource: { values: [affRow] }
+    resource: { values: [[JSON.stringify(merged)]] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }
@@ -242,23 +243,33 @@ if (action === 'aff-get-stats') {
   const currentRow = rows[rowIndex] || [];
   let affiliates = [];
   try { affiliates = JSON.parse(currentRow[18] || '[]'); } catch(e) {}
-  const withdrawStatus     = currentRow[19] || 'none';
-  const withdrawPaypalName = currentRow[20] || '';
-  const withdrawPaypalEmail= currentRow[21] || '';
+  const withdrawStatus      = currentRow[19] || 'none';
+  const withdrawPaypalName  = currentRow[20] || '';
+  const withdrawPaypalEmail = currentRow[21] || '';
   affiliates.forEach(function(a) {
     if (withdrawStatus && withdrawStatus !== 'none') a.withdrawStatus = withdrawStatus;
   });
-  return { statusCode: 200, body: JSON.stringify({ success: true, affiliates, withdrawStatus, withdrawPaypalName, withdrawPaypalEmail }) };
+  return { 
+    statusCode: 200, 
+    body: JSON.stringify({ 
+      success: true, 
+      affiliates,
+      withdrawStatus,
+      withdrawPaypalName,
+      withdrawPaypalEmail
+    }) 
+  };
 }
 
 if (action === 'aff-track-click') {
   const { username } = body;
   if (!username) throw new Error("Username required");
-  const allRows = rows;
-  for (let i = 0; i < allRows.length; i++) {
+  for (let i = 0; i < rows.length; i++) {
     let affiliates = [];
-    try { affiliates = JSON.parse(allRows[i][18] || '[]'); } catch(e) {}
-    const idx = affiliates.findIndex(function(a) { return a.username && a.username.toLowerCase() === username.toLowerCase(); });
+    try { affiliates = JSON.parse(rows[i][18] || '[]'); } catch(e) {}
+    const idx = affiliates.findIndex(function(a) { 
+      return a.username && a.username.toLowerCase() === username.toLowerCase(); 
+    });
     if (idx !== -1) {
       affiliates[idx].clicks = (affiliates[idx].clicks || 0) + 1;
       await sheets.spreadsheets.values.update({
@@ -267,10 +278,10 @@ if (action === 'aff-track-click') {
         valueInputOption: 'RAW',
         resource: { values: [[JSON.stringify(affiliates)]] }
       });
-      break;
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
   }
-  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  return { statusCode: 200, body: JSON.stringify({ success: false, error: 'Username not found' }) };
 }
 
 if (action === 'aff-record-order') {
@@ -280,21 +291,23 @@ if (action === 'aff-record-order') {
   for (let i = 0; i < rows.length; i++) {
     let affiliates = [];
     try { affiliates = JSON.parse(rows[i][18] || '[]'); } catch(e) {}
-    const idx = affiliates.findIndex(function(a) { return a.username && a.username.toLowerCase() === username.toLowerCase(); });
+    const idx = affiliates.findIndex(function(a) { 
+      return a.username && a.username.toLowerCase() === username.toLowerCase(); 
+    });
     if (idx !== -1) {
-      affiliates[idx].totalMoney      = parseFloat((affiliates[idx].totalMoney || 0) + commission).toFixed(2);
+      affiliates[idx].totalMoney      = parseFloat((parseFloat(affiliates[idx].totalMoney || 0) + commission)).toFixed(2);
       affiliates[idx].totalOrders     = (affiliates[idx].totalOrders || 0) + 1;
-      affiliates[idx].totalOrderValue = parseFloat((affiliates[idx].totalOrderValue || 0) + parseFloat(orderAmount)).toFixed(2);
+      affiliates[idx].totalOrderValue = parseFloat((parseFloat(affiliates[idx].totalOrderValue || 0) + parseFloat(orderAmount))).toFixed(2);
       await sheets.spreadsheets.values.update({
         spreadsheetId,
         range: `bbw4life-accounts!S${i + 1}`,
         valueInputOption: 'RAW',
         resource: { values: [[JSON.stringify(affiliates)]] }
       });
-      break;
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
   }
-  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  return { statusCode: 200, body: JSON.stringify({ success: false, error: 'Username not found' }) };
 }
 
 if (action === 'aff-withdraw-request') {
