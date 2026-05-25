@@ -209,15 +209,29 @@ exports.handler = async (event) => {
     
 
 
-    if (action === 'aff-create') {
+   if (action === 'aff-create') {
   if (!email) throw new Error("Email required");
   const { allAffiliates } = body;
   if (rowIndex === -1) throw new Error("User not found");
+
+  const aff = (allAffiliates || [])[0] || {};
+  const affRow = [
+    aff.username || '',
+    aff.clicks || 0,
+    parseFloat(aff.totalMoney || 0).toFixed(2),
+    aff.totalOrders || 0,
+    parseFloat(aff.totalOrderValue || 0).toFixed(2),
+    aff.withdrawStatus || 'none',
+    '',
+    '',
+    JSON.stringify(allAffiliates || [])
+  ];
+
   await sheets.spreadsheets.values.update({
     spreadsheetId,
     range: `bbw4life-accounts!S${rowNum}`,
     valueInputOption: 'RAW',
-    resource: { values: [[JSON.stringify(allAffiliates || [])]] }
+    resource: { values: [affRow] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }

@@ -2162,3 +2162,18 @@ a.stat-wishlist-link:visited {
   .aff-history-link { font-size: 0.72rem; }
   .aff-copy-link-btn { width: 100%; justify-content: center; }
 }
+
+
+@media (max-width: 600px) {
+  .aff-input-row {
+    flex-direction: column;
+  }
+  .aff-input {
+    width: 100%;
+    flex: none;
+  }
+  .aff-create-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

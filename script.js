@@ -7146,8 +7146,8 @@ function loadProfilePhoto() {
   function saveHistory(arr) { localStorage.setItem(HISTORY_KEY, JSON.stringify(arr)); }
 
   function buildAffLink(username) {
-    return window.location.origin + '/shop.html?ref=' + encodeURIComponent(username);
-  }
+    return window.location.origin + '/?ref=' + encodeURIComponent(username);
+}
 
   function validateUsername(name) {
     if (!name || name.length < 3) return 'Minimum 3 characters required.';
