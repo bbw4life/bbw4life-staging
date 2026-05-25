@@ -812,26 +812,30 @@
 
   /* ════════════════════════════════════════════════════
      SHOW / HIDE DYNAMIC SECTIONS
-     ── cp-upsell-section est géré séparément par initPageUpsell
-        et renderPageCart — PAS dans ces listes
   ════════════════════════════════════════════════════ */
   function showDynamicSections() {
     ['cp-countdown','cp-progress-container','cp-promo-message-wrap',
      'cp-paul-banner','cp-promo-codes-container','cp-social-proof',
-     'cp-share-section'].forEach(function (id) {
+     'cp-share-section',
+     'cp-extra-section',
+     'cp-marquee-strip'
+    ].forEach(function (id) {
       const el = document.getElementById(id);
       if (el) el.style.display = '';
     });
-  }
+}
 
   function hideDynamicSections() {
     ['cp-countdown','cp-progress-container','cp-promo-message-wrap',
      'cp-paul-banner','cp-promo-codes-container','cp-social-proof',
-     'cp-share-section','cp-upsell-section'].forEach(function (id) {
+     'cp-share-section','cp-upsell-section',
+     'cp-extra-section',
+     'cp-marquee-strip'
+    ].forEach(function (id) {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
-  }
+}
 
   /* ════════════════════════════════════════════════════
      CHECKOUT BUTTON

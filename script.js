@@ -5667,12 +5667,14 @@ document.dispatchEvent(new Event('wishlist:change'));
             const promoMsg    = document.querySelector('.cart-promo-message');
             const banner      = document.querySelector('.cart-drawer__paul-banner');
             const promoCodes  = document.querySelector('.cart-drawer__promo-slider-container');
+            const drawerExtra = document.getElementById('drawer-extra-section');
 
             if (countdown)   countdown.style.display   = 'none';
             if (progressBar) progressBar.style.display = 'none';
             if (promoMsg)    promoMsg.style.display     = 'none';
             if (banner)      banner.style.display       = 'none';
             if (promoCodes)  promoCodes.style.display   = 'none';
+            if (drawerExtra) drawerExtra.style.display = 'none';
         }, 150); // après initCartDrawerExtras (100ms)
     } else {
         setTimeout(() => initCartDrawerExtras(), 100);

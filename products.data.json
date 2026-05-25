@@ -5123,6 +5123,8 @@
   ]
 },
 "country_selector": {
+  "auto_translate": "yes",
+  "auto_currency": "yes",
   "enabled": "yes",
   "default_country": "us",
   "options": [
