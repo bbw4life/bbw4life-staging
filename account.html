@@ -390,127 +390,116 @@
         </div>
       </div>
     </div>
+
+
+
+
+
     
+   <div class="affiliation-section" id="affiliation-section">
 
-
-
-    <!-- ══════════════════════════════════════════
-     AFFILIATION SECTION
-══════════════════════════════════════════ -->
-<div class="affiliation-section" id="affiliation-section">
-
-  <!-- Header -->
   <div class="aff-header">
-    <h2 class="aff-title">Programme d'Affiliation</h2>
-    <p class="aff-subtitle">Partagez votre lien unique et gagnez des commissions sur chaque commande</p>
-    <p class="aff-desc">Créez votre nom d'utilisateur affilié, partagez votre lien et recevez <strong>5%</strong> sur chaque commande passée via votre lien. Atteignez <strong>50%</strong> de gains et débloquez un code promo exclusif ou un retrait PayPal.</p>
+    <h2 class="aff-title">Affiliate Program</h2>
+    <p class="aff-subtitle">Share your unique link and earn commissions on every order</p>
+    <p class="aff-desc">Create your affiliate username, share your link and receive <strong>5%</strong> on every order placed through it. Reach <strong>50%</strong> in earnings to unlock an exclusive promo code or a PayPal withdrawal.</p>
   </div>
 
-  <!-- Créer un lien -->
   <div class="aff-create-card">
     <div class="aff-create-inner">
       <label class="aff-label" for="aff-username-input">
-        <i class="fi fi-rr-at"></i> Choisissez votre nom d'utilisateur affilié
+        <i class="fi fi-rr-at"></i> Choose your affiliate username
       </label>
       <div class="aff-input-row">
         <input
           type="text"
           id="aff-username-input"
           class="aff-input"
-          placeholder="ex: francenel81"
+          placeholder="e.g. francenel81"
           maxlength="30"
           autocomplete="off"
           spellcheck="false"
         >
         <button class="aff-create-btn" id="aff-create-btn">
-          <i class="fi fi-rr-link"></i> Créer mon lien
+          <i class="fi fi-rr-link"></i> Create my link
         </button>
       </div>
-      <p class="aff-input-hint">Lettres, chiffres et tirets uniquement. Min 3 caractères.</p>
+      <p class="aff-input-hint">Letters, numbers and hyphens only. Min 3 characters.</p>
       <p class="aff-create-error" id="aff-create-error" style="display:none;"></p>
     </div>
   </div>
 
-  <!-- Tableau des affiliés -->
   <div class="aff-table-card" id="aff-table-card" style="display:none;">
     <h3 class="aff-table-title">
-      <i class="fi fi-rr-chart-line-up"></i> Tableau de Bord
+      <i class="fi fi-rr-chart-line-up"></i> Dashboard
     </h3>
     <div class="aff-table-wrap">
       <table class="aff-table" id="aff-table">
         <thead>
           <tr>
             <th>User Name</th>
-            <th>Clics</th>
-            <th>% Gagné</th>
+            <th>Total Clicks</th>
+            <th>Total %</th>
             <th>Money Earned</th>
-            <th>Commandes</th>
+            <th>Total Orders</th>
             <th>Jackpot</th>
           </tr>
         </thead>
-        <tbody id="aff-table-body">
-        </tbody>
+        <tbody id="aff-table-body"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Récompense 50% -->
   <div class="aff-reward-card" id="aff-reward-card" style="display:none;">
     <div class="aff-reward-inner">
       <div class="aff-reward-icon"><i class="fi fi-rr-trophy"></i></div>
-      <h3 class="aff-reward-title">🎉 Félicitations !</h3>
+      <h3 class="aff-reward-title">🎉 Congratulations!</h3>
       <p class="aff-reward-msg">
-        Vous avez atteint <strong>50%</strong> de gains ! Profitez de votre avantage exclusif :
+        You have reached <strong>50%</strong> in earnings! Enjoy your exclusive benefit:
       </p>
-      <!-- Option 1 : Code Promo -->
       <div class="aff-reward-promo" id="aff-reward-promo">
-        <span class="aff-reward-promo-label">Votre code promo (-50%) :</span>
+        <span class="aff-reward-promo-label">Your promo code (-50%):</span>
         <div class="aff-promo-code-row">
           <span class="aff-promo-code-val" id="aff-promo-code-val">AFF50-XXXXXX</span>
           <button class="aff-copy-promo-btn" id="aff-copy-promo-btn">
-            <i class="fi fi-rr-copy"></i> Copier
+            <i class="fi fi-rr-copy"></i> Copy
           </button>
         </div>
-        <p class="aff-promo-note">Utilisez ce code sur votre prochaine commande pour -50%</p>
+        <p class="aff-promo-note">Use this code on your next order for -50%</p>
       </div>
-      <!-- OU Retrait PayPal -->
-      <div class="aff-reward-divider">
-        <span>OU</span>
-      </div>
+      <div class="aff-reward-divider"><span>OR</span></div>
       <div class="aff-withdraw-wrap" id="aff-withdraw-wrap">
-        <p class="aff-withdraw-label">Recevoir vos gains sur PayPal :</p>
+        <p class="aff-withdraw-label">Receive your earnings via PayPal:</p>
         <div class="aff-withdraw-form" id="aff-withdraw-form">
-          <input type="text" id="aff-paypal-name" placeholder="Votre nom PayPal" class="aff-withdraw-input">
-          <input type="email" id="aff-paypal-email" placeholder="Votre email PayPal" class="aff-withdraw-input">
+          <input type="text" id="aff-paypal-name" placeholder="Your PayPal name" class="aff-withdraw-input">
+          <input type="email" id="aff-paypal-email" placeholder="Your PayPal email" class="aff-withdraw-input">
           <button class="aff-withdraw-btn" id="aff-withdraw-btn">
-            <i class="fi fi-rr-paper-plane"></i> Envoyer la demande
+            <i class="fi fi-rr-paper-plane"></i> Send request
           </button>
           <p class="aff-withdraw-error" id="aff-withdraw-error" style="display:none;"></p>
         </div>
-        <!-- Statut de la demande de retrait -->
         <div class="aff-withdraw-status" id="aff-withdraw-status" style="display:none;">
-          <span class="aff-status-badge" id="aff-status-badge">En attente</span>
-          <p id="aff-status-msg">Votre demande est en cours de traitement par notre équipe.</p>
+          <span class="aff-status-badge" id="aff-status-badge">Pending</span>
+          <p id="aff-status-msg">Your request is being processed by our team.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Historique des liens -->
   <div class="aff-history-card" id="aff-history-card" style="display:none;">
     <div class="aff-history-header">
       <h3 class="aff-history-title">
-        <i class="fi fi-rr-time-past"></i> Historique des Liens
+        <i class="fi fi-rr-time-past"></i> Link History
       </h3>
       <button class="aff-clean-btn" id="aff-clean-btn">
-        <i class="fi fi-rr-trash"></i> Vider l'historique
+        <i class="fi fi-rr-trash"></i> Clear history
       </button>
     </div>
     <div class="aff-history-list" id="aff-history-list"></div>
   </div>
 
 </div>
-<!-- ══ FIN AFFILIATION ══ -->
+
+
 
 
   <!-- NEWSLETTER -->
