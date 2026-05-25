@@ -2300,6 +2300,9 @@ function applyPromoFreeItems() {
 
 // Ces lignes existaient déjà — NE PAS SUPPRIMER
 window.openCartDrawer = openCartDrawer;
+window.checkout = checkout;
+window.showCheckoutBlockPopup = showCheckoutBlockPopup;
+window.showCheckoutBlockPopup = showCheckoutBlockPopup;
 window.openWishlistModal = openWishlistModal;
 window.renderCart = renderCart;
 window.renderWishlist = renderWishlist;
@@ -3790,7 +3793,7 @@ if (window.innerWidth <= 768) {
 
   // ── Page courante
   const currentPath  = window.location.pathname;
-  
+
   function getBreadcrumbTitle() {
   const path = window.location.pathname;
   // Chercher dans SEO_MAP si disponible
@@ -4009,6 +4012,19 @@ const currentTitle = getBreadcrumbTitle();
   };
 
 })();
+
+
+const rcCheckoutBtn = document.getElementById('rc-checkout-btn');
+if (rcCheckoutBtn) {
+  rcCheckoutBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (typeof window.checkout === 'function') {
+      window.checkout();
+    } else {
+      window.location.href = '/checkout/checkout.html';
+    }
+  });
+}
 
 // ====================== FILTER BAR ======================
 (function initFilterBar() {
