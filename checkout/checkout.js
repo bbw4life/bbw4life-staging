@@ -321,7 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const shippingData = await getShippingData();
-            shippingData.affRef = localStorage.getItem('aff_ref') || '';
+            
+            shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
+
             const discountedCart = getDiscountedCart();
             const discountedSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
             const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || '';

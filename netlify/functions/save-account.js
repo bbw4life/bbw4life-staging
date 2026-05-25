@@ -240,23 +240,39 @@ exports.handler = async (event) => {
 if (action === 'aff-get-stats') {
   if (!email) throw new Error("Email required");
   if (rowIndex === -1) return { statusCode: 200, body: JSON.stringify({ success: true, affiliates: [] }) };
+  
   const currentRow = rows[rowIndex] || [];
-  let affiliates = [];
-  try { affiliates = JSON.parse(currentRow[18] || '[]'); } catch(e) {}
-  const withdrawStatus      = currentRow[19] || 'none';
-  const withdrawPaypalName  = currentRow[20] || '';
-  const withdrawPaypalEmail = currentRow[21] || '';
-  affiliates.forEach(function(a) {
-    if (withdrawStatus && withdrawStatus !== 'none') a.withdrawStatus = withdrawStatus;
-  });
+  
+  // Lire depuis les colonnes séparées S à Y
+  const username      = currentRow[18] || '';
+  const clicks        = parseInt(currentRow[19]  || 0);
+  const totalMoney    = parseFloat(currentRow[20] || 0);
+  const totalOrders   = parseInt(currentRow[21]  || 0);
+  const totalOrderValue = parseFloat(currentRow[22] || 0);
+  const withdrawStatus  = currentRow[23] || 'none';
+  const createdAt       = currentRow[24] || '';
+
+  // Si pas d'username → pas d'affilié
+  if (!username) {
+    return { statusCode: 200, body: JSON.stringify({ success: true, affiliates: [] }) };
+  }
+
+  const affiliates = [{
+    username,
+    clicks,
+    totalMoney,
+    totalOrders,
+    totalOrderValue,
+    withdrawStatus,
+    createdAt
+  }];
+
   return { 
     statusCode: 200, 
     body: JSON.stringify({ 
       success: true, 
       affiliates,
-      withdrawStatus,
-      withdrawPaypalName,
-      withdrawPaypalEmail
+      withdrawStatus
     }) 
   };
 }
@@ -264,26 +280,22 @@ if (action === 'aff-get-stats') {
 if (action === 'aff-track-click') {
   const { username } = body;
   if (!username) throw new Error("Username required");
+  
   for (let i = 1; i < rows.length; i++) {
-    let affiliates = [];
-    try { 
-      const raw = rows[i][18] || '';
-      if (!raw || !raw.startsWith('[')) continue;
-      affiliates = JSON.parse(raw); 
-    } catch(e) { continue; }
-    const idx = affiliates.findIndex(function(a) { 
-      return a.username && a.username.toLowerCase() === username.toLowerCase(); 
+    const rowUsername = (rows[i][18] || '').toLowerCase().trim();
+    if (rowUsername !== username.toLowerCase().trim()) continue;
+    
+    // Incrémenter clicks dans colonne T (index 19)
+    const currentClicks = parseInt(rows[i][19] || 0);
+    const newClicks = currentClicks + 1;
+    
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `bbw4life-accounts!T${i + 1}`,
+      valueInputOption: 'RAW',
+      resource: { values: [[newClicks]] }
     });
-    if (idx !== -1) {
-      affiliates[idx].clicks = (affiliates[idx].clicks || 0) + 1;
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: `bbw4life-accounts!S${i + 1}`,
-        valueInputOption: 'RAW',
-        resource: { values: [[JSON.stringify(affiliates)]] }
-      });
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
-    }
+    return { statusCode: 200, body: JSON.stringify({ success: true, clicks: newClicks }) };
   }
   return { statusCode: 200, body: JSON.stringify({ success: false, error: 'Username not found' }) };
 }
@@ -292,24 +304,22 @@ if (action === 'aff-record-order') {
   const { username, orderAmount } = body;
   if (!username || !orderAmount) throw new Error("Missing data");
   const commission = parseFloat(orderAmount) * 0.05;
-  for (let i = 0; i < rows.length; i++) {
-    let affiliates = [];
-    try { affiliates = JSON.parse(rows[i][18] || '[]'); } catch(e) {}
-    const idx = affiliates.findIndex(function(a) { 
-      return a.username && a.username.toLowerCase() === username.toLowerCase(); 
+  
+  for (let i = 1; i < rows.length; i++) {
+    const rowUsername = (rows[i][18] || '').toLowerCase().trim();
+    if (rowUsername !== username.toLowerCase().trim()) continue;
+    
+    const newMoney    = parseFloat((parseFloat(rows[i][20] || 0) + commission)).toFixed(2);
+    const newOrders   = parseInt(rows[i][21] || 0) + 1;
+    const newOrderVal = parseFloat((parseFloat(rows[i][22] || 0) + parseFloat(orderAmount))).toFixed(2);
+    
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: `bbw4life-accounts!U${i + 1}:W${i + 1}`,
+      valueInputOption: 'RAW',
+      resource: { values: [[newMoney, newOrders, newOrderVal]] }
     });
-    if (idx !== -1) {
-      affiliates[idx].totalMoney      = parseFloat((parseFloat(affiliates[idx].totalMoney || 0) + commission)).toFixed(2);
-      affiliates[idx].totalOrders     = (affiliates[idx].totalOrders || 0) + 1;
-      affiliates[idx].totalOrderValue = parseFloat((parseFloat(affiliates[idx].totalOrderValue || 0) + parseFloat(orderAmount))).toFixed(2);
-      await sheets.spreadsheets.values.update({
-        spreadsheetId,
-        range: `bbw4life-accounts!S${i + 1}`,
-        valueInputOption: 'RAW',
-        resource: { values: [[JSON.stringify(affiliates)]] }
-      });
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
-    }
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
   }
   return { statusCode: 200, body: JSON.stringify({ success: false, error: 'Username not found' }) };
 }
