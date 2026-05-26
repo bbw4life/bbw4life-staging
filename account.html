@@ -398,50 +398,125 @@
 
   <div class="affiliation-section" id="affiliation-section">
 
-  <div class="aff-header">
-    <h2 class="aff-title">Affiliate Program</h2>
-    <p class="aff-subtitle">Share your unique link and earn commissions on every order</p>
-    <p class="aff-desc">Create your affiliate username, share your link and receive <strong>5%</strong> on every order placed through it. Reach <strong>50%</strong> in earnings to unlock an exclusive promo code or a PayPal withdrawal.</p>
+  <!-- ── HERO BANNER ── -->
+  <div class="aff-hero">
+    <div class="aff-hero__badge">
+      <i class="fi fi-rr-star"></i>
+      <span>Affiliate Program</span>
+    </div>
+    <h2 class="aff-hero__title">Earn money by sharing<br>what you love</h2>
+    <p class="aff-hero__sub">
+      Join the BBW4LIFE affiliate program and earn
+      <strong id="aff-txt-commission">5%</strong> commission on every order
+      placed through your unique link.
+    </p>
+
+    <div class="aff-hero__stats">
+      <div class="aff-hero__stat">
+        <span class="aff-hero__stat-val" id="aff-txt-commission2">5%</span>
+        <span class="aff-hero__stat-label">Commission per order</span>
+      </div>
+      <div class="aff-hero__stat-divider"></div>
+      <div class="aff-hero__stat">
+        <span class="aff-hero__stat-val" id="aff-txt-unlock">50%</span>
+        <span class="aff-hero__stat-label">Earnings to unlock rewards</span>
+      </div>
+      <div class="aff-hero__stat-divider"></div>
+      <div class="aff-hero__stat">
+        <span class="aff-hero__stat-val" id="aff-txt-promo-disc">-50%</span>
+        <span class="aff-hero__stat-label">Exclusive promo code</span>
+      </div>
+    </div>
+
+    <div class="aff-hero__steps">
+      <div class="aff-hero__step">
+        <div class="aff-hero__step-num">1</div>
+        <p>Create your username</p>
+      </div>
+      <div class="aff-hero__step-arrow"><i class="fi fi-rr-arrow-right"></i></div>
+      <div class="aff-hero__step">
+        <div class="aff-hero__step-num">2</div>
+        <p>Share your unique link</p>
+      </div>
+      <div class="aff-hero__step-arrow"><i class="fi fi-rr-arrow-right"></i></div>
+      <div class="aff-hero__step">
+        <div class="aff-hero__step-num">3</div>
+        <p>Earn on every order</p>
+      </div>
+    </div>
   </div>
 
+  <!-- ── CREATE LINK ── -->
   <div class="aff-create-card">
-    <div class="aff-create-inner">
-      <label class="aff-label" for="aff-username-input">
-        <i class="fi fi-rr-at"></i> Choose your affiliate username
-      </label>
+    <div class="aff-create-card__left">
+      <i class="fi fi-rr-link aff-create-card__icon"></i>
+      <div>
+        <h3 class="aff-create-card__title">Create your affiliate link</h3>
+        <p class="aff-create-card__hint">Letters, numbers, hyphens and _ only — min 3 characters</p>
+      </div>
+    </div>
+    <div class="aff-create-card__right">
       <div class="aff-input-row">
+        <div class="aff-input-prefix">bbw4life.com/?ref=</div>
         <input
           type="text"
           id="aff-username-input"
           class="aff-input"
-          placeholder="e.g. francenel81"
+          placeholder="yourname"
           maxlength="30"
           autocomplete="off"
           spellcheck="false"
         >
         <button class="aff-create-btn" id="aff-create-btn">
-          <i class="fi fi-rr-link"></i> Create my link
+          <i class="fi fi-rr-add"></i> Generate link
         </button>
       </div>
-      <p class="aff-input-hint">Letters, numbers and hyphens only. Min 3 characters.</p>
       <p class="aff-create-error" id="aff-create-error" style="display:none;"></p>
     </div>
   </div>
 
+  <!-- ── DASHBOARD TABLE ── -->
   <div class="aff-table-card" id="aff-table-card" style="display:none;">
-    <h3 class="aff-table-title">
-      <i class="fi fi-rr-chart-line-up"></i> Dashboard
-    </h3>
+    <div class="aff-table-card__header">
+      <div class="aff-table-card__title-wrap">
+        <i class="fi fi-rr-chart-line-up"></i>
+        <h3 class="aff-table-card__title">Your Dashboard</h3>
+      </div>
+      <div class="aff-table-card__live">
+        <span class="aff-live-dot"></span> Live data
+      </div>
+    </div>
+
+    <div class="aff-kpi-row" id="aff-kpi-row">
+      <div class="aff-kpi">
+        <span class="aff-kpi__label"><i class="fi fi-rr-cursor"></i> Total clicks</span>
+        <span class="aff-kpi__val" id="aff-kpi-clicks">—</span>
+      </div>
+      <div class="aff-kpi">
+        <span class="aff-kpi__label"><i class="fi fi-rr-shopping-bag"></i> Total orders</span>
+        <span class="aff-kpi__val" id="aff-kpi-orders">—</span>
+      </div>
+      <div class="aff-kpi">
+        <span class="aff-kpi__label"><i class="fi fi-rr-dollar"></i> Money earned</span>
+        <span class="aff-kpi__val aff-kpi__val--green" id="aff-kpi-earned">—</span>
+      </div>
+      <div class="aff-kpi">
+        <span class="aff-kpi__label"><i class="fi fi-rr-percentage"></i> Commission rate</span>
+        <span class="aff-kpi__val aff-kpi__val--pink" id="aff-kpi-commission">—</span>
+      </div>
+    </div>
+
     <div class="aff-table-wrap">
       <table class="aff-table" id="aff-table">
         <thead>
           <tr>
-            <th>User Name</th>
-            <th>Total Clicks</th>
-            <th>Total %</th>
-            <th>Money Earned</th>
-            <th>Total Orders</th>
-            <th>Jackpot</th>
+            <th>Username</th>
+            <th>Clicks</th>
+            <th>Orders</th>
+            <th>Order volume</th>
+            <th>Earned (<span id="aff-th-commission">5</span>%)</th>
+            <th>% reached</th>
+            <th>Jackpot progress</th>
           </tr>
         </thead>
         <tbody id="aff-table-body"></tbody>
@@ -449,31 +524,58 @@
     </div>
   </div>
 
+  <!-- ── REWARD CARD ── -->
   <div class="aff-reward-card" id="aff-reward-card" style="display:none;">
     <div class="aff-reward-inner">
-      <div class="aff-reward-icon"><i class="fi fi-rr-trophy"></i></div>
-      <h3 class="aff-reward-title">🎉 Congratulations!</h3>
-      <p class="aff-reward-msg">
-        You have reached <strong>50%</strong> in earnings! Enjoy your exclusive benefit:
-      </p>
-      <div class="aff-reward-promo" id="aff-reward-promo">
-        <span class="aff-reward-promo-label">Your promo code (-50%):</span>
+
+      <!-- Jackpot — visible uniquement si threshold atteint -->
+      <div class="aff-jackpot-block" id="aff-jackpot-block" style="display:none;">
+        <div class="aff-jackpot-block__icon">🏆</div>
+        <h3 class="aff-jackpot-block__title">Jackpot unlocked!</h3>
+        <p class="aff-jackpot-block__msg">
+          You reached <strong id="aff-txt-jackpot-qty">20</strong> orders —
+          your reward: <strong class="aff-jackpot-block__amt" id="aff-txt-jackpot-amt">$100</strong>
+        </p>
+      </div>
+
+      <!-- Divider entre jackpot et promo si les deux sont visibles -->
+      <div class="aff-reward-divider" id="aff-reward-or-divider" style="display:none;">
+        <span>AND</span>
+      </div>
+
+      <!-- Promo code — visible uniquement si unlock_percent atteint -->
+      <div class="aff-reward-promo" id="aff-reward-promo" style="display:none;">
+        <div class="aff-reward-promo__header">
+          <i class="fi fi-rr-ticket"></i>
+          <span>Your exclusive promo code</span>
+          <span class="aff-reward-promo__disc" id="aff-txt-promo-badge">-50%</span>
+        </div>
         <div class="aff-promo-code-row">
-          <span class="aff-promo-code-val" id="aff-promo-code-val">AFF50-XXXXXX</span>
+          <span class="aff-promo-code-val" id="aff-promo-code-val">AFF-XXXXXX</span>
           <button class="aff-copy-promo-btn" id="aff-copy-promo-btn">
             <i class="fi fi-rr-copy"></i> Copy
           </button>
         </div>
-        <p class="aff-promo-note">Use this code on your next order for -50%</p>
+        <p class="aff-promo-note" id="aff-promo-note">Use this code on your next order for -50%</p>
       </div>
-      <div class="aff-reward-divider"><span>OR</span></div>
+
+      <div class="aff-reward-divider" id="aff-reward-divider-or">
+        <span>OR</span>
+      </div>
+
+      <!-- Withdraw -->
       <div class="aff-withdraw-wrap" id="aff-withdraw-wrap">
-        <p class="aff-withdraw-label">Receive your earnings via PayPal:</p>
+        <p class="aff-withdraw-label">
+          <i class="fi fi-rr-paper-plane"></i>
+          Receive your earnings via PayPal
+        </p>
         <div class="aff-withdraw-form" id="aff-withdraw-form">
-          <input type="text" id="aff-paypal-name" placeholder="Your PayPal name" class="aff-withdraw-input">
-          <input type="email" id="aff-paypal-email" placeholder="Your PayPal email" class="aff-withdraw-input">
+          <div class="aff-withdraw-fields">
+            <input type="text"  id="aff-paypal-name"  placeholder="Your PayPal name"  class="aff-withdraw-input">
+            <input type="email" id="aff-paypal-email" placeholder="Your PayPal email" class="aff-withdraw-input">
+          </div>
           <button class="aff-withdraw-btn" id="aff-withdraw-btn">
-            <i class="fi fi-rr-paper-plane"></i> Send request
+            <i class="fi fi-rr-paper-plane"></i> Send withdrawal request
           </button>
           <p class="aff-withdraw-error" id="aff-withdraw-error" style="display:none;"></p>
         </div>
@@ -482,16 +584,19 @@
           <p id="aff-status-msg">Your request is being processed by our team.</p>
         </div>
       </div>
+
     </div>
   </div>
 
+  <!-- ── HISTORY ── -->
   <div class="aff-history-card" id="aff-history-card" style="display:none;">
     <div class="aff-history-header">
-      <h3 class="aff-history-title">
-        <i class="fi fi-rr-time-past"></i> Link History
-      </h3>
+      <div class="aff-history-header__left">
+        <i class="fi fi-rr-time-past"></i>
+        <h3 class="aff-history-title">Link history</h3>
+      </div>
       <button class="aff-clean-btn" id="aff-clean-btn">
-        <i class="fi fi-rr-trash"></i> Clear history
+        <i class="fi fi-rr-trash"></i> Clear
       </button>
     </div>
     <div class="aff-history-list" id="aff-history-list"></div>

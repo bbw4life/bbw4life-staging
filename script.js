@@ -7230,7 +7230,7 @@ function loadProfilePhoto() {
         '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
         '<td>' + (aff.clicks || 0) + '</td>' +
         '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
-          + commPct + '% <small>(' + pct + '% reached)</small></span></td>' +
+          + pct + '%</span></td>' +
         '<td><strong style="color:#1a6b3c;">$' + earned.toFixed(2) + '</strong></td>' +
         '<td>' + (aff.totalOrders || 0) + '</td>' +
         '<td class="aff-td-jackpot">'
@@ -7469,6 +7469,34 @@ function loadProfilePhoto() {
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
         affiliatesFromSheet = data.affiliates;
+
+
+        // ── Inject setting values dans les textes du hero ──
+          const cfg = getAffCfg();
+
+          const el = (id) => document.getElementById(id);
+
+          if (el('aff-txt-commission'))  el('aff-txt-commission').textContent  = cfg.commPct + '%';
+          if (el('aff-txt-commission2')) el('aff-txt-commission2').textContent = cfg.commPct + '%';
+          if (el('aff-txt-unlock'))      el('aff-txt-unlock').textContent      = cfg.unlockPct + '%';
+          if (el('aff-txt-promo-disc'))  el('aff-txt-promo-disc').textContent  = '-' + cfg.promoDisc + '%';
+          if (el('aff-th-commission'))   el('aff-th-commission').textContent   = cfg.commPct;
+          if (el('aff-txt-jackpot-qty')) el('aff-txt-jackpot-qty').textContent = cfg.jackpotQty;
+          if (el('aff-txt-jackpot-amt')) el('aff-txt-jackpot-amt').textContent = '$' + cfg.jackpotAmt.toFixed(2);
+          if (el('aff-txt-promo-badge')) el('aff-txt-promo-badge').textContent = '-' + cfg.promoDisc + '%';
+          if (el('aff-promo-note'))      el('aff-promo-note').textContent      = 'Use this code on your next order for -' + cfg.promoDisc + '%';
+
+          // ── KPI cards ──
+          if (data.affiliates[0]) {
+            const aff = data.affiliates[0];
+            const earned = parseFloat(aff.totalOrderValue || 0) * (cfg.commPct / 100);
+            if (el('aff-kpi-clicks'))     el('aff-kpi-clicks').textContent     = aff.clicks || 0;
+            if (el('aff-kpi-orders'))     el('aff-kpi-orders').textContent     = aff.totalOrders || 0;
+            if (el('aff-kpi-earned'))     el('aff-kpi-earned').textContent     = '$' + earned.toFixed(2);
+            if (el('aff-kpi-commission')) el('aff-kpi-commission').textContent = cfg.commPct + '%';
+          }
+
+
         renderTable(affiliatesFromSheet);
         renderHistory(affiliatesFromSheet);
       }
