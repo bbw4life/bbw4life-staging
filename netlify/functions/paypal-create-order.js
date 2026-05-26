@@ -97,7 +97,7 @@ exports.handler = async (event) => {
     const orderBody = {
       intent: "CAPTURE",
       purchase_units: [{
-        reference_id: `${fullName}|${shipping.phone || ''}|${shipping.email || ''}|${shipping.countryCode || 'US'}|${shipping.shipping_method || 'Standard Shipping'}`,
+        reference_id: `${fullName}|${shipping.phone || ''}|${shipping.email || ''}|${shipping.countryCode || 'US'}|${shipping.shipping_method || 'Standard Shipping'}|${shipping.affRef || ''}`,
         amount: {
           currency_code: "USD",
           value: finalTotal,

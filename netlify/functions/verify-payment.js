@@ -168,10 +168,10 @@ exports.handler = async (event) => {
     }
 
 
-    
 
 
-    const affRef = shipping.affRef || null;
+
+    const affRef = (provider === 'paypal' ? refParts[5] : shipping.affRef) || null;
     if (affRef) {
       try {
         await fetch(`${BASE_URL}/.netlify/functions/save-account`, {
