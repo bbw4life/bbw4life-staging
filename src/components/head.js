@@ -425,7 +425,7 @@ function injectPageSEO() {
 
     let seo = SEO_MAP[path];
 
-    /* Pages produit dynamiques : products/product1.html ... product99.html */
+   
     if (!seo && /\/products\/product\d+\.html/.test(path)) {
         seo = {
             title: 'Product | BBW4LIFE — Plus Size Fashion',
@@ -484,9 +484,6 @@ function injectPageSEO() {
         document.head.appendChild(canonical);
     }
     canonical.href = seo.canonical;
-
-    /* Expose le titre nettoyé pour le breadcrumb */
-window.__currentPageTitle = seo.title.split('|')[0].trim();
 }
 
 window.__SEO_MAP = SEO_MAP;

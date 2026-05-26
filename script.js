@@ -1,4 +1,3 @@
-// ← ICI en premier, avant tout
 (function captureAffiliateRef() {
   const urlParams = new URLSearchParams(window.location.search);
   const refParam  = urlParams.get('ref');
@@ -3803,7 +3802,6 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  // ── Séparateur : lit les 7 clés, active celle qui a "yes"
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -3823,39 +3821,19 @@ if (window.innerWidth <= 768) {
   }
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  // ── Page courante
-  const currentPath  = window.location.pathname;
+  const currentPath = window.location.pathname;
 
   function getBreadcrumbTitle() {
-  if (window.__currentPageTitle) return window.__currentPageTitle;
-  const path = window.location.pathname;
-  if (window.__SEO_MAP && window.__SEO_MAP[path]) {
-    return window.__SEO_MAP[path].title.split('|')[0].trim();
-  }
-  return document.title.split('|')[0].trim() 
-      || document.querySelector('h1')?.textContent?.trim() 
+    const path = window.location.pathname;
+    if (window.__SEO_MAP && window.__SEO_MAP[path]) {
+      return window.__SEO_MAP[path].title.split('|')[0].trim();
+    }
+    return document.title.split('|')[0].trim()
+      || document.querySelector('h1')?.textContent?.trim()
       || path.split('/').pop().replace('.html','').replace(/-/g,' ');
-}
-const currentTitle = getBreadcrumbTitle();
-
-  // ── Historique localStorage (6 dernières pages)
-  const BC_KEY = 'bc_visited';
-  const BC_MAX = 6;
-
-  let visited = [];
-  try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
-
-  visited = visited.filter(p => p.url !== currentPath);
-
-  if (currentPath !== '/' && currentPath !== '/index.html') {
-    visited.unshift({ url: currentPath, title: currentTitle });
   }
+  const currentTitle = getBreadcrumbTitle();
 
-  if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
-
-  try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
-
-  // ── Construire la liste
   list.innerHTML = `
     <li class="bc-item">
       <a href="/index.html">
@@ -3869,13 +3847,12 @@ const currentTitle = getBreadcrumbTitle();
       </a>
     </li>`;
 
-  visited.forEach(page => {
-    const isActive = page.url === currentPath;
+  if (currentPath !== '/' && currentPath !== '/index.html') {
     const li = document.createElement('li');
-    li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-    li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+    li.className = 'bc-item bc-active';
+    li.innerHTML = `<a href="${currentPath}">${currentTitle}</a>`;
     list.appendChild(li);
-  });
+  }
 
   nav.style.display = 'block';
 
