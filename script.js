@@ -7143,7 +7143,7 @@ function loadProfilePhoto() {
 
   
 
-  (function initAffiliationSystem() {
+ (function initAffiliationSystem() {
   const usernameInput  = document.getElementById('aff-username-input');
   const createBtn      = document.getElementById('aff-create-btn');
   const createError    = document.getElementById('aff-create-error');
@@ -7167,21 +7167,19 @@ function loadProfilePhoto() {
   const userEmail = localStorage.getItem('userEmail') || '';
   if (!userEmail) return;
 
-  // ── État global venant du sheet ──
   let affiliatesFromSheet = [];
 
-  // ── Lire le setting affiliation ──
   function getAffCfg() {
-    const allProds   = window.__allProducts || [];
-    const settings   = allProds.find(function(p) { return p.type === 'settings'; }) || {};
-    const affCfg     = settings.affiliation || {};
+    const allProds = window.__allProducts || [];
+    const settings = allProds.find(function(p) { return p.type === 'settings'; }) || {};
+    const affCfg   = settings.affiliation || {};
     return {
-      commPct:     parseFloat(affCfg.commission_percent)         || 5,
-      jackpotQty:  parseInt(affCfg.jackpot_orders_threshold)     || 50,
-      jackpotAmt:  parseFloat(affCfg.jackpot_reward_amount)      || 100,
-      unlockPct:   parseFloat(affCfg.promo_code_unlock_percent)  || 50,
-      promoPrefix: affCfg.promo_code_prefix                      || 'AFF',
-      promoDisc:   parseFloat(affCfg.promo_code_discount_percent)|| 50
+      commPct:     parseFloat(affCfg.commission_percent)          || 5,
+      jackpotQty:  parseInt(affCfg.jackpot_orders_threshold)      || 50,
+      jackpotAmt:  parseFloat(affCfg.jackpot_reward_amount)       || 100,
+      unlockPct:   parseFloat(affCfg.promo_code_unlock_percent)   || 50,
+      promoPrefix: affCfg.promo_code_prefix                       || 'AFF',
+      promoDisc:   parseFloat(affCfg.promo_code_discount_percent) || 50
     };
   }
 
@@ -7201,7 +7199,47 @@ function loadProfilePhoto() {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ── Affiche le tableau depuis les données du sheet ──
+  // ── Affiche un toast temporaire ──
+  function showToastAff(message, color) {
+    let toast = document.getElementById('aff-choice-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'aff-choice-toast';
+      toast.style.cssText =
+        'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);' +
+        'color:#fff;padding:10px 22px;border-radius:30px;font-size:0.85rem;' +
+        'font-weight:600;z-index:99999;box-shadow:0 4px 18px rgba(0,0,0,.18);' +
+        'transition:opacity 0.3s ease;display:none;';
+      document.body.appendChild(toast);
+    }
+    toast.style.background = color || '#22a06b';
+    toast.textContent = message;
+    toast.style.display = 'block';
+    toast.style.opacity = '1';
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function() {
+      toast.style.opacity = '0';
+      setTimeout(function() { toast.style.display = 'none'; }, 300);
+    }, 3500);
+  }
+
+  // ── Injecte ou récupère le message d'exclusivité ──
+  function getOrCreateExclusiveMsg() {
+    let msg = document.getElementById('aff-exclusive-msg');
+    if (!msg) {
+      msg = document.createElement('p');
+      msg.id = 'aff-exclusive-msg';
+      msg.style.cssText =
+        'text-align:center;font-size:0.82rem;color:#7b3f6e;font-weight:600;' +
+        'background:#f9f0fb;border:1px dashed #c0385e;border-radius:8px;' +
+        'padding:8px 14px;margin:0 0 14px 0;';
+      msg.textContent = '⚠️ You can only choose one option — promo code OR PayPal withdrawal.';
+      const rewardInner = rewardCard ? rewardCard.querySelector('.aff-reward-inner') : null;
+      if (rewardInner) rewardInner.insertBefore(msg, rewardInner.firstChild);
+    }
+    return msg;
+  }
+
   function renderTable(affiliates) {
     if (!affiliates || !affiliates.length) {
       tableCard.style.display = 'none';
@@ -7217,29 +7255,24 @@ function loadProfilePhoto() {
     tableBody.innerHTML = '';
 
     affiliates.forEach(function(aff) {
-    const totalOrders    = parseInt(aff.totalOrders || 0);
-    // Earned = totalOrders * commPct (ex: 1 commande = 20%, 2 = 40%)
-    const earnedPct      = totalOrders * commPct;
-    // % reached = progression vers jackpot (ex: 1/20 = 5%)
-    const reachedPct     = jackpotQty > 0
-                          ? ((totalOrders / jackpotQty) * 100).toFixed(1)
-                          : '0.0';
-    const jackpotReached = totalOrders >= jackpotQty;
-    const promoReached   = earnedPct >= unlockPct;
+      const totalOrders    = parseInt(aff.totalOrders || 0);
+      const earnedPct      = totalOrders * commPct;
+      const jackpotReached = totalOrders >= jackpotQty;
+      const promoReached   = earnedPct >= unlockPct;
 
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
-      '<td>' + (aff.clicks || 0) + '</td>' +
-      '<td>' + totalOrders + '</td>' +
-      '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalOrderValue || 0).toFixed(2) + '</strong></td>' +
-      '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
-        + earnedPct.toFixed(0) + '%</span></td>' +
-      '<td>' + totalOrders + ' / ' + jackpotQty + '</td>' +
-      '<td class="aff-td-jackpot">'
-        + (jackpotReached ? '🏆 $' + cfg.jackpotAmt.toFixed(0) : '—')
-        + '</td>';
-    tableBody.appendChild(tr);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
+        '<td>' + (aff.clicks || 0) + '</td>' +
+        '<td>' + totalOrders + '</td>' +
+        '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalOrderValue || 0).toFixed(2) + '</strong></td>' +
+        '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
+          + earnedPct.toFixed(0) + '%</span></td>' +
+        '<td>' + totalOrders + ' / ' + jackpotQty + '</td>' +
+        '<td class="aff-td-jackpot">'
+          + (jackpotReached ? '🏆 $' + cfg.jackpotAmt.toFixed(0) : '—')
+          + '</td>';
+      tableBody.appendChild(tr);
 
       if (jackpotReached || promoReached) {
         showReward(aff);
@@ -7247,7 +7280,6 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Affiche l'historique des liens depuis les données du sheet ──
   function renderHistory(affiliates) {
     if (!affiliates || !affiliates.length) {
       historyCard.style.display = 'none';
@@ -7284,25 +7316,31 @@ function loadProfilePhoto() {
   function showReward(aff) {
     if (!rewardCard) return;
 
-    const cfg        = getAffCfg();
-    const jackpotQty = cfg.jackpotQty;
-    const jackpotAmt = cfg.jackpotAmt;
-    const unlockPct  = cfg.unlockPct;
-    const promoPrefix= cfg.promoPrefix;
-    const promoDisc  = cfg.promoDisc;
-    const commPct    = cfg.commPct;
+    const cfg         = getAffCfg();
+    const jackpotQty  = cfg.jackpotQty;
+    const jackpotAmt  = cfg.jackpotAmt;
+    const unlockPct   = cfg.unlockPct;
+    const promoPrefix = cfg.promoPrefix;
+    const promoDisc   = cfg.promoDisc;
+    const commPct     = cfg.commPct;
 
-   const totalOrders    = parseInt(aff.totalOrders || 0);
+    const totalOrders    = parseInt(aff.totalOrders || 0);
     const earnedPct      = totalOrders * commPct;
-    const reachedPct     = jackpotQty > 0 ? (totalOrders / jackpotQty) * 100 : 0;
     const jackpotReached = totalOrders >= jackpotQty;
     const promoReached   = earnedPct >= unlockPct;
 
-    // N'afficher la carte que si au moins une condition est atteinte
     if (!jackpotReached && !promoReached) return;
     rewardCard.style.display = 'block';
 
-    // ── Jackpot block — affiché UNIQUEMENT si threshold de commandes atteint ──
+    // ── Clé unique par username dans localStorage ──
+    const storageKey   = 'aff_chosen_option_' + (aff.username || '');
+    const chosenOption = localStorage.getItem(storageKey); // 'promo' | 'withdraw' | null
+
+    // ── Message d'exclusivité (affiché seulement si aucun choix encore fait) ──
+    const exclusiveMsg = getOrCreateExclusiveMsg();
+    exclusiveMsg.style.display = (!chosenOption && promoReached) ? '' : 'none';
+
+    // ── Jackpot block ──
     let jackpotBlock = document.getElementById('aff-jackpot-block');
     if (jackpotReached) {
       if (!jackpotBlock) {
@@ -7321,9 +7359,9 @@ function loadProfilePhoto() {
 
         const rewardInner = rewardCard.querySelector('.aff-reward-inner');
         if (rewardInner) {
-          const divider = rewardInner.querySelector('.aff-reward-divider');
+          const divider      = rewardInner.querySelector('.aff-reward-divider');
           const withdrawWrap = rewardInner.querySelector('#aff-withdraw-wrap');
-          const ref = divider || withdrawWrap || null;
+          const ref          = divider || withdrawWrap || null;
           if (ref) rewardInner.insertBefore(jackpotBlock, ref);
           else rewardInner.appendChild(jackpotBlock);
         }
@@ -7333,28 +7371,74 @@ function loadProfilePhoto() {
       if (jackpotBlock) jackpotBlock.style.display = 'none';
     }
 
-    // ── Promo code — affiché UNIQUEMENT si promo_code_unlock_percent atteint ──
+    // ── Divider OR (entre promo et withdraw) ──
+    const dividerOr = document.getElementById('aff-reward-divider-or');
+
+    // ── Promo code ──
     const rewardPromo = document.getElementById('aff-reward-promo');
     if (rewardPromo) {
-      if (promoReached) {
+      // Visible si : promo atteint ET (pas de choix OU choix = promo)
+      if (promoReached && chosenOption !== 'withdraw') {
         rewardPromo.style.display = '';
-        const promoCode = promoPrefix;
-        if (promoCodeVal) promoCodeVal.textContent = promoCode;
+
+        if (promoCodeVal) promoCodeVal.textContent = promoPrefix;
 
         const promoNote = rewardPromo.querySelector('.aff-promo-note');
         if (promoNote) {
-          promoNote.textContent =
-            'Use this code on your next order for -' + promoDisc + '%';
+          promoNote.textContent = 'Use this code on your next order for -' + promoDisc + '%';
         }
+
+        // ── Bind copie → lock sur promo, cacher withdraw ──
+        if (copyPromoBtn && !copyPromoBtn.dataset.boundChoice) {
+          copyPromoBtn.dataset.boundChoice = '1';
+          copyPromoBtn.addEventListener('click', function() {
+            const code = promoCodeVal ? promoCodeVal.textContent : '';
+            navigator.clipboard.writeText(code).then(function() {
+              // Feedback visuel du bouton
+              const orig = copyPromoBtn.innerHTML;
+              copyPromoBtn.innerHTML = '<i class="fi fi-rr-check"></i> Copied!';
+              setTimeout(function() { copyPromoBtn.innerHTML = orig; }, 2000);
+
+              // Enregistrer le choix seulement si pas encore fait
+              if (!localStorage.getItem(storageKey)) {
+                localStorage.setItem(storageKey, 'promo');
+
+                // Masquer withdraw et divider
+                const withdrawWrap = document.getElementById('aff-withdraw-wrap');
+                if (withdrawWrap)  withdrawWrap.style.display  = 'none';
+                if (dividerOr)     dividerOr.style.display     = 'none';
+                if (exclusiveMsg)  exclusiveMsg.style.display  = 'none';
+
+                showToastAff('✅ Promo code chosen — PayPal withdrawal option hidden.', '#22a06b');
+              }
+            });
+          });
+        }
+
       } else {
-        rewardPromo.style.display = 'none'; 
+        // Choix withdraw déjà fait → cacher la promo
+        rewardPromo.style.display = 'none';
       }
     }
 
-    // ── Withdraw status ──
+    // ── Divider OR ──
+    if (dividerOr) {
+      // Visible seulement si promo atteint ET aucun choix encore fait
+      dividerOr.style.display = (promoReached && !chosenOption) ? '' : 'none';
+    }
+
+    // ── Withdraw wrap / status ──
+    const withdrawWrap = document.getElementById('aff-withdraw-wrap');
+
     if (aff.withdrawStatus && aff.withdrawStatus !== 'none') {
+      // Withdraw déjà envoyé → figer sur withdraw
+      if (!localStorage.getItem(storageKey)) {
+        localStorage.setItem(storageKey, 'withdraw');
+      }
       if (withdrawForm)   withdrawForm.style.display   = 'none';
       if (withdrawStatus) withdrawStatus.style.display = 'block';
+      if (withdrawWrap)   withdrawWrap.style.display   = '';
+
       const approved = aff.withdrawStatus === 'approved';
       if (statusBadge) {
         statusBadge.textContent = approved ? '✅ Approved' : '⏳ Pending';
@@ -7365,21 +7449,28 @@ function loadProfilePhoto() {
           ? 'Your withdrawal has been approved! You will receive your payment shortly.'
           : 'Your withdrawal request is being processed by our team.';
       }
+
+      // Cacher promo et divider puisque withdraw est choisi
+      if (rewardPromo) rewardPromo.style.display = 'none';
+      if (dividerOr)   dividerOr.style.display   = 'none';
+      if (exclusiveMsg) exclusiveMsg.style.display = 'none';
+
+    } else {
+      // Pas encore de withdraw envoyé
+      if (chosenOption === 'promo') {
+        // Promo déjà choisi → cacher tout le withdraw wrap
+        if (withdrawWrap) withdrawWrap.style.display = 'none';
+        if (dividerOr)    dividerOr.style.display    = 'none';
+      } else {
+        // Aucun choix ou choix = withdraw → montrer le formulaire
+        if (withdrawWrap)  withdrawWrap.style.display  = '';
+        if (withdrawForm)  withdrawForm.style.display  = '';
+        if (withdrawStatus) withdrawStatus.style.display = 'none';
+      }
     }
   }
 
-  if (copyPromoBtn) {
-    copyPromoBtn.addEventListener('click', function() {
-      const code = promoCodeVal ? promoCodeVal.textContent : '';
-      navigator.clipboard.writeText(code).then(function() {
-        const orig = copyPromoBtn.innerHTML;
-        copyPromoBtn.innerHTML = '<i class="fi fi-rr-check"></i> Copied!';
-        setTimeout(function() { copyPromoBtn.innerHTML = orig; }, 2000);
-      });
-    });
-  }
-
-  // ── Créer un affilié → sauvegarder dans le sheet ──
+  // ── Créer un affilié ──
   if (createBtn) {
     createBtn.addEventListener('click', async function() {
       if (!usernameInput) return;
@@ -7429,26 +7520,59 @@ function loadProfilePhoto() {
     withdrawBtn.addEventListener('click', async function() {
       const paypalName  = document.getElementById('aff-paypal-name')?.value.trim()  || '';
       const paypalEmail = document.getElementById('aff-paypal-email')?.value.trim() || '';
-      if (!paypalName || !paypalEmail) { withdrawError.textContent = 'Please fill in all PayPal fields.'; withdrawError.style.display = 'block'; return; }
-      if (!paypalEmail.includes('@')) { withdrawError.textContent = 'Invalid PayPal email.'; withdrawError.style.display = 'block'; return; }
+      if (!paypalName || !paypalEmail) {
+        withdrawError.textContent = 'Please fill in all PayPal fields.';
+        withdrawError.style.display = 'block';
+        return;
+      }
+      if (!paypalEmail.includes('@')) {
+        withdrawError.textContent = 'Invalid PayPal email.';
+        withdrawError.style.display = 'block';
+        return;
+      }
       withdrawError.style.display = 'none';
       withdrawBtn.disabled = true;
       withdrawBtn.innerHTML = '<div class="plan-spinner"></div> Sending...';
+
       try {
         const res  = await fetch('/.netlify/functions/save-account', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
         });
         const data = await res.json();
+
         if (data.success) {
+          // Marquer le choix withdraw dans localStorage
+          const currentAff = affiliatesFromSheet[0];
+          if (currentAff) {
+            const storageKey = 'aff_chosen_option_' + (currentAff.username || '');
+            localStorage.setItem(storageKey, 'withdraw');
+          }
+
           affiliatesFromSheet.forEach(function(a) { a.withdrawStatus = 'pending'; });
+
+          // Masquer promo + divider + message exclusivité
+          const rewardPromo  = document.getElementById('aff-reward-promo');
+          const dividerOr    = document.getElementById('aff-reward-divider-or');
+          const exclusiveMsg = document.getElementById('aff-exclusive-msg');
+          if (rewardPromo)  rewardPromo.style.display  = 'none';
+          if (dividerOr)    dividerOr.style.display    = 'none';
+          if (exclusiveMsg) exclusiveMsg.style.display = 'none';
+
+          // Afficher le statut pending
           if (withdrawForm)   withdrawForm.style.display   = 'none';
           if (withdrawStatus) {
             withdrawStatus.style.display = 'block';
             if (statusBadge) { statusBadge.textContent = '⏳ Pending'; statusBadge.className = 'aff-status-badge'; }
             if (statusMsg)   statusMsg.textContent = 'Your request is being processed by our team.';
           }
-        } else { throw new Error(data.error || 'Unknown error'); }
+
+          showToastAff('✅ Withdrawal request sent — promo code option hidden.', '#7b3f6e');
+
+        } else {
+          throw new Error(data.error || 'Unknown error');
+        }
       } catch(err) {
         withdrawError.textContent = 'Error: ' + err.message;
         withdrawError.style.display = 'block';
@@ -7463,39 +7587,35 @@ function loadProfilePhoto() {
     if (!userEmail) return;
     try {
       const res  = await fetch('/.netlify/functions/save-account', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
       });
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
         affiliatesFromSheet = data.affiliates;
 
+        const cfg = getAffCfg();
+        const el  = (id) => document.getElementById(id);
 
-        // ── Inject setting values dans les textes du hero ──
-          const cfg = getAffCfg();
+        if (el('aff-txt-commission'))  el('aff-txt-commission').textContent  = cfg.commPct + '%';
+        if (el('aff-txt-commission2')) el('aff-txt-commission2').textContent = cfg.commPct + '%';
+        if (el('aff-txt-unlock'))      el('aff-txt-unlock').textContent      = cfg.unlockPct + '%';
+        if (el('aff-txt-promo-disc'))  el('aff-txt-promo-disc').textContent  = '-' + cfg.promoDisc + '%';
+        if (el('aff-th-commission'))   el('aff-th-commission').textContent   = cfg.commPct;
+        if (el('aff-txt-jackpot-qty')) el('aff-txt-jackpot-qty').textContent = cfg.jackpotQty;
+        if (el('aff-txt-jackpot-amt')) el('aff-txt-jackpot-amt').textContent = '$' + cfg.jackpotAmt.toFixed(2);
+        if (el('aff-txt-promo-badge')) el('aff-txt-promo-badge').textContent = '-' + cfg.promoDisc + '%';
+        if (el('aff-promo-note'))      el('aff-promo-note').textContent      = 'Use this code on your next order for -' + cfg.promoDisc + '%';
 
-          const el = (id) => document.getElementById(id);
-
-          if (el('aff-txt-commission'))  el('aff-txt-commission').textContent  = cfg.commPct + '%';
-          if (el('aff-txt-commission2')) el('aff-txt-commission2').textContent = cfg.commPct + '%';
-          if (el('aff-txt-unlock'))      el('aff-txt-unlock').textContent      = cfg.unlockPct + '%';
-          if (el('aff-txt-promo-disc'))  el('aff-txt-promo-disc').textContent  = '-' + cfg.promoDisc + '%';
-          if (el('aff-th-commission'))   el('aff-th-commission').textContent   = cfg.commPct;
-          if (el('aff-txt-jackpot-qty')) el('aff-txt-jackpot-qty').textContent = cfg.jackpotQty;
-          if (el('aff-txt-jackpot-amt')) el('aff-txt-jackpot-amt').textContent = '$' + cfg.jackpotAmt.toFixed(2);
-          if (el('aff-txt-promo-badge')) el('aff-txt-promo-badge').textContent = '-' + cfg.promoDisc + '%';
-          if (el('aff-promo-note'))      el('aff-promo-note').textContent      = 'Use this code on your next order for -' + cfg.promoDisc + '%';
-
-          // ── KPI cards ──
-          if (data.affiliates[0]) {
-            const aff = data.affiliates[0];
-            const earned = parseFloat(aff.totalOrderValue || 0) * (cfg.commPct / 100);
-            if (el('aff-kpi-clicks'))     el('aff-kpi-clicks').textContent     = aff.clicks || 0;
-            if (el('aff-kpi-orders'))     el('aff-kpi-orders').textContent     = aff.totalOrders || 0;
-            if (el('aff-kpi-earned'))     el('aff-kpi-earned').textContent     = '$' + earned.toFixed(2);
-            if (el('aff-kpi-commission')) el('aff-kpi-commission').textContent = cfg.commPct + '%';
-          }
-
+        if (data.affiliates[0]) {
+          const aff    = data.affiliates[0];
+          const earned = parseFloat(aff.totalOrderValue || 0) * (cfg.commPct / 100);
+          if (el('aff-kpi-clicks'))     el('aff-kpi-clicks').textContent     = aff.clicks || 0;
+          if (el('aff-kpi-orders'))     el('aff-kpi-orders').textContent     = aff.totalOrders || 0;
+          if (el('aff-kpi-earned'))     el('aff-kpi-earned').textContent     = '$' + earned.toFixed(2);
+          if (el('aff-kpi-commission')) el('aff-kpi-commission').textContent = cfg.commPct + '%';
+        }
 
         renderTable(affiliatesFromSheet);
         renderHistory(affiliatesFromSheet);
@@ -7503,7 +7623,6 @@ function loadProfilePhoto() {
     } catch(e) { console.warn('[Affiliation] sync failed:', e.message); }
   }
 
-  // ── Init ──
   syncFromSheet();
   setInterval(syncFromSheet, 60000);
 
