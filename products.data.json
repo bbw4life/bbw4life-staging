@@ -5388,7 +5388,7 @@
   },
   "affiliation": {
   "commission_percent": 20,
-  "jackpot_orders_threshold": 10,
+  "jackpot_orders_threshold": 20,
   "jackpot_reward_amount": 100,
   "promo_code_unlock_percent": 40,
   "promo_code_prefix": "Francenel467",
