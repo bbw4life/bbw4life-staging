@@ -401,7 +401,7 @@
   <div class="aff-header">
     <h2 class="aff-title">Affiliate Program</h2>
     <p class="aff-subtitle">Share your unique link and earn commissions on every order</p>
-    <p class="aff-desc">Create your affiliate username, share your link and receive commissions on every order placed through it. Reach the earnings threshold to unlock an exclusive promo code or a PayPal withdrawal.</p>
+    <p class="aff-desc">Create your affiliate username, share your link and receive <strong>5%</strong> on every order placed through it. Reach <strong>50%</strong> in earnings to unlock an exclusive promo code or a PayPal withdrawal.</p>
   </div>
 
   <div class="aff-create-card">
@@ -436,12 +436,11 @@
       <table class="aff-table" id="aff-table">
         <thead>
           <tr>
-            <th>Username</th>
-            <th>Clicks</th>
-            <th>Commission</th>
-            <th>% Earned</th>
+            <th>User Name</th>
+            <th>Total Clicks</th>
+            <th>Total %</th>
             <th>Money Earned</th>
-            <th>Orders / Goal</th>
+            <th>Total Orders</th>
             <th>Jackpot</th>
           </tr>
         </thead>
@@ -454,37 +453,24 @@
     <div class="aff-reward-inner">
       <div class="aff-reward-icon"><i class="fi fi-rr-trophy"></i></div>
       <h3 class="aff-reward-title">🎉 Congratulations!</h3>
-      <p class="aff-reward-msg" id="aff-reward-msg">
-        You have reached the earnings threshold! Enjoy your exclusive benefit:
+      <p class="aff-reward-msg">
+        You have reached <strong>50%</strong> in earnings! Enjoy your exclusive benefit:
       </p>
-
       <div class="aff-reward-promo" id="aff-reward-promo">
-        <span class="aff-reward-promo-label" id="aff-reward-promo-label">Your promo code:</span>
+        <span class="aff-reward-promo-label">Your promo code (-50%):</span>
         <div class="aff-promo-code-row">
           <span class="aff-promo-code-val" id="aff-promo-code-val">AFF50-XXXXXX</span>
           <button class="aff-copy-promo-btn" id="aff-copy-promo-btn">
             <i class="fi fi-rr-copy"></i> Copy
           </button>
         </div>
-        <p class="aff-promo-note" id="aff-promo-note">Use this code on your next order</p>
+        <p class="aff-promo-note">Use this code on your next order for -50%</p>
       </div>
-
-      <!-- JACKPOT SECTION — visible uniquement quand le seuil de commandes est atteint -->
-      <div class="aff-jackpot-section" id="aff-jackpot-section" style="display:none;">
-        <div class="aff-reward-divider"><span>+</span></div>
-        <div style="text-align:center; margin-top:16px;">
-          <div style="font-size:2.5rem;">🏆</div>
-          <p style="font-weight:700; font-size:1.2rem; color:#c9963e; margin:8px 0;">Jackpot Unlocked!</p>
-          <p style="margin:0;">You've earned a bonus of <strong class="aff-jackpot-amount" id="aff-jackpot-amount">$0.00</strong> added to your withdrawal!</p>
-        </div>
-      </div>
-
       <div class="aff-reward-divider"><span>OR</span></div>
-
       <div class="aff-withdraw-wrap" id="aff-withdraw-wrap">
         <p class="aff-withdraw-label">Receive your earnings via PayPal:</p>
         <div class="aff-withdraw-form" id="aff-withdraw-form">
-          <input type="text"  id="aff-paypal-name"  placeholder="Your PayPal name"  class="aff-withdraw-input">
+          <input type="text" id="aff-paypal-name" placeholder="Your PayPal name" class="aff-withdraw-input">
           <input type="email" id="aff-paypal-email" placeholder="Your PayPal email" class="aff-withdraw-input">
           <button class="aff-withdraw-btn" id="aff-withdraw-btn">
             <i class="fi fi-rr-paper-plane"></i> Send request
@@ -496,7 +482,6 @@
           <p id="aff-status-msg">Your request is being processed by our team.</p>
         </div>
       </div>
-
     </div>
   </div>
 

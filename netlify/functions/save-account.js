@@ -223,20 +223,19 @@ exports.handler = async (event) => {
     return { statusCode: 200, body: JSON.stringify({ success: true }) };
   }
 
-  // S=Username, T=Clicks, U=Earnings, V=Orders, W=OrderValue, X=WithdrawStatus, Y=CreatedAt, Z=Jackpot
+  // S=Username, T=Clicks, U=Earnings, V=Orders, W=OrderValue, X=WithdrawStatus, Y=CreatedAt
   await sheets.spreadsheets.values.update({
     spreadsheetId,
-    range: `bbw4life-accounts!S${rowNum}:Z${rowNum}`,
+    range: `bbw4life-accounts!S${rowNum}:Y${rowNum}`,
     valueInputOption: 'RAW',
     resource: { values: [[
       newAff.username,
-      newAff.clicks        || 0,
-      newAff.totalMoney    || 0,
-      newAff.totalOrders   || 0,
+      newAff.clicks || 0,
+      newAff.totalMoney || 0,
+      newAff.totalOrders || 0,
       newAff.totalOrderValue || 0,
       newAff.withdrawStatus || 'none',
-      newAff.createdAt     || formatDate(),
-      0  // Jackpot initial = 0
+      newAff.createdAt || formatDate()
     ]] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
@@ -248,8 +247,7 @@ if (action === 'aff-get-stats') {
 
   const currentRow = rows[rowIndex] || [];
 
-  // S=Username(18), T=Clicks(19), U=Earnings(20), V=Orders(21),
-  // W=OrderValue(22), X=WithdrawStatus(23), Y=CreatedAt(24), Z=Jackpot(25)
+  // S=Username(18), T=Clicks(19), U=Earnings(20), V=Orders(21), W=OrderValue(22), X=WithdrawStatus(23), Y=CreatedAt(24)
   const username        = currentRow[18] || '';
   const clicks          = parseInt(currentRow[19]  || 0);
   const totalMoney      = parseFloat(currentRow[20] || 0);
@@ -257,50 +255,10 @@ if (action === 'aff-get-stats') {
   const totalOrderValue = parseFloat(currentRow[22] || 0);
   const withdrawStatus  = currentRow[23] || 'none';
   const createdAt       = currentRow[24] || '';
-  const jackpot         = parseFloat(currentRow[25] || 0);
 
   if (!username) {
     return { statusCode: 200, body: JSON.stringify({ success: true, affiliates: [] }) };
   }
-
-  // Lire les settings affiliation depuis products.data.json
-  let affSettings = {
-    commission_percent:        5,
-    jackpot_orders_threshold:  10,
-    jackpot_reward_amount:     100,
-    promo_code_unlock_percent: 50,
-    promo_code_prefix:         'AFF50-',
-    promo_code_discount_percent: 50
-  };
-  try {
-    const fs   = require('fs');
-    const path = require('path');
-    const dataPath = path.join(process.cwd(), 'public', 'products.data.json');
-    const raw  = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    const settingsRow = Array.isArray(raw) ? raw.find(function(p) { return p.type === 'settings'; }) : null;
-    if (settingsRow && settingsRow.affiliation) {
-      affSettings = Object.assign({}, affSettings, settingsRow.affiliation);
-    }
-  } catch(e) { console.warn('[aff-get-stats] Could not load settings:', e.message); }
-
-  const commissionPct      = parseFloat(affSettings.commission_percent)        || 5;
-  const jackpotThreshold   = parseInt(affSettings.jackpot_orders_threshold)    || 10;
-  const jackpotRewardAmt   = parseFloat(affSettings.jackpot_reward_amount)     || 100;
-  const promoUnlockPct     = parseFloat(affSettings.promo_code_unlock_percent) || 50;
-  const promoPrefix        = affSettings.promo_code_prefix                     || 'AFF50-';
-  const promoDiscountPct   = parseFloat(affSettings.promo_code_discount_percent) || 50;
-
-  // Calcul du % gagné
-  const pct = totalOrderValue > 0
-    ? parseFloat(((totalMoney / totalOrderValue) * 100).toFixed(1))
-    : 0;
-
-  const promoUnlocked  = pct >= promoUnlockPct;
-  const jackpotUnlocked = totalOrders >= jackpotThreshold;
-
-  const promoCode = promoUnlocked
-    ? promoPrefix + username.toUpperCase().slice(0, 6)
-    : null;
 
   const affiliates = [{
     username,
@@ -309,21 +267,16 @@ if (action === 'aff-get-stats') {
     totalOrders,
     totalOrderValue,
     withdrawStatus,
-    createdAt,
-    jackpot,
-    jackpotUnlocked,
-    promoUnlocked,
-    promoCode,
-    commissionPercent:      commissionPct,
-    jackpotThreshold:       jackpotThreshold,
-    jackpotRewardAmount:    jackpotRewardAmt,
-    promoUnlockPercent:     promoUnlockPct,
-    promoDiscountPercent:   promoDiscountPct
+    createdAt
   }];
 
   return {
     statusCode: 200,
-    body: JSON.stringify({ success: true, affiliates, withdrawStatus })
+    body: JSON.stringify({
+      success: true,
+      affiliates,
+      withdrawStatus
+    })
   };
 }
 
@@ -353,58 +306,25 @@ if (action === 'aff-track-click') {
 if (action === 'aff-record-order') {
   const { username, orderAmount } = body;
   if (!username || !orderAmount) throw new Error("Missing data");
-
-  // Lire les settings
-  let affSettings = {
-    commission_percent:       5,
-    jackpot_orders_threshold: 10,
-    jackpot_reward_amount:    100
-  };
-  try {
-    const fs   = require('fs');
-    const path = require('path');
-    const dataPath = path.join(process.cwd(), 'public', 'products.data.json');
-    const raw  = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    const settingsRow = Array.isArray(raw) ? raw.find(function(p) { return p.type === 'settings'; }) : null;
-    if (settingsRow && settingsRow.affiliation) {
-      affSettings = Object.assign({}, affSettings, settingsRow.affiliation);
-    }
-  } catch(e) { console.warn('[aff-record-order] Could not load settings:', e.message); }
-
-  const commissionPct    = parseFloat(affSettings.commission_percent)        || 5;
-  const jackpotThreshold = parseInt(affSettings.jackpot_orders_threshold)    || 10;
-  const jackpotAmount    = parseFloat(affSettings.jackpot_reward_amount)     || 100;
-
+  const commissionPct = parseFloat(body.commissionPercent) || 5;
   const commission = parseFloat(orderAmount) * (commissionPct / 100);
 
   for (let i = 1; i < rows.length; i++) {
     const rowUsername = (rows[i][18] || '').toLowerCase().trim();
     if (rowUsername !== username.toLowerCase().trim()) continue;
 
-    // U=Earnings(20), V=Orders(21), W=OrderValue(22), Z=Jackpot(25)
+    // U=Earnings(20), V=Orders(21), W=OrderValue(22)
     const newMoney    = parseFloat((parseFloat(rows[i][20] || 0) + commission)).toFixed(2);
     const newOrders   = parseInt(rows[i][21] || 0) + 1;
     const newOrderVal = parseFloat((parseFloat(rows[i][22] || 0) + parseFloat(orderAmount))).toFixed(2);
 
-    // Jackpot : ajouter le montant uniquement quand le seuil est atteint exactement
-    const currentJackpot = parseFloat(rows[i][25] || 0);
-    let newJackpot = currentJackpot;
-    if (newOrders === jackpotThreshold) {
-      newJackpot = parseFloat((currentJackpot + jackpotAmount).toFixed(2));
-    }
-
-    await sheets.spreadsheets.values.batchUpdate({
+    await sheets.spreadsheets.values.update({
       spreadsheetId,
-      resource: {
-        valueInputOption: 'RAW',
-        data: [
-          { range: `bbw4life-accounts!U${i + 1}:W${i + 1}`, values: [[newMoney, newOrders, newOrderVal]] },
-          { range: `bbw4life-accounts!Z${i + 1}`,            values: [[newJackpot]] }
-        ]
-      }
+      range: `bbw4life-accounts!U${i + 1}:W${i + 1}`,
+      valueInputOption: 'RAW',
+      resource: { values: [[newMoney, newOrders, newOrderVal]] }
     });
-
-    return { statusCode: 200, body: JSON.stringify({ success: true, commission: commission.toFixed(2), newOrders, newJackpot }) };
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
   }
   return { statusCode: 200, body: JSON.stringify({ success: false, error: 'Username not found' }) };
 }
@@ -414,16 +334,12 @@ if (action === 'aff-withdraw-request') {
   if (!email || !paypalName || !paypalEmail) throw new Error("Missing data");
   if (rowIndex === -1) throw new Error("User not found");
 
-  // X=WithdrawStatus(23), AA=PaypalName(26), AB=PaypalEmail(27)
-  await sheets.spreadsheets.values.batchUpdate({
+  // X=WithdrawStatus(23), Z=PaypalName(25), AA=PaypalEmail(26)
+  await sheets.spreadsheets.values.update({
     spreadsheetId,
-    resource: {
-      valueInputOption: 'RAW',
-      data: [
-        { range: `bbw4life-accounts!X${rowNum}`,        values: [['pending']]   },
-        { range: `bbw4life-accounts!AA${rowNum}:AB${rowNum}`, values: [[paypalName, paypalEmail]] }
-      ]
-    }
+    range: `bbw4life-accounts!X${rowNum}:AA${rowNum}`,
+    valueInputOption: 'RAW',
+    resource: { values: [['pending', '', paypalName, paypalEmail]] }
   });
   return { statusCode: 200, body: JSON.stringify({ success: true }) };
 }
@@ -432,12 +348,8 @@ if (action === 'aff-approve-withdraw') {
   const { targetEmail } = body;
   if (!targetEmail) throw new Error("targetEmail required");
 
-  const normalize2 = function(s) {
-    return s ? s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase() : "";
-  };
-  const targetIdx = rows.findIndex(function(r) {
-    return normalize2(r[2] || '') === normalize2(targetEmail);
-  });
+  const normalize2 = (s) => s ? s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase() : "";
+  const targetIdx = rows.findIndex(r => normalize2(r[2] || '') === normalize2(targetEmail));
   if (targetIdx === -1) throw new Error("User not found");
 
   const targetRowNum = targetIdx + 1;

@@ -7142,7 +7142,8 @@ function loadProfilePhoto() {
 
 
   
-(function initAffiliationSystem() {
+
+  (function initAffiliationSystem() {
   const usernameInput  = document.getElementById('aff-username-input');
   const createBtn      = document.getElementById('aff-create-btn');
   const createError    = document.getElementById('aff-create-error');
@@ -7150,6 +7151,7 @@ function loadProfilePhoto() {
   const tableBody      = document.getElementById('aff-table-body');
   const historyCard    = document.getElementById('aff-history-card');
   const historyList    = document.getElementById('aff-history-list');
+  const cleanBtn       = document.getElementById('aff-clean-btn');
   const rewardCard     = document.getElementById('aff-reward-card');
   const promoCodeVal   = document.getElementById('aff-promo-code-val');
   const copyPromoBtn   = document.getElementById('aff-copy-promo-btn');
@@ -7165,7 +7167,23 @@ function loadProfilePhoto() {
   const userEmail = localStorage.getItem('userEmail') || '';
   if (!userEmail) return;
 
+  // ── État global venant du sheet ──
   let affiliatesFromSheet = [];
+
+  // ── Lire le setting affiliation ──
+  function getAffCfg() {
+    const allProds   = window.__allProducts || [];
+    const settings   = allProds.find(function(p) { return p.type === 'settings'; }) || {};
+    const affCfg     = settings.affiliation || {};
+    return {
+      commPct:     parseFloat(affCfg.commission_percent)         || 5,
+      jackpotQty:  parseInt(affCfg.jackpot_orders_threshold)     || 50,
+      jackpotAmt:  parseFloat(affCfg.jackpot_reward_amount)      || 100,
+      unlockPct:   parseFloat(affCfg.promo_code_unlock_percent)  || 50,
+      promoPrefix: affCfg.promo_code_prefix                      || 'AFF',
+      promoDisc:   parseFloat(affCfg.promo_code_discount_percent)|| 50
+    };
+  }
 
   function buildAffLink(username) {
     return window.location.origin + '/?ref=' + encodeURIComponent(username);
@@ -7180,59 +7198,55 @@ function loadProfilePhoto() {
 
   function escHtml(str) {
     if (!str) return '';
-    return String(str)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ── Tableau dashboard ──
+  // ── Affiche le tableau depuis les données du sheet ──
   function renderTable(affiliates) {
     if (!affiliates || !affiliates.length) {
       tableCard.style.display = 'none';
       return;
     }
+
+    const cfg        = getAffCfg();
+    const commPct    = cfg.commPct;
+    const jackpotQty = cfg.jackpotQty;
+    const unlockPct  = cfg.unlockPct;
+
     tableCard.style.display = 'block';
     tableBody.innerHTML = '';
 
     affiliates.forEach(function(aff) {
-      const commPct          = aff.commissionPercent    || 5;
-      const jackpotThreshold = aff.jackpotThreshold     || 10;
-      const jackpotAmt       = aff.jackpotRewardAmount  || 100;
-      const promoUnlockPct   = aff.promoUnlockPercent   || 50;
-      const jackpotUnlocked  = aff.jackpotUnlocked      || false;
-      const jackpot          = parseFloat(aff.jackpot   || 0);
-      const totalOrders      = aff.totalOrders          || 0;
-
-      const pct = aff.totalOrderValue > 0
-        ? ((aff.totalMoney / aff.totalOrderValue) * 100).toFixed(1)
-        : '0.0';
-
-      const isPromoUnlocked = parseFloat(pct) >= promoUnlockPct;
-      const ordersLeft      = Math.max(0, jackpotThreshold - totalOrders);
+      // Argent gagné calculé depuis commission_percent du setting
+      const earned         = parseFloat(aff.totalOrderValue || 0) * (commPct / 100);
+      const pct            = aff.totalOrderValue > 0
+                             ? ((earned / aff.totalOrderValue) * 100).toFixed(1)
+                             : '0.0';
+      const jackpotReached = aff.totalOrders >= jackpotQty;
+      const promoReached   = parseFloat(pct) >= unlockPct;
 
       const tr = document.createElement('tr');
       tr.innerHTML =
         '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
         '<td>' + (aff.clicks || 0) + '</td>' +
-        '<td>' + commPct + '%</td>' +
-        '<td><span class="aff-badge-pct' + (isPromoUnlocked ? ' jackpot' : '') + '">' + pct + '%</span></td>' +
-        '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalMoney || 0).toFixed(2) + '</strong></td>' +
-        '<td>' + totalOrders + ' / ' + jackpotThreshold + '</td>' +
-        '<td class="aff-td-jackpot">' +
-          (jackpotUnlocked
-            ? '🏆 $' + jackpot.toFixed(2)
-            : ordersLeft + ' left') +
-        '</td>';
+        '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
+          + commPct + '% <small>(' + pct + '% reached)</small></span></td>' +
+        '<td><strong style="color:#1a6b3c;">$' + earned.toFixed(2) + '</strong></td>' +
+        '<td>' + (aff.totalOrders || 0) + '</td>' +
+        '<td class="aff-td-jackpot">'
+          + (jackpotReached
+              ? '🏆 JACKPOT'
+              : (aff.totalOrders || 0) + ' / ' + jackpotQty)
+          + '</td>';
       tableBody.appendChild(tr);
 
-      // Afficher la reward card si promo débloquée
-      if (isPromoUnlocked) showReward(aff);
+      if (jackpotReached || promoReached) {
+        showReward(aff);
+      }
     });
   }
 
-  // ── Historique des liens ──
+  // ── Affiche l'historique des liens depuis les données du sheet ──
   function renderHistory(affiliates) {
     if (!affiliates || !affiliates.length) {
       historyCard.style.display = 'none';
@@ -7266,43 +7280,78 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Reward card ──
   function showReward(aff) {
     if (!rewardCard) return;
+
+    const cfg        = getAffCfg();
+    const jackpotQty = cfg.jackpotQty;
+    const jackpotAmt = cfg.jackpotAmt;
+    const unlockPct  = cfg.unlockPct;
+    const promoPrefix= cfg.promoPrefix;
+    const promoDisc  = cfg.promoDisc;
+    const commPct    = cfg.commPct;
+
+    const earned         = parseFloat(aff.totalOrderValue || 0) * (commPct / 100);
+    const pct            = aff.totalOrderValue > 0
+                           ? (earned / aff.totalOrderValue) * 100
+                           : 0;
+    const jackpotReached = aff.totalOrders >= jackpotQty;
+    const promoReached   = pct >= unlockPct;
+
+    // N'afficher la carte que si au moins une condition est atteinte
+    if (!jackpotReached && !promoReached) return;
     rewardCard.style.display = 'block';
 
-    const promoDiscountPct = aff.promoDiscountPercent || 50;
-    const promoCode        = aff.promoCode || ((aff.promo_code_prefix || 'AFF50-') + aff.username.toUpperCase().slice(0, 6));
-    const jackpotUnlocked  = aff.jackpotUnlocked || false;
-    const jackpot          = parseFloat(aff.jackpot || 0);
+    // ── Jackpot block — affiché UNIQUEMENT si threshold de commandes atteint ──
+    let jackpotBlock = document.getElementById('aff-jackpot-block');
+    if (jackpotReached) {
+      if (!jackpotBlock) {
+        jackpotBlock = document.createElement('div');
+        jackpotBlock.id        = 'aff-jackpot-block';
+        jackpotBlock.className = 'aff-jackpot-block';
+        jackpotBlock.style.cssText =
+          'background:linear-gradient(135deg,#fff8e1,#fff3cd);border:2px solid #f59e0b;' +
+          'border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;';
+        jackpotBlock.innerHTML =
+          '<div style="font-size:2.5rem;">🏆</div>' +
+          '<h4 style="color:#b45309;margin:8px 0;">JACKPOT REACHED!</h4>' +
+          '<p style="color:#92400e;">You have reached <strong>' + jackpotQty + ' orders</strong>.</p>' +
+          '<p style="color:#92400e;font-size:1.2rem;font-weight:700;">Your reward: <strong>$'
+            + jackpotAmt.toFixed(2) + '</strong></p>';
 
-    // Mettre à jour le label promo avec le % dynamique
-    const promoLabelEl = document.getElementById('aff-reward-promo-label');
-    if (promoLabelEl) promoLabelEl.textContent = 'Your promo code (-' + promoDiscountPct + '%):';
+        const rewardInner = rewardCard.querySelector('.aff-reward-inner');
+        if (rewardInner) {
+          const divider = rewardInner.querySelector('.aff-reward-divider');
+          const withdrawWrap = rewardInner.querySelector('#aff-withdraw-wrap');
+          const ref = divider || withdrawWrap || null;
+          if (ref) rewardInner.insertBefore(jackpotBlock, ref);
+          else rewardInner.appendChild(jackpotBlock);
+        }
+      }
+      jackpotBlock.style.display = '';
+    } else {
+      if (jackpotBlock) jackpotBlock.style.display = 'none';
+    }
 
-    const promoNoteEl = document.getElementById('aff-promo-note');
-    if (promoNoteEl) promoNoteEl.textContent = 'Use this code on your next order for -' + promoDiscountPct + '%';
+    // ── Promo code — affiché UNIQUEMENT si promo_code_unlock_percent atteint ──
+    const rewardPromo = document.getElementById('aff-reward-promo');
+    if (rewardPromo) {
+      if (promoReached) {
+        rewardPromo.style.display = '';
+        const promoCode = promoPrefix + '-' + (aff.username || '').toUpperCase().slice(0, 6);
+        if (promoCodeVal) promoCodeVal.textContent = promoCode;
 
-    // Mettre à jour le message principal
-    const rewardMsgEl = document.getElementById('aff-reward-msg');
-    if (rewardMsgEl) rewardMsgEl.innerHTML = 'You have reached the earnings threshold! Enjoy your exclusive benefit:';
-
-    // Code promo
-    if (promoCodeVal) promoCodeVal.textContent = promoCode;
-
-    // Jackpot — visible uniquement si le seuil de commandes est atteint
-    const jackpotSection = document.getElementById('aff-jackpot-section');
-    if (jackpotSection) {
-      if (jackpotUnlocked) {
-        jackpotSection.style.display = 'block';
-        const jackpotAmountEl = document.getElementById('aff-jackpot-amount');
-        if (jackpotAmountEl) jackpotAmountEl.textContent = '$' + jackpot.toFixed(2);
+        const promoNote = rewardPromo.querySelector('.aff-promo-note');
+        if (promoNote) {
+          promoNote.textContent =
+            'Use this code on your next order for -' + promoDisc + '%';
+        }
       } else {
-        jackpotSection.style.display = 'none';
+        rewardPromo.style.display = 'none';
       }
     }
 
-    // Statut withdraw
+    // ── Withdraw status ──
     if (aff.withdrawStatus && aff.withdrawStatus !== 'none') {
       if (withdrawForm)   withdrawForm.style.display   = 'none';
       if (withdrawStatus) withdrawStatus.style.display = 'block';
@@ -7319,7 +7368,6 @@ function loadProfilePhoto() {
     }
   }
 
-  // ── Copie du promo code ──
   if (copyPromoBtn) {
     copyPromoBtn.addEventListener('click', function() {
       const code = promoCodeVal ? promoCodeVal.textContent : '';
@@ -7331,7 +7379,7 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Créer un affilié ──
+  // ── Créer un affilié → sauvegarder dans le sheet ──
   if (createBtn) {
     createBtn.addEventListener('click', async function() {
       if (!usernameInput) return;
@@ -7344,20 +7392,20 @@ function loadProfilePhoto() {
       if (!existing) {
         const newAff = {
           username,
-          clicks:         0,
-          totalMoney:     0,
-          totalOrders:    0,
+          clicks: 0,
+          totalMoney: 0,
+          totalOrders: 0,
           totalOrderValue: 0,
           withdrawStatus: 'none',
-          createdAt:      new Date().toLocaleDateString('en-US')
+          createdAt: new Date().toLocaleDateString('en-US')
         };
         affiliatesFromSheet.push(newAff);
 
         try {
           await fetch('/.netlify/functions/save-account', {
-            method:  'POST',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
+            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
           });
         } catch(e) { console.warn('[Affiliation] save failed:', e.message); }
       }
@@ -7381,25 +7429,15 @@ function loadProfilePhoto() {
     withdrawBtn.addEventListener('click', async function() {
       const paypalName  = document.getElementById('aff-paypal-name')?.value.trim()  || '';
       const paypalEmail = document.getElementById('aff-paypal-email')?.value.trim() || '';
-      if (!paypalName || !paypalEmail) {
-        withdrawError.textContent = 'Please fill in all PayPal fields.';
-        withdrawError.style.display = 'block';
-        return;
-      }
-      if (!paypalEmail.includes('@')) {
-        withdrawError.textContent = 'Invalid PayPal email.';
-        withdrawError.style.display = 'block';
-        return;
-      }
+      if (!paypalName || !paypalEmail) { withdrawError.textContent = 'Please fill in all PayPal fields.'; withdrawError.style.display = 'block'; return; }
+      if (!paypalEmail.includes('@')) { withdrawError.textContent = 'Invalid PayPal email.'; withdrawError.style.display = 'block'; return; }
       withdrawError.style.display = 'none';
       withdrawBtn.disabled = true;
       withdrawBtn.innerHTML = '<div class="plan-spinner"></div> Sending...';
-
       try {
         const res  = await fetch('/.netlify/functions/save-account', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
         });
         const data = await res.json();
         if (data.success) {
@@ -7410,9 +7448,7 @@ function loadProfilePhoto() {
             if (statusBadge) { statusBadge.textContent = '⏳ Pending'; statusBadge.className = 'aff-status-badge'; }
             if (statusMsg)   statusMsg.textContent = 'Your request is being processed by our team.';
           }
-        } else {
-          throw new Error(data.error || 'Unknown error');
-        }
+        } else { throw new Error(data.error || 'Unknown error'); }
       } catch(err) {
         withdrawError.textContent = 'Error: ' + err.message;
         withdrawError.style.display = 'block';
@@ -7422,14 +7458,13 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Sync depuis le sheet ──
+  // ── Sync depuis le sheet au chargement ──
   async function syncFromSheet() {
     if (!userEmail) return;
     try {
       const res  = await fetch('/.netlify/functions/save-account', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ action: 'aff-get-stats', email: userEmail })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
       });
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
@@ -7440,6 +7475,7 @@ function loadProfilePhoto() {
     } catch(e) { console.warn('[Affiliation] sync failed:', e.message); }
   }
 
+  // ── Init ──
   syncFromSheet();
   setInterval(syncFromSheet, 60000);
 
