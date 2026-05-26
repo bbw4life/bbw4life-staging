@@ -7235,7 +7235,7 @@ function loadProfilePhoto() {
       '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalOrderValue || 0).toFixed(2) + '</strong></td>' +
       '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
         + earnedPct.toFixed(0) + '%</span></td>' +
-      '<td>' + reachedPct + '% — ' + totalOrders + ' / ' + jackpotQty + '</td>' +
+      '<td>' + totalOrders + ' / ' + jackpotQty + '</td>' +
       '<td class="aff-td-jackpot">'
         + (jackpotReached ? '🏆 $' + cfg.jackpotAmt.toFixed(0) : '—')
         + '</td>';
