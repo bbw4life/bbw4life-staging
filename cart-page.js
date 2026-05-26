@@ -872,8 +872,10 @@
 
   /* ════════════════════════════════════════════════════════════════
      SHARE CART — système propre et indépendant
+     URL générée : /cart.html?cart_share=ID1,ID2,ID3
+     PAS de wishlist_share — PAS de all-product — JAMAIS
   ════════════════════════════════════════════════════════════════ */
- function initShareCart() {
+  function initShareCart() {
     const shareModal    = document.getElementById('cp-share-modal');
     const shareBackdrop = document.getElementById('cp-share-modal-backdrop');
     const shareClose    = document.getElementById('cp-share-modal-close');
@@ -881,10 +883,6 @@
     const shareCopyBtn  = document.getElementById('cp-share-modal-copy');
     const shareBtn      = document.getElementById('cpShareCartBtn');
     const copyLinkBtn   = document.getElementById('cp-copy-link');
-
-    // URL canonique — générée une seule fois à l'ouverture du modal
-    // et réutilisée partout (Copy + réseaux sociaux)
-    var _canonicalUrl = null;
 
     function buildCartShareUrl() {
       var cart = getCart();
@@ -904,11 +902,11 @@
       }).join('\n');
     }
 
-    function buildShareMessage(platform, url) {
+    function buildShareMessage(platform) {
       var cart = getCart();
       if (!cart.length) return null;
 
-      var shareUrl     = url || _canonicalUrl || buildCartShareUrl();
+      var shareUrl     = buildCartShareUrl();
       var productLines = buildProductLines();
       var count        = cart.reduce(function (s, i) { return s + i.quantity; }, 0);
       var subtotal     = cart.reduce(function (s, i) { return s + parseFloat(i.price) * i.quantity; }, 0);
@@ -924,9 +922,15 @@
 
       var twitterMsg =
         'Check out my BBW4LIFE cart! ' + count + ' amazing item' + (count > 1 ? 's' : '') + ' I\'m loving.\n\n' +
-        shareUrl + '\n\n#BBW4LIFE #CurvyFashion #PlusSize';
+        shareUrl + '\n\n' +
+        '#BBW4LIFE #CurvyFashion #PlusSize';
 
-      if (platform === 'twitter') return twitterMsg;
+      var pinterestMsg =
+        'My BBW4LIFE shopping cart — ' + count + ' beautiful item' + (count > 1 ? 's' : '') + '!\n\n' +
+        productLines + '\n\n' + shareUrl;
+
+      if (platform === 'twitter')   return twitterMsg;
+      if (platform === 'pinterest') return pinterestMsg;
       return intro;
     }
 
@@ -934,87 +938,42 @@
       showToast(msg);
     }
 
-    // ── Ouvre le modal ET fixe l'URL canonique ──
-    function openModal() {
-      var cart = getCart();
-      if (!cart.length) { showShareToast('Your cart is empty!'); return; }
-
-      // Générer l'URL une seule fois ici
-      _canonicalUrl = buildCartShareUrl();
-
-      if (shareLinkEl) shareLinkEl.value = _canonicalUrl || '';
-      if (shareModal) { shareModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-    }
-
-    function closeModal() {
-      if (shareModal) { shareModal.style.display = 'none'; document.body.style.overflow = ''; }
-    }
-
-    // ── Gère tous les partages avec l'URL canonique ──
     function handleCartShare(platform) {
       var cart = getCart();
-      if (!cart.length) { showShareToast('Your cart is empty!'); return; }
+      if (!cart.length) {
+        showShareToast('Your cart is empty!');
+        return;
+      }
 
-      // Toujours utiliser l'URL canonique si disponible
-      var shareUrl = _canonicalUrl || buildCartShareUrl();
-      _canonicalUrl = shareUrl; // mémoriser pour les clics suivants
+      var shareUrl = buildCartShareUrl();
+      var message  = buildShareMessage(platform);
 
+      var platformUrls = {
+        whatsapp:  'https://wa.me/?text=' + encodeURIComponent(message),
+        facebook:  'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) + '&quote=' + encodeURIComponent(message),
+        twitter:   'https://x.com/intent/tweet?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent('Check out my BBW4LIFE cart!'),
+        pinterest: 'https://pinterest.com/pin/create/button/?url=' + encodeURIComponent(shareUrl) + '&media=' + encodeURIComponent(window.__allProducts && window.__allProducts.length ? (function(){ var cart = getCart(); var first = cart[0]; if (!first) return ''; var prod = (window.__allProducts||[]).find(function(p){return p.id===first.id;}); return prod ? prod.image : ''; })() : '') + '&description=' + encodeURIComponent(buildShareMessage('pinterest') || message)
+      };
       if (platform === 'copy') {
-        navigator.clipboard.writeText(shareUrl).then(function () {
-          showShareToast('Link copied to clipboard!');
-          if (shareLinkEl) shareLinkEl.value = shareUrl;
-        }).catch(function () {
-          showShareToast('Could not copy. Please copy manually.');
-        });
-        return;
+          var fullMessage = buildShareMessage('whatsapp');
+          var textToCopy = fullMessage || shareUrl;
+          navigator.clipboard.writeText(textToCopy).then(function () {
+              showShareToast('Message copied to clipboard!');
+              if (shareLinkEl) shareLinkEl.value = shareUrl;
+          }).catch(function () {
+              showShareToast('Could not copy. Please copy manually.');
+          });
+          return;
       }
 
-      var message = buildShareMessage(platform, shareUrl);
-
-      // ── Facebook : partage d'URL uniquement (pas de quote, ignoré par FB) ──
-      if (platform === 'facebook') {
-        var fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
-        window.open(fbUrl, '_blank', 'noopener,noreferrer,width=640,height=520');
-        showShareToast('Opening Facebook share…');
-        return;
-      }
-
-      // ── Pinterest : ouvre le sélecteur d'images de la page cible ──
-      if (platform === 'pinterest') {
-        // Pinterest "any image" picker — ouvre une popup qui crawle l'URL cible
-        // et propose de choisir une image à pinner
-        var pinUrl =
-          'https://pinterest.com/pin/create/button/' +
-          '?url=' + encodeURIComponent(shareUrl) +
-          '&description=' + encodeURIComponent(
-            'My BBW4LIFE cart — ' + getCart().length + ' beautiful item' +
-            (getCart().length > 1 ? 's' : '') + '! ' + shareUrl
-          );
-        window.open(pinUrl, '_blank', 'noopener,noreferrer,width=750,height=560');
-        showShareToast('Opening Pinterest…');
-        return;
-      }
-
-      // ── WhatsApp ──
-      if (platform === 'whatsapp') {
-        var waUrl = 'https://wa.me/?text=' + encodeURIComponent(message);
-        window.open(waUrl, '_blank', 'noopener,noreferrer,width=640,height=520');
-        showShareToast('Opening WhatsApp…');
-        return;
-      }
-
-      // ── Twitter / X ──
-      if (platform === 'twitter') {
-        var twUrl = 'https://x.com/intent/tweet?text=' + encodeURIComponent(message);
-        window.open(twUrl, '_blank', 'noopener,noreferrer,width=640,height=520');
-        showShareToast('Opening X / Twitter…');
-        return;
+      if (platformUrls[platform]) {
+        window.open(platformUrls[platform], '_blank', 'noopener,noreferrer,width=640,height=520');
+        showShareToast('Opening share window...');
       }
     }
 
     window.handleCartShare = handleCartShare;
 
-    // ── Délégation globale pour tous les boutons data-cart-share ──
     document.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-cart-share]');
       if (!btn) return;
@@ -1023,14 +982,25 @@
       handleCartShare(btn.dataset.cartShare);
     });
 
+    function openModal() {
+      var cart = getCart();
+      if (!cart.length) { showShareToast('Your cart is empty!'); return; }
+      var url = buildCartShareUrl();
+      if (shareLinkEl) shareLinkEl.value = url || '';
+      if (shareModal) { shareModal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    }
+
+    function closeModal() {
+      if (shareModal) { shareModal.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+
     if (shareBtn)      shareBtn.addEventListener('click', openModal);
     if (shareClose)    shareClose.addEventListener('click', closeModal);
     if (shareBackdrop) shareBackdrop.addEventListener('click', closeModal);
 
-    // Copy depuis le modal
     if (shareCopyBtn) {
       shareCopyBtn.addEventListener('click', function () {
-        var url = _canonicalUrl || buildCartShareUrl();
+        var url = buildCartShareUrl();
         if (!url) { showShareToast('Your cart is empty!'); return; }
         navigator.clipboard.writeText(url).then(function () {
           showShareToast('Link copied!');
@@ -1039,7 +1009,6 @@
       });
     }
 
-    // Copy depuis le bouton dans la page (hors modal)
     if (copyLinkBtn) {
       copyLinkBtn.addEventListener('click', function () {
         handleCartShare('copy');
