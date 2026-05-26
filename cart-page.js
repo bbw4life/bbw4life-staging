@@ -197,6 +197,15 @@
     updateHeader();
     updateProgressBar();
     updatePromoMessage();
+
+
+    setTimeout(function () {
+      var savedCountry = null;
+      try { savedCountry = localStorage.getItem('bbw_country'); } catch (e) {}
+      if (savedCountry && typeof window.convertPricesForCountry === 'function') {
+        window.convertPricesForCountry(savedCountry);
+      }
+    }, 50);
   }
 
   /* ── Qty ── */
@@ -290,6 +299,14 @@
 
     setText('cp-sticky-qty',   totalQty + (totalQty === 1 ? ' item' : ' items'));
     setText('cp-sticky-total', '$' + subtotal.toFixed(2));
+
+      setTimeout(function () {
+        var savedCountry = null;
+        try { savedCountry = localStorage.getItem('bbw_country'); } catch (e) {}
+        if (savedCountry && typeof window.convertPricesForCountry === 'function') {
+          window.convertPricesForCountry(savedCountry);
+        }
+      }, 50);
   }
 
   function updateHeader() {
