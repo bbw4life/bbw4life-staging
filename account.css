@@ -1500,9 +1500,9 @@ a.stat-wishlist-link:visited {
 ══════════════════════════════════════════ */
 
 .affiliation-section {
-  max-width: 1100px;
+  max-width: 100%;
   margin: 0 auto 60px;
-  padding: 0 16px;
+  padding: 0 5px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -1513,11 +1513,16 @@ a.stat-wishlist-link:visited {
 .aff-hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #1a0a12 0%, #3a1228 40%, #2a0f22 70%, #1c0c18 100%);
-  border-radius: 20px;
-  padding: 52px 40px 44px;
+  background: #000000;
+  border-radius: 14px;
+  padding: 0 40px;
   text-align: center;
   box-sizing: border-box;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .aff-hero::before {
@@ -1525,7 +1530,7 @@ a.stat-wishlist-link:visited {
   position: absolute;
   top: -60px; left: -60px;
   width: 280px; height: 280px;
-  background: radial-gradient(circle, rgba(201,150,62,0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(201,150,62,0.15) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -1534,7 +1539,7 @@ a.stat-wishlist-link:visited {
   position: absolute;
   bottom: -80px; right: -40px;
   width: 320px; height: 320px;
-  background: radial-gradient(circle, rgba(184,48,88,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(184,48,88,0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -1542,13 +1547,13 @@ a.stat-wishlist-link:visited {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  background: rgba(201,150,62,0.18);
+  background: rgba(201,150,62,0.15);
   border: 1px solid rgba(201,150,62,0.35);
   border-radius: 40px;
-  padding: 6px 18px;
-  margin-bottom: 22px;
+  padding: 4px 14px;
+  margin-bottom: 10px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   font-weight: 700;
   letter-spacing: 0.10em;
   text-transform: uppercase;
@@ -1557,17 +1562,17 @@ a.stat-wishlist-link:visited {
 }
 
 .aff-hero__badge i {
-  font-size: 0.78rem;
+  font-size: 0.70rem;
   color: #e8bc6a;
   -webkit-text-fill-color: #e8bc6a;
 }
 
 .aff-hero__title {
   font-family: 'Cormorant Garamond', Georgia, serif !important;
-  font-size: clamp(2rem, 4vw, 3.2rem) !important;
+  font-size: clamp(1.5rem, 3vw, 2.4rem) !important;
   font-weight: 700 !important;
-  line-height: 1.2 !important;
-  margin: 0 0 16px !important;
+  line-height: 1.15 !important;
+  margin: 0 0 8px !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
   background: none !important;
@@ -1575,12 +1580,12 @@ a.stat-wishlist-link:visited {
 
 .aff-hero__sub {
   font-family: 'DM Sans', sans-serif !important;
-  font-size: 1.05rem !important;
-  color: rgba(255,255,255,0.68) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.68) !important;
-  max-width: 540px;
-  margin: 0 auto 36px !important;
-  line-height: 1.7 !important;
+  font-size: 0.88rem !important;
+  color: rgba(255,255,255,0.60) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.60) !important;
+  max-width: 480px;
+  margin: 0 auto 16px !important;
+  line-height: 1.6 !important;
 }
 
 .aff-hero__sub strong {
@@ -1596,68 +1601,67 @@ a.stat-wishlist-link:visited {
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-bottom: 36px;
-  flex-wrap: wrap;
+  margin-bottom: 16px;
+  flex-wrap: nowrap;
 }
 
 .aff-hero__stat {
-  padding: 0 32px;
+  padding: 0 24px;
   text-align: center;
 }
 
 .aff-hero__stat-val {
   display: block;
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 2.4rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #e8bc6a;
   -webkit-text-fill-color: #e8bc6a;
   line-height: 1;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .aff-hero__stat-label {
   display: block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.74rem;
-  color: rgba(255,255,255,0.50);
-  -webkit-text-fill-color: rgba(255,255,255,0.50);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.45);
+  -webkit-text-fill-color: rgba(255,255,255,0.45);
   text-transform: uppercase;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   font-weight: 500;
 }
 
 .aff-hero__stat-divider {
   width: 1px;
-  height: 40px;
+  height: 32px;
   background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
 }
 
-/* Steps */
+/* Steps — caché sur mobile pour gagner de la place */
 .aff-hero__steps {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .aff-hero__step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
 .aff-hero__step-num {
-  width: 36px; height: 36px;
+  width: 28px; height: 28px;
   border-radius: 50%;
-  background: rgba(184,48,88,0.35);
-  border: 1.5px solid rgba(184,48,88,0.60);
+  background: rgba(184,48,88,0.30);
+  border: 1.5px solid rgba(184,48,88,0.55);
   display: flex; align-items: center; justify-content: center;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #f5a0b8;
   -webkit-text-fill-color: #f5a0b8;
@@ -1665,21 +1669,21 @@ a.stat-wishlist-link:visited {
 
 .aff-hero__step p {
   font-family: 'DM Sans', sans-serif !important;
-  font-size: 0.80rem !important;
-  color: rgba(255,255,255,0.55) !important;
-  -webkit-text-fill-color: rgba(255,255,255,0.55) !important;
+  font-size: 0.68rem !important;
+  color: rgba(255,255,255,0.50) !important;
+  -webkit-text-fill-color: rgba(255,255,255,0.50) !important;
   margin: 0 !important;
   text-align: center;
-  max-width: 90px;
-  line-height: 1.4 !important;
+  max-width: 80px;
+  line-height: 1.3 !important;
 }
 
 .aff-hero__step-arrow {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.25);
-  -webkit-text-fill-color: rgba(255,255,255,0.25);
-  padding: 0 12px;
-  margin-top: -18px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.20);
+  -webkit-text-fill-color: rgba(255,255,255,0.20);
+  padding: 0 8px;
+  margin-top: -14px;
 }
 
 /* ── CARD BASE ── */
@@ -1793,6 +1797,7 @@ a.stat-wishlist-link:visited {
   white-space: nowrap;
   display: flex; align-items: center; gap: 7px;
   transition: opacity 0.20s;
+  flex-shrink: 0;
 }
 
 .aff-create-btn:hover { opacity: 0.88; }
@@ -2395,7 +2400,7 @@ a.stat-wishlist-link:visited {
   background: #fafafa;
   border: 1px solid rgba(201,150,62,0.12);
   border-radius: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   transition: border-color 0.18s;
 }
 
@@ -2412,6 +2417,7 @@ a.stat-wishlist-link:visited {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   min-width: 90px;
+  flex-shrink: 0;
 }
 
 .aff-history-link {
@@ -2429,6 +2435,7 @@ a.stat-wishlist-link:visited {
   color: #bbb;
   -webkit-text-fill-color: #bbb;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .aff-copy-link-btn {
@@ -2445,38 +2452,145 @@ a.stat-wishlist-link:visited {
   display: flex; align-items: center; gap: 5px;
   transition: all 0.18s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .aff-copy-link-btn:hover {
   background: rgba(201,150,62,0.09);
 }
 
-/* ── RESPONSIVE ── */
+/* ══════════════════════════════════════════
+   RESPONSIVE — MOBILE
+══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .aff-hero { padding: 36px 20px 32px; }
-  .aff-hero__stat { padding: 0 18px; }
-  .aff-hero__stat-val { font-size: 1.8rem; }
-  .aff-hero__step-arrow { display: none; }
-  .aff-hero__steps { gap: 14px; }
 
+  /* ── Hero : 250px, pleine largeur, pas empilé ── */
+  .aff-hero {
+    height: 250px;
+    padding: 0 16px;
+    border-radius: 10px;
+  }
+
+  .aff-hero__badge {
+    margin-bottom: 6px;
+  }
+
+  .aff-hero__title {
+    font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
+    margin-bottom: 5px !important;
+  }
+
+  .aff-hero__sub {
+    font-size: 0.76rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Stats : reste horizontal, taille réduite */
+  .aff-hero__stats {
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+  }
+
+  .aff-hero__stat {
+    padding: 0 10px;
+  }
+
+  .aff-hero__stat-val {
+    font-size: 1.25rem;
+  }
+
+  .aff-hero__stat-label {
+    font-size: 0.55rem;
+  }
+
+  .aff-hero__stat-divider {
+    height: 24px;
+  }
+
+  /* Steps cachés sur mobile pour tenir dans 250px */
+  .aff-hero__steps {
+    display: none;
+  }
+
+  /* ── Create card : layout horizontal préservé ── */
   .aff-create-card {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
+    align-items: stretch;
+    padding: 18px 16px;
+    gap: 14px;
   }
-  .aff-input-row { flex-direction: column; border-radius: 12px; }
-  .aff-input-prefix { border-right: none; border-bottom: 1px solid rgba(201,150,62,0.18); width: 100%; }
-  .aff-create-btn { width: 100%; justify-content: center; height: 46px; }
-  .aff-input { height: 44px; }
 
+  .aff-create-card__left {
+    align-items: flex-start;
+  }
+
+  /* Input row : horizontal sur mobile, pas empilé */
+  .aff-input-row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .aff-input-prefix {
+    font-size: 0.65rem;
+    padding: 0 8px;
+    height: 44px;
+    border-right: 1px solid rgba(201,150,62,0.18);
+    border-bottom: none;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .aff-input {
+    height: 44px;
+    font-size: 0.88rem;
+    min-width: 0;
+    flex: 1;
+    padding: 0 10px;
+  }
+
+  .aff-create-btn {
+    height: 44px;
+    padding: 0 14px;
+    font-size: 0.78rem;
+    width: auto;
+    flex-shrink: 0;
+    border-radius: 0;
+  }
+
+  /* ── Table card ── */
   .aff-table-card,
   .aff-reward-card,
-  .aff-history-card { padding: 20px 16px; }
+  .aff-history-card {
+    padding: 18px 14px;
+  }
 
-  .aff-withdraw-fields { grid-template-columns: 1fr; }
+  /* ── Withdraw fields : une colonne sur mobile ── */
+  .aff-withdraw-fields {
+    grid-template-columns: 1fr;
+  }
 
-  .aff-history-item { flex-direction: column; align-items: flex-start; }
-  .aff-copy-link-btn { width: 100%; justify-content: center; }
+  /* ── History items : restent horizontaux ── */
+  .aff-history-item {
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .aff-history-user {
+    font-size: 0.75rem;
+    min-width: 70px;
+  }
+
+  .aff-history-link {
+    font-size: 0.65rem;
+  }
+
+  .aff-copy-link-btn {
+    padding: 5px 10px;
+    font-size: 0.68rem;
+  }
 }
 
 
