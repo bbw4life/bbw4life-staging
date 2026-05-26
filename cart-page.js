@@ -193,19 +193,15 @@
       btn.addEventListener('click', handleRemove);
     });
 
-    updateSummary();
+   updateSummary();
     updateHeader();
     updateProgressBar();
     updatePromoMessage();
 
-
-    setTimeout(function () {
-      var savedCountry = null;
-      try { savedCountry = localStorage.getItem('bbw_country'); } catch (e) {}
-      if (savedCountry && typeof window.convertPricesForCountry === 'function') {
-        window.convertPricesForCountry(savedCountry);
-      }
-    }, 50);
+    if (typeof window.convertPricesForCountry === 'function') {
+      var _activeCountry = localStorage.getItem('bbw_country');
+      if (_activeCountry) window.convertPricesForCountry(_activeCountry);
+    }
   }
 
   /* ── Qty ── */
@@ -299,14 +295,6 @@
 
     setText('cp-sticky-qty',   totalQty + (totalQty === 1 ? ' item' : ' items'));
     setText('cp-sticky-total', '$' + subtotal.toFixed(2));
-
-      setTimeout(function () {
-        var savedCountry = null;
-        try { savedCountry = localStorage.getItem('bbw_country'); } catch (e) {}
-        if (savedCountry && typeof window.convertPricesForCountry === 'function') {
-          window.convertPricesForCountry(savedCountry);
-        }
-      }, 50);
   }
 
   function updateHeader() {
@@ -1443,7 +1431,10 @@
       track.appendChild(buildCard(prod, btnText, allProducts, 'page'));
     });
 
-    section.style.display = '';
+    var cartCheck = (typeof window.__getCart === 'function')
+  ? window.__getCart()
+  : JSON.parse(localStorage.getItem('cart') || '[]');
+section.style.display = cartCheck.length === 0 ? 'none' : '';
 
     /* Per page: 3 desktop, 2 mobile */
     var perPage = window.innerWidth <= 768 ? 2 : 3;
@@ -1507,9 +1498,13 @@
     if (document.getElementById('cp-extra-section')) {
       initPageCart(allProducts, cfg);
 
-      /* Re-init if cart updates (products added/removed) */
       document.addEventListener('cart:update', function () {
-        /* keep section visible regardless of cart state */
+        var section = document.getElementById('cp-extra-section');
+        if (!section) return;
+        var cart = (typeof window.__getCart === 'function')
+          ? window.__getCart()
+          : JSON.parse(localStorage.getItem('cart') || '[]');
+        section.style.display = cart.length === 0 ? 'none' : '';
       });
     }
 

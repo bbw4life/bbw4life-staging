@@ -5496,13 +5496,18 @@ document.dispatchEvent(new Event('wishlist:change'));
       cartItemsContainer.querySelectorAll('.remove-item').forEach(btn => btn.addEventListener('click', removeFromCart));
     }
 
-    updateSubtotal();
+   updateSubtotal();
     if (products.length) {
       const cd = (products.find(p => p.type === 'settings') || {}).cart_drawer || {};
       updateCartProgressBar(cd);
       updateCartPromoMessage(cd);
     }
-    updateBadges(); 
+    updateBadges();
+
+    if (typeof window.convertPricesForCountry === 'function') {
+      var _savedCountry = localStorage.getItem('bbw_country');
+      if (_savedCountry) window.convertPricesForCountry(_savedCountry);
+    }
   }
 
   function normalizeVal(v) {

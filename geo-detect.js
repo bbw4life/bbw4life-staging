@@ -432,242 +432,300 @@
 
 
   /* ══════════════════════════════════════════════════════════════
-   6b. CONVERSION MONNAIE
+   6b. CONVERSION MONNAIE — Fallback circulaire 3 APIs
 ══════════════════════════════════════════════════════════════ */
-var _ratesCache     = {};
-var _ratesFetched   = false;
-var _ratesCallbacks = [];
+var _ratesCache   = {};
+var _ratesFetched = false;
+var _ratesPending = [];
+var _activeCountry = null;
+var _observerStarted = false;
 
 var RATES_KEY     = 'bbw_fx_rates';
 var RATES_EXP_KEY = 'bbw_fx_expires';
-var RATES_TTL     = 24 * 60 * 60 * 1000; /* 24h */
+var RATES_TTL     = 24 * 60 * 60 * 1000;
 
-/* Taux de secours si l'API échoue */
-var FALLBACK_RATES = {
-  EUR: 0.92, GBP: 0.79, CAD: 1.36, AUD: 1.53, JPY: 149.5,
-  CNY: 7.24, INR: 83.1, BRL: 4.97, MXN: 17.2, KRW: 1325,
-  RUB: 92.5, TRY: 32.1, PLN: 3.97, RON: 4.57, NZD: 1.63,
-  SGD: 1.34, MYR: 4.72, THB: 35.1, VND: 24500, IDR: 15700,
-  PHP: 56.5, PKR: 278,  BDT: 110,  EGP: 30.9, NGN: 1590,
-  ZAR: 18.7, GHS: 13.2, KES: 129,  XOF: 603,  XAF: 603,
-  CDF: 2750, MAD: 10.0, DZD: 135,  TND: 3.12, HTG: 132,
-  SAR: 3.75, AED: 3.67, ARS: 870,  COP: 3900, CLP: 948,
-  PEN: 3.71, HKD: 7.82, CHF: 0.90
-};
+/* ── 3 APIs en rotation circulaire ── */
+var RATE_APIS = [
+  function() { return fetch('https://open.er-api.com/v6/latest/USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
+
+  function() { return fetch('https://api.exchangerate-api.com/v4/latest/USD')
+    .then(function(r){ return r.json(); })
+    .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
+
+  function() { return fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (!d || !d.usd) throw new Error('no rates');
+      /* normaliser les clés en MAJUSCULES */
+      var normalized = {};
+      Object.keys(d.usd).forEach(function(k){ normalized[k.toUpperCase()] = d.usd[k]; });
+      return normalized;
+    }); }
+];
+
+var _apiIndex = 0;
 
 function fetchRates(callback) {
-  /* 1. Déjà en cache mémoire */
-  if (_ratesFetched && Object.keys(_ratesCache).length > 0) {
-    callback(_ratesCache);
-    return;
-  }
+  if (_ratesFetched) { callback(_ratesCache); return; }
 
-  /* 2. Cache localStorage valide */
+  /* Cache localStorage (24h) */
   try {
-    var expires = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
-    var saved   = localStorage.getItem(RATES_KEY);
-    if (saved && Date.now() < expires) {
+    var exp   = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
+    var saved = localStorage.getItem(RATES_KEY);
+    if (saved && Date.now() < exp) {
       _ratesCache   = JSON.parse(saved);
       _ratesFetched = true;
-      console.log('[BBW FX] Taux chargés depuis localStorage');
       callback(_ratesCache);
       return;
     }
-  } catch (e) {}
+  } catch(e) {}
 
-  /* 3. File d'attente si fetch déjà en cours */
-  _ratesCallbacks.push(callback);
-  if (_ratesCallbacks.length > 1) return;
+  _ratesPending.push(callback);
+  if (_ratesPending.length > 1) return; /* une seule requête en vol */
 
-  console.log('[BBW FX] Fetch des taux depuis open.er-api.com...');
-
-  /* 4. Essai API principale */
-  fetch('https://open.er-api.com/v6/latest/USD')
-    .then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(function (data) {
-      if (data && data.rates && Object.keys(data.rates).length > 0) {
-        _ratesCache   = data.rates;
+  function tryAPI(idx, attempts) {
+    if (attempts >= RATE_APIS.length) {
+      /* Toutes les APIs ont échoué → callback vide */
+      _ratesPending.forEach(function(cb){ cb({}); });
+      _ratesPending = [];
+      return;
+    }
+    var api = RATE_APIS[idx % RATE_APIS.length];
+    api()
+      .then(function(rates) {
+        _ratesCache   = rates;
         _ratesFetched = true;
-        console.log('[BBW FX] Taux OK depuis API (' + Object.keys(data.rates).length + ' devises)');
         try {
-          localStorage.setItem(RATES_KEY,     JSON.stringify(data.rates));
+          localStorage.setItem(RATES_KEY,     JSON.stringify(rates));
           localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
-        } catch (e) {}
-      } else {
-        throw new Error('Réponse API invalide');
-      }
-      _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
-      _ratesCallbacks = [];
-    })
-    .catch(function (err) {
-      console.warn('[BBW FX] API principale échouée:', err.message, '→ Fallback');
+        } catch(e) {}
+        _ratesPending.forEach(function(cb){ cb(rates); });
+        _ratesPending = [];
+      })
+      .catch(function() {
+        /* Essai suivant dans le cercle */
+        setTimeout(function(){ tryAPI(idx + 1, attempts + 1); }, 300);
+      });
+  }
 
-      /* 5. Fallback API secondaire */
-      fetch('https://api.exchangerate-api.com/v4/latest/USD')
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data && data.rates) {
-            _ratesCache   = data.rates;
-            _ratesFetched = true;
-            console.log('[BBW FX] Taux OK depuis fallback API');
-            try {
-              localStorage.setItem(RATES_KEY,     JSON.stringify(data.rates));
-              localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
-            } catch (e) {}
-          } else {
-            throw new Error('Fallback invalide');
-          }
-          _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
-          _ratesCallbacks = [];
-        })
-        .catch(function () {
-          /* 6. Dernier recours : taux statiques */
-          console.warn('[BBW FX] Fallback API échouée → taux statiques utilisés');
-          _ratesCache   = FALLBACK_RATES;
-          _ratesFetched = true;
-          _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
-          _ratesCallbacks = [];
-        });
-    });
+  tryAPI(_apiIndex, 0);
 }
 
-function convertPricesForCountry(countryCode) {
-  if (!countryCode) return;
+/* ── Extrait la valeur USD depuis data-usd ou le texte ── */
+function extractUSD(el) {
+  if (el.dataset.usd) return parseFloat(el.dataset.usd);
+  var text  = el.textContent || '';
+  var match = text.match(/\$\s*([\d,]+\.?\d*)/);
+  if (!match) return null;
+  return parseFloat(match[1].replace(/,/g, ''));
+}
 
-  var allProducts    = window.__allProducts || [];
-  var settings       = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
-  var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
+/* ── Formate le prix converti ── */
+function formatPrice(usd, rate, symbol) {
+  var converted = (usd * rate);
+  /* Arrondir selon la grandeur */
+  var formatted;
+  if (converted < 10)        formatted = converted.toFixed(2);
+  else if (converted < 100)  formatted = converted.toFixed(2);
+  else if (converted < 1000) formatted = converted.toFixed(0);
+  else                       formatted = Math.round(converted).toLocaleString();
+  return symbol + ' ' + formatted;
+}
 
-  var found = countryOptions.find(function (o) { return o.code === countryCode; });
-
-  if (!found) {
-    console.warn('[BBW FX] Pays non trouvé dans settings:', countryCode);
-    return;
-  }
-  if (!found.currency) {
-    console.warn('[BBW FX] Pas de currency pour:', countryCode);
-    return;
-  }
-
-  /* Parser "EUR €" → code="EUR", symbol="€" */
-  var parts        = found.currency.trim().split(/\s+/);
-  var currencyCode = parts[0].toUpperCase();
-  var symbol       = parts.slice(1).join(' ') || currencyCode;
-
-  console.log('[BBW FX] Conversion vers', currencyCode, symbol, 'pour pays', countryCode);
-
-  var PRICE_SELECTORS = [
-    '.current-price',
-    '.compare-price',
-    '.cs-price',
-    '.cs-compare-price',
-    '.bd-total-price',
-    '#satc-price',
-    '.bbwpg-card__price',
-    '.bbwpg-card__compare',
-    '.rv-card__price',
-    '.rv-card__compare',
-    '.fs-price',
-    '.fs-compare',
-    '.prog-price',
-    '.paul-reservation-price-label',
-    '#p2-upsell-total',
-    '.p2-upsell-new',
-    '.p2-upsell-old',
-    '#cp-subtotal-val',
-    '#cp-total-val',
-    '#cp-sticky-total',
-    '#cp-savings-val',
-    '#cp-upsell-total-display',
-    '.cp-item-price-col',
-    '.cp-item-line-total',
-    '.cp-extra-card__price',
-    '.cp-extra-card__compare',
-    '.drawer-extra-card__price',
-    '.drawer-extra-card__compare',
-    '.subtotal',
-    '.cart-item .item-meta p'
-  ];
-
-  /* Extrait le montant USD depuis un texte contenant $ */
-  function extractUSD(text) {
-    if (!text) return null;
-    var match = text.match(/\$\s*([\d,]+\.?\d*)/);
-    if (!match) return null;
-    return parseFloat(match[1].replace(/,/g, ''));
-  }
-
-  /* Reconstruit le texte avec la nouvelle devise */
-  function buildText(originalText, amount, sym) {
-    if (originalText.includes(':')) {
-      /* "Subtotal: $45.00" → "Subtotal: € 45.00" */
-      var prefix = originalText.substring(0, originalText.indexOf('$'));
-      return prefix + sym + ' ' + amount;
-    }
-    return sym + ' ' + amount;
-  }
-
-  /* ── Restauration USD ── */
+/* ── Applique la conversion sur UN élément ── */
+function convertElement(el, rate, symbol, currencyCode) {
   if (currencyCode === 'USD') {
-    PRICE_SELECTORS.forEach(function (sel) {
-      document.querySelectorAll(sel).forEach(function (el) {
-        if (el.dataset.usdPrice && el.dataset.usdOrigText) {
-          el.textContent = el.dataset.usdOrigText;
+    /* Remettre le prix USD original */
+    if (el.dataset.usd) {
+      el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
+    }
+    return;
+  }
+  var usd = extractUSD(el);
+  if (usd === null || isNaN(usd) || usd <= 0) return;
+  /* Sauvegarder le prix USD original la première fois */
+  if (!el.dataset.usd) el.dataset.usd = String(usd);
+  el.textContent = formatPrice(usd, rate, symbol);
+}
+
+var PRICE_SELECTORS = [
+  /* Produits — pages & cartes */
+  '.current-price', '.compare-price',
+  '.col-card__price', '.col-card__compare',
+  '.cs-price', '.cs-compare-price',
+  '.bbwpg-card__price', '.bbwpg-card__compare',
+  '.rv-card__price', '.rv-card__compare',
+  '.fs-price', '.fs-compare',
+  '.p2-upsell-new', '.p2-upsell-old',
+  '.col-qv-price', '.col-qv-compare',
+  '.bd-original', '.bd-total-price',
+  '.cp-extra-card__price', '.cp-extra-card__compare',
+  '.drawer-extra-card__price', '.drawer-extra-card__compare',
+
+  /* Cart page */
+  '.cp-item-price-col', '.cp-item-line-total',
+  '#cp-subtotal-val', '#cp-tax-val', '#cp-total-val',
+  '#cp-savings-val', '#cp-upsell-total-display',
+  '#cp-sticky-total',
+
+  /* Cart drawer */
+  '.subtotal',
+  '.cart-item .item-meta p',
+
+  /* Sticky ATC */
+  '#satc-price',
+
+  /* Bundle page produit */
+  '#single-price', '#duo-price', '#trio-price',
+  '#single-original-price', '#duo-original-price', '#trio-original-price',
+  '.bundle-price span',
+  '.bd-total-price', '.bd-save strong', '.bd-original s',
+
+  /* Mini product slider */
+  '.product-item .current-price', '.product-item .compare-price',
+
+  /* Product grid section (bbwpg) */
+  '.bbwpg-card__price', '.bbwpg-card__compare',
+
+  /* Collection slider */
+  '.cs-price', '.cs-compare-price',
+
+  /* Featured spotlight */
+  '.fs-price', '.fs-compare',
+
+  /* Programs */
+  '.prog-price',
+  '.paul-reservation-price-label',
+
+  /* Sticky ATC page produit */
+  '#satc-price',
+
+  /* Prix dans les cartes génériques */
+  '.product-price .current-price',
+  '.product-price .compare-price',
+  '.price-wrapper .current-price',
+  '.price-wrapper .compare-price'
+].join(', ');
+
+/* ── Convertit TOUS les éléments visibles ── */
+function convertAllPrices(rate, symbol, currencyCode) {
+  document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+    convertElement(el, rate, symbol, currencyCode);
+  });
+}
+
+/* ── Démarre l'observation du DOM pour les éléments injectés APRÈS le load ── */
+function startPriceObserver(rate, symbol, currencyCode) {
+  if (_observerStarted) return;
+  _observerStarted = true;
+
+  if (!window.MutationObserver) return;
+
+  var observer = new MutationObserver(function(mutations) {
+    var hasNewNodes = false;
+    mutations.forEach(function(m) {
+      if (m.addedNodes.length) hasNewNodes = true;
+    });
+    if (!hasNewNodes) return;
+
+
+    setTimeout(function() {
+
+    /* Relire le pays actif au moment de la mutation */
+    var country = _activeCountry;
+    if (!country) return;
+
+    var allProducts    = window.__allProducts || [];
+    var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
+    var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
+    var found          = countryOptions.find(function(o){ return o.code === country; });
+    if (!found || !found.currency) return;
+
+    var parts    = found.currency.trim().split(/\s+/);
+    var code     = parts[0].toUpperCase();
+    var sym      = parts.slice(1).join(' ') || code;
+
+    if (code === 'USD') return; /* pas de conversion nécessaire */
+
+    fetchRates(function(rates) {
+      var r = rates[code];
+      if (!r) return;
+      /* Convertir seulement les éléments qui n'ont pas encore été traités */
+      document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+        if (!el.dataset.converted || el.dataset.converted !== country) {
+          convertElement(el, r, sym, code);
+          el.dataset.converted = country;
         }
       });
     });
-    console.log('[BBW FX] Restauré en USD');
+    }, 50);
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+/* ── Fonction principale appelée depuis applyCountry ── */
+function convertPricesForCountry(countryCode) {
+  _activeCountry = countryCode;
+
+  var allProducts    = window.__allProducts || [];
+  var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
+  var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
+
+  var found = countryOptions.find(function(o){ return o.code === countryCode; });
+  if (!found || !found.currency) return;
+
+  var parts  = found.currency.trim().split(/\s+/);
+  var code   = parts[0].toUpperCase();
+  var symbol = parts.slice(1).join(' ') || code;
+
+  if (code === 'USD') {
+    /* Remettre tous les prix USD originaux */
+    document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+      if (el.dataset.usd) {
+        el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
+        delete el.dataset.converted;
+      }
+    });
+    _observerStarted = false;
     return;
   }
 
-  /* ── Conversion ── */
-  fetchRates(function (rates) {
-    var rate = rates[currencyCode];
-
+  fetchRates(function(rates) {
+    var rate = rates[code];
     if (!rate) {
-      console.warn('[BBW FX] Taux introuvable pour:', currencyCode, '— taux disponibles:', Object.keys(rates).slice(0, 10));
+      console.warn('[BBW FX] Rate not found for', code, '— available:', Object.keys(rates).slice(0, 10));
       return;
     }
 
-    console.log('[BBW FX] Taux', currencyCode, '=', rate);
-
-    var converted = 0;
-
-    PRICE_SELECTORS.forEach(function (sel) {
-      var elements = document.querySelectorAll(sel);
-
-      elements.forEach(function (el) {
-        var text = el.textContent || '';
-
-        /* Cas 1 : le texte contient encore $ → extraction directe */
-        var usd = extractUSD(text);
-
-        if (usd !== null && !isNaN(usd)) {
-          /* Sauvegarder la valeur USD originale */
-          el.dataset.usdPrice    = String(usd);
-          el.dataset.usdOrigText = text;
-
-          var convertedAmount = (usd * rate).toFixed(2);
-          el.textContent = buildText(text, convertedAmount, symbol);
-          converted++;
-
-        } else if (el.dataset.usdPrice) {
-          /* Cas 2 : déjà converti (plus de $) → reconvertir depuis la base */
-          var base = parseFloat(el.dataset.usdPrice);
-          if (!isNaN(base)) {
-            var reconvertedAmount = (base * rate).toFixed(2);
-            var origText = el.dataset.usdOrigText || ('$' + base.toFixed(2));
-            el.textContent = buildText(origText, reconvertedAmount, symbol);
-            converted++;
-          }
-        }
-      });
+    /* 1. Convertir les éléments déjà dans le DOM */
+    convertAllPrices(rate, symbol, code);
+    document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+      el.dataset.converted = countryCode;
     });
 
-    console.log('[BBW FX] ' + converted + ' élément(s) converti(s) → ' + currencyCode);
+    /* 2. Observer le DOM pour les injections futures (script.js async) */
+    _observerStarted = false; /* reset pour redémarrer avec les bons paramètres */
+    startPriceObserver(rate, symbol, code);
+  });
+
+  /* 3. Réessayer après 1s, 3s, 6s pour attraper les prix injectés par script.js */
+  [500, 1000, 2000, 3000, 5000, 8000, 12000].forEach(function(delay) {
+    setTimeout(function() {
+      if (_activeCountry !== countryCode) return;
+      fetchRates(function(rates) {
+        var r = rates[code];
+        if (!r) return;
+        document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+          if (!el.dataset.converted || el.dataset.converted !== countryCode) {
+            convertElement(el, r, symbol, code);
+            el.dataset.converted = countryCode;
+          }
+        });
+      });
+    }, delay);
   });
 }
 
@@ -839,12 +897,20 @@ window.convertPricesForCountry = convertPricesForCountry;
         if (autoTranslate === 'yes') {
           detectGeo();
         } else {
-          /* Pas de géo auto — mais on sync les sélecteurs avec ce qui est déjà sauvegardé */
           var savedL = loadSavedLang();
           var savedC = loadSavedCountry();
           if (savedL || savedC) {
             syncAllSelectors(savedL || 'en', savedC || 'us');
           }
+        }
+        var savedCountry = loadSavedCountry();
+        if (savedCountry) {
+          /* Tentatives progressives pour attraper tous les prix injectés */
+          [500, 1500, 3000, 5000, 8000].forEach(function(delay) {
+            setTimeout(function() {
+              convertPricesForCountry(savedCountry);
+            }, delay);
+          });
         }
       }
     }, 100);
@@ -856,4 +922,4 @@ window.convertPricesForCountry = convertPricesForCountry;
     waitAndInit();
   }
 
-})(); 
+})();  
