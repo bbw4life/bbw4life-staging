@@ -7217,28 +7217,29 @@ function loadProfilePhoto() {
     tableBody.innerHTML = '';
 
     affiliates.forEach(function(aff) {
-      // Argent gagné calculé depuis commission_percent du setting
-      const earned         = parseFloat(aff.totalOrderValue || 0) * (commPct / 100);
-      const pct            = aff.totalOrderValue > 0
-                             ? ((earned / aff.totalOrderValue) * 100).toFixed(1)
-                             : '0.0';
-      const jackpotReached = aff.totalOrders >= jackpotQty;
-      const promoReached   = parseFloat(pct) >= unlockPct;
+    const totalOrders    = parseInt(aff.totalOrders || 0);
+    // Earned = totalOrders * commPct (ex: 1 commande = 20%, 2 = 40%)
+    const earnedPct      = totalOrders * commPct;
+    // % reached = progression vers jackpot (ex: 1/20 = 5%)
+    const reachedPct     = jackpotQty > 0
+                          ? ((totalOrders / jackpotQty) * 100).toFixed(1)
+                          : '0.0';
+    const jackpotReached = totalOrders >= jackpotQty;
+    const promoReached   = parseFloat(reachedPct) >= unlockPct;
 
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
-        '<td>' + (aff.clicks || 0) + '</td>' +
-        '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
-          + pct + '%</span></td>' +
-        '<td><strong style="color:#1a6b3c;">$' + earned.toFixed(2) + '</strong></td>' +
-        '<td>' + (aff.totalOrders || 0) + '</td>' +
-        '<td class="aff-td-jackpot">'
-          + (jackpotReached
-              ? '🏆 JACKPOT'
-              : (aff.totalOrders || 0) + ' / ' + jackpotQty)
-          + '</td>';
-      tableBody.appendChild(tr);
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
+      '<td>' + (aff.clicks || 0) + '</td>' +
+      '<td>' + totalOrders + '</td>' +
+      '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalOrderValue || 0).toFixed(2) + '</strong></td>' +
+      '<td><span class="aff-badge-pct' + (promoReached ? ' jackpot' : '') + '">'
+        + earnedPct.toFixed(0) + '%</span></td>' +
+      '<td>' + reachedPct + '% — ' + totalOrders + ' / ' + jackpotQty + '</td>' +
+      '<td class="aff-td-jackpot">'
+        + (jackpotReached ? '🏆 $' + cfg.jackpotAmt.toFixed(0) : '—')
+        + '</td>';
+    tableBody.appendChild(tr);
 
       if (jackpotReached || promoReached) {
         showReward(aff);
@@ -7291,12 +7292,10 @@ function loadProfilePhoto() {
     const promoDisc  = cfg.promoDisc;
     const commPct    = cfg.commPct;
 
-    const earned         = parseFloat(aff.totalOrderValue || 0) * (commPct / 100);
-    const pct            = aff.totalOrderValue > 0
-                           ? (earned / aff.totalOrderValue) * 100
-                           : 0;
-    const jackpotReached = aff.totalOrders >= jackpotQty;
-    const promoReached   = pct >= unlockPct;
+    const totalOrders    = parseInt(aff.totalOrders || 0);
+    const reachedPct     = jackpotQty > 0 ? (totalOrders / jackpotQty) * 100 : 0;
+    const jackpotReached = totalOrders >= jackpotQty;
+    const promoReached   = reachedPct >= unlockPct;
 
     // N'afficher la carte que si au moins une condition est atteinte
     if (!jackpotReached && !promoReached) return;
