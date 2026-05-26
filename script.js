@@ -7225,7 +7225,7 @@ function loadProfilePhoto() {
                           ? ((totalOrders / jackpotQty) * 100).toFixed(1)
                           : '0.0';
     const jackpotReached = totalOrders >= jackpotQty;
-    const promoReached   = parseFloat(reachedPct) >= unlockPct;
+    const promoReached   = earnedPct >= unlockPct;
 
     const tr = document.createElement('tr');
     tr.innerHTML =
@@ -7292,10 +7292,11 @@ function loadProfilePhoto() {
     const promoDisc  = cfg.promoDisc;
     const commPct    = cfg.commPct;
 
-    const totalOrders    = parseInt(aff.totalOrders || 0);
+   const totalOrders    = parseInt(aff.totalOrders || 0);
+    const earnedPct      = totalOrders * commPct;
     const reachedPct     = jackpotQty > 0 ? (totalOrders / jackpotQty) * 100 : 0;
     const jackpotReached = totalOrders >= jackpotQty;
-    const promoReached   = reachedPct >= unlockPct;
+    const promoReached   = earnedPct >= unlockPct;
 
     // N'afficher la carte que si au moins une condition est atteinte
     if (!jackpotReached && !promoReached) return;
