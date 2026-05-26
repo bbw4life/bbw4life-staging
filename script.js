@@ -7338,7 +7338,7 @@ function loadProfilePhoto() {
     if (rewardPromo) {
       if (promoReached) {
         rewardPromo.style.display = '';
-        const promoCode = promoPrefix + '-' + (aff.username || '').toUpperCase().slice(0, 6);
+        const promoCode = promoPrefix;
         if (promoCodeVal) promoCodeVal.textContent = promoCode;
 
         const promoNote = rewardPromo.querySelector('.aff-promo-note');
