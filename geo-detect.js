@@ -431,6 +431,9 @@
 
 
 
+  
+
+
   /* ══════════════════════════════════════════════════════════════
    6b. CONVERSION MONNAIE — Fallback circulaire 3 APIs
 ══════════════════════════════════════════════════════════════ */
@@ -551,7 +554,6 @@ function convertElement(el, rate, symbol, currencyCode) {
 }
 
 var PRICE_SELECTORS = [
-  /* Produits — pages & cartes */
   '.current-price', '.compare-price',
   '.col-card__price', '.col-card__compare',
   '.cs-price', '.cs-compare-price',
@@ -560,61 +562,100 @@ var PRICE_SELECTORS = [
   '.fs-price', '.fs-compare',
   '.p2-upsell-new', '.p2-upsell-old',
   '.col-qv-price', '.col-qv-compare',
-  '.bd-original', '.bd-total-price',
+  '.bd-original s',
+  '.bd-save strong',
+  '.bd-total-price',
+  '.bd-product-price',
   '.cp-extra-card__price', '.cp-extra-card__compare',
   '.drawer-extra-card__price', '.drawer-extra-card__compare',
-
-  /* Cart page */
   '.cp-item-price-col', '.cp-item-line-total',
   '#cp-subtotal-val', '#cp-tax-val', '#cp-total-val',
   '#cp-savings-val', '#cp-upsell-total-display',
   '#cp-sticky-total',
-
-  /* Cart drawer */
   '.subtotal',
   '.cart-item .item-meta p',
-
-  /* Sticky ATC */
   '#satc-price',
-
-  /* Bundle page produit */
   '#single-price', '#duo-price', '#trio-price',
   '#single-original-price', '#duo-original-price', '#trio-original-price',
   '.bundle-price span',
-  '.bd-total-price', '.bd-save strong', '.bd-original s',
-
-  /* Mini product slider */
   '.product-item .current-price', '.product-item .compare-price',
-
-  /* Product grid section (bbwpg) */
   '.bbwpg-card__price', '.bbwpg-card__compare',
-
-  /* Collection slider */
   '.cs-price', '.cs-compare-price',
-
-  /* Featured spotlight */
   '.fs-price', '.fs-compare',
-
-  /* Programs */
   '.prog-price',
   '.paul-reservation-price-label',
-
-  /* Sticky ATC page produit */
   '#satc-price',
-
-  /* Prix dans les cartes génériques */
   '.product-price .current-price',
   '.product-price .compare-price',
   '.price-wrapper .current-price',
-  '.price-wrapper .compare-price'
+  '.price-wrapper .compare-price',
+  '.marquee-free-shipping',
+  '.col-marquee-free-shipping',
+  '.hdr-free-shipping-threshold'
 ].join(', ');
 
-/* ── Convertit TOUS les éléments visibles ── */
 function convertAllPrices(rate, symbol, currencyCode) {
+  /* ── Sélecteurs ciblés ── */
   document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
     convertElement(el, rate, symbol, currencyCode);
   });
+
+  /* ── SCAN UNIVERSEL : tout élément contenant $X.XX ── */
+  var walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+
+  var nodes = [];
+  var node;
+  while ((node = walker.nextNode())) {
+    if (/\$\s*[\d,]+\.?\d*/.test(node.nodeValue)) {
+      nodes.push(node);
+    }
+  }
+
+  nodes.forEach(function(textNode) {
+    var parent = textNode.parentElement;
+    if (!parent) return;
+
+    /* Ignorer les scripts, styles, inputs */
+    var tag = parent.tagName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+    /* Ignorer si déjà traité par convertElement */
+    if (parent.dataset && parent.dataset.usd) return;
+
+    var original = textNode.nodeValue;
+    var converted = original.replace(/\$\s*([\d,]+\.?\d*)/g, function(match, amount) {
+      var usd = parseFloat(amount.replace(/,/g, ''));
+      if (isNaN(usd) || usd <= 0) return match;
+
+      /* Sauvegarder l'original */
+      if (!parent.dataset.rawText) {
+        parent.dataset.rawText = original;
+        parent.dataset.rawCountry = currencyCode;
+      }
+
+      if (currencyCode === 'USD') return match;
+
+      var converted_amount = usd * rate;
+      var formatted;
+      if (converted_amount < 10)        formatted = converted_amount.toFixed(2);
+      else if (converted_amount < 1000) formatted = converted_amount.toFixed(0);
+      else                              formatted = Math.round(converted_amount).toLocaleString();
+
+      return symbol + ' ' + formatted;
+    });
+
+    if (converted !== original) {
+      textNode.nodeValue = converted;
+    }
+  });
 }
+
+
 
 /* ── Démarre l'observation du DOM pour les éléments injectés APRÈS le load ── */
 function startPriceObserver(rate, symbol, currencyCode) {
@@ -922,4 +963,4 @@ window.convertPricesForCountry = convertPricesForCountry;
     waitAndInit();
   }
 
-})();  
+})();

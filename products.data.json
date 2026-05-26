@@ -5142,8 +5142,8 @@
   "default_country": "us",
   "options": [
     { "code": "us", "label": "USA",        "name": "United States",    "flag": "🇺🇸", "lang": "en", "currency": "USD $"   },
-    { "code": "do", "label": "Dom. Rep.",  "name": "Dominican Rep.",   "flag": "🇩🇴", "lang": "es", "currency": "USD $"   },
-    { "code": "ht", "label": "Haiti",      "name": "Haïti",            "flag": "🇭🇹", "lang": "ht", "currency": "HTG G"   },
+    { "code": "do", "label": "Dom. Rep.", "name": "Dominican Rep.", "flag": "🇩🇴", "lang": "es", "currency": "DOP RD$" },
+    { "code": "ht", "label": "Haiti", "name": "Haïti", "flag": "🇭🇹", "lang": "ht", "currency": "HTG HTG" },
     { "code": "ca", "label": "Canada",     "name": "Canada",           "flag": "🇨🇦", "lang": "en", "currency": "CAD $"   },
     { "code": "gb", "label": "UK",         "name": "United Kingdom",   "flag": "🇬🇧", "lang": "en", "currency": "GBP £"   },
     { "code": "au", "label": "Australia",  "name": "Australia",        "flag": "🇦🇺", "lang": "en", "currency": "AUD $"   },

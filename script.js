@@ -3827,12 +3827,11 @@ if (window.innerWidth <= 768) {
   const currentPath  = window.location.pathname;
 
   function getBreadcrumbTitle() {
+  if (window.__currentPageTitle) return window.__currentPageTitle;
   const path = window.location.pathname;
-  // Chercher dans SEO_MAP si disponible
   if (window.__SEO_MAP && window.__SEO_MAP[path]) {
     return window.__SEO_MAP[path].title.split('|')[0].trim();
   }
-  // Fallback : document.title après nettoyage
   return document.title.split('|')[0].trim() 
       || document.querySelector('h1')?.textContent?.trim() 
       || path.split('/').pop().replace('.html','').replace(/-/g,' ');
