@@ -7347,7 +7347,7 @@ function loadProfilePhoto() {
             'Use this code on your next order for -' + promoDisc + '%';
         }
       } else {
-        rewardPromo.style.display = 'none';
+        rewardPromo.style.display = 'none'; 
       }
     }
 
