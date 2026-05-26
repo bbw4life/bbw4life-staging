@@ -5385,6 +5385,14 @@
       "Pdg-Francenel-product40",
       "Pdg-Francenel-product67"
     ]
-  }
+  },
+  "affiliation": {
+  "commission_percent": 20,
+  "jackpot_orders_threshold": 10,
+  "jackpot_reward_amount": 100,
+  "promo_code_unlock_percent": 40,
+  "promo_code_prefix": "Francenel467",
+  "promo_code_discount_percent": 40
+}
 }
 ]

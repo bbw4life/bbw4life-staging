@@ -7141,7 +7141,8 @@ function loadProfilePhoto() {
 
 
 
-  (function initAffiliationSystem() {
+  
+(function initAffiliationSystem() {
   const usernameInput  = document.getElementById('aff-username-input');
   const createBtn      = document.getElementById('aff-create-btn');
   const createError    = document.getElementById('aff-create-error');
@@ -7149,7 +7150,6 @@ function loadProfilePhoto() {
   const tableBody      = document.getElementById('aff-table-body');
   const historyCard    = document.getElementById('aff-history-card');
   const historyList    = document.getElementById('aff-history-list');
-  const cleanBtn       = document.getElementById('aff-clean-btn');
   const rewardCard     = document.getElementById('aff-reward-card');
   const promoCodeVal   = document.getElementById('aff-promo-code-val');
   const copyPromoBtn   = document.getElementById('aff-copy-promo-btn');
@@ -7165,7 +7165,6 @@ function loadProfilePhoto() {
   const userEmail = localStorage.getItem('userEmail') || '';
   if (!userEmail) return;
 
-  // ── État global venant du sheet ──
   let affiliatesFromSheet = [];
 
   function buildAffLink(username) {
@@ -7181,38 +7180,63 @@ function loadProfilePhoto() {
 
   function escHtml(str) {
     if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
   }
 
-  // ── Affiche le tableau depuis les données du sheet ──
+  // ── Tableau dashboard ──
   function renderTable(affiliates) {
-    if (!affiliates || !affiliates.length) { 
-      tableCard.style.display = 'none'; 
-      return; 
+    if (!affiliates || !affiliates.length) {
+      tableCard.style.display = 'none';
+      return;
     }
     tableCard.style.display = 'block';
     tableBody.innerHTML = '';
+
     affiliates.forEach(function(aff) {
-      const pct       = aff.totalOrderValue > 0 ? ((aff.totalMoney / aff.totalOrderValue) * 100).toFixed(1) : '0.0';
-      const isJackpot = parseFloat(pct) >= 50;
+      const commPct          = aff.commissionPercent    || 5;
+      const jackpotThreshold = aff.jackpotThreshold     || 10;
+      const jackpotAmt       = aff.jackpotRewardAmount  || 100;
+      const promoUnlockPct   = aff.promoUnlockPercent   || 50;
+      const jackpotUnlocked  = aff.jackpotUnlocked      || false;
+      const jackpot          = parseFloat(aff.jackpot   || 0);
+      const totalOrders      = aff.totalOrders          || 0;
+
+      const pct = aff.totalOrderValue > 0
+        ? ((aff.totalMoney / aff.totalOrderValue) * 100).toFixed(1)
+        : '0.0';
+
+      const isPromoUnlocked = parseFloat(pct) >= promoUnlockPct;
+      const ordersLeft      = Math.max(0, jackpotThreshold - totalOrders);
+
       const tr = document.createElement('tr');
       tr.innerHTML =
         '<td class="aff-td-username">' + escHtml(aff.username) + '</td>' +
         '<td>' + (aff.clicks || 0) + '</td>' +
-        '<td><span class="aff-badge-pct' + (isJackpot ? ' jackpot' : '') + '">' + pct + '%</span></td>' +
+        '<td>' + commPct + '%</td>' +
+        '<td><span class="aff-badge-pct' + (isPromoUnlocked ? ' jackpot' : '') + '">' + pct + '%</span></td>' +
         '<td><strong style="color:#1a6b3c;">$' + parseFloat(aff.totalMoney || 0).toFixed(2) + '</strong></td>' +
-        '<td>' + (aff.totalOrders || 0) + '</td>' +
-        '<td class="aff-td-jackpot">' + (isJackpot ? '🏆 JACKPOT' : '-') + '</td>';
+        '<td>' + totalOrders + ' / ' + jackpotThreshold + '</td>' +
+        '<td class="aff-td-jackpot">' +
+          (jackpotUnlocked
+            ? '🏆 $' + jackpot.toFixed(2)
+            : ordersLeft + ' left') +
+        '</td>';
       tableBody.appendChild(tr);
-      if (isJackpot) showReward(aff);
+
+      // Afficher la reward card si promo débloquée
+      if (isPromoUnlocked) showReward(aff);
     });
   }
 
-  // ── Affiche l'historique des liens depuis les données du sheet ──
+  // ── Historique des liens ──
   function renderHistory(affiliates) {
-    if (!affiliates || !affiliates.length) { 
-      historyCard.style.display = 'none'; 
-      return; 
+    if (!affiliates || !affiliates.length) {
+      historyCard.style.display = 'none';
+      return;
     }
     historyCard.style.display = 'block';
     historyList.innerHTML = '';
@@ -7242,11 +7266,43 @@ function loadProfilePhoto() {
     });
   }
 
+  // ── Reward card ──
   function showReward(aff) {
     if (!rewardCard) return;
     rewardCard.style.display = 'block';
-    const promoCode = 'AFF50-' + aff.username.toUpperCase().slice(0, 6);
+
+    const promoDiscountPct = aff.promoDiscountPercent || 50;
+    const promoCode        = aff.promoCode || ((aff.promo_code_prefix || 'AFF50-') + aff.username.toUpperCase().slice(0, 6));
+    const jackpotUnlocked  = aff.jackpotUnlocked || false;
+    const jackpot          = parseFloat(aff.jackpot || 0);
+
+    // Mettre à jour le label promo avec le % dynamique
+    const promoLabelEl = document.getElementById('aff-reward-promo-label');
+    if (promoLabelEl) promoLabelEl.textContent = 'Your promo code (-' + promoDiscountPct + '%):';
+
+    const promoNoteEl = document.getElementById('aff-promo-note');
+    if (promoNoteEl) promoNoteEl.textContent = 'Use this code on your next order for -' + promoDiscountPct + '%';
+
+    // Mettre à jour le message principal
+    const rewardMsgEl = document.getElementById('aff-reward-msg');
+    if (rewardMsgEl) rewardMsgEl.innerHTML = 'You have reached the earnings threshold! Enjoy your exclusive benefit:';
+
+    // Code promo
     if (promoCodeVal) promoCodeVal.textContent = promoCode;
+
+    // Jackpot — visible uniquement si le seuil de commandes est atteint
+    const jackpotSection = document.getElementById('aff-jackpot-section');
+    if (jackpotSection) {
+      if (jackpotUnlocked) {
+        jackpotSection.style.display = 'block';
+        const jackpotAmountEl = document.getElementById('aff-jackpot-amount');
+        if (jackpotAmountEl) jackpotAmountEl.textContent = '$' + jackpot.toFixed(2);
+      } else {
+        jackpotSection.style.display = 'none';
+      }
+    }
+
+    // Statut withdraw
     if (aff.withdrawStatus && aff.withdrawStatus !== 'none') {
       if (withdrawForm)   withdrawForm.style.display   = 'none';
       if (withdrawStatus) withdrawStatus.style.display = 'block';
@@ -7263,6 +7319,7 @@ function loadProfilePhoto() {
     }
   }
 
+  // ── Copie du promo code ──
   if (copyPromoBtn) {
     copyPromoBtn.addEventListener('click', function() {
       const code = promoCodeVal ? promoCodeVal.textContent : '';
@@ -7274,7 +7331,7 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Créer un affilié → sauvegarder dans le sheet ──
+  // ── Créer un affilié ──
   if (createBtn) {
     createBtn.addEventListener('click', async function() {
       if (!usernameInput) return;
@@ -7283,26 +7340,24 @@ function loadProfilePhoto() {
       if (err) { createError.textContent = err; createError.style.display = 'block'; return; }
       createError.style.display = 'none';
 
-      // Vérifier si existe déjà dans le sheet
       const existing = affiliatesFromSheet.find(function(a) { return a.username === username; });
       if (!existing) {
-        const newAff = { 
-          username, 
-          clicks: 0, 
-          totalMoney: 0, 
-          totalOrders: 0, 
-          totalOrderValue: 0, 
-          withdrawStatus: 'none', 
-          createdAt: new Date().toLocaleDateString('en-US') 
+        const newAff = {
+          username,
+          clicks:         0,
+          totalMoney:     0,
+          totalOrders:    0,
+          totalOrderValue: 0,
+          withdrawStatus: 'none',
+          createdAt:      new Date().toLocaleDateString('en-US')
         };
         affiliatesFromSheet.push(newAff);
 
-        // Sauvegarder dans le sheet
         try {
           await fetch('/.netlify/functions/save-account', {
-            method: 'POST',
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
+            body:    JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
           });
         } catch(e) { console.warn('[Affiliation] save failed:', e.message); }
       }
@@ -7326,15 +7381,25 @@ function loadProfilePhoto() {
     withdrawBtn.addEventListener('click', async function() {
       const paypalName  = document.getElementById('aff-paypal-name')?.value.trim()  || '';
       const paypalEmail = document.getElementById('aff-paypal-email')?.value.trim() || '';
-      if (!paypalName || !paypalEmail) { withdrawError.textContent = 'Please fill in all PayPal fields.'; withdrawError.style.display = 'block'; return; }
-      if (!paypalEmail.includes('@')) { withdrawError.textContent = 'Invalid PayPal email.'; withdrawError.style.display = 'block'; return; }
+      if (!paypalName || !paypalEmail) {
+        withdrawError.textContent = 'Please fill in all PayPal fields.';
+        withdrawError.style.display = 'block';
+        return;
+      }
+      if (!paypalEmail.includes('@')) {
+        withdrawError.textContent = 'Invalid PayPal email.';
+        withdrawError.style.display = 'block';
+        return;
+      }
       withdrawError.style.display = 'none';
       withdrawBtn.disabled = true;
       withdrawBtn.innerHTML = '<div class="plan-spinner"></div> Sending...';
+
       try {
         const res  = await fetch('/.netlify/functions/save-account', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
         });
         const data = await res.json();
         if (data.success) {
@@ -7345,7 +7410,9 @@ function loadProfilePhoto() {
             if (statusBadge) { statusBadge.textContent = '⏳ Pending'; statusBadge.className = 'aff-status-badge'; }
             if (statusMsg)   statusMsg.textContent = 'Your request is being processed by our team.';
           }
-        } else { throw new Error(data.error || 'Unknown error'); }
+        } else {
+          throw new Error(data.error || 'Unknown error');
+        }
       } catch(err) {
         withdrawError.textContent = 'Error: ' + err.message;
         withdrawError.style.display = 'block';
@@ -7355,13 +7422,14 @@ function loadProfilePhoto() {
     });
   }
 
-  // ── Sync depuis le sheet au chargement ──
+  // ── Sync depuis le sheet ──
   async function syncFromSheet() {
     if (!userEmail) return;
     try {
       const res  = await fetch('/.netlify/functions/save-account', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ action: 'aff-get-stats', email: userEmail })
       });
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
@@ -7372,12 +7440,10 @@ function loadProfilePhoto() {
     } catch(e) { console.warn('[Affiliation] sync failed:', e.message); }
   }
 
-  // ── Init ──
   syncFromSheet();
   setInterval(syncFromSheet, 60000);
 
 })();
-
 
 
 
