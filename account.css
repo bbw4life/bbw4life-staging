@@ -1501,7 +1501,7 @@ a.stat-wishlist-link:visited {
 
 .affiliation-section {
   max-width: 100%;
-  margin: 0 auto 60px;
+  margin: 0 auto 10px;
   padding: 0 5px;
   display: flex;
   flex-direction: column;
@@ -1695,6 +1695,11 @@ a.stat-wishlist-link:visited {
   border-radius: 16px;
   border: 1px solid rgba(201,150,62,0.14);
   box-sizing: border-box;
+}
+
+.aff-table-card,
+.aff-reward-card,
+.aff-history-card {
   overflow: hidden;
 }
 
@@ -1743,6 +1748,8 @@ a.stat-wishlist-link:visited {
 
 .aff-create-card__right {
   flex: 1 1 300px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .aff-input-row {
@@ -2463,8 +2470,6 @@ a.stat-wishlist-link:visited {
    RESPONSIVE — MOBILE
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
-
-  /* ── Hero : 250px, pleine largeur, pas empilé ── */
   .aff-hero {
     height: 250px;
     padding: 0 16px;
@@ -2512,51 +2517,63 @@ a.stat-wishlist-link:visited {
     display: none;
   }
 
-  /* ── Create card : layout horizontal préservé ── */
+  /* ── Create card : layout mobile corrigé ── */
   .aff-create-card {
     flex-direction: column;
     align-items: stretch;
-    padding: 18px 16px;
-    gap: 14px;
+    padding: 16px;
+    gap: 12px;
+    overflow: visible;
   }
 
   .aff-create-card__left {
     align-items: flex-start;
   }
 
-  /* Input row : horizontal sur mobile, pas empilé */
+  .aff-create-card__right {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Input row : horizontal, sans débordement */
   .aff-input-row {
     flex-direction: row;
     flex-wrap: nowrap;
     border-radius: 10px;
     overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .aff-input-prefix {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     padding: 0 8px;
     height: 44px;
     border-right: 1px solid rgba(201,150,62,0.18);
     border-bottom: none;
     width: auto;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .aff-input {
     height: 44px;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     min-width: 0;
-    flex: 1;
-    padding: 0 10px;
+    flex: 1 1 0;
+    padding: 0 8px;
+    width: 0;
   }
 
   .aff-create-btn {
     height: 44px;
-    padding: 0 14px;
-    font-size: 0.78rem;
+    padding: 0 12px;
+    font-size: 0.75rem;
     width: auto;
     flex-shrink: 0;
     border-radius: 0;
+    gap: 4px;
   }
 
   /* ── Table card ── */
@@ -2586,6 +2603,7 @@ a.stat-wishlist-link:visited {
   .aff-history-link {
     font-size: 0.65rem;
   }
+
 
   .aff-copy-link-btn {
     padding: 5px 10px;
