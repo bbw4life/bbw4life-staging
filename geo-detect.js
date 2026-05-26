@@ -432,7 +432,7 @@
 
 
   /* ══════════════════════════════════════════════════════════════
-   6b. CONVERSION MONNAIE — via exchangerate-api (gratuit, open)
+   6b. CONVERSION MONNAIE
 ══════════════════════════════════════════════════════════════ */
 var _ratesCache     = {};
 var _ratesFetched   = false;
@@ -440,56 +440,125 @@ var _ratesCallbacks = [];
 
 var RATES_KEY     = 'bbw_fx_rates';
 var RATES_EXP_KEY = 'bbw_fx_expires';
-var RATES_TTL     = 24 * 60 * 60 * 1000; /* 24h en ms */
+var RATES_TTL     = 24 * 60 * 60 * 1000; /* 24h */
+
+/* Taux de secours si l'API échoue */
+var FALLBACK_RATES = {
+  EUR: 0.92, GBP: 0.79, CAD: 1.36, AUD: 1.53, JPY: 149.5,
+  CNY: 7.24, INR: 83.1, BRL: 4.97, MXN: 17.2, KRW: 1325,
+  RUB: 92.5, TRY: 32.1, PLN: 3.97, RON: 4.57, NZD: 1.63,
+  SGD: 1.34, MYR: 4.72, THB: 35.1, VND: 24500, IDR: 15700,
+  PHP: 56.5, PKR: 278,  BDT: 110,  EGP: 30.9, NGN: 1590,
+  ZAR: 18.7, GHS: 13.2, KES: 129,  XOF: 603,  XAF: 603,
+  CDF: 2750, MAD: 10.0, DZD: 135,  TND: 3.12, HTG: 132,
+  SAR: 3.75, AED: 3.67, ARS: 870,  COP: 3900, CLP: 948,
+  PEN: 3.71, HKD: 7.82, CHF: 0.90
+};
 
 function fetchRates(callback) {
-  if (_ratesFetched) { callback(_ratesCache); return; }
+  /* 1. Déjà en cache mémoire */
+  if (_ratesFetched && Object.keys(_ratesCache).length > 0) {
+    callback(_ratesCache);
+    return;
+  }
+
+  /* 2. Cache localStorage valide */
   try {
     var expires = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
     var saved   = localStorage.getItem(RATES_KEY);
     if (saved && Date.now() < expires) {
       _ratesCache   = JSON.parse(saved);
       _ratesFetched = true;
+      console.log('[BBW FX] Taux chargés depuis localStorage');
       callback(_ratesCache);
       return;
     }
   } catch (e) {}
 
+  /* 3. File d'attente si fetch déjà en cours */
   _ratesCallbacks.push(callback);
   if (_ratesCallbacks.length > 1) return;
 
+  console.log('[BBW FX] Fetch des taux depuis open.er-api.com...');
+
+  /* 4. Essai API principale */
   fetch('https://open.er-api.com/v6/latest/USD')
-    .then(function (r) { return r.json(); })
+    .then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(function (data) {
-      if (data && data.rates) {
+      if (data && data.rates && Object.keys(data.rates).length > 0) {
         _ratesCache   = data.rates;
         _ratesFetched = true;
+        console.log('[BBW FX] Taux OK depuis API (' + Object.keys(data.rates).length + ' devises)');
         try {
           localStorage.setItem(RATES_KEY,     JSON.stringify(data.rates));
-          localStorage.setItem(RATES_EXP_KEY, Date.now() + RATES_TTL);
+          localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
         } catch (e) {}
-        _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
-        _ratesCallbacks = [];
+      } else {
+        throw new Error('Réponse API invalide');
       }
-    })
-    .catch(function () {
-      _ratesCallbacks.forEach(function (cb) { cb({}); });
+      _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
       _ratesCallbacks = [];
+    })
+    .catch(function (err) {
+      console.warn('[BBW FX] API principale échouée:', err.message, '→ Fallback');
+
+      /* 5. Fallback API secondaire */
+      fetch('https://api.exchangerate-api.com/v4/latest/USD')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.rates) {
+            _ratesCache   = data.rates;
+            _ratesFetched = true;
+            console.log('[BBW FX] Taux OK depuis fallback API');
+            try {
+              localStorage.setItem(RATES_KEY,     JSON.stringify(data.rates));
+              localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
+            } catch (e) {}
+          } else {
+            throw new Error('Fallback invalide');
+          }
+          _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
+          _ratesCallbacks = [];
+        })
+        .catch(function () {
+          /* 6. Dernier recours : taux statiques */
+          console.warn('[BBW FX] Fallback API échouée → taux statiques utilisés');
+          _ratesCache   = FALLBACK_RATES;
+          _ratesFetched = true;
+          _ratesCallbacks.forEach(function (cb) { cb(_ratesCache); });
+          _ratesCallbacks = [];
+        });
     });
 }
 
 function convertPricesForCountry(countryCode) {
+  if (!countryCode) return;
+
   var allProducts    = window.__allProducts || [];
   var settings       = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
   var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
 
   var found = countryOptions.find(function (o) { return o.code === countryCode; });
-  if (!found || !found.currency) return;
 
-  var currencyCode = found.currency.trim().split(/\s+/)[0].toUpperCase();
-  var symbol       = found.currency.trim().split(/\s+/).slice(1).join(' ') || currencyCode;
+  if (!found) {
+    console.warn('[BBW FX] Pays non trouvé dans settings:', countryCode);
+    return;
+  }
+  if (!found.currency) {
+    console.warn('[BBW FX] Pas de currency pour:', countryCode);
+    return;
+  }
 
-  /* ── Sélecteurs CSS ciblés dans votre site ── */
+  /* Parser "EUR €" → code="EUR", symbol="€" */
+  var parts        = found.currency.trim().split(/\s+/);
+  var currencyCode = parts[0].toUpperCase();
+  var symbol       = parts.slice(1).join(' ') || currencyCode;
+
+  console.log('[BBW FX] Conversion vers', currencyCode, symbol, 'pour pays', countryCode);
+
   var PRICE_SELECTORS = [
     '.current-price',
     '.compare-price',
@@ -523,67 +592,82 @@ function convertPricesForCountry(countryCode) {
     '.cart-item .item-meta p'
   ];
 
+  /* Extrait le montant USD depuis un texte contenant $ */
   function extractUSD(text) {
     if (!text) return null;
     var match = text.match(/\$\s*([\d,]+\.?\d*)/);
     if (!match) return null;
-    return parseFloat(match[1].replace(',', ''));
+    return parseFloat(match[1].replace(/,/g, ''));
   }
 
-  function ensureUsdStored(el) {
-    if (!el.dataset.usdPrice) {
-      var usd = extractUSD(el.textContent);
-      if (usd !== null) el.dataset.usdPrice = usd;
-    }
-    return parseFloat(el.dataset.usdPrice);
-  }
-
-  function formatText(el, amount, sym) {
-    var original = el.dataset.originalText || el.textContent;
-    if (!el.dataset.originalText) el.dataset.originalText = original;
-    if (original.includes(':')) {
-      var prefix = original.split('$')[0];
+  /* Reconstruit le texte avec la nouvelle devise */
+  function buildText(originalText, amount, sym) {
+    if (originalText.includes(':')) {
+      /* "Subtotal: $45.00" → "Subtotal: € 45.00" */
+      var prefix = originalText.substring(0, originalText.indexOf('$'));
       return prefix + sym + ' ' + amount;
-    }
-    if (original.includes('/')) {
-      var suffix = original.split('$')[1].replace(/[\d.,]+/, '').trim();
-      return sym + ' ' + amount + ' ' + suffix;
     }
     return sym + ' ' + amount;
   }
 
-  function applyUSD(el) {
-    var usd = parseFloat(el.dataset.usdPrice);
-    if (isNaN(usd)) return;
-    var original = el.dataset.originalText;
-    if (original) {
-      el.textContent = original;
-    } else {
-      el.textContent = '$' + usd.toFixed(2);
-    }
-  }
-
+  /* ── Restauration USD ── */
   if (currencyCode === 'USD') {
     PRICE_SELECTORS.forEach(function (sel) {
       document.querySelectorAll(sel).forEach(function (el) {
-        applyUSD(el);
+        if (el.dataset.usdPrice && el.dataset.usdOrigText) {
+          el.textContent = el.dataset.usdOrigText;
+        }
       });
     });
+    console.log('[BBW FX] Restauré en USD');
     return;
   }
 
+  /* ── Conversion ── */
   fetchRates(function (rates) {
     var rate = rates[currencyCode];
-    if (!rate) return;
+
+    if (!rate) {
+      console.warn('[BBW FX] Taux introuvable pour:', currencyCode, '— taux disponibles:', Object.keys(rates).slice(0, 10));
+      return;
+    }
+
+    console.log('[BBW FX] Taux', currencyCode, '=', rate);
+
+    var converted = 0;
 
     PRICE_SELECTORS.forEach(function (sel) {
-      document.querySelectorAll(sel).forEach(function (el) {
-        var usd = ensureUsdStored(el);
-        if (isNaN(usd)) return;
-        var converted = (usd * rate).toFixed(2);
-        el.textContent = formatText(el, converted, symbol);
+      var elements = document.querySelectorAll(sel);
+
+      elements.forEach(function (el) {
+        var text = el.textContent || '';
+
+        /* Cas 1 : le texte contient encore $ → extraction directe */
+        var usd = extractUSD(text);
+
+        if (usd !== null && !isNaN(usd)) {
+          /* Sauvegarder la valeur USD originale */
+          el.dataset.usdPrice    = String(usd);
+          el.dataset.usdOrigText = text;
+
+          var convertedAmount = (usd * rate).toFixed(2);
+          el.textContent = buildText(text, convertedAmount, symbol);
+          converted++;
+
+        } else if (el.dataset.usdPrice) {
+          /* Cas 2 : déjà converti (plus de $) → reconvertir depuis la base */
+          var base = parseFloat(el.dataset.usdPrice);
+          if (!isNaN(base)) {
+            var reconvertedAmount = (base * rate).toFixed(2);
+            var origText = el.dataset.usdOrigText || ('$' + base.toFixed(2));
+            el.textContent = buildText(origText, reconvertedAmount, symbol);
+            converted++;
+          }
+        }
       });
     });
+
+    console.log('[BBW FX] ' + converted + ' élément(s) converti(s) → ' + currencyCode);
   });
 }
 
