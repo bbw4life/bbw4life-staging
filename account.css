@@ -1515,14 +1515,14 @@ a.stat-wishlist-link:visited {
   overflow: hidden;
   background: #000000;
   border-radius: 14px;
-  padding:20px 20px;
+  padding: 24px 20px 20px;
   text-align: center;
   box-sizing: border-box;
-  height: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0;
 }
 
 .aff-hero::before {
@@ -1584,7 +1584,7 @@ a.stat-wishlist-link:visited {
   color: rgba(255,255,255,0.60) !important;
   -webkit-text-fill-color: rgba(255,255,255,0.60) !important;
   max-width: 480px;
-  margin: 0 auto 16px !important;
+  margin: 0 auto 14px !important;
   line-height: 1.6 !important;
 }
 
@@ -1601,7 +1601,7 @@ a.stat-wishlist-link:visited {
   align-items: center;
   justify-content: center;
   gap: 0;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   flex-wrap: nowrap;
 }
 
@@ -1639,12 +1639,16 @@ a.stat-wishlist-link:visited {
   flex-shrink: 0;
 }
 
-/* Steps — caché sur mobile pour gagner de la place */
+/* ── STEPS — desktop ── */
 .aff-hero__steps {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 0;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .aff-hero__step {
@@ -1652,6 +1656,8 @@ a.stat-wishlist-link:visited {
   flex-direction: column;
   align-items: center;
   gap: 5px;
+  flex: 1;
+  min-width: 0;
 }
 
 .aff-hero__step-num {
@@ -1665,6 +1671,7 @@ a.stat-wishlist-link:visited {
   font-weight: 700;
   color: #f5a0b8;
   -webkit-text-fill-color: #f5a0b8;
+  flex-shrink: 0;
 }
 
 .aff-hero__step p {
@@ -1674,16 +1681,18 @@ a.stat-wishlist-link:visited {
   -webkit-text-fill-color: rgba(255,255,255,0.50) !important;
   margin: 0 !important;
   text-align: center;
-  max-width: 80px;
+  max-width: 90px;
   line-height: 1.3 !important;
+  word-break: break-word;
 }
 
 .aff-hero__step-arrow {
   font-size: 0.75rem;
   color: rgba(255,255,255,0.20);
   -webkit-text-fill-color: rgba(255,255,255,0.20);
-  padding: 0 8px;
+  padding: 0 6px;
   margin-top: -14px;
+  flex-shrink: 0;
 }
 
 /* ── CARD BASE ── */
@@ -2467,22 +2476,44 @@ a.stat-wishlist-link:visited {
 }
 
 /* ══════════════════════════════════════════
+   RESPONSIVE — TABLET
+══════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .aff-hero__steps {
+    max-width: 420px;
+  }
+
+  .aff-hero__step p {
+    max-width: 72px;
+    font-size: 0.62rem !important;
+  }
+
+  .aff-hero__stat {
+    padding: 0 16px;
+  }
+}
+
+/* ══════════════════════════════════════════
    RESPONSIVE — MOBILE
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
+
+  /* ── Hero : hauteur auto sur mobile pour ne pas couper les steps ── */
   .aff-hero {
-    height: 270px;
-    padding: 16px 16px !important;
+    height: auto;
+    min-height: 0;
+    padding: 20px 16px 18px !important;
     border-radius: 10px;
+    gap: 0;
   }
 
   .aff-hero__badge {
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
 
   .aff-hero__title {
-    font-size: clamp(1.2rem, 5vw, 1.6rem) !important;
-    margin-bottom: 5px !important;
+    font-size: clamp(1.15rem, 5vw, 1.5rem) !important;
+    margin-bottom: 6px !important;
   }
 
   .aff-hero__sub {
@@ -2493,7 +2524,7 @@ a.stat-wishlist-link:visited {
   /* Stats : reste horizontal, taille réduite */
   .aff-hero__stats {
     flex-wrap: nowrap;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   .aff-hero__stat {
@@ -2501,20 +2532,52 @@ a.stat-wishlist-link:visited {
   }
 
   .aff-hero__stat-val {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
 
   .aff-hero__stat-label {
-    font-size: 0.55rem;
+    font-size: 0.52rem;
   }
 
   .aff-hero__stat-divider {
-    height: 24px;
+    height: 22px;
   }
 
-  /* Steps cachés sur mobile pour tenir dans 250px */
+  /* ── Steps : visibles sur mobile, format compact ── */
   .aff-hero__steps {
-    display: none;
+    display: flex;
+    max-width: 100%;
+    gap: 0;
+    margin-top: 12px;
+    padding: 10px 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .aff-hero__step {
+    flex: 1;
+    gap: 4px;
+  }
+
+  .aff-hero__step-num {
+    width: 22px;
+    height: 22px;
+    font-size: 0.68rem;
+  }
+
+  .aff-hero__step p {
+    font-size: 0.58rem !important;
+    max-width: 100%;
+    line-height: 1.25 !important;
+  }
+
+  .aff-hero__step-arrow {
+    font-size: 0.60rem;
+    padding: 0 2px;
+    margin-top: -10px;
   }
 
   /* ── Create card : layout mobile corrigé ── */
@@ -2603,7 +2666,6 @@ a.stat-wishlist-link:visited {
   .aff-history-link {
     font-size: 0.65rem;
   }
-
 
   .aff-copy-link-btn {
     padding: 5px 10px;
