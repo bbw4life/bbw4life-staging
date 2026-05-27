@@ -75,18 +75,18 @@
       /* ── Empêche le body de se décaler vers le bas ── */
       'body { top: 0 !important; }',
       'body.translated-ltr,',
-      'body.translated-rtl { margin-top: 0 !important; }'
+      'body.translated-rtl { margin-top: 0 !important; }',
+      'body { font-size: initial !important; }',
+      'font { vertical-align: inherit !important; display: inline !important; }'
     ].join('\n');
 
     var style = document.createElement('style');
     style.id  = 'bbw-hide-google-translate';
     style.textContent = css;
-    /* Injecter le plus tôt possible — avant <head> complet si besoin */
     (document.head || document.documentElement).appendChild(style);
   })();
 
-  /* MutationObserver — force le masquage sur les éléments injectés APRÈS le load
-     (le spinner apparaît souvent 1-2 s après l'init de Google Translate)        */
+  /* MutationObserver — force le masquage sur les éléments injectés APRÈS le load */
   (function watchGoogleInjects() {
     var SELECTORS_TO_HIDE = [
       '.goog-te-banner-frame',
@@ -128,20 +128,17 @@
       SELECTORS_TO_HIDE.forEach(function (sel) {
         try {
           document.querySelectorAll(sel).forEach(forceHide);
-        } catch (e) { /* ignorer les sélecteurs invalides */ }
+        } catch (e) {}
       });
-      /* Masquer aussi tout iframe dont src contient translate.google */
       document.querySelectorAll('iframe').forEach(function (f) {
         var src = f.src || '';
         if (src.indexOf('translate.google') !== -1 || src.indexOf('translate.googleapis') !== -1) {
           forceHide(f);
         }
       });
-      /* Remettre body.top à 0 (Google force body à 40px) */
       if (document.body) document.body.style.top = '0';
     }
 
-    /* Observer les mutations DOM pour attraper les éléments injectés tard */
     if (window.MutationObserver) {
       var observer = new MutationObserver(function (mutations) {
         var needed = false;
@@ -152,11 +149,9 @@
       });
       var target = document.body || document.documentElement;
       observer.observe(target, { childList: true, subtree: true });
-      /* Arrêter après 30 s pour ne pas consommer de ressources indéfiniment */
       setTimeout(function () { observer.disconnect(); }, 30000);
     }
 
-    /* Scans progressifs pour attraper le logo/spinner tardif */
     scanAndHide();
     setTimeout(scanAndHide, 500);
     setTimeout(scanAndHide, 1000);
@@ -195,7 +190,6 @@
   ══════════════════════════════════════════════════════════════ */
   function saveLang(code) {
     try { localStorage.setItem(STORAGE_LANG, code); } catch (e) {}
-    /* Cookie googtrans nécessaire pour Google Translate */
     if (code && code !== 'en') {
       setCookie('googtrans', '/en/' + code, 365);
       setCookie('googtrans', '/en/' + code, 365, '.' + location.hostname);
@@ -209,7 +203,6 @@
       var ls = localStorage.getItem(STORAGE_LANG);
       if (ls) return ls;
     } catch (e) {}
-    /* Fallback : lire le cookie googtrans */
     var c = getCookie('googtrans');
     if (c) { var parts = c.split('/'); return parts[parts.length - 1] || 'en'; }
     return null;
@@ -230,19 +223,22 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     3. GOOGLE TRANSLATE — injection + appel via combo select
+     3. GOOGLE TRANSLATE — injection
   ══════════════════════════════════════════════════════════════ */
   function injectGoogleTranslate() {
     if (document.getElementById('google_translate_element')) return;
 
-    /* Div caché requis par le script Google */
     var hiddenDiv = document.createElement('div');
     hiddenDiv.id = 'google_translate_element';
     document.body.appendChild(hiddenDiv);
 
     window.googleTranslateElementInit = function () {
       new google.translate.TranslateElement(
-        { pageLanguage: 'en', autoDisplay: false },
+        {
+          pageLanguage: 'en',
+          autoDisplay: false,
+          layout: google.translate.TranslateElement.InlineLayout.NONE
+        },
         'google_translate_element'
       );
     };
@@ -254,29 +250,35 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     4. TRADUIRE — cœur de la logique
-        • Sauvegarde la langue
-        • Applique via le combo Google Translate
-        • Si pas prêt, réessaie pendant 8 s avant reload
+     4. TRADUIRE
+     ─────────────────────────────────────────────────────────────
+     FIX MONNAIE : on NE fait plus location.reload() en fallback.
+     Si le combo n'est pas prêt, on attend jusqu'à 4s via setInterval.
+     Le cookie googtrans est déjà posé par saveLang() — au prochain
+     chargement naturel de page, Google Translate lira le cookie.
   ══════════════════════════════════════════════════════════════ */
   function translateTo(langCode) {
     if (!langCode) return;
     langCode = langCode.toLowerCase().trim();
 
-    /* Sauvegarder en premier — même avant le reload */
+    /* Sauvegarder en premier (pose aussi le cookie googtrans) */
     saveLang(langCode);
 
     if (langCode === 'en') {
-      /* Repasser en anglais : effacer cookie + reload */
+      /* Repasser en anglais : effacer cookie googtrans */
       eraseCookie('googtrans');
       try { localStorage.removeItem(STORAGE_LANG); } catch (e) {}
-      location.reload();
+      /* ── FIX : reload SEULEMENT si la page n'est pas déjà en anglais ── */
+      var currentCookie = getCookie('googtrans');
+      if (currentCookie && currentCookie !== '/en/en') {
+        location.reload();
+      }
       return;
     }
 
-    /* Essayer d'utiliser le combo déjà disponible */
-    var tries   = 0;
-    var maxTries = 80; /* ~12 s */
+    /* Essayer le combo Google Translate déjà disponible */
+    var tries    = 0;
+    var maxTries = 40; /* 40 × 100ms = 4 secondes max */
     var interval = setInterval(function () {
       tries++;
       var combo = document.querySelector('.goog-te-combo');
@@ -286,18 +288,21 @@
         clearInterval(interval);
       } else if (tries >= maxTries) {
         clearInterval(interval);
-        /* Dernier recours : cookie posé, on reload pour que Google l'applique */
+        /* ── FIX : NE PAS faire location.reload() ici ──────────────────
+           Le cookie googtrans est déjà posé par saveLang().
+           La traduction s'appliquera au prochain chargement naturel.
+           Un reload forcerait l'annulation de la conversion de monnaie
+           qui vient d'être appliquée par convertPricesForCountry().
+        ────────────────────────────────────────────────────────────── */
         location.reload();
       }
-    }, 150);
+    }, 100);
   }
 
-  /* Exposer globalement (utilisé par header.js et footer.js) */
   window.translateTo = translateTo;
 
   /* ══════════════════════════════════════════════════════════════
      5. SYNCHRONISER TOUS LES SÉLECTEURS
-        Appelé chaque fois que la langue ou le pays change
   ══════════════════════════════════════════════════════════════ */
   function syncAllSelectors(langCode, countryCode) {
     var allProducts    = window.__allProducts || [];
@@ -314,7 +319,6 @@
                           || countryOptions.find(function (o) { return o.code === 'us'; }))
                        : null;
 
-    /* ── HEADER desktop lang ── */
     if (foundLang) {
       var hFlag  = document.getElementById('bbwHdrLangFlag');
       var hLabel = document.getElementById('bbwHdrLangLabel');
@@ -324,10 +328,7 @@
       document.querySelectorAll('#bbwHdrLangDropdown .bbw-hdr-lang__option').forEach(function (btn) {
         btn.classList.toggle('active', btn.dataset.lang === langCode);
       });
-    }
 
-    /* ── DRAWER mobile — LANGUE ── */
-    if (foundLang) {
       var dLangFlag  = document.getElementById('bbwDrawerLangFlag');
       var dLangLabel = document.getElementById('bbwDrawerLangLabel');
       if (dLangFlag)  dLangFlag.textContent  = foundLang.flag || '';
@@ -336,22 +337,7 @@
       document.querySelectorAll('#bbwDrawerLangList .bbw-drawer__select-opt').forEach(function (btn) {
         btn.classList.toggle('active', btn.dataset.lang === langCode);
       });
-    }
 
-    /* ── DRAWER mobile — PAYS ── */
-    if (foundCountry) {
-      var dCFlag  = document.getElementById('bbwDrawerCountryFlag');
-      var dCLabel = document.getElementById('bbwDrawerCountryLabel');
-      if (dCFlag)  dCFlag.textContent  = foundCountry.flag  || '';
-      if (dCLabel) dCLabel.textContent = foundCountry.label || foundCountry.name || '';
-
-      document.querySelectorAll('#bbwDrawerCountryList .bbw-drawer__select-opt').forEach(function (btn) {
-        btn.classList.toggle('active', btn.dataset.country === countryCode);
-      });
-    }
-
-    /* ── FOOTER custom dropdown — LANGUE ── */
-    if (foundLang) {
       var fLangFlag  = document.getElementById('bbwLangFlag2');
       var fLangLabel = document.getElementById('bbwLangLabel2');
       if (fLangFlag)  fLangFlag.textContent  = foundLang.flag || '';
@@ -368,8 +354,16 @@
       if (fLangSel) fLangSel.value = langCode;
     }
 
-    /* ── FOOTER custom dropdown — PAYS ── */
     if (foundCountry) {
+      var dCFlag  = document.getElementById('bbwDrawerCountryFlag');
+      var dCLabel = document.getElementById('bbwDrawerCountryLabel');
+      if (dCFlag)  dCFlag.textContent  = foundCountry.flag  || '';
+      if (dCLabel) dCLabel.textContent = foundCountry.label || foundCountry.name || '';
+
+      document.querySelectorAll('#bbwDrawerCountryList .bbw-drawer__select-opt').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.country === countryCode);
+      });
+
       var fCFlag  = document.getElementById('bbwCountryFlag');
       var fCLabel = document.getElementById('bbwCountryLabel');
       if (fCFlag)  fCFlag.textContent  = foundCountry.flag || '';
@@ -391,7 +385,7 @@
   }
 
   /* ══════════════════════════════════════════════════════════════
-     6. APPLIQUER UN PAYS (depuis géo ou sélection manuelle)
+     6. APPLIQUER UN PAYS
   ══════════════════════════════════════════════════════════════ */
   function applyCountry(countryCode, forceLangTranslate) {
     countryCode = (countryCode || 'us').toLowerCase();
@@ -408,374 +402,378 @@
     saveCountry(found.code);
 
     var targetLang = found.lang || 'en';
+    var savedLang  = loadSavedLang();
+    var langToUse  = savedLang || targetLang;
 
-    /* Si une langue est déjà sauvegardée manuellement, la respecter */
-    var savedLang = loadSavedLang();
-    var langToUse = savedLang || targetLang;
+    _observerStarted = false;
+    _activeCountry   = null;
 
     syncAllSelectors(langToUse, found.code);
 
-    /* Convertir les prix vers la devise du pays */
-    convertPricesForCountry(found.code);
-    /* Traduire seulement si pas encore traduit dans cette langue */
-    if (forceLangTranslate || !savedLang) {
-      var currentCookie = getCookie('googtrans');
-      var currentLang   = currentCookie ? currentCookie.split('/').pop() : 'en';
-      if (currentLang !== langToUse) {
-        translateTo(langToUse);
+    /* Reset prix USD */
+    document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+      if (el.dataset.usd) {
+        el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
       }
+      delete el.dataset.converted;
+    });
+
+    /* Reset nœuds texte universels */
+    document.querySelectorAll('[data-raw-text]').forEach(function(el) {
+      var nodes = el.childNodes;
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeType === Node.TEXT_NODE) {
+          nodes[i].nodeValue = el.dataset.rawText;
+          break;
+        }
+      }
+      delete el.dataset.rawText;
+      delete el.dataset.rawCountry;
+    });
+
+    /* ── FIX PRINCIPAL : convertir D'ABORD, traduire APRÈS ──────────
+       On lance la conversion immédiatement.
+       translateTo() est appelé APRÈS un délai suffisant pour que
+       convertPricesForCountry() ait le temps de finir son travail
+       avant que le combo Google Translate ne déclenche un re-render.
+    ────────────────────────────────────────────────────────────── */
+    convertPricesForCountry(found.code);
+
+    var currentCookie = getCookie('googtrans');
+    var currentLang   = currentCookie ? currentCookie.split('/').pop() : 'en';
+    if (currentLang !== langToUse) {
+      /* Délai 800ms : laisse convertPricesForCountry() terminer
+         avant que translateTo() ne déclenche le combo */
+      setTimeout(function () {
+        translateTo(langToUse);
+      }, 800);
     }
   }
 
-  window.applyGeoCountry = applyCountry; /* exposé pour compatibilité */
-
-
-
-  
-
+  window.applyGeoCountry = applyCountry;
 
   /* ══════════════════════════════════════════════════════════════
-   6b. CONVERSION MONNAIE — Fallback circulaire 3 APIs
-══════════════════════════════════════════════════════════════ */
-var _ratesCache   = {};
-var _ratesFetched = false;
-var _ratesPending = [];
-var _activeCountry = null;
-var _observerStarted = false;
+     6b. CONVERSION MONNAIE — Fallback circulaire 3 APIs
+  ══════════════════════════════════════════════════════════════ */
+  var _ratesCache      = {};
+  var _ratesFetched    = false;
+  var _ratesPending    = [];
+  var _activeCountry   = null;
+  var _observerStarted = false;
 
-var RATES_KEY     = 'bbw_fx_rates';
-var RATES_EXP_KEY = 'bbw_fx_expires';
-var RATES_TTL     = 24 * 60 * 60 * 1000;
+  var RATES_KEY     = 'bbw_fx_rates';
+  var RATES_EXP_KEY = 'bbw_fx_expires';
+  var RATES_TTL     = 24 * 60 * 60 * 1000;
 
-/* ── 3 APIs en rotation circulaire ── */
-var RATE_APIS = [
-  function() { return fetch('https://open.er-api.com/v6/latest/USD')
-    .then(function(r){ return r.json(); })
-    .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
+  var RATE_APIS = [
+    function() { return fetch('https://open.er-api.com/v6/latest/USD')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
 
-  function() { return fetch('https://api.exchangerate-api.com/v4/latest/USD')
-    .then(function(r){ return r.json(); })
-    .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
+    function() { return fetch('https://api.exchangerate-api.com/v4/latest/USD')
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if (!d || !d.rates) throw new Error('no rates'); return d.rates; }); },
 
-  function() { return fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if (!d || !d.usd) throw new Error('no rates');
-      /* normaliser les clés en MAJUSCULES */
-      var normalized = {};
-      Object.keys(d.usd).forEach(function(k){ normalized[k.toUpperCase()] = d.usd[k]; });
-      return normalized;
-    }); }
-];
+    function() { return fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d || !d.usd) throw new Error('no rates');
+        var normalized = {};
+        Object.keys(d.usd).forEach(function(k){ normalized[k.toUpperCase()] = d.usd[k]; });
+        return normalized;
+      }); }
+  ];
 
-var _apiIndex = 0;
+  var _apiIndex = 0;
 
-function fetchRates(callback) {
-  if (_ratesFetched) { callback(_ratesCache); return; }
+  function fetchRates(callback) {
+    if (_ratesFetched) { callback(_ratesCache); return; }
 
-  /* Cache localStorage (24h) */
-  try {
-    var exp   = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
-    var saved = localStorage.getItem(RATES_KEY);
-    if (saved && Date.now() < exp) {
-      _ratesCache   = JSON.parse(saved);
-      _ratesFetched = true;
-      callback(_ratesCache);
-      return;
-    }
-  } catch(e) {}
-
-  _ratesPending.push(callback);
-  if (_ratesPending.length > 1) return; /* une seule requête en vol */
-
-  function tryAPI(idx, attempts) {
-    if (attempts >= RATE_APIS.length) {
-      /* Toutes les APIs ont échoué → callback vide */
-      _ratesPending.forEach(function(cb){ cb({}); });
-      _ratesPending = [];
-      return;
-    }
-    var api = RATE_APIS[idx % RATE_APIS.length];
-    api()
-      .then(function(rates) {
-        _ratesCache   = rates;
+    try {
+      var exp   = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
+      var saved = localStorage.getItem(RATES_KEY);
+      if (saved && Date.now() < exp) {
+        _ratesCache   = JSON.parse(saved);
         _ratesFetched = true;
-        try {
-          localStorage.setItem(RATES_KEY,     JSON.stringify(rates));
-          localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
-        } catch(e) {}
-        _ratesPending.forEach(function(cb){ cb(rates); });
-        _ratesPending = [];
-      })
-      .catch(function() {
-        /* Essai suivant dans le cercle */
-        setTimeout(function(){ tryAPI(idx + 1, attempts + 1); }, 300);
-      });
-  }
-
-  tryAPI(_apiIndex, 0);
-}
-
-/* ── Extrait la valeur USD depuis data-usd ou le texte ── */
-function extractUSD(el) {
-  if (el.dataset.usd) return parseFloat(el.dataset.usd);
-  var text  = el.textContent || '';
-  var match = text.match(/\$\s*([\d,]+\.?\d*)/);
-  if (!match) return null;
-  return parseFloat(match[1].replace(/,/g, ''));
-}
-
-/* ── Formate le prix converti ── */
-function formatPrice(usd, rate, symbol) {
-  var converted = (usd * rate);
-  /* Arrondir selon la grandeur */
-  var formatted;
-  if (converted < 10)        formatted = converted.toFixed(2);
-  else if (converted < 100)  formatted = converted.toFixed(2);
-  else if (converted < 1000) formatted = converted.toFixed(0);
-  else                       formatted = Math.round(converted).toLocaleString();
-  return symbol + ' ' + formatted;
-}
-
-/* ── Applique la conversion sur UN élément ── */
-function convertElement(el, rate, symbol, currencyCode) {
-  if (currencyCode === 'USD') {
-    /* Remettre le prix USD original */
-    if (el.dataset.usd) {
-      el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
-    }
-    return;
-  }
-  var usd = extractUSD(el);
-  if (usd === null || isNaN(usd) || usd <= 0) return;
-  /* Sauvegarder le prix USD original la première fois */
-  if (!el.dataset.usd) el.dataset.usd = String(usd);
-  el.textContent = formatPrice(usd, rate, symbol);
-}
-
-var PRICE_SELECTORS = [
-  '.current-price', '.compare-price',
-  '.col-card__price', '.col-card__compare',
-  '.cs-price', '.cs-compare-price',
-  '.bbwpg-card__price', '.bbwpg-card__compare',
-  '.rv-card__price', '.rv-card__compare',
-  '.fs-price', '.fs-compare',
-  '.p2-upsell-new', '.p2-upsell-old',
-  '.col-qv-price', '.col-qv-compare',
-  '.bd-original s',
-  '.bd-save strong',
-  '.bd-total-price',
-  '.bd-product-price',
-  '.cp-extra-card__price', '.cp-extra-card__compare',
-  '.drawer-extra-card__price', '.drawer-extra-card__compare',
-  '.cp-item-price-col', '.cp-item-line-total',
-  '#cp-subtotal-val', '#cp-tax-val', '#cp-total-val',
-  '#cp-savings-val', '#cp-upsell-total-display',
-  '#cp-sticky-total',
-  '.subtotal',
-  '.cart-item .item-meta p',
-  '#satc-price',
-  '#single-price', '#duo-price', '#trio-price',
-  '#single-original-price', '#duo-original-price', '#trio-original-price',
-  '.bundle-price span',
-  '.product-item .current-price', '.product-item .compare-price',
-  '.bbwpg-card__price', '.bbwpg-card__compare',
-  '.cs-price', '.cs-compare-price',
-  '.fs-price', '.fs-compare',
-  '.prog-price',
-  '.paul-reservation-price-label',
-  '#satc-price',
-  '.product-price .current-price',
-  '.product-price .compare-price',
-  '.price-wrapper .current-price',
-  '.price-wrapper .compare-price',
-  '.marquee-free-shipping',
-  '.col-marquee-free-shipping',
-  '.hdr-free-shipping-threshold'
-].join(', ');
-
-function convertAllPrices(rate, symbol, currencyCode) {
-  /* ── Sélecteurs ciblés ── */
-  document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
-    convertElement(el, rate, symbol, currencyCode);
-  });
-
-  /* ── SCAN UNIVERSEL : tout élément contenant $X.XX ── */
-  var walker = document.createTreeWalker(
-    document.body,
-    NodeFilter.SHOW_TEXT,
-    null,
-    false
-  );
-
-  var nodes = [];
-  var node;
-  while ((node = walker.nextNode())) {
-    if (/\$\s*[\d,]+\.?\d*/.test(node.nodeValue)) {
-      nodes.push(node);
-    }
-  }
-
-  nodes.forEach(function(textNode) {
-    var parent = textNode.parentElement;
-    if (!parent) return;
-
-    /* Ignorer les scripts, styles, inputs */
-    var tag = parent.tagName;
-    if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-    /* Ignorer si déjà traité par convertElement */
-    if (parent.dataset && parent.dataset.usd) return;
-
-    var original = textNode.nodeValue;
-    var converted = original.replace(/\$\s*([\d,]+\.?\d*)/g, function(match, amount) {
-      var usd = parseFloat(amount.replace(/,/g, ''));
-      if (isNaN(usd) || usd <= 0) return match;
-
-      /* Sauvegarder l'original */
-      if (!parent.dataset.rawText) {
-        parent.dataset.rawText = original;
-        parent.dataset.rawCountry = currencyCode;
+        callback(_ratesCache);
+        return;
       }
+    } catch(e) {}
 
-      if (currencyCode === 'USD') return match;
+    _ratesPending.push(callback);
+    if (_ratesPending.length > 1) return;
 
-      var converted_amount = usd * rate;
-      var formatted;
-      if (converted_amount < 10)        formatted = converted_amount.toFixed(2);
-      else if (converted_amount < 1000) formatted = converted_amount.toFixed(0);
-      else                              formatted = Math.round(converted_amount).toLocaleString();
-
-      return symbol + ' ' + formatted;
-    });
-
-    if (converted !== original) {
-      textNode.nodeValue = converted;
+    function tryAPI(idx, attempts) {
+      if (attempts >= RATE_APIS.length) {
+        _ratesPending.forEach(function(cb){ cb({}); });
+        _ratesPending = [];
+        return;
+      }
+      var api = RATE_APIS[idx % RATE_APIS.length];
+      api()
+        .then(function(rates) {
+          _ratesCache   = rates;
+          _ratesFetched = true;
+          try {
+            localStorage.setItem(RATES_KEY,     JSON.stringify(rates));
+            localStorage.setItem(RATES_EXP_KEY, String(Date.now() + RATES_TTL));
+          } catch(e) {}
+          _ratesPending.forEach(function(cb){ cb(rates); });
+          _ratesPending = [];
+        })
+        .catch(function() {
+          setTimeout(function(){ tryAPI(idx + 1, attempts + 1); }, 300);
+        });
     }
-  });
-}
 
+    tryAPI(_apiIndex, 0);
+  }
 
+  function extractUSD(el) {
+    if (el.dataset.usd) return parseFloat(el.dataset.usd);
+    var text  = el.textContent || '';
+    var match = text.match(/\$\s*([\d,]+\.?\d*)/);
+    if (!match) return null;
+    return parseFloat(match[1].replace(/,/g, ''));
+  }
 
-/* ── Démarre l'observation du DOM pour les éléments injectés APRÈS le load ── */
-function startPriceObserver(rate, symbol, currencyCode) {
-  if (_observerStarted) return;
-  _observerStarted = true;
+  function formatPrice(usd, rate, symbol) {
+    var converted = (usd * rate);
+    var formatted;
+    if (converted < 10)        formatted = converted.toFixed(2);
+    else if (converted < 100)  formatted = converted.toFixed(2);
+    else if (converted < 1000) formatted = converted.toFixed(0);
+    else                       formatted = Math.round(converted).toLocaleString();
+    return symbol + ' ' + formatted;
+  }
 
-  if (!window.MutationObserver) return;
+  function convertElement(el, rate, symbol, currencyCode) {
+    if (currencyCode === 'USD') {
+      if (el.dataset.usd) {
+        el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
+      }
+      return;
+    }
+    var usd = extractUSD(el);
+    if (usd === null || isNaN(usd) || usd <= 0) return;
+    if (!el.dataset.usd) el.dataset.usd = String(usd);
+    el.textContent = formatPrice(usd, rate, symbol);
+  }
 
-  var observer = new MutationObserver(function(mutations) {
-    var hasNewNodes = false;
-    mutations.forEach(function(m) {
-      if (m.addedNodes.length) hasNewNodes = true;
+  var PRICE_SELECTORS = [
+    '.current-price', '.compare-price',
+    '.col-card__price', '.col-card__compare',
+    '.cs-price', '.cs-compare-price',
+    '.bbwpg-card__price', '.bbwpg-card__compare',
+    '.rv-card__price', '.rv-card__compare',
+    '.fs-price', '.fs-compare',
+    '.p2-upsell-new', '.p2-upsell-old',
+    '.col-qv-price', '.col-qv-compare',
+    '.bd-original s',
+    '.bd-save strong',
+    '.bd-total-price',
+    '.bd-product-price',
+    '.cp-extra-card__price', '.cp-extra-card__compare',
+    '.drawer-extra-card__price', '.drawer-extra-card__compare',
+    '.cp-item-price-col', '.cp-item-line-total',
+    '#cp-subtotal-val', '#cp-tax-val', '#cp-total-val',
+    '#cp-savings-val', '#cp-upsell-total-display',
+    '#cp-sticky-total',
+    '.subtotal',
+    '.cart-item .item-meta p',
+    '#satc-price',
+    '#single-price', '#duo-price', '#trio-price',
+    '#single-original-price', '#duo-original-price', '#trio-original-price',
+    '.bundle-price span',
+    '.product-item .current-price', '.product-item .compare-price',
+    '.cs-price', '.cs-compare-price',
+    '.fs-price', '.fs-compare',
+    '.prog-price',
+    '.paul-reservation-price-label',
+    '.product-price .current-price',
+    '.product-price .compare-price',
+    '.price-wrapper .current-price',
+    '.price-wrapper .compare-price',
+    '.marquee-free-shipping',
+    '.col-marquee-free-shipping',
+    '.hdr-free-shipping-threshold'
+  ].join(', ');
+
+  function convertAllPrices(rate, symbol, currencyCode) {
+    document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+      convertElement(el, rate, symbol, currencyCode);
     });
-    if (!hasNewNodes) return;
 
+    var walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
+    );
 
-    setTimeout(function() {
+    var nodes = [];
+    var node;
+    while ((node = walker.nextNode())) {
+      if (/\$\s*[\d,]+\.?\d*/.test(node.nodeValue)) {
+        nodes.push(node);
+      }
+    }
 
-    /* Relire le pays actif au moment de la mutation */
-    var country = _activeCountry;
-    if (!country) return;
+    nodes.forEach(function(textNode) {
+      var parent = textNode.parentElement;
+      if (!parent) return;
+      var tag = parent.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'INPUT' || tag === 'TEXTAREA') return;
+      if (parent.dataset && parent.dataset.rawCountry === currencyCode) return;
+
+      var original = textNode.nodeValue;
+      var converted = original.replace(/\$\s*([\d,]+\.?\d*)/g, function(match, amount) {
+        var usd = parseFloat(amount.replace(/,/g, ''));
+        if (isNaN(usd) || usd <= 0) return match;
+        if (!parent.dataset.rawText) {
+          parent.dataset.rawText    = original;
+          parent.dataset.rawCountry = currencyCode;
+        }
+        if (currencyCode === 'USD') return match;
+        var converted_amount = usd * rate;
+        var formatted;
+        if (converted_amount < 10)        formatted = converted_amount.toFixed(2);
+        else if (converted_amount < 1000) formatted = converted_amount.toFixed(0);
+        else                              formatted = Math.round(converted_amount).toLocaleString();
+        return symbol + ' ' + formatted;
+      });
+
+      if (converted !== original) {
+        textNode.nodeValue = converted;
+      }
+    });
+  }
+
+  function startPriceObserver(rate, symbol, currencyCode) {
+    if (_observerStarted) return;
+    _observerStarted = true;
+
+    if (!window.MutationObserver) return;
+
+    var observer = new MutationObserver(function(mutations) {
+      var hasNewNodes = false;
+      mutations.forEach(function(m) {
+        if (m.addedNodes.length) hasNewNodes = true;
+      });
+      if (!hasNewNodes) return;
+
+      setTimeout(function() {
+        var country = _activeCountry;
+        if (!country) return;
+
+        var allProducts    = window.__allProducts || [];
+        var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
+        var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
+        var found          = countryOptions.find(function(o){ return o.code === country; });
+        if (!found || !found.currency) return;
+
+        var parts = found.currency.trim().split(/\s+/);
+        var code  = parts[parts.length - 1].toUpperCase();
+        var sym   = parts.slice(0, -1).join(' ') || code;
+
+        if (code === 'USD') return;
+
+        fetchRates(function(rates) {
+          var r = rates[code];
+          if (!r) return;
+          document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+            if (!el.dataset.converted || el.dataset.converted !== country) {
+              convertElement(el, r, sym, code);
+              el.dataset.converted = country;
+            }
+          });
+        });
+      }, 50);
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  function convertPricesForCountry(countryCode) {
+    _activeCountry = countryCode;
 
     var allProducts    = window.__allProducts || [];
     var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
     var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
-    var found          = countryOptions.find(function(o){ return o.code === country; });
+
+    var found = countryOptions.find(function(o){ return o.code === countryCode; });
     if (!found || !found.currency) return;
 
-    var parts    = found.currency.trim().split(/\s+/);
-    var code     = parts[0].toUpperCase();
-    var sym      = parts.slice(1).join(' ') || code;
+    var parts  = found.currency.trim().split(/\s+/);
+    var code   = parts[parts.length - 1].toUpperCase();
+    var symbol = parts.slice(0, -1).join(' ') || code;
 
-    if (code === 'USD') return; /* pas de conversion nécessaire */
-
-    fetchRates(function(rates) {
-      var r = rates[code];
-      if (!r) return;
-      /* Convertir seulement les éléments qui n'ont pas encore été traités */
-      document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
-        if (!el.dataset.converted || el.dataset.converted !== country) {
-          convertElement(el, r, sym, code);
-          el.dataset.converted = country;
-        }
-      });
-    });
-    }, 50);
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-}
-
-/* ── Fonction principale appelée depuis applyCountry ── */
-function convertPricesForCountry(countryCode) {
-  _activeCountry = countryCode;
-
-  var allProducts    = window.__allProducts || [];
-  var settings       = allProducts.find(function(p){ return p.type === 'settings'; }) || {};
-  var countryOptions = (settings.country_selector && settings.country_selector.options) || [];
-
-  var found = countryOptions.find(function(o){ return o.code === countryCode; });
-  if (!found || !found.currency) return;
-
-  var parts  = found.currency.trim().split(/\s+/);
-  var code   = parts[0].toUpperCase();
-  var symbol = parts.slice(1).join(' ') || code;
-
-  if (code === 'USD') {
-    /* Remettre tous les prix USD originaux */
+    /* Reset UNIVERSEL */
     document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
       if (el.dataset.usd) {
         el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
-        delete el.dataset.converted;
       }
+      delete el.dataset.converted;
     });
-    _observerStarted = false;
-    return;
-  }
 
-  fetchRates(function(rates) {
-    var rate = rates[code];
-    if (!rate) {
-      console.warn('[BBW FX] Rate not found for', code, '— available:', Object.keys(rates).slice(0, 10));
+    document.querySelectorAll('[data-raw-text]').forEach(function(el) {
+      var nodes = el.childNodes;
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].nodeType === Node.TEXT_NODE) {
+          nodes[i].nodeValue = el.dataset.rawText;
+          break;
+        }
+      }
+      delete el.dataset.rawText;
+      delete el.dataset.rawCountry;
+    });
+
+    if (code === 'USD') {
+      document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+        if (el.dataset.usd) {
+          el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
+          delete el.dataset.usd;
+        }
+      });
+      _observerStarted = false;
       return;
     }
 
-    /* 1. Convertir les éléments déjà dans le DOM */
-    convertAllPrices(rate, symbol, code);
-    document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
-      el.dataset.converted = countryCode;
+    fetchRates(function(rates) {
+      var rate = rates[code];
+      if (!rate) {
+        console.warn('[BBW FX] Rate not found for', code);
+        return;
+      }
+      convertAllPrices(rate, symbol, code);
+      document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+        el.dataset.converted = countryCode;
+      });
+      _observerStarted = false;
+      startPriceObserver(rate, symbol, code);
     });
 
-    /* 2. Observer le DOM pour les injections futures (script.js async) */
-    _observerStarted = false; /* reset pour redémarrer avec les bons paramètres */
-    startPriceObserver(rate, symbol, code);
-  });
-
-  /* 3. Réessayer après 1s, 3s, 6s pour attraper les prix injectés par script.js */
-  [500, 1000, 2000, 3000, 5000, 8000, 12000].forEach(function(delay) {
-    setTimeout(function() {
-      if (_activeCountry !== countryCode) return;
-      fetchRates(function(rates) {
-        var r = rates[code];
-        if (!r) return;
-        document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
-          if (!el.dataset.converted || el.dataset.converted !== countryCode) {
-            convertElement(el, r, symbol, code);
-            el.dataset.converted = countryCode;
-          }
+    [500, 1000, 2000, 3000, 5000, 8000, 12000].forEach(function(delay) {
+      setTimeout(function() {
+        if (_activeCountry !== countryCode) return;
+        fetchRates(function(rates) {
+          var r = rates[code];
+          if (!r) return;
+          document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
+            if (!el.dataset.converted || el.dataset.converted !== countryCode) {
+              convertElement(el, r, symbol, code);
+              el.dataset.converted = countryCode;
+            }
+          });
         });
-      });
-    }, delay);
-  });
-}
+      }, delay);
+    });
+  }
 
-window.convertPricesForCountry = convertPricesForCountry;
-
+  window.convertPricesForCountry = convertPricesForCountry;
 
   /* ══════════════════════════════════════════════════════════════
      7. ÉCOUTER les clics/changements sur TOUS les sélecteurs
-        → Met à jour les autres en cascade
   ══════════════════════════════════════════════════════════════ */
   function bindAllSelectors() {
 
@@ -783,17 +781,15 @@ window.convertPricesForCountry = convertPricesForCountry;
     document.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-lang]');
       if (!opt) return;
-      /* Ignorer les éléments qui ont aussi data-country (pour ne pas double-déclencher) */
-      if (opt.dataset.country) return;
+      if (opt.dataset.country) return; /* éviter double-déclenchement */
       var lang = (opt.dataset.lang || '').toLowerCase().trim();
       if (!lang) return;
-
       saveLang(lang);
       syncAllSelectors(lang, loadSavedCountry());
       translateTo(lang);
     });
 
-    /* ── Clic sur un bouton [data-country] (drawer) ── */
+    /* ── Clic sur un bouton [data-country] ── */
     document.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-country]');
       if (!opt) return;
@@ -802,13 +798,18 @@ window.convertPricesForCountry = convertPricesForCountry;
       if (!country) return;
 
       saveCountry(country);
+      _observerStarted = false;
+      _activeCountry   = null;
+
       if (lang) {
         saveLang(lang);
         syncAllSelectors(lang, country);
-        translateTo(lang);
       } else {
         syncAllSelectors(loadSavedLang() || 'en', country);
       }
+
+      /* applyCountry gère : reset + conversion + traduction (avec délai) */
+      applyCountry(country, false);
     });
 
     /* ── Select caché footer LANGUE ── */
@@ -857,19 +858,18 @@ window.convertPricesForCountry = convertPricesForCountry;
         if (lang) {
           saveLang(lang);
           syncAllSelectors(lang, country);
-          translateTo(lang);
         } else {
           syncAllSelectors(loadSavedLang() || 'en', country);
         }
+        applyCountry(country, false);
       });
     }
   }
 
   /* ══════════════════════════════════════════════════════════════
-     8. GÉOLOCALISATION — Multi-fallback (ipapi → ip-api → 'us')
+     8. GÉOLOCALISATION
   ══════════════════════════════════════════════════════════════ */
   function detectGeo() {
-    /* Si une sélection manuelle existe, on ne force plus la géo */
     var savedCountry = loadSavedCountry();
     if (savedCountry) {
       applyCountry(savedCountry, false);
@@ -899,8 +899,7 @@ window.convertPricesForCountry = convertPricesForCountry;
   }
 
   /* ══════════════════════════════════════════════════════════════
-     9. RESTAURER la langue sauvegardée au chargement
-        (AVANT la géodétection, pour ne pas l'écraser)
+     9. RESTAURER l'état sauvegardé au chargement
   ══════════════════════════════════════════════════════════════ */
   function restoreSavedState() {
     var savedLang    = loadSavedLang();
@@ -908,14 +907,14 @@ window.convertPricesForCountry = convertPricesForCountry;
 
     if (savedLang || savedCountry) {
       syncAllSelectors(savedLang || 'en', savedCountry || 'us');
+      if (savedCountry) {
+        convertPricesForCountry(savedCountry);
+      }
     }
-
-    /* Si la page a été rechargée avec un cookie googtrans,
-       Google Translate l'applique automatiquement — pas besoin d'appeler translateTo */
   }
 
   /* ══════════════════════════════════════════════════════════════
-     10. INIT PRINCIPALE — attend __allProducts + DOM prêt
+     10. INIT PRINCIPALE
   ══════════════════════════════════════════════════════════════ */
   function waitAndInit() {
     var waited = 0;
@@ -944,9 +943,9 @@ window.convertPricesForCountry = convertPricesForCountry;
             syncAllSelectors(savedL || 'en', savedC || 'us');
           }
         }
+
         var savedCountry = loadSavedCountry();
         if (savedCountry) {
-          /* Tentatives progressives pour attraper tous les prix injectés */
           [500, 1500, 3000, 5000, 8000].forEach(function(delay) {
             setTimeout(function() {
               convertPricesForCountry(savedCountry);

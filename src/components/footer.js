@@ -491,8 +491,8 @@
     const langCfg        = s.language_selector || {};
     const countryOptions = countryCfg.options  || [];
     const langOptions    = langCfg.options     || [];
-    const defaultCountry = countryCfg.default_country || 'us';
-    const defaultLang    = langCfg.default_lang        || 'en';
+    const defaultCountry = localStorage.getItem('bbw_country') || countryCfg.default_country || 'us';
+    const defaultLang    = localStorage.getItem('bbw_lang')    || langCfg.default_lang        || 'en';
 
     /* ── Peupler le custom dropdown Country ── */
     const countryList = document.getElementById('bbwCountryList');

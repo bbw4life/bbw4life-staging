@@ -337,8 +337,10 @@
     const langOptions    = langCfg.options    || [];
     const countryOptions = countryCfg.options || [];
 
-    const defaultLang    = langCfg.default_lang       || 'en';
-    const defaultCountry = countryCfg.default_country || 'us';
+    const savedLang      = localStorage.getItem('bbw_lang')    || langCfg.default_lang    || 'en';
+    const savedCountry   = localStorage.getItem('bbw_country') || countryCfg.default_country || 'us';
+    const defaultLang    = savedLang;
+    const defaultCountry = savedCountry;
 
     /* ══════════════════════════════════════════════════════════
        A. DESKTOP — .bbw-hdr-lang
