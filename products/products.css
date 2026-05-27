@@ -4295,3 +4295,13 @@ body:has(.product-section) .bbw-footer {
     } 
 }
 
+.is-product-page .bbw-footer {
+    padding-bottom: 60px !important;
+}
+
+@media (max-width: 768px) {
+    .is-product-page .bbw-footer {
+        padding-bottom: 210px !important;
+    }
+}
+

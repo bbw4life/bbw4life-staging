@@ -1,3 +1,4 @@
+
 (function captureAffiliateRef() {
   const urlParams = new URLSearchParams(window.location.search);
   const refParam  = urlParams.get('ref');

@@ -1417,17 +1417,18 @@
    14. BODY / GLOBAL FIXES
 ══════════════════════════════════════════════════════════════ */
 .bbw-footer {
-  padding-bottom: 0 !important;
+  padding-bottom: 0px !important;
   margin-bottom: 0 !important;
 }
+
 
 .bbw-footer__bottom       { padding-bottom: 18px !important; margin-bottom: 0 !important; }
 .bbw-footer__secure-text  { margin-bottom: 0 !important; }
 .bbw-footer__payments     { margin-bottom: 0 !important; }
 .bbw-footer__bottom-right { margin-bottom: 0 !important; padding-bottom: 0 !important; }
 
-body { margin-bottom: 0 !important; }
 
+body { margin-bottom: 0 !important; }
 /* ══════════════════════════════════════════════════════════════
    15. RÉDUCTION DES ANIMATIONS (accessibilité)
 ══════════════════════════════════════════════════════════════ */

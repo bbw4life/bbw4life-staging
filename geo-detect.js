@@ -260,9 +260,6 @@
 
   /* ══════════════════════════════════════════════════════════════
      4. TRADUIRE — cœur de la logique
-        • Sauvegarde la langue
-        • Applique via le combo Google Translate
-        • Si pas prêt, réessaie pendant 8 s avant reload
   ══════════════════════════════════════════════════════════════ */
   function translateTo(langCode) {
     if (!langCode) return;

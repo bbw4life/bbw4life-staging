@@ -1,3 +1,5 @@
+document.body.classList.add('is-product-page');
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ====================== CJ DROPSHIPPING DATA LOADING ======================
