@@ -971,7 +971,7 @@
 
       if (hasCfg || waited >= MAX_WAIT) {
         clearInterval(interval);
-        injectGoogleTranslate();
+        
         bindAllSelectors();
         restoreSavedState();
 

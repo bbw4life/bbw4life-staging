@@ -4291,5 +4291,7 @@ body:has(.product-section) .bbw-footer {
 @media (max-width: 768px) {
     body:has(.product-section) .bbw-footer {
         margin-bottom: 210px !important;
-    }
+    } 
 }
+
+
