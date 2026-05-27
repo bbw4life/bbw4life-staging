@@ -4284,6 +4284,7 @@ details[open] .chevron {
     .sticky-atc__img { width: 40px; height: 40px; }
 }
 
+
 body:has(.product-section) .bbw-footer {
     margin-bottom: 60px !important;
 }
@@ -4293,5 +4294,4 @@ body:has(.product-section) .bbw-footer {
         margin-bottom: 210px !important;
     } 
 }
-
 
