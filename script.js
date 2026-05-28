@@ -1,4 +1,3 @@
-
 (function captureAffiliateRef() {
   const urlParams = new URLSearchParams(window.location.search);
   const refParam  = urlParams.get('ref');
@@ -4402,6 +4401,7 @@ if (rcCheckoutBtn) {
     //  STICKY ATC — initialise après le fetch products.data.json
     (function initStickyATC() {
 
+        // ── Cibler uniquement une page produit ──
         const productSection = document.querySelector('.product-section');
         if (!productSection) return;
 
@@ -4409,34 +4409,39 @@ if (rcCheckoutBtn) {
         const product = products.find(p => p.id === pid);
         if (!product) return;
 
-        const bar           = document.getElementById('sticky-atc');
-        const satcImg       = document.getElementById('satc-img');
-        const satcTitle     = document.getElementById('satc-title');
-        const satcPrice     = document.getElementById('satc-price');
-        const satcSwatches  = document.getElementById('satc-swatches');
+        // ── Éléments DOM ──
+        const bar         = document.getElementById('sticky-atc');
+        const satcImg     = document.getElementById('satc-img');
+        const satcTitle   = document.getElementById('satc-title');
+        const satcPrice   = document.getElementById('satc-price');
+        const satcSwatches= document.getElementById('satc-swatches');
         const satcColorName = document.getElementById('satc-color-name');
         const satcColorField= document.getElementById('satc-color-field');
         const satcSizeField = document.getElementById('satc-size-field');
-        const satcSizeEl    = document.getElementById('satc-size');
-        const satcMinus     = document.getElementById('satc-minus');
-        const satcPlus      = document.getElementById('satc-plus');
-        const satcQtyVal    = document.getElementById('satc-qty-val');
-        const satcAddBtn    = document.getElementById('satc-add-btn');
+        const satcSizeEl  = document.getElementById('satc-size');
+        const satcMinus   = document.getElementById('satc-minus');
+        const satcPlus    = document.getElementById('satc-plus');
+        const satcQtyVal  = document.getElementById('satc-qty-val');
+        const satcAddBtn  = document.getElementById('satc-add-btn');
 
         if (!bar || !satcImg) return;
 
-        let satcQty           = 1;
+        // ── État interne ──
+        let satcQty          = 1;
         let satcSelectedColor = null;
         let satcSelectedSize  = null;
 
         const hasColors = product.colors && product.colors.length > 0;
         const hasSizes  = product.sizes  && product.sizes.length  > 0;
 
+        // ── Remplir le titre ──
         satcTitle.textContent = product.title;
 
+        // ── Image par défaut ──
         const defaultImg = (hasColors && product.colors[0].image) ? product.colors[0].image : product.image;
         satcImg.src = upgradeShopifyImageUrl(defaultImg);
 
+        // ── Fonction prix ──
         function getSatcPrice(color, size) {
             if (!color || !size) return product.price;
             const v = product.variants.find(vv => vv.color === color && vv.size === size);
@@ -4448,11 +4453,11 @@ if (rcCheckoutBtn) {
             satcPrice.textContent = '$' + p.toFixed(2);
         }
 
+        // ── Init prix ──
         satcPrice.textContent = '$' + product.price.toFixed(2);
 
         // ── Couleurs ──
         if (hasColors) {
-            satcSwatches.innerHTML = ''; // ← CORRECTION : vider avant de remplir
             product.colors.forEach((col, i) => {
                 const sw = document.createElement('div');
                 sw.className = 'satc-swatch' + (i === 0 ? ' active' : '');
@@ -4468,6 +4473,7 @@ if (rcCheckoutBtn) {
                 });
                 satcSwatches.appendChild(sw);
             });
+            // Sélectionner la 1ère couleur par défaut
             satcSelectedColor = product.colors[0].name;
             satcColorName.textContent = product.colors[0].name;
         } else {
@@ -4476,26 +4482,25 @@ if (rcCheckoutBtn) {
 
         // ── Tailles ──
         if (hasSizes) {
-            satcSizeEl.innerHTML = ''; // ← CORRECTION : vider avant de remplir
-            const defaultOpt = document.createElement('option');
-            defaultOpt.value = "";
-            defaultOpt.textContent = "Select Size";
-            defaultOpt.selected = true;
-            defaultOpt.disabled = true;
-            satcSizeEl.appendChild(defaultOpt);
-            product.sizes.forEach(sz => {
-                const opt = document.createElement('option');
-                opt.value = sz;
-                opt.textContent = sz;
-                satcSizeEl.appendChild(opt);
-            });
-            satcSizeEl.addEventListener('change', () => {
-                satcSelectedSize = satcSizeEl.value || null;
-                updateSatcPrice();
-            });
-        } else {
-            satcSizeField.style.display = 'none';
-        }
+        const defaultOpt = document.createElement('option');
+        defaultOpt.value = "";
+        defaultOpt.textContent = "Select Size";
+        defaultOpt.selected = true;
+        defaultOpt.disabled = true;
+        satcSizeEl.appendChild(defaultOpt);  // ✅ bonne variable
+        product.sizes.forEach(sz => {
+            const opt = document.createElement('option');
+            opt.value = sz;
+            opt.textContent = sz;
+            satcSizeEl.appendChild(opt);
+        });
+        satcSizeEl.addEventListener('change', () => {
+            satcSelectedSize = satcSizeEl.value || null;
+            updateSatcPrice();
+        });
+    } else {
+        satcSizeField.style.display = 'none';
+    }
 
         // ── Quantité ──
         satcMinus.addEventListener('click', () => {
@@ -4508,6 +4513,7 @@ if (rcCheckoutBtn) {
 
         // ── Add to Cart ──
         satcAddBtn.addEventListener('click', () => {
+            // Vérifications
             if (hasColors && !satcSelectedColor) {
                 showErrorPopup('Please select a color.');
                 return;
@@ -4517,12 +4523,14 @@ if (rcCheckoutBtn) {
                 return;
             }
 
+            // Image du variant
             let itemImage = upgradeShopifyImageUrl(product.image);
             if (satcSelectedColor) {
                 const colorObj = product.colors.find(c => c.name === satcSelectedColor);
                 if (colorObj && colorObj.image) itemImage = upgradeShopifyImageUrl(colorObj.image);
             }
 
+            // Variant ID
             let cjVariantId = null;
             const variant = product.variants.find(v => {
                 const colorMatch = !satcSelectedColor || v.color === satcSelectedColor;
@@ -4536,6 +4544,7 @@ if (rcCheckoutBtn) {
             const ratio   = product.compare_price / product.price;
             const compare = price * ratio;
 
+            // Ajouter au cart (utilise la variable `cart` globale de script.js)
             let cartItem = cart.find(i =>
                 i.id    === product.id &&
                 i.color === satcSelectedColor &&
@@ -4564,6 +4573,7 @@ if (rcCheckoutBtn) {
             renderCart();
             openCartDrawer();
 
+            // Feedback visuel
             satcAddBtn.classList.add('added');
             satcAddBtn.querySelector('span').textContent = 'Added!';
             setTimeout(() => {
@@ -4572,30 +4582,34 @@ if (rcCheckoutBtn) {
             }, 2000);
         });
 
-        // ── Visibilité ──
+        // ── Trigger : afficher la barre quand on approche du footer ──
         const footer = document.querySelector('footer.footer, footer.bbw-footer, .bbw-footer');
         const addToCartMainBtn = document.querySelector('.product-content .add-to-cart');
 
         function checkStickyVisibility() {
-            if (!footer) return;
-            const footerTop    = footer.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            const nearFooter   = footerTop < windowHeight * 4.5;
+        if (!footer) return;
 
-            let mainBtnVisible = false;
-            if (addToCartMainBtn) {
-                const rect = addToCartMainBtn.getBoundingClientRect();
-                mainBtnVisible = rect.top >= 0 && rect.bottom <= windowHeight;
-            }
+        const footerTop    = footer.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
 
-            if (nearFooter && !mainBtnVisible) {
-                bar.classList.add('visible');
-                bar.setAttribute('aria-hidden', 'false');
-            } else {
-                bar.classList.remove('visible');
-                bar.setAttribute('aria-hidden', 'true');
-            }
+        // Afficher quand le footer est à 50% de la hauteur de la fenêtre
+        const nearFooter = footerTop < windowHeight * 4.5;
+
+        // Cacher si le bouton principal ATC est visible à l'écran
+        let mainBtnVisible = false;
+        if (addToCartMainBtn) {
+            const rect = addToCartMainBtn.getBoundingClientRect();
+            mainBtnVisible = rect.top >= 0 && rect.bottom <= windowHeight;
         }
+
+        if (nearFooter && !mainBtnVisible) {
+            bar.classList.add('visible');
+            bar.setAttribute('aria-hidden', 'false');
+        } else {
+            bar.classList.remove('visible');
+            bar.setAttribute('aria-hidden', 'true');
+        }
+    }
 
         window.addEventListener('scroll', checkStickyVisibility, { passive: true });
         checkStickyVisibility();

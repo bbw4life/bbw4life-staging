@@ -7,9 +7,10 @@
   <link rel="stylesheet" href="/src/components/header.css">
   <link rel="stylesheet" href="/products/products.css">
   <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
   <script src="/preloader-inline.js"></script>
   <script src="/src/components/head.js"></script>
-
+  <link rel="stylesheet" href="/src/components/footer.css">
 </head>
 <body>
 
@@ -187,6 +188,44 @@
           <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
         </div>
 
+
+        <!-- ══════════════ OCCASION GUIDE ══════════════ -->
+      <div class="bbw-occasion-guide" data-scroll-reveal>
+        <div class="bbw-occasion-header">
+          <i class="fas fa-palette"></i>
+          <span>Which Color for Which Moment?</span>
+        </div>
+        <div class="bbw-occasion-list">
+          <div class="bbw-occasion-item">
+            <div class="bbw-occasion-dot" style="background:#FF0000;"></div>
+            <div class="bbw-occasion-color">Red</div>
+            <div class="bbw-occasion-arrow">→</div>
+            <div class="bbw-occasion-desc">
+              <i class="fas fa-glass-cheers"></i>
+              Date night, parties, events — walk in and own the room
+            </div>
+          </div>
+          <div class="bbw-occasion-item">
+            <div class="bbw-occasion-dot" style="background:#1a1a1a;"></div>
+            <div class="bbw-occasion-color">Black</div>
+            <div class="bbw-occasion-arrow">→</div>
+            <div class="bbw-occasion-desc">
+              <i class="fas fa-briefcase"></i>
+              Office, dinners, everything — the most powerful color
+            </div>
+          </div>
+          <div class="bbw-occasion-item">
+            <div class="bbw-occasion-dot" style="background:#FF69B4;"></div>
+            <div class="bbw-occasion-color">Pink</div>
+            <div class="bbw-occasion-arrow">→</div>
+            <div class="bbw-occasion-desc">
+              <i class="fas fa-sun"></i>
+              Brunch, weddings, celebrations — feminine joy
+            </div>
+          </div>
+        </div>
+      </div>
+
         <!-- WAVE -->
         <div class="pp-wave-separator">
           <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -349,17 +388,6 @@
         <div class="product-options" data-scroll-reveal>
           <label for="size-select">Select Your Size:</label>
           <select id="size-select">
-            <option value="" selected disabled>— Choose your size —</option>
-            <option value="3">Size 3</option>
-            <option value="4">Size 4</option>
-            <option value="5">Size 5</option>
-            <option value="6">Size 6</option>
-            <option value="7">Size 7</option>
-            <option value="8">Size 8</option>
-            <option value="9">Size 9</option>
-            <option value="10">Size 10</option>
-            <option value="11">Size 11</option>
-            <option value="12">Size 12</option>
           </select>
           <span class="wishlist-icon-product" title="Add to Wishlist">
             <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -371,10 +399,6 @@
           </span>
           <label for="color-select">Select Color:</label>
           <div class="color-swatches">
-            <div class="swatch active" style="background-color:#FF0000;" data-color="Red" data-image="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_Red.png?v=1778102221" title="Red"></div>
-            <div class="swatch" style="background-color:#000000;" data-color="Black" data-image="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_Black.png?v=1778102207" title="Black"></div>
-            <div class="swatch" style="background-color:#FF69B4;" data-color="Pink" data-image="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_Pink.png?v=1778102212" title="Pink"></div>
-          </div>
         </div>
 
         <!-- WAVE -->
@@ -663,99 +687,40 @@
     </div>
   </section>
 
-  <!-- ══════════════ PRODUCT REQUEST BUTTONS ══════════════ -->
-  <section class="bbw-request-section" data-scroll-reveal>
-    <div class="container">
-      <div class="bbw-request-label">
-        <i class="fas fa-clock"></i>
-        <span>Want to reserve one of our upcoming BBW4LIFE exclusive designs?</span>
-      </div>
-      <!-- Bouton Request Product -->
-      <div id="plan-request-trigger-placeholder"></div>
-    </div>
-  </section>
-
 
   <!-- ═══════════════════════════════════════
-   BBW4LIFE — CUSTOM REQUEST BANNER
+   BBW4LIFE — BANNER
 ═══════════════════════════════════════ -->
 <section class="bbw-custom-banner">
-
-  <!-- Images de fond côte à côte, subtiles -->
   <div class="bbw-cb-images">
     <div class="bbw-cb-img bbw-cb-img--left">
-      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_73_1.png?v=1778797721" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_6.png?v=1778102210" alt="" loading="lazy">
     </div>
     <div class="bbw-cb-img bbw-cb-img--right">
-      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_1.png?v=1778800275" alt="" loading="lazy">
+      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_1_7.png?v=1778102238" alt="" loading="lazy">
     </div>
   </div>
-
-  <!-- Overlay -->
   <div class="bbw-cb-overlay"></div>
-
-  <!-- Shimmer line top -->
   <div class="bbw-cb-shimmer-top"></div>
-
-  <!-- Contenu -->
   <div class="bbw-cb-content">
-
-    <!-- Eyebrow -->
     <span class="bbw-cb-eyebrow">
       <span class="bbw-cb-eyebrow-dot"></span>
-      BBW4LIFE Exclusive
+      Bold. Strapped. Unstoppable.
       <span class="bbw-cb-eyebrow-dot"></span>
     </span>
-
-    <!-- Citation -->
     <blockquote class="bbw-cb-quote">
-      "Your style. Your rules.<br>Your beauty — on your terms."
+      "Heads don't turn by accident —<br>they turn because you showed up."
     </blockquote>
-
-    <!-- Texte CTA -->
     <p class="bbw-cb-sub">
-      Request a personalized product,<br class="bbw-cb-br"> exactly the way you want it.
+      Cross-strap stiletto. Red, Black & Pink.<br class="bbw-cb-br">Sizes 3–12. Made for queens who refuse to go unnoticed.
     </p>
-
-    <!-- Ligne déco -->
     <div class="bbw-cb-line">
       <span></span>
       <i class="bbw-cb-diamond">◆</i>
       <span></span>
     </div>
-
   </div>
-
-  <!-- Shimmer line bottom -->
   <div class="bbw-cb-shimmer-bottom"></div>
-
-</section>
-
-  <section class="bbw-request-section bbw-request-section--personalized" data-scroll-reveal>
-    <div class="container">
-      <div class="bbw-request-label">
-        <i class="fas fa-wand-magic-sparkles"></i>
-        <span>Want something made exactly for you? Tell us your dream and we'll make it real.</span>
-      </div>
-    </div> 
-
-
-<!-- ══════════════════════════════════════════
-     BOUTON — MY PERSONALIZED PRODUCT
-══════════════════════════════════════════ -->
-<section class="my-product-section" data-scroll-reveal>
-    <div class="container">
-        <button class="my-product-btn" id="openMyProductPopup">
-            <span class="my-product-btn__icon">
-                <i class="fas fa-wand-magic-sparkles"></i>
-            </span>
-            <span class="my-product-btn__text">
-                <strong>Submit Your Custom Product</strong>
-                <small>Your style. Your size. Your vision — we make it real.</small>
-            </span>
-            <span class="my-product-btn__arrow">→</span>
-        </button>
-    </div>
 </section>
 
   <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
@@ -1444,6 +1409,7 @@
 <script src="/animations.js"></script>
 <script src="/search.js"></script>
 <script src="/geo-detect.js"></script>
+<script src="/products/products-globales.js"></script>
 
 
 <script>
@@ -1523,14 +1489,6 @@
     </button>
   </div>
 </div>
-
-<!-- Stripe Public Key -->
-<script>
-    window.STRIPE_PUBLIC_KEY = "pk_test_51PMDwoF9QAVBUyaUqwc7ekbAhyZdI9oA3ubZT8b7TtWGrykoPLvsql4mexEwEoS5pggyssqN6jpj2w5VQMHOSftf00q97Rbt1f";
-</script>
-
-<script src="https://js.stripe.com/v3/"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=AbHxiQOr022CZ5tf7LtOUlpW-NZxUMfCxankCaZnFJNcN6msJ_eNT3HAptmJhcaQDNltCahOOzi4CoPX&currency=USD&intent=capture"></script>
 
 </body>
 </html>

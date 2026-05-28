@@ -371,6 +371,38 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product1.html'
     },
 
+    '/products/product2.html': {
+        title: 'RetroRun Sneakers — Chunky Sole Street Style | BBW4LIFE',
+        description: 'Bold chunky sole retro sneakers designed for plus size queens. Round-toe street style in Black, Green, Blue & Wine Red. Sizes 37 to 44. All-day comfort — free worldwide shipping.',
+        keywords: 'plus size sneakers, BBW chunky sneakers, curvy women shoes, retro round toe sneakers, plus size street style, chunky sole shoes, wide fit sneakers, BBW4LIFE shoes, sizes 37 to 44 sneakers, retro run sneakers curvy, plus size platform sneakers, BBW street style shoes',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_2_1.png?v=1778168128',
+        canonical: 'https://www.bbw4life.com/products/product2.html'
+    },
+
+    '/products/product3.html': {
+        title: 'BohoFlip Sandals — Embroidered Boho Flip Flops for Plus Size Queens | BBW4LIFE',
+        description: 'Slip on the BohoFlip Sandals by BBW4LIFE — electric embroidery, effortless slip-on design, 4 bold colors (Black, Pink, Blue, Brown) and sizes 35 to 43. Made for curvy queens who refuse to hide their style. Free worldwide shipping. 30-day returns.',
+        keywords: 'boho flip flop sandals, plus size sandals, BBW4LIFE sandals, embroidered sandals, curvy women sandals, boho sandals plus size, flip flop sandals BBW, plus size flip flops, embroidered flip flops, BBW4LIFE shoes, curvy woman sandals, boho sandals sizes 35 43, plus size beach sandals, BBW boho sandals, curvy woman summer sandals, electric embroidery sandals, plus size summer shoes, BBW4LIFE boho collection, curvy fashion sandals, boho flip flop plus size, slip on sandals curvy, plus size vacation sandals, BBW beach sandals, curvy woman boho style, plus size shoe sizes 35 43, boho embroidery flip flops, BBW4LIFE flip flops, curvy queen sandals, plus size boho shoes, summer sandals curvy women',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_3_1.png?v=1778181127',
+        canonical: 'https://www.bbw4life.com/products/product3.html'
+    },
+
+    '/products/product4.html': {
+        title: 'PowerHeels — 12cm Stiletto Pumps for Plus Size Queens | BBW4LIFE',
+        description: 'Stand tall and own every room in the PowerHeels by BBW4LIFE. Dramatic 12cm stiletto pumps in Black, Green, Orange & Lavender — designed for curvy queens. Sizes 5 to 10.5. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size stiletto heels, BBW heels 12cm, curvy women pumps, high heels plus size, BBW4LIFE heels, stiletto pumps curvy, plus size formal heels, high heels BBW, curvy queen heels, plus size party shoes, stiletto pumps BBW, sizes 5 to 10.5 heels, dramatic heels plus size, BBW4LIFE shoes, curvy woman formal shoes, plus size gala heels, BBW stiletto pumps, high heel shoes curvy, plus size evening heels, powerful heels BBW4LIFE',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_1.png?v=1778183863',
+        canonical: 'https://www.bbw4life.com/products/product4.html'
+    },
+
+    '/products/product5.html': {
+        title: 'WinterBoost Boots — Ankle Boots for Plus Size Queens | BBW4LIFE',
+        description: 'Walk taller every day in the WinterBoost Boots by BBW4LIFE. Cozy, chic ankle boots in Black, Brown & Gray — designed for curvy queens who want style and comfort all year. Sizes 36 to 43. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size ankle boots, BBW ankle boots, curvy women boots, winter boots plus size, BBW4LIFE boots, ankle boots curvy queen, plus size winter boots, WinterBoost boots BBW, curvy woman ankle boots, plus size everyday boots, boots for BBW women, ankle boots sizes 36 to 43, plus size black boots, plus size brown boots, plus size grey boots, cozy boots plus size, BBW4LIFE shoes, curvy queen boots, wide calf ankle boots, plus size autumn boots, plus size spring boots, comfortable boots curvy, BBW boots stylish, ankle boots wide fit, BBW4LIFE WinterBoost, plus size boot queen, flattering ankle boots curvy, all season boots plus size, plus size work boots, curvy women footwear',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_5_1.png?v=1778185883',
+        canonical: 'https://www.bbw4life.com/products/product5.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */

@@ -940,8 +940,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 
-
-
 // ====================== URGENCY BAR — MISE À JOUR DYNAMIQUE ======================
 (function() {
     const urgencyBar = document.querySelector('.pp-urgency-bar span');

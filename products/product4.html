@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">A queen who stands tall in her heels walks like she owns every room she enters.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product4">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">Standing tall was never about height — it was always about confidence. <strong>The PowerHeels were designed for the curvy queen who refuses to be invisible, who walks into every room like she owns it.</strong> Dramatic 12cm height. Four stunning colors. Made for every size. <em>Your throne starts here.</em></p>
+        </div>
+
+
+        <!-- BBW HIGH HEEL GUIDE -->
+        <div class="bbw-heel-guide" data-scroll-reveal>
+        <div class="bbw-heel-guide__header">
+            <i class="fas fa-crown"></i>
+            <span>Your First Time in 12cm Heels? Read This.</span>
+        </div>
+        <div class="bbw-heel-guide__steps">
+            <div class="bbw-heel-guide__step">
+            <div class="bbw-heel-guide__step-num">1</div>
+            <div class="bbw-heel-guide__step-body">
+                <strong>Your First 20 Minutes</strong>
+                <span>Wear them indoors first. Walk slowly on a flat surface. Let your body find its natural balance. You will feel taller immediately — that is normal and beautiful.</span>
+            </div>
+            </div>
+            <div class="bbw-heel-guide__step">
+            <div class="bbw-heel-guide__step-num">2</div>
+            <div class="bbw-heel-guide__step-body">
+                <strong>Posture Is Everything</strong>
+                <span>Stand straight, shoulders back, core gently engaged. The 12cm heel naturally shifts your weight forward — let it. Your posture will automatically become more powerful.</span>
+            </div>
+            </div>
+            <div class="bbw-heel-guide__step">
+            <div class="bbw-heel-guide__step-num">3</div>
+            <div class="bbw-heel-guide__step-body">
+                <strong>Add a Gel Insole</strong>
+                <span>For long events (weddings, galas), slide in a soft gel insole. It adds a cushion layer under the ball of your foot — you can dance for hours without feeling anything except confident.</span>
+            </div>
+            </div>
+            <div class="bbw-heel-guide__step">
+            <div class="bbw-heel-guide__step-num">4</div>
+            <div class="bbw-heel-guide__step-body">
+                <strong>You Are Not "Too Heavy" for 12cm</strong>
+                <span>This is the most important step. The PowerHeels were designed with a stabilized base precisely for plus size women. Your weight is not the problem. It never was. Put them on. Own every inch.</span>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flame"></i> 57% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Stand Tall Like the Queen You Are &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> 12cm of Pure Confidence &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-shoes-heels"></i> Sizes 5 to 10.5 Available &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flame"></i> 57% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Stand Tall Like the Queen You Are &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> 12cm of Pure Confidence &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-shoes-heels"></i> Sizes 5 to 10.5 Available &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>39 queens</strong> added these heels to cart today — Own the room tonight!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Step Up & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me 👑</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Me & My Bestie 💕</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Pair</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Pair</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Squad Goals Pack 🔥</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Pair 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Pair 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Pair 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-sparkles"></i>
+            <span>Complete Your Power Queen Look</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who complete their look feel unstoppable — dress the part from head to heel.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing these heels right now.</span>
+          </p>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+         <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select">
+          </select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches">
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BENEFITS -->
+        <div class="pp-benefits-block">
+          <div class="pp-benefits-header">
+            <i class="fas fa-check-circle"></i>
+            <span>Why queens can't stop wearing these heels</span>
+          </div>
+          <ul class="pp-benefits-list">
+            <li><i class="fas fa-check"></i><span>12cm dramatic height that instantly transforms your silhouette — every curve celebrated, every step powerful</span></li>
+            <li><i class="fas fa-check"></i><span>4 bold colorways: Black, Green, Orange & Lavender — because your mood deserves a color that matches it</span></li>
+            <li><i class="fas fa-check"></i><span>Stiletto design that elongates your legs and commands attention in any room you enter</span></li>
+            <li><i class="fas fa-check"></i><span>Sizes 5 to 10.5 — plus size queens, your perfect heel has arrived</span></li>
+            <li><i class="fas fa-check"></i><span>Versatile enough for date nights, galas, office events, and every moment you deserve to shine</span></li>
+          </ul>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Which size is right for me?</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">PowerHeels — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_1.png?v=1778183863" alt="PowerHeels Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                The PowerHeels run true to US sizing. For the best fit and maximum comfort at 12cm height, measure your foot length carefully. If you're between sizes, we recommend sizing <strong>up</strong> for added comfort during extended wear.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> How to Measure Your Foot</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <ul>
+                <li><strong>Step 1:</strong> Place your foot flat on a piece of paper.</li>
+                <li><strong>Step 2:</strong> Mark the tip of your longest toe and the back of your heel.</li>
+                <li><strong>Step 3:</strong> Measure the distance between the two marks in cm.</li>
+                <li>For heels: choose the <strong>larger size</strong> if between two sizes for maximum comfort.</li>
+              </ul>
+              <h3><i class="fi fi-rr-ruler-triangle"></i> US Size Conversion Chart</h3>
+              <table>
+                <thead>
+                  <tr><th>US Size</th><th>EU Size</th><th>Foot Length (cm)</th><th>Best For</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>5</strong></td><td>35</td><td>22.0 cm</td><td>Narrow to regular</td></tr>
+                  <tr><td><strong>6</strong></td><td>36</td><td>23.0 cm</td><td>Regular width</td></tr>
+                  <tr><td><strong>6.5</strong></td><td>37</td><td>23.5 cm</td><td>Regular width</td></tr>
+                  <tr><td><strong>7.5</strong></td><td>38</td><td>24.0 cm</td><td>Regular width</td></tr>
+                  <tr><td><strong>8.5</strong></td><td>39</td><td>24.5 cm</td><td>Regular to wide</td></tr>
+                  <tr><td><strong>9</strong></td><td>40</td><td>25.0 cm</td><td>Wide</td></tr>
+                  <tr><td><strong>9.5</strong></td><td>41</td><td>25.5 cm</td><td>Wide</td></tr>
+                  <tr><td><strong>10</strong></td><td>42</td><td>26.0 cm</td><td>Wide to extra wide</td></tr>
+                  <tr><td><strong>10.5</strong></td><td>43</td><td>26.5 cm</td><td>Extra wide</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-palette"></i> Available Colors</h3>
+              <table>
+                <thead><tr><th>Color</th><th>Mood & Occasion</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>⚫ Black</strong></td><td>Classic power — the ultimate versatile heel for every occasion</td></tr>
+                  <tr><td><strong>🟢 Green</strong></td><td>Bold statement — stand out at galas, parties, and special events</td></tr>
+                  <tr><td><strong>🟠 Orange</strong></td><td>Fierce energy — summer events, brunches, and everything vibrant</td></tr>
+                  <tr><td><strong>💜 Lavender</strong></td><td>Elegant mystery — weddings, formal events, and romantic evenings</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">What makes these heels extraordinary?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The <strong>PowerHeels</strong> are not just shoes. They are a declaration. At 12cm, they transform your posture, your presence, and the way you feel in any room. Every curve of the heel is designed to elongate and celebrate your silhouette.</p>
+              <p>Available in four breathtaking colors and sizes 5 to 10.5 — because <strong>every BBW queen deserves heels that fit perfectly and make her feel like royalty</strong>.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping & Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Arrives carefully packaged — ready to make your grand entrance.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your satisfaction is everything.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs & Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> Stiletto pump heels</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Heel Height:</strong> 12cm dramatic stiletto</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Colors:</strong> Black, Green, Orange, Lavender</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> 5 through 10.5 (US)</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Occasion:</strong> Galas, date nights, weddings, formal events, parties</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Wipe clean with a soft damp cloth, store in box</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_2.png?v=1778183864" alt="PowerHeels Black — dramatic stiletto" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-fire"></i> Own Every Room</div>
+                <div class="slide-text">12cm of pure confidence. Black PowerHeels with any outfit and you become the main character instantly.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_3.png?v=1778183864" alt="PowerHeels Green — bold statement" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Bold Green Energy</div>
+                <div class="slide-text">Green PowerHeels + a sleek black dress = the look no one forgets. Bold. Fearless. Absolutely you.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_5.png?v=1778183860" alt="PowerHeels Orange — fierce confidence" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> Orange Fire</div>
+                <div class="slide-text">Orange heels for the woman who refuses to blend in. Every step is a statement of fierce, unapologetic beauty.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_6.png?v=1778183864" alt="PowerHeels — silhouette elegance" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-crown"></i> Silhouette Magic</div>
+                <div class="slide-text">The 12cm stiletto elongates every curve beautifully. Walk taller, stand prouder, feel more powerful than ever.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Are 12cm heels wearable for plus size women?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Absolutely, queen. <strong>The PowerHeels are designed with a stabilized stiletto base</strong> that provides better balance than traditional thin stilettos. The platform-influenced sole distributes weight more evenly, making the 12cm height more comfortable than you might expect. Thousands of BBW queens wear these for full evenings without discomfort.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">What outfits do these heels work with?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Everything elegant. Black PowerHeels + any dress = instant sophistication. Orange heels + a white midi dress = the summer event look everyone talks about. Lavender + a formal gown = wedding guest perfection. Green + a sleek black set = unforgettable. <strong>The heel is the statement — your outfit celebrates it.</strong></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Which color should I choose?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Black is the most versatile — works with everything, every occasion, every season. Green is the boldest and most talked about. Orange is for the queen who wants maximum energy and confidence. Lavender is the most elegant and romantic. <strong>Many queens order two colors — and our bundle pricing makes that completely worth it.</strong></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How do I find my correct size?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Our PowerHeels follow standard US sizing. <strong>If you're between sizes, always go up</strong> — a slightly larger heel is far more comfortable than one that's too tight, especially at 12cm. Check the size chart above for precise cm measurements if you're unsure.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your PowerHeels will arrive in <strong>12–20 business days</strong> with standard free worldwide shipping. Express options are available at checkout. Every order arrives carefully packaged — because your queen delivery deserves to feel like a gift.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I wear these heels for long events?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Yes. <strong>Our queens have worn PowerHeels through full wedding receptions, gala evenings, and long nights out.</strong> The stabilized base and quality insole make these more comfortable than typical stilettos of this height. Pro tip: bring gel insoles for extended wear and you'll be dancing all night.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     BBW4LIFE — BANNER
+  ═══════════════════════════════════════ -->
+    <section class="bbw-custom-banner">
+  <div class="bbw-cb-images">
+    <div class="bbw-cb-img bbw-cb-img--left">
+      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_7.png?v=1778183863" alt="" loading="lazy">
+    </div>
+    <div class="bbw-cb-img bbw-cb-img--right">
+      <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_8.png?v=1778183862" alt="" loading="lazy">
+    </div>
+  </div>
+  <div class="bbw-cb-overlay"></div>
+  <div class="bbw-cb-shimmer-top"></div>
+  <div class="bbw-cb-content">
+    <span class="bbw-cb-eyebrow">
+      <span class="bbw-cb-eyebrow-dot"></span>
+      12cm of Pure Power
+      <span class="bbw-cb-eyebrow-dot"></span>
+    </span>
+    <blockquote class="bbw-cb-quote">
+      "You were never too much.<br>The room was just too small."
+    </blockquote>
+    <p class="bbw-cb-sub">
+      Stiletto height. Dramatic silhouette.<br class="bbw-cb-br">Sizes 5–10.5. Own every room tonight.
+    </p>
+    <div class="bbw-cb-line">
+      <span></span>
+      <i class="bbw-cb-diamond">◆</i>
+      <span></span>
+    </div>
+  </div>
+  <div class="bbw-cb-shimmer-bottom"></div>
+</section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider">
+        <div class="product-item" data-product-id="Pdg-Francenel-product1">
+          <div class="product-image">
+            <a href="/products/product1.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product1"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product1"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product2">
+          <div class="product-image">
+            <a href="/products/product2.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product2"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product2"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product3">
+          <div class="product-image">
+            <a href="/products/product3.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product3"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product3"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product5">
+          <div class="product-image">
+            <a href="/products/product5.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product5"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product5"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product6">
+          <div class="product-image">
+            <a href="/products/product6.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product6"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product6"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product39">
+          <div class="product-image">
+            <a href="/products/product39.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product39"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product39"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product7">
+          <div class="product-image">
+            <a href="/products/product7.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product7"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product7"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:71%;"></div></div><span id="count-5">52</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:19%;"></div></div><span id="count-4">14</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:7%;"></div></div><span id="count-3">5</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:2%;"></div></div><span id="count-2">2</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_1.png?v=1778183863" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_2.png?v=1778183864" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_3.png?v=1778183864" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_4.png?v=1778183863" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_5.png?v=1778183860" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_6.png?v=1778183864" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_7.png?v=1778183863" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_8.png?v=1778183862" alt="Review photo">
+          <div class="review-photos-more">12+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-May-16</span></div>
+          <div class="rv-card-right"><h4>Nadia K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I walked into that gala and the room stopped.</h5>
+        <p>Black PowerHeels, size 9. I wore them to my company's annual gala and I have never received so many compliments in my life. My boss asked where I bought my shoes. My colleague asked if I was a model. I am a plus size woman who used to avoid heels because I thought they "weren't for me." BBW4LIFE changed that forever.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_1.png?v=1778183863" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-May-11</span></div>
+          <div class="rv-card-right"><h4>Fatima R.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The Green ones are absolutely electric</h5>
+        <p>Green PowerHeels, size 8.5. I wore them with a black midi dress to my friend's birthday dinner and every single woman at the table asked where I got them. The color is even more vibrant in person. The heel is stable — more than I expected for 12cm. I felt taller, fiercer, and more beautiful than I have in years. BBW4LIFE, you did that.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-May-06</span></div>
+          <div class="rv-card-right"><h4>Marie-Claire D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Lavender + wedding guest dress = perfection</h5>
+        <p>Lavender PowerHeels, size 7.5. I wore these as a wedding guest and my photos look like I hired a professional stylist. The lavender is delicate but powerful — the heel makes me look 6 feet tall. Three women stopped me between the ceremony and reception to ask about my shoes. Size 7.5 fits perfectly. Ordering the Black pair next.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_lavender.png?v=1778183861" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Apr-29</span></div>
+          <div class="rv-card-right"><h4>Simone T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I cried when I put them on. Happy tears.</h5>
+        <p>Orange PowerHeels, size 10. I am a plus size woman and I have spent 15 years believing that heels like these weren't made for women like me. When I put the Orange PowerHeels on and looked in the mirror, I genuinely cried. My legs looked incredible. My posture transformed. I felt like the queen BBW4LIFE tells me I am. Thank you from the bottom of my heart.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-Apr-22</span></div>
+          <div class="rv-card-right"><h4>Aminata S.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Dakar — arrived in 19 days, perfect</h5>
+        <p>Commandé depuis Dakar, Sénégal. Arrivé en 19 jours dans un emballage magnifique. PowerHeels en noir, taille 9. Le talon est plus stable que je ne le pensais pour 12cm. Je les ai portés à une soirée et toutes les femmes me posaient des questions. BBW4LIFE livre au Sénégal et le fait parfaitement. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Apr-15</span></div>
+          <div class="rv-card-right"><h4>Celestine O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered the duo bundle — my sister and I both love them</h5>
+        <p>I ordered the Me & My Bestie bundle — Black for me (size 9.5), Green for my sister (size 7.5). We wore them to a charity gala together and we were photographed multiple times. People thought we were event hosts. The bundle savings were real and the packaging was stunning. BBW4LIFE — you elevated our whole evening.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">V</div><span class="date">2026-Apr-07</span></div>
+          <div class="rv-card-right"><h4>Viviane M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore these for 5 hours at a wedding — zero pain</h5>
+        <p>Black PowerHeels, size 8.5. I was at my cousin's wedding for over 5 hours — cocktail hour, ceremony, dinner, dancing. I expected to suffer like I always do in heels. Instead, I danced the entire night. The base is more stable than any heel I've owned before. My feet felt fine. My photos were flawless. BBW4LIFE, these are life-changing.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Mar-30</span></div>
+          <div class="rv-card-right"><h4>Imani J.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The Orange ones went viral on my TikTok</h5>
+        <p>Orange PowerHeels, size 9. I posted an outfit video with these heels and my comments exploded. "Where did you get those?!" — 6,200 likes and I've sent the BBW4LIFE link to over 300 people. Plus size women seeing another plus size woman in bold 12cm orange heels and feeling inspired — that's what BBW4LIFE is about. Size 9 fits perfectly. ❤️</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_Orange.png?v=1778183862" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Titi O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Size 10.5 actually fits!</p><p class="rv-mq-quote">After years of not finding heels in my size, BBW4LIFE delivered. Black PowerHeels, 10.5. Stunning. I stood tall all night.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Brenda K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">These made me feel like royalty</p><p class="rv-mq-quote">Lavender PowerHeels for my graduation ceremony. Every photo looks like a magazine shoot. Size 6.5. Absolutely magical.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Leticia P.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My date night power move</p><p class="rv-mq-quote">Green PowerHeels + wrap dress = the most confidence I have ever felt on a date. He proposed three months later. Size 8. Perfect fit.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">G</div><div class="rv-mq-meta"><p class="rv-mq-name">Gloria F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">At 60, I found my power heel</p><p class="rv-mq-quote">I'm 60 years old and I haven't felt this fierce in heels in decades. Black PowerHeels, size 9. My granddaughter wants a pair!</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">E</div><div class="rv-mq-meta"><p class="rv-mq-name">Esther A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Orange + black dress = iconic</p><p class="rv-mq-quote">Orange PowerHeels with a black bodycon dress is the look I'll be wearing forever. Effortlessly powerful. Size 7.5.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">H</div><div class="rv-mq-meta"><p class="rv-mq-name">Habiba M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Arrived from Morocco — parfait</p><p class="rv-mq-quote">Commandé depuis Casablanca. Arrivé en 17 jours. PowerHeels lavande, taille 8. Magnifique pour une soirée de mariage.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rose C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My most-asked-about purchase ever</p><p class="rv-mq-quote">I've been asked about my Black PowerHeels more than any other item I've ever owned. Size 9.5. BBW4LIFE made me a style icon.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Doris N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">These changed how I see myself</p><p class="rv-mq-quote">I never wore heels because I thought I was "too big." Green PowerHeels proved me wrong. I walk differently now. Size 10. Transformed.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Titi O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Size 10.5 actually fits!</p><p class="rv-mq-quote">After years of not finding heels in my size, BBW4LIFE delivered. Black PowerHeels, 10.5. Stunning. I stood tall all night.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Brenda K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">These made me feel like royalty</p><p class="rv-mq-quote">Lavender PowerHeels for my graduation ceremony. Every photo looks like a magazine shoot. Size 6.5. Absolutely magical.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-Mar-20</span></div>
+          <div class="rv-card-right"><h4>Adaeze N.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore these to church and women thought I was a model</h5>
+        <p>Black PowerHeels to Sunday service. Three women asked me after the sermon if I was a model or if I had just attended a fashion event. I had not. I was just wearing BBW4LIFE. Size 9. That's the power of these heels — they transform not just your height but your entire presence.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Mar-12</span></div>
+          <div class="rv-card-right"><h4>Lucie M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My first BBW4LIFE order — I immediately ordered two more</h5>
+        <p>Ordered Orange PowerHeels in size 8 as my first BBW4LIFE purchase. When they arrived I was speechless. The quality, the color, the heel stability at 12cm — all extraordinary. I ordered Black and Green the same week. This brand understands that plus size women deserve exceptional footwear, not afterthoughts.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_green.png?v=1778183863" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Mar-04</span></div>
+          <div class="rv-card-right"><h4>Uche A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>12cm and I danced all night — impossible until BBW4LIFE</h5>
+        <p>I have never in my life worn 12cm heels for more than an hour without pain. Black PowerHeels, size 10.5. I danced for 4 hours straight at my nephew's wedding. The base is engineered differently — more stability, better weight distribution. I woke up the next morning with zero foot pain. BBW4LIFE changed my relationship with heels forever.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Feb-24</span></div>
+          <div class="rv-card-right"><h4>Harriet B.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Gorgeous — go up half a size for wide feet</h5>
+        <p>The heels are absolutely stunning — the Orange color in person is even more vibrant than in photos. I have slightly wide feet and ordered my usual size 8, which was just a touch snug. Exchanged for 8.5 and they fit perfectly. The quality is exceptional for the price. Recommend going up half a size if you have wider feet.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Feb-15</span></div>
+          <div class="rv-card-right"><h4>Olawale K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I bought these for my wife — she hasn't stopped smiling</h5>
+        <p>My wife is a plus size woman who always said heels weren't made for her. I ordered the Lavender PowerHeels as a surprise birthday gift, size 9. When she opened them and tried them on, she looked in the mirror and said "I look like a queen." She has worn them to every event since. BBW4LIFE — you helped me make her feel seen and celebrated. Thank you.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Feb-06</span></div>
+          <div class="rv-card-right"><h4>Marie-Ange P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Haïti — livraison parfaite</h5>
+        <p>Mwen te kòmande de Ayiti. Yo rive nan 20 jou, anbalaj pafè. PowerHeels nwa, tay 8.5. Yo bèl anpil. Mwen te mete yo nan yon sware epi tout moun te mande kote mwen jwenn yo. BBW4LIFE livre toupatou — Ayisyèn yo, pase kòmand san ezite. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Jan-28</span></div>
+          <div class="rv-card-right"><h4>Celestine P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>New Year's gift to myself — total transformation</h5>
+        <p>I ordered Black PowerHeels as my New Year's gift to myself. Put them on for the first time on January 1st and walked outside feeling like a completely different woman. My neighbor said "you look incredible — did you change your hair?" I said no, just new heels. That is the magic of wearing something that truly celebrates your body. Size 9.5.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2026-Jan-18</span></div>
+          <div class="rv-card-right"><h4>Josepha K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The craftsmanship is genuinely designer-level</h5>
+        <p>I work in fashion and I know quality when I see it. The PowerHeels construction — the stability of the base, the finish of the heel itself, the quality of the upper — is exceptional for this price point. Green pair, size 8. These would sell for triple at a boutique. BBW4LIFE found a way to make designer-quality heels accessible to every queen. That matters.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_4_9.png?v=1778183864" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2026-Jan-09</span></div>
+          <div class="rv-card-right"><h4>Eunice O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Black PowerHeels at the office = instant authority</h5>
+        <p>Black PowerHeels with a tailored pantsuit = the most powerful I have ever felt walking into a meeting. My colleagues thought I had bought expensive designer shoes. Size 8.5. The 12cm heel gives me a presence I didn't know I could project. BBW4LIFE heels are not just for evenings — they are for every moment you need to own the room.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Dec-30</span></div>
+          <div class="rv-card-right"><h4>Xena T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>These heels are part of my healing journey</h5>
+        <p>Buying the Lavender PowerHeels was a milestone in my body acceptance journey. For years I told myself that tall heels weren't for plus size women. When I put them on and looked in the mirror at 12cm tall, I took a photo and sent it to my therapist with the caption: "I am proud of my body today." Size 9. BBW4LIFE is part of my healing story.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Queen Moment ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. I felt like a goddess!)" required>
+            <textarea id="review-text" placeholder="Tell your story — how did these heels make you feel? Where did you wear them? Your words inspire other queens. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already inspiring other beautiful women like you.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<!-- FOOTER -->
+<div id="footer-container"></div>
+
+<!-- WIDGETS -->
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+<script src="/animations.js"></script>
+<script src="/search.js"></script>
+<script src="/geo-detect.js"></script>
+<script src="/products/products-globales.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+    <div class="sticky-atc__inner">
+        <div class="sticky-atc__product">
+            <img id="satc-img" src="" alt="" class="sticky-atc__img">
+            <div class="sticky-atc__info">
+                <span id="satc-title" class="sticky-atc__title"></span>
+                <span id="satc-price" class="sticky-atc__price"></span>
+            </div>
+        </div>
+        <div class="sticky-atc__selectors">
+            <div class="satc-field" id="satc-color-field">
+                <label class="satc-label">Color</label>
+                <div class="satc-color-wrap">
+                    <div class="satc-swatches" id="satc-swatches"></div>
+                    <span class="satc-color-name" id="satc-color-name">—</span>
+                </div>
+            </div>
+            <div class="satc-field" id="satc-size-field">
+                <label class="satc-label">Size</label>
+                <select id="satc-size" class="satc-select"></select>
+            </div>
+            <div class="satc-field">
+                <label class="satc-label">Qty</label>
+                <div class="satc-qty">
+                    <button class="satc-qty-btn" id="satc-minus">−</button>
+                    <span id="satc-qty-val">1</span>
+                    <button class="satc-qty-btn" id="satc-plus">+</button>
+                </div>
+            </div>
+        </div>
+        <button class="sticky-atc__btn" id="satc-add-btn">
+            <i class="fi fi-rr-shopping-cart"></i>
+            <span>Add to Cart</span>
+        </button>
+    </div>
+</div>
+
+</body>
+</html>
