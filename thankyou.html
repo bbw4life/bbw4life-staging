@@ -7,7 +7,7 @@
     <meta name="description" content="Thank you for your order at BBW4LIFE — Beauty Has No Sizes">
     <meta name="robots" content="noindex, nofollow">
     <meta name="author" content="BBW4LIFE">
-    <meta name="theme-color" content="#c0385e">
+    <meta name="theme-color" content="#000000">
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self' https:;
          script-src 'self' https://js.stripe.com https://www.paypal.com;
@@ -149,7 +149,7 @@
     </div>
     <div class="stat-badge">
         <i class="fas fa-heart"></i>
-        <span>10K+</span>
+        <span><span data-stat-text data-stat-key="members"></span>+</span>
         <p>Queens in our family</p>
     </div>
 </div>
@@ -166,7 +166,7 @@
     <h4>Share the Love <i class="fas fa-sparkles share-title-icon"></i></h4>
     <p>Inspire a queen you love — share your BBW4LIFE moment</p>
     <div class="share-buttons">
-        <a class="share-btn instagram" href="https://www.instagram.com" target="_blank" rel="noopener">
+        <a class="share-btn instagram" id="share-instagram-btn" href="https://www.instagram.com" target="_blank" rel="noopener">
             <i class="fab fa-instagram"></i> Instagram
         </a>
         <a class="share-btn whatsapp"
@@ -265,18 +265,63 @@
 <script>
 // ── Copy link button ──
 document.getElementById('copy-link-btn')?.addEventListener('click', function() {
-    navigator.clipboard.writeText('https://www.bbw4life.com').then(() => {
+    const msg = `🌸 I just ordered from BBW4LIFE — Beauty Has No Sizes! A brand that truly celebrates every curve and every woman. Check them out! 👉 ${window.location.origin}`;
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(msg).then(() => {
+            this.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            this.style.background = 'var(--green)';
+            this.style.color = '#fff';
+            this.style.borderColor = 'var(--green)';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-link"></i> Copy Link';
+                this.style.background = '';
+                this.style.color = '';
+                this.style.borderColor = '';
+            }, 2500);
+        });
+    } else {
+        const el = document.createElement('textarea');
+        el.value = msg;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
         this.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        this.style.background = 'var(--green)';
-        this.style.color = '#fff';
-        this.style.borderColor = 'var(--green)';
         setTimeout(() => {
             this.innerHTML = '<i class="fas fa-link"></i> Copy Link';
-            this.style.background = '';
-            this.style.color = '';
-            this.style.borderColor = '';
         }, 2500);
-    });
+    }
+});
+
+// ── Instagram share button ──
+document.getElementById('share-instagram-btn')?.addEventListener('click', function(e) {
+    e.preventDefault(); // Bloque l'ouverture immédiate
+    
+    const msg = `🌸 I just ordered from BBW4LIFE — Beauty Has No Sizes! A brand that truly celebrates every curve and every woman. Check them out! 👉 ${window.location.origin}`;
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(msg).then(() => {
+            // Message copié → PUIS ouvre Instagram après 800ms
+            this.innerHTML = '<i class="fab fa-instagram"></i> Message Copied!';
+            setTimeout(() => {
+                window.open('https://www.instagram.com', '_blank');
+                this.innerHTML = '<i class="fab fa-instagram"></i> Instagram';
+            }, 800);
+        });
+    } else {
+        const el = document.createElement('textarea');
+        el.value = msg;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        this.innerHTML = '<i class="fab fa-instagram"></i> Message Copied!';
+        setTimeout(() => {
+            window.open('https://www.instagram.com', '_blank');
+            this.innerHTML = '<i class="fab fa-instagram"></i> Instagram';
+        }, 800);
+    }
 });
 </script>
 

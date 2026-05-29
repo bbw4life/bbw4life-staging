@@ -24,9 +24,10 @@
 
 
 .my-product-section {
-  padding: 20px 0 10px;
+  padding: 10px 0 10px;
   text-align: center;
-  background: var(--col-bg) !important;
+  background: var(--col-bg);
+  color: #1a0f0a !important;
   border-top: 1px solid rgba(201,150,62,0.18);
 }
 

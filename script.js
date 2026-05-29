@@ -8483,6 +8483,11 @@ document.addEventListener('DOMContentLoaded', function () {
       return `<img src="${src}" alt="${alt}" class="cf-founder-img" style="width:100%;max-width:220px;border-radius:12px;display:block;margin:8px auto;border:2px solid rgba(201,150,62,0.40);">`;
     });
 
+
+    out = out.replace(/https?:\/\/[^\s<"]+/g, '');
+    out = out.replace(/\/(collections|products|page|policies|blog|account|checkout)[^\s<"']*/g, '');
+    out = out.replace(/\.html\b/g, '');
+
     return out
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<strong>$1</strong>')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -8779,9 +8784,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const response = await fetch('/.netlify/functions/chat', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({
-            message: text,
-            history: conversationHistory.slice(-8)
+          body: JSON.stringify({
+              message: text,
+              history: conversationHistory.slice(-8),
+              detectedLang: userLang
           })
         });
 

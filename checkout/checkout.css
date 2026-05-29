@@ -2,11 +2,7 @@
 
 /* ════════════════════════════════════════════════════════════════
    BBW4LIFE — CHECKOUT ULTRA PREMIUM
-   Palette : ivoire chaud · or flamboyant · rose profond · crème
-   Émotion : désir · confiance · exclusivité · féminité luxueuse
 ════════════════════════════════════════════════════════════════ */
-
-/* ── Variables locales (héritées du système global BBW4LIFE) ── */
 :root {
   --ck-bg:          #fdf8f3;
   --ck-bg2:         #fef5ec;
@@ -299,7 +295,7 @@ body::after {
 #ck-wave-section {
   position: relative;
   width: 100%;
-  height: 28px;
+  height: 20px;
   background: #1a1a1a;
   overflow: hidden;
   isolation: isolate;
@@ -336,12 +332,10 @@ body::after {
    MAIN LAYOUT
 ════════════════════════════════════════════════════════════════ */
 .checkout-main {
-  max-width: 1240px;
-  margin: 30px auto;
+  margin: 20px auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
-  padding: 0 24px;
   position: relative;
   z-index: 1;
 }
@@ -353,6 +347,18 @@ body::after {
   .checkout-main { padding: 0 16px; margin: 18px auto; }
 }
 
+
+.checkout-main {
+  max-width: 1240px;
+}
+
+@media (max-width: 480px) {
+  .checkout-main {
+    max-width: 100% !important;
+    padding: 0 8px !important;
+  }
+
+}
 
 /* ════════════════════════════════════════════════════════════════
    CARDS DE BASE
@@ -366,7 +372,7 @@ body::after {
   border-radius: var(--ck-radius);
   border: 1px solid var(--ck-border);
   box-shadow: var(--ck-shadow-s);
-  padding: 28px;
+  padding: 18px 5px !important;
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.38s ease, transform 0.38s ease;
@@ -439,12 +445,13 @@ h2::before {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  margin-bottom: 12px;
-  padding: 12px;
+  margin-bottom: 10px;
   background: var(--ck-gold-ultra);
   border: 1px solid var(--ck-border-s);
   border-radius: var(--ck-radius-sm);
   transition: var(--ck-trans);
+  max-width: 100% !important;
+  padding: 5px 4px !important;
 }
 .cart-items .item:last-child { margin-bottom: 0; }
 
@@ -1766,7 +1773,7 @@ select:focus {
   display: flex;
   align-items: center;
   width: max-content;
-  animation: ck-marqueeScroll 40s linear infinite;
+  animation: ck-marqueeScroll 60s linear infinite !important;
   will-change: transform;
 }
 .ck-marquee-inner:hover { animation-play-state: paused; }
@@ -1811,7 +1818,7 @@ select:focus {
 @media (max-width: 640px) {
   .ck-marquee-item { font-size: 0.85rem; padding: 0 20px; gap: 6px; }
   .ck-marquee-glow-left, .ck-marquee-glow-right { width: 60px; }
-  .ck-marquee-inner { animation-duration: 35s; }
+  .ck-marquee-inner { animation-duration: 45s; }
 }
 
 
@@ -1819,7 +1826,7 @@ select:focus {
    RESPONSIVE GÉNÉRAL
 ════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  .cart-items .item { flex-direction: row; align-items: flex-start; text-align: left; }
+  .cart-items .item { flex-direction: row; align-items: flex-start; text-align: left; padding: 10px 3px !important; }
   .cart-items .item img { width: 60px; height: 60px; }
   #pay-button { font-size: 0.96rem; padding: 16px; }
   .trust-items { grid-template-columns: repeat(2, 1fr); }
@@ -1829,7 +1836,8 @@ select:focus {
     max-height: 80vh !important;
     overflow-y: auto !important;
   }
- }
+}
+
 
 @media (max-width: 480px) {
   h2 { font-size: 1.22rem; }
