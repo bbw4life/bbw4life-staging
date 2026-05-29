@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     console.log(`📌 sessionId: ${sessionId} | orderID: ${orderID} | forceReset: ${forceReset}`);
 
-    // Force reset pour ce test
     if (forceReset) {
         sessionStorage.clear();
         console.log("🔄 sessionStorage cleared (forceReset)");
@@ -54,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error(data.error || "There was an issue verifying your order. Please contact BBW4LIFE support and we'll take care of you right away.");
         }
 
-        // Sauvegarde après succès uniquement
         sessionStorage.setItem("paymentVerified", sessionId || orderID);
 
         showSuccess();
@@ -68,7 +66,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ── Show success state + reveal all extra sections ──
+// ── Reveal all extra sections with staggered animation ──
+function revealExtraSections() {
+    const ids = [
+        'next-steps-section',
+        'order-stats-section',
+        'gratitude-section',
+        'share-section',
+        'bbw-request-section',
+        'bbw-banner-section',
+        'bbw-request-personalized-section',
+        'support-bar-section',
+        'success-icon'
+    ];
+    ids.forEach((id, i) => {
+        setTimeout(() => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = (id === 'success-icon') ? 'flex' : '';
+        }, i * 180);
+    });
+    // Update main title
+    const h1 = document.querySelector('.container > h1');
+    if (h1) {
+        h1.textContent = 'Order Confirmed! 🎉';
+        h1.style.background = 'linear-gradient(135deg, #22a06b, #2ecc87)';
+        h1.style.webkitBackgroundClip = 'text';
+        h1.style.webkitTextFillColor = 'transparent';
+        h1.style.backgroundClip = 'text';
+    }
+}
+
+// ── Show success state ──
 function showSuccess() {
     document.getElementById('message').innerHTML = `
         <h1>Welcome to the BBW4LIFE Family! 💖</h1>
@@ -78,13 +106,11 @@ function showSuccess() {
         <p>📧 Please check your email inbox for your order details and tracking number.</p>
         <p>Remember: <em>Beauty Has No Sizes.</em> You made the right choice — for yourself. 🌸</p>
     `;
-    document.getElementById('message').style.display  = 'block';
-    document.getElementById('buttons').style.display  = 'block';
+    document.getElementById('message').style.display = 'block';
+    document.getElementById('buttons').style.display = 'block';
 
-    // ✅ Appel direct — fiable, sans observer
-    if (typeof revealExtraSections === 'function') {
-        revealExtraSections();
-    }
+    // ✅ Appel direct ici — revealExtraSections est dans le même fichier
+    revealExtraSections();
 }
 
 // ── Show error state ──

@@ -262,36 +262,6 @@
 
 <script src="thankyou.js"></script>
 <script>
-// ── Reveal extra sections after confirmation ──
-function revealExtraSections() {
-    const ids = [
-        'next-steps-section',
-        'order-stats-section',
-        'gratitude-section',
-        'share-section',
-        'bbw-request-section',
-        'bbw-banner-section',
-        'bbw-request-personalized-section',
-        'support-bar-section',
-        'success-icon'
-    ];
-    ids.forEach((id, i) => {
-        setTimeout(() => {
-            const el = document.getElementById(id);
-            if (el) el.style.display = (id === 'success-icon') ? 'flex' : '';
-        }, i * 180);
-    });
-    // Update title
-    const h1 = document.querySelector('.container > h1');
-    if (h1) {
-        h1.textContent = 'Order Confirmed! 🎉';
-        h1.style.background = 'linear-gradient(135deg, #22a06b, #2ecc87)';
-        h1.style.webkitBackgroundClip = 'text';
-        h1.style.webkitTextFillColor = 'transparent';
-        h1.style.backgroundClip = 'text';
-    }
-}
-
 // ── Copy link button ──
 document.getElementById('copy-link-btn')?.addEventListener('click', function() {
     navigator.clipboard.writeText('https://www.bbw4life.com').then(() => {
