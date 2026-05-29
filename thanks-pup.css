@@ -12,6 +12,7 @@
   --pg-rose:        #c0385e;
   --pg-espresso:    #1a0f0a;
   --pg-text:        #2c1a12;
+  --col-bg: #222120;
   --pg-muted:       rgba(44, 26, 18, 0.55);
   --pg-radius:      14px;
   --pg-card-radius: 18px;
@@ -25,7 +26,7 @@
 .my-product-section {
   padding: 20px 0 10px;
   text-align: center;
-  background: var(--col-bg);
+  background: var(--col-bg) !important;
   border-top: 1px solid rgba(201,150,62,0.18);
 }
 
@@ -34,7 +35,7 @@
   align-items: center;
   gap: 16px;
   background: linear-gradient(135deg, #fdf0f4 0%, #fef8ee 100%);
-  color: #1a0f0a;
+  color: #1a0f0a !important;
   border: 2px solid rgba(201,150,62,0.30);
   border-radius: 100px;
   padding: 14px 28px 14px 16px;
