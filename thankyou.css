@@ -873,3 +873,134 @@ p.error {
 
 
 
+/* ================================================================
+   THANKYOU-ICONS.CSS — BBW4LIFE
+   Icônes Font Awesome · Corrections fond · Bouton WhatsApp noir
+================================================================ */
+
+/* ── Step icons dans les h4 ── */
+.step-text h4 .step-icon {
+  font-size: 1rem;
+  margin-right: 6px;
+  background: linear-gradient(135deg, var(--bbw-rose), var(--bbw-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  vertical-align: middle;
+}
+
+/* ── Gratitude emoji → icône cœur ── */
+.gratitude-emoji i {
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, var(--bbw-rose), var(--bbw-gold), #FFD700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Share title icon ── */
+.share-title-icon {
+  font-size: 1rem;
+  margin-left: 6px;
+  background: linear-gradient(135deg, var(--bbw-gold-vivid), var(--bbw-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  vertical-align: middle;
+}
+
+/* ── Banner crown icon ── */
+.bbw-crown-icon {
+  font-size: 1rem;
+  margin-left: 4px;
+  color: var(--bbw-gold-vivid);
+  vertical-align: middle;
+}
+
+/* ── Bouton WhatsApp support bar → NOIR ── */
+.support-wa-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 9px 20px !important;
+  background: #0d0d0d !important;
+  color: #fff !important;
+  border-radius: 100px !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.80rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.44s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35) !important;
+  border: 1.5px solid rgba(201,150,62,0.30) !important;
+}
+.support-wa-btn:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  background: #1a1a1a !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.50) !important;
+  border-color: var(--bbw-gold) !important;
+}
+.support-wa-btn i {
+  font-size: 1rem !important;
+  background: none !important;
+  -webkit-text-fill-color: #25D366 !important;
+  color: #25D366 !important;
+}
+
+/* ── Fix fond blanc section bbw-request-section ── */
+.bbw-request-section {
+  background: linear-gradient(145deg,
+    rgba(201,150,62,0.06) 0%,
+    rgba(192,56,94,0.04) 50%,
+    rgba(201,150,62,0.06) 100%) !important;
+  border: 1px solid rgba(201,150,62,0.14) !important;
+  border-radius: 20px !important;
+  max-width: 640px !important;
+  margin: 0 auto 18px !important;
+  padding: 28px 32px !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.bbw-request-section .container {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  max-width: 100% !important;
+  animation: none !important;
+}
+
+/* Top bar dégradé sur les sections request */
+.bbw-request-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    var(--bbw-rose),
+    var(--bbw-gold),
+    var(--bbw-gold-vivid));
+  border-radius: 20px 20px 0 0;
+}
+
+/* ── Fix fond blanc my-product-section ── */
+.my-product-section {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.my-product-section .container {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  max-width: 100% !important;
+  animation: none !important;
+}
+
