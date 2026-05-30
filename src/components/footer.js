@@ -234,9 +234,6 @@
 
   /* ──────────────────────────────────────────────────────────────
      6. COL 5 — New Gems slider
-     Ordre : collection, produit, collection, produit, ...
-     Sources : settings.footer_new_gems.collection_ids  → jrgq_collections
-               settings.footer_new_gems.product_ids     → produits réels
   ────────────────────────────────────────────────────────────── */
   function applyCol5(s) {
     const titleEl = $('bbwCol5Title');

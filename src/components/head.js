@@ -437,7 +437,6 @@ function injectBlogSchema() {
     document.head.appendChild(script);
 }
 
-/* ─── Injection head.html global ─── */
 function injectGlobalHead() {
     return fetch('/src/components/head.html')
         .then(r => r.text())
@@ -445,7 +444,16 @@ function injectGlobalHead() {
             const temp = document.createElement('div');
             temp.innerHTML = html;
             Array.from(temp.children).forEach(el => {
-                document.head.appendChild(el.cloneNode(true));
+                if (el.tagName === 'SCRIPT') {
+                    // Recrée le script pour forcer l'exécution
+                    const s = document.createElement('script');
+                    if (el.src) s.src = el.src;
+                    else s.textContent = el.textContent;
+                    s.defer = el.defer;
+                    document.head.appendChild(s);
+                } else {
+                    document.head.appendChild(el.cloneNode(true));
+                }
             });
         })
         .catch(err => console.error('[Head] Failed to load head.html:', err));
