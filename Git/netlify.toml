@@ -11,3 +11,10 @@
 [functions.retry-pending-order]
   schedule = "*/5 * * * *"
   background = true
+
+[[headers]]
+  for = "/products.data.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "https://bbw4life.com"
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store, no-cache"

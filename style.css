@@ -11903,3 +11903,19 @@ body {
   opacity: 0.88;
 }
 
+
+/* ══════════════════════════════════════════════════════
+   READING PROGRESS BAR — global
+══════════════════════════════════════════════════════ */
+#reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #1e1a1c, #c9963e, #e8bc6a);
+  z-index: 99999;
+  transition: width 0.1s linear;
+  border-radius: 0 2px 2px 0;
+  pointer-events: none;
+}

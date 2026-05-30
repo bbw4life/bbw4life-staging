@@ -1,5 +1,5 @@
 /* ================================================================
-   CURVAFIT — article-featured.js
+  BBW4LIFE— article-featured.js
 ================================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
