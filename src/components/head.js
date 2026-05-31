@@ -523,6 +523,30 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product20.html'
     },
 
+    '/products/product21.html': {
+        title: 'CurveBikini — Solid Color High Waist Swimwear | BBW4LIFE',
+        description: 'Celebrate your curves in this solid-color high-waist bikini. Flattering coverage, vibrant energy, and all-day beach confidence. Plus size swimwear made for queens. Sizes 0XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size bikini, BBW swimwear, curvy women bikini, high waist bikini plus size, solid color swimsuit, BBW4LIFE bikini, plus size swimwear, curvy bikini black, high waist swimwear curvy, BBW bikini, plus size beach wear, 0XL 4XL bikini, curve bikini, body positive swimwear',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_21_1.png?v=1778334193',
+        canonical: 'https://www.bbw4life.com/products/product21.html'
+    },
+
+    '/products/product22.html': {
+        title: 'LeopardNight Set — Mesh Pajama Lingerie Dress | BBW4LIFE',
+        description: 'Wild leopard print meets sheer mesh in this bold lingerie set. Playful, confident and made for curvy women who love their power. Available in Leopard, Black, White & Red. Sizes L to 4XL. Free worldwide shipping.',
+        keywords: 'plus size lingerie, BBW lingerie set, curvy women lingerie, leopard print pajama, mesh lingerie dress, plus size nightwear, BBW4LIFE lingerie, plus size lingerie set, leopard lingerie curvy, BBW mesh dress, plus size pajama set, curvy lingerie L to 4XL, bold plus size nightdress, leopard print BBW',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_22_1.png?v=1778337237',
+        canonical: 'https://www.bbw4life.com/products/product22.html'
+    },
+
+    '/products/product23.html': {
+        title: 'SupportBra — Large Cup Breathable Mesh Bra for Curvy Women | BBW4LIFE',
+        description: 'All-day lift, comfort and confidence in one breathable mesh bra. Large cup support from 70E to 110F — 8 colors, 8 sizes. Designed for curvy women who deserve to feel supported and beautiful every day. Free worldwide shipping.',
+        keywords: 'plus size bra, large cup bra, BBW bra, curvy women bra, breathable mesh bra, full figure bra, plus size lingerie, BBW4LIFE bra, support bra plus size, large bust bra, wide back bra, full cup bra, comfortable plus size bra, curvy bra, plus size underwear, BBW support bra',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_1.jpg?v=1778340059',
+        canonical: 'https://www.bbw4life.com/products/product23.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */

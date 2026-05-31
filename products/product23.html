@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">Real support for real curves — because every woman deserves to feel held, lifted and completely beautiful every single day.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product23">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">There is something deeply intimate about a bra that actually fits — one that holds you without hurting you, lifts you without pinching, and makes you feel supported in the truest sense of the word. <strong>The SupportBra was built for that exact feeling.</strong> Breathable mesh. Large cup precision. Curves celebrated. <em>You deserve comfort that feels like care.</em></p>
+        </div>
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flame"></i> 59% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> 8 Colors Available &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Large Cup Support for Every Curve &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> Sizes 70E to 110F &nbsp;•&nbsp; <i class="fi fi-rr-shield-check"></i> Breathable Mesh All Day &nbsp;•&nbsp; <i class="fi fi-rr-undo"></i> 30-Day Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flame"></i> 59% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> 8 Colors Available &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Large Cup Support for Every Curve &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> Sizes 70E to 110F &nbsp;•&nbsp; <i class="fi fi-rr-shield-check"></i> Breathable Mesh All Day &nbsp;•&nbsp; <i class="fi fi-rr-undo"></i> 30-Day Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>48 queens</strong> added this bra to their cart today — don't miss your size!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- CONFIDENCE STRIP -->
+        <div class="bbw-confidence-strip" data-scroll-reveal>
+          <div class="bbw-confidence-strip__inner">
+            <div class="bbw-confidence-strip__row">
+              <div class="bbw-confidence-strip__icon"><i class="fas fa-compress-arrows-alt"></i></div>
+              <div class="bbw-confidence-strip__text"><strong>Gathered mesh cups</strong> provide all-day lift and support — no underwire pressure, just pure comfort.</div>
+            </div>
+            <div class="bbw-confidence-strip__divider"></div>
+            <div class="bbw-confidence-strip__row">
+              <div class="bbw-confidence-strip__icon"><i class="fas fa-wind"></i></div>
+              <div class="bbw-confidence-strip__text">Breathable mesh fabric keeps you <strong>cool, comfortable and confident</strong> from morning to midnight.</div>
+            </div>
+            <div class="bbw-confidence-strip__divider"></div>
+            <div class="bbw-confidence-strip__row">
+              <div class="bbw-confidence-strip__icon"><i class="fas fa-crown"></i></div>
+              <div class="bbw-confidence-strip__text"><strong>Sizes 70E to 110F</strong> — because every large cup queen deserves a bra that was made for her body, not adapted from it.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW FIT GUIDE — BLOC CUSTOM P23 -->
+        <div class="bbw-fit-guide" data-scroll-reveal>
+          <div class="bbw-fit-guide__header">
+            <i class="fas fa-ruler-horizontal"></i>
+            <span>How to Find Your Perfect Bra Size</span>
+          </div>
+          <div class="bbw-fit-guide__steps">
+            <div class="bbw-fit-guide__step">
+              <div class="bbw-fit-guide__num">1</div>
+              <div class="bbw-fit-guide__text">
+                <strong>Measure Your Band (Tour de dos)</strong>
+                <span>Wrap the tape firmly around your ribcage, just under your bust. Keep it parallel to the floor. Round to the nearest even number — this is your band size.</span>
+              </div>
+            </div>
+            <div class="bbw-fit-guide__step">
+              <div class="bbw-fit-guide__num">2</div>
+              <div class="bbw-fit-guide__text">
+                <strong>Measure Your Bust (Tour de poitrine)</strong>
+                <span>Measure around the fullest part of your chest, keeping the tape parallel and relaxed — not tight. Note this number.</span>
+              </div>
+            </div>
+            <div class="bbw-fit-guide__step">
+              <div class="bbw-fit-guide__num">3</div>
+              <div class="bbw-fit-guide__text">
+                <strong>Calculate Your Cup Size</strong>
+                <span>Subtract your band measurement from your bust measurement. Each 2.5cm difference = one cup size. 10cm = D, 12.5cm = E, 15cm = F, and so on.</span>
+              </div>
+            </div>
+            <div class="bbw-fit-guide__step">
+              <div class="bbw-fit-guide__num">4</div>
+              <div class="bbw-fit-guide__text">
+                <strong>If Between Sizes</strong>
+                <span>Always size up for maximum comfort. A slightly larger cup with a snug band gives the best lift and support for full figures.</span>
+              </div>
+            </div>
+          </div>
+          <div class="bbw-fit-guide__tip">
+            <i class="fas fa-lightbulb"></i>
+            <span>Queen tip: <strong>Measure at the end of the day</strong> when your body is at its natural fullest — this gives the most accurate fit. Our Berline style assistant in the chat can also help you find your size if you are unsure.</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Stock Up & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me 🤍</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Me & My Sister 💕</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Bra</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Bra</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Queens Comfort Pack 👑</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Bra 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Bra 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Bra 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-gem"></i>
+            <span>Complete Your Comfort Collection</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who complete their lingerie collection feel unstoppable from the inside out — every day, not just special occasions.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing this bra right now.</span>
+          </p>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select"></select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches"></div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Find your perfect bra size</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">SupportBra — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_1.jpg?v=1778340059" alt="SupportBra Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                The SupportBra is designed with a <strong>precise large cup fit</strong> that provides all-day support without underwire pressure. The gathered mesh cups adapt to your natural shape. If you are between sizes, we recommend sizing <strong>up</strong> for the most comfortable and flattering support.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> Bra Size Chart</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <table>
+                <thead>
+                  <tr><th>Size Label</th><th>Band (cm)</th><th>Cup</th><th>US/UK Equiv.</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>M / 70E–75E</strong></td><td>70–75</td><td>E</td><td>32E–34D</td></tr>
+                  <tr><td><strong>L / 75F–80E</strong></td><td>75–80</td><td>E–F</td><td>34E–36D</td></tr>
+                  <tr><td><strong>XL / 80F–85E</strong></td><td>80–85</td><td>E–F</td><td>36E–38D</td></tr>
+                  <tr><td><strong>2XL / 85F–90E</strong></td><td>85–90</td><td>E–F</td><td>38E–40D</td></tr>
+                  <tr><td><strong>3XL / 90F–95E</strong></td><td>90–95</td><td>E–F</td><td>40E–42D</td></tr>
+                  <tr><td><strong>4XL / 95F–100E</strong></td><td>95–100</td><td>E–F</td><td>42E–44D</td></tr>
+                  <tr><td><strong>5XL / 100D–100F</strong></td><td>100</td><td>D–F</td><td>44D–44F</td></tr>
+                  <tr><td><strong>6XL / 105G–110F</strong></td><td>105–110</td><td>F–G</td><td>46F–48F</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-palette"></i> Available Colors</h3>
+              <table>
+                <thead><tr><th>Color</th><th>Best Worn For</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Black</strong></td><td>Everyday elegance — versatile, discreet under dark clothing</td></tr>
+                  <tr><td><strong>Apricot</strong></td><td>Nude & natural — nearly invisible under light fabrics</td></tr>
+                  <tr><td><strong>White</strong></td><td>Fresh and pure — perfect under white or light outfits</td></tr>
+                  <tr><td><strong>Lake Blue</strong></td><td>A pop of color — wear proudly or as a self-care treat</td></tr>
+                  <tr><td><strong>Nude Pink</strong></td><td>Soft and feminine — the most flattering on all skin tones</td></tr>
+                  <tr><td><strong>Gray</strong></td><td>Subtle and chic — pairs beautifully with gray and neutral outfits</td></tr>
+                  <tr><td><strong>Red</strong></td><td>Bold and passionate — for the queen who refuses to be invisible</td></tr>
+                  <tr><td><strong>Milk Coffee</strong></td><td>Warm and rich — the coziest neutral in the collection</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">What makes this bra different for plus size women?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The <strong>SupportBra</strong> was engineered specifically around large cup proportions — not scaled up from a small cup template. The gathered mesh cups are shaped to match the natural fullness of larger busts, providing lift from the correct angle without creating the dreaded side spillage or center gap.</p>
+              <p>The breathable mesh construction means you can wear this all day without overheating or discomfort. Wide shoulder straps distribute weight evenly, and the multi-hook back closure allows you to customize the fit as your body naturally shifts throughout the day. <strong>This is what proper support feels like.</strong></p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Your bra arrives carefully and discreetly packaged — your privacy is respected.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your comfort is our guarantee.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> Large cup gathered breathable mesh bra</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fabric:</strong> Breathable mesh — lightweight, soft, moisture-wicking</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Closure:</strong> Multi-hook back for adjustable fit</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Straps:</strong> Wide, adjustable shoulder straps</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> M/70E–75E through 6XL/105G–110F</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Colors:</strong> Black, Apricot, White, Lake Blue, Nude Pink, Gray, Red, Milk Coffee</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Hand wash cold, lay flat to dry</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_2.jpg?v=1778340062" alt="SupportBra — Black" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Classic Black — Everyday Power</div>
+                <div class="slide-text">Timeless and versatile. Black is the queen of all basics — support that disappears under your outfit but never lets you down.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_aprricot.png?v=1778340068" alt="SupportBra — Apricot" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-sun"></i> Apricot — The Natural Nude</div>
+                <div class="slide-text">The perfect nude. Apricot blends beautifully with warm skin tones — disappears under light fabrics so your outfit stays the star.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_pink.png?v=1778340068" alt="SupportBra — Nude Pink" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> Nude Pink — Soft & Feminine</div>
+                <div class="slide-text">Delicate and beautifully flattering on all skin tones. Nude Pink turns an everyday essential into a small act of self-love.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_red.png?v=1778340068" alt="SupportBra — Red" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-fire"></i> Red — Bold & Unapologetic</div>
+                <div class="slide-text">For the queen who knows that even her foundations deserve to be fierce. Red is not just a color — it is a declaration.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is this bra comfortable for full-figured women all day?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Yes — this is precisely what it was designed for. The breathable mesh construction allows air circulation so you stay cool and comfortable even during long days. The wide adjustable straps distribute the weight of larger busts evenly, preventing shoulder dig-in. <strong>Queens who wear this describe it as the first bra in years that did not hurt them.</strong> The gathered cup design provides lift without the pressure of an underwire.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How do I find my correct size in this bra?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Measure your band (under bust, parallel to floor) and your bust (fullest part). The difference between the two measurements determines your cup size. Use the size guide above — and when in doubt, always size up. <strong>A slightly larger cup with a firm band gives the most comfortable and flattering result for full figures.</strong> Our Berline assistant in the chat can also help you find your perfect fit if you share your measurements.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Which color should I choose first?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Start with what you need most. If you want invisible support under everyday outfits, start with <strong>Apricot, Nude Pink or White</strong>. For your boldest days, choose <strong>Red</strong>. For a versatile everyday foundation, <strong>Black</strong> is timeless. Most queens who try one come back for two or three more colors. The trio bundle saves you the most and lets you build a complete collection that covers every mood and every outfit.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Does this bra have underwire?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>No — the SupportBra is designed without underwire. The support comes entirely from the structure of the gathered mesh cups, the wide band and the adjustable straps. <strong>This was a deliberate design choice for plus size comfort</strong> — underwire in larger cups often creates pressure points, digging and discomfort that builds over the course of a day. This bra achieves genuine lift and support through cut and construction rather than wire. Most queens who switch say they never want to go back to underwire.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I use this as an everyday bra?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Absolutely. The SupportBra is built for daily wear. <strong>The breathable mesh keeps you comfortable during long days</strong>, the neutral colors (Apricot, Nude Pink, White, Black) disappear under most fabrics, and the adjustable closures let you fine-tune your fit as needed throughout the day. Many queens order the trio bundle specifically to have one for every day of the week in rotation — that is how reliable and comfortable this bra is for everyday use.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How do I care for this bra?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p><strong>Washing:</strong> Hand wash in cool water with gentle detergent. If using a machine, always use a mesh laundry bag on the delicate cycle with cold water. Never wring or twist the cups — this distorts the shape.</p>
+              <p><strong>Drying:</strong> Lay flat to dry naturally. Never tumble dry — the heat damages the mesh elasticity and cup structure over time.</p>
+              <p><strong>Storage:</strong> Store with cups nested inside each other, not folded flat — this preserves the cup shape. <strong>Queens who care for their SupportBra properly find it maintains its shape, support and comfort for many months of regular wear.</strong></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your SupportBra ships worldwide with <strong>free standard shipping in 12–20 business days.</strong> Express options are available at checkout. Every order is packaged discreetly — your privacy is completely respected. Track your order at any time and our support team is available via chat whenever you need us.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+  <section id="rv-section" class="rv-section" style="display:none;">
+    <div class="rv-header">
+      <div class="rv-header-left">
+        <span class="rv-eyebrow">Your Journey</span>
+        <h2 class="rv-title">Recently Viewed</h2>
+      </div>
+      <div class="rv-header-right">
+        <button class="rv-nav-btn" id="rv-prev" aria-label="Previous"><i class="fi fi-rr-angle-left"></i></button>
+        <button class="rv-nav-btn" id="rv-next" aria-label="Next"><i class="fi fi-rr-angle-right"></i></button>
+        <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history"><i class="fi fi-rr-trash"></i></button>
+      </div>
+    </div>
+    <div class="rv-slider-wrap">
+      <div class="rv-track" id="rv-track"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="col-marquee-section">
+    <div class="col-marquee-track">
+      <div class="col-marquee-inner">
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-fire"></i> Support that loves your curves back</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> Large cup queens deserve real comfort — every day</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-wind"></i> Breathable mesh — cool all day, confident all night</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> 8 colors. 8 sizes. Every queen covered.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-fire"></i> Support that loves your curves back</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> Large cup queens deserve real comfort — every day</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-wind"></i> Breathable mesh — cool all day, confident all night</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> 8 colors. 8 sizes. Every queen covered.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ BBW CUSTOM BANNER ══════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_5.jpg?v=1778340063" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_6.jpg?v=1778340062" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        BBW4LIFE Statement
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "A woman who is truly supported<br>stands taller than anyone in the room."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        Breathable mesh. Large cup precision.<br class="bbw-cb-br">8 colors. Sizes 70E to 110F. Every queen, covered.
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+<section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+  <h2 class="section-title">Queens Also Love These</h2>
+  <div class="slider-container">
+    <div class="product-slider"></div>
+  </div>
+</section>
+
+  <section class="bbw-wave-divider">
+    <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+        <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+        <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+        <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+  </section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:72%;"></div></div><span id="count-5">53</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:18%;"></div></div><span id="count-4">13</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:7%;"></div></div><span id="count-3">5</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:3%;"></div></div><span id="count-2">2</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_1.jpg?v=1778340059" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_2.jpg?v=1778340062" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_3.jpg?v=1778340061" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_4.jpg?v=1778340062" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_5.jpg?v=1778340063" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_6.jpg?v=1778340062" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_7.jpg?v=1778340062" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_8.jpg?v=1778340061" alt="Review photo">
+          <div class="review-photos-more">11+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 PREMIÈRES REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-10</span></div>
+          <div class="rv-card-right"><h4>Adaeze O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The first bra in years that did not give me a headache by noon</h5>
+        <p>I am a 4XL and finding a bra that actually fits without causing pain by midday has been impossible — until now. Size 4XL/95F–100E in Black. No underwire means no pressure points. The mesh breathes. The straps do not dig. By 6pm I was still comfortable. BBW4LIFE, you have no idea what you have given me.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_black.png?v=1778340068" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-May-07</span></div>
+          <div class="rv-card-right"><h4>Ngozi F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I ordered three colors on the first order. No regrets.</h5>
+        <p>Black, Apricot and Nude Pink. Size 3XL/90F–95E. All three fit beautifully and serve completely different purposes — Black for daily wear, Apricot under light clothing, Nude Pink for my self-care days. The quality is consistent across all three. I am already planning my next order for Lake Blue and Red. BBW4LIFE understands what large cup women actually need.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-May-02</span></div>
+          <div class="rv-card-right"><h4>Fatima B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My back stopped hurting after I switched to this bra</h5>
+        <p>I have had chronic shoulder and back pain from ill-fitting bras my entire adult life. Size 5XL/100D–100F. The wide straps distribute the weight completely differently — I noticed the difference on day one. After two weeks of wearing this every day my shoulder and back tension has reduced significantly. This is not just a bra. This is health.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">T</div><span class="date">2026-Apr-26</span></div>
+          <div class="rv-card-right"><h4>Tunde A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I bought this for my wife — she has not taken it off in days</h5>
+        <p>My wife has struggled to find comfortable plus size bras for years. I ordered the Nude Pink in size 2XL/85F–90E as a surprise. She put it on and said it was the most comfortable bra she had ever worn. She wore it three days in a row. I am ordering more colors tonight. Thank you BBW4LIFE for making something that actually works for her size.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Apr-20</span></div>
+          <div class="rv-card-right"><h4>Grace M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Size 6XL and it fits perfectly. I was in tears.</h5>
+        <p>I am a 6XL/105G–110F. Finding lingerie in my size that is genuinely beautiful — not just functional and ugly — has been one of the hardest parts of being a plus size woman. This bra arrived and it fit. Perfectly. And it was beautiful. I stood in front of the mirror and cried. Happy, grateful, proud tears. BBW4LIFE made something for me. Finally.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Apr-14</span></div>
+          <div class="rv-card-right"><h4>Chidinma W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Abuja — arrived in 18 days, perfect condition</h5>
+        <p>Nigerian queen here, ordering from Abuja. Arrived beautifully packaged in 18 days. White, size XL/80F–85E. The mesh quality is genuinely good — soft, breathable and well-constructed. The cups hold their shape. The band stays in place. I shared this with my entire WhatsApp group immediately. BBW4LIFE ships to us and delivers for us. Recommend 100%.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Apr-08</span></div>
+          <div class="rv-card-right"><h4>Marie-Claire D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Rouge taille 3XL — la reine a trouvé son soutien-gorge</h5>
+        <p>Commande depuis Paris. Rouge, taille 3XL/90F–95E. Je cherchais depuis des années un soutien-gorge grande bonnet qui soit à la fois confortable et beau. Ce soutien-gorge est exactement ça. Le mesh respire vraiment, pas de baleine, pas de pression. Je me sens soutenue et belle en même temps. BBW4LIFE comprend les femmes rondes. Je commande trois autres couleurs cette semaine.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">R</div><span class="date">2026-Apr-01</span></div>
+          <div class="rv-card-right"><h4>Rosette B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Milk Coffee color — the warmest, most flattering neutral I have ever owned</h5>
+        <p>I ordered Milk Coffee almost by accident — it was the last color I would have chosen. But it arrived and I was immediately in love. It is warm, rich and flattering in a way that Black and Nude never quite achieved for my skin tone. Size 2XL. The support is perfect. The color is now my absolute favorite. BBW4LIFE, you knew better than me on this one.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_23_milk.png?v=1778340068" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE LEFT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zainab K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Lake Blue is gorgeous</p><p class="rv-mq-quote">Lake Blue in size 4XL. I wear it like jewelry — visible under my blouse and I love it. BBW4LIFE made a bra I am proud to show.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing E.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">No more underwire pain</p><p class="rv-mq-quote">Goodbye underwire forever. This gathered mesh bra gives me more support than underwire ever did — without a single moment of pain. Size 3XL Black.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">W</div><div class="rv-mq-meta"><p class="rv-mq-name">Wumi A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Ordered 4 colors — all perfect</p><p class="rv-mq-quote">Black, Apricot, Nude Pink and Gray. All size 2XL. Every single one fits perfectly and serves a different purpose in my wardrobe. BBW4LIFE is the answer.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Precious L.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Gray is incredibly versatile</p><p class="rv-mq-quote">Gray was my last choice but now it is my most worn. Pairs with everything. Size XL. Soft, supportive, and completely invisible under most outfits.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">E</div><div class="rv-mq-meta"><p class="rv-mq-name">Ebony T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My daughter and I ordered together</p><p class="rv-mq-quote">Different sizes, same quality. She got Nude Pink, I got Black. Both fit perfectly. Same comfort, same support, same confidence. BBW4LIFE for life.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">H</div><div class="rv-mq-meta"><p class="rv-mq-name">Harriet N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Still perfect after 4 months</p><p class="rv-mq-quote">I have been wearing my Black SupportBra daily for four months. The cups still hold their shape. The elastic still snaps back. Real quality. Size 5XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Lena J.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Commande depuis la RDC</p><p class="rv-mq-quote">Livraison en 20 jours depuis Kinshasa. Apricot taille 3XL. Confort incroyable. BBW4LIFE livre partout en Afrique et la qualité est réelle. Merci!</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chiamaka I.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">White on dark skin is stunning</p><p class="rv-mq-quote">White on deep brown skin is absolutely gorgeous. Size 2XL. I wear it under sheer tops on purpose now. People compliment the look. BBW4LIFE changed my style.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zainab K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Lake Blue is gorgeous</p><p class="rv-mq-quote">Lake Blue in size 4XL. I wear it like jewelry — visible under my blouse and I love it. BBW4LIFE made a bra I am proud to show.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing E.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">No more underwire pain</p><p class="rv-mq-quote">Goodbye underwire forever. This gathered mesh bra gives me more support than underwire ever did — without a single moment of pain. Size 3XL Black.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 7 REVIEWS SUIVANTES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">V</div><span class="date">2026-Mar-24</span></div>
+          <div class="rv-card-right"><h4>Vivienne A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My physiotherapist said my posture has improved. The bra is why.</h5>
+        <p>I have been seeing a physiotherapist for neck and shoulder tension. She noticed during my last session that my posture had improved and asked what had changed. I told her I had started wearing a different bra. Size 4XL Black SupportBra. Proper support from the right structure changes how your entire body holds itself. This bra is doing more than holding me up — it is helping me stand straight.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Mar-17</span></div>
+          <div class="rv-card-right"><h4>Ifeoma C.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I gifted this to my mother for Mother's Day. She called me immediately.</h5>
+        <p>My mother is a 6XL. Finding beautiful lingerie in her size has always been impossible. I ordered the Apricot SupportBra. She called me the moment she opened it — first because it was beautiful, then because it fit, then because she could not believe someone had finally made something for her size that was not ugly or flimsy. BBW4LIFE made my mother feel seen. That is the greatest gift I could give her.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">D</div><span class="date">2026-Mar-10</span></div>
+          <div class="rv-card-right"><h4>Damilola W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Red bra changed how I walk. Seriously.</h5>
+        <p>I know it sounds dramatic but hear me out. I put on the Red SupportBra for the first time, size 2XL, and I walked differently. Not because the bra magically changed my body — but because I felt something different inside. Supported. Seen. Beautiful from the foundations up. When you feel properly held and properly beautiful, you carry yourself differently. BBW4LIFE is psychology as much as it is lingerie.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2026-Mar-03</span></div>
+          <div class="rv-card-right"><h4>Josephine M.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful bra — size up if you have a larger cup depth</h5>
+        <p>The SupportBra is genuinely beautiful and comfortable — Nude Pink, size 3XL. One note: if you have a very deep cup as well as a full band, I recommend sizing up one. The cup width is generous but the depth runs slightly smaller. Once I went up a size everything was perfect — great lift, no spillage, comfortable all day. Quality is excellent.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Feb-24</span></div>
+          <div class="rv-card-right"><h4>Oluwaseun K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I work 12-hour shifts as a nurse. This bra survived all of them.</h5>
+        <p>Twelve hours on my feet. A lot of movement. A lot of stress on every piece of clothing. Black SupportBra, size 3XL. It held up through every shift — no band riding up, no straps slipping, no cups losing their shape by hour ten. Breathable enough that I did not overheat. I ordered two more immediately. BBW4LIFE, you made a working queen's life significantly better.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">K</div><span class="date">2026-Feb-16</span></div>
+          <div class="rv-card-right"><h4>Kemi O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Lake Blue under my white shirt — a whole vibe</h5>
+        <p>I wear Lake Blue under my white work shirts intentionally. The soft blue shows through just slightly and it is the most elegant thing. Size XL. The support is excellent — the cups are well-shaped and hold everything in place all day. I feel sophisticated and beautiful and comfortable simultaneously. BBW4LIFE understands that lingerie is not just about what is hidden — it is about how you feel in everything you wear.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Feb-08</span></div>
+          <div class="rv-card-right"><h4>Simone C.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Livraison en Martinique — qualité extraordinaire</h5>
+        <p>Commande depuis la Martinique. Livraison en 19 jours, emballage soigné et discret. Milk Coffee taille 4XL. La qualité du mesh est vraiment supérieure — doux, respirant, solide. Les bonnets gardent leur forme après plusieurs lavages. Je porte ce soutien-gorge tous les jours depuis trois semaines et il est encore parfait. BBW4LIFE a compris ce que les femmes rondes méritent. Toutes mes amies ont déjà commandé.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE RIGHT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--right">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Gray every Monday — it sets the week</p><p class="rv-mq-quote">I wear my Gray SupportBra every Monday as a ritual. It centers me. Comfortable, elegant, supported — exactly how I want to start my week. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best gift for a plus size woman</p><p class="rv-mq-quote">I gift this to every plus size woman in my life now. Nothing says I see you and I care about your comfort like a bra that actually fits. BBW4LIFE gets it.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rose M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Size 6XL exists and fits perfectly</p><p class="rv-mq-quote">6XL/105G–110F. It exists. It fits. It is beautiful. I have waited 20 years to write a sentence like that. BBW4LIFE made it possible. Ordering Red next.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Amina D.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Commande depuis le Sénégal</p><p class="rv-mq-quote">Dakar queen! Livraison en 19 jours. Noir taille 2XL. Qualité exceptionnelle. Je recommande BBW4LIFE à toutes les femmes rondes d'Afrique de l'Ouest.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Shade A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Apricot is my daily invisible armor</p><p class="rv-mq-quote">Apricot in size L. Almost invisible under everything I wear. Maximum support, zero visibility, all-day comfort. This is my daily armor. BBW4LIFE every day.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">N</div><div class="rv-mq-meta"><p class="rv-mq-name">Ngozi W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Mesh is surprisingly durable</p><p class="rv-mq-quote">I expected the mesh to stretch or tear quickly. Five months later — still holding shape perfectly. Black, size 4XL. Real quality that lasts. BBW4LIFE delivers.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chisom B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My whole church group ordered</p><p class="rv-mq-quote">I shared BBW4LIFE with my women's group at church. Seven of us ordered the same week. All different sizes. All completely satisfied. We talk about it every Sunday now.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Dami C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Price to quality is unreal</p><p class="rv-mq-quote">For this price I expected basic. I got premium. The mesh, the cups, the stitching — all well above what I paid. Red size 3XL. BBW4LIFE overdelivers every single time.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Gray every Monday — it sets the week</p><p class="rv-mq-quote">I wear my Gray SupportBra every Monday as a ritual. It centers me. Comfortable, elegant, supported — exactly how I want to start my week. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best gift for a plus size woman</p><p class="rv-mq-quote">I gift this to every plus size woman in my life now. Nothing says I see you and I care about your comfort like a bra that actually fits. BBW4LIFE gets it.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 10 HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Jan-30</span></div>
+          <div class="rv-card-right"><h4>Queen O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My name is Queen and this bra finally matches who I am</h5>
+        <p>I have been named Queen my whole life and finding lingerie that matched that name has been a lifelong search. Lake Blue SupportBra, size 3XL. It is beautiful, it is comfortable, it supports me completely and it makes me feel like the queen my mother named me to be. BBW4LIFE gets the assignment every single time.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Jan-22</span></div>
+          <div class="rv-card-right"><h4>Leticia F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Post-partum body. This bra made me feel beautiful again.</h5>
+        <p>My body changed significantly after my second child. Finding a bra that fit my new, larger cup size without making me feel terrible about my body took months. Black SupportBra, size 4XL. I put it on and I felt supported, comfortable and — for the first time since giving birth — beautiful. BBW4LIFE, thank you for making something that includes me in this stage of my body's journey.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Jan-14</span></div>
+          <div class="rv-card-right"><h4>Uju B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I have been wearing the wrong size bra for 10 years. BBW4LIFE helped me find the right one.</h5>
+        <p>I used the fit guide on this page, measured properly for the first time, and discovered I had been wearing the wrong size for a decade. Size 5XL/100D–100F in Nude Pink. It fits perfectly and the difference in comfort and posture is extraordinary. Ten years of unnecessary pain and discomfort because the right size was not available or accessible. BBW4LIFE made the right size beautiful and affordable. I am emotional writing this.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Jan-06</span></div>
+          <div class="rv-card-right"><h4>Helen W.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Excellent quality — the straps are slightly wide for narrow shoulders but support is excellent</h5>
+        <p>The support, cup shape and mesh quality are all excellent. Milk Coffee, size 2XL. The one note: the straps are quite wide which is great for weight distribution but can sit outside narrow shoulder blades. A minor styling adjustment for me. The support itself is the best I have experienced at this size and price point. Comfortable all day.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2025-Dec-28</span></div>
+          <div class="rv-card-right"><h4>Oluwakemi A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Christmas gift to myself. Red SupportBra. Best present I have ever received.</h5>
+        <p>I have been buying myself presents for Christmas since I was 25 — my way of celebrating myself. This year: Red SupportBra, size 3XL. I put it on Christmas morning and sat in my living room drinking coffee, feeling like the most beautiful woman in the world. No occasion needed. Just me, my Red bra, and the decision to treat myself like I deserve. BBW4LIFE made that moment possible.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2025-Dec-18</span></div>
+          <div class="rv-card-right"><h4>Marie-Josée T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Haïti — magnifique, livré parfaitement</h5>
+        <p>Commande depuis Port-au-Prince. Livraison en 20 jours, emballage discret et soigné. Blanc taille 2XL. La qualité du mesh est vraiment au-dessus de ce que j'attendais à ce prix. Les bonnets maintiennent leur forme, l'élastique est solide, et le confort est exceptionnel. BBW4LIFE comprend les femmes rondes des Caraïbes aussi. Ayiti reprezante! Merci du fond du cœur.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2025-Dec-09</span></div>
+          <div class="rv-card-right"><h4>Chisom A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I stopped settling for ugly bras. This is the line in the sand.</h5>
+        <p>For too long, plus size bras meant functional and ugly. Beige, basic, shapeless, uncomfortable. The SupportBra is the opposite of all of that. Black, size 4XL. Beautiful design, quality mesh, actual structure. I wore it to work on a Tuesday and felt like a different woman. BBW4LIFE, you drew the line between what we were given before and what we actually deserve. I will never go back.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2025-Nov-30</span></div>
+          <div class="rv-card-right"><h4>Julienne M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Six months of daily wear — still performing perfectly</h5>
+        <p>I bought my first SupportBra six months ago — Black, size 3XL. I have worn it almost every day. Washed it carefully. The cups still hold their shape. The mesh has not stretched or thinned. The elastic still snaps back. The support is still consistent. Six months of daily wear at this price point — this is exceptional quality. BBW4LIFE does not compromise on what matters.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2025-Nov-20</span></div>
+          <div class="rv-card-right"><h4>Esther A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Gifted to my best friend. She ordered five more the same day.</h5>
+        <p>I gifted Nude Pink in size 5XL to my best friend for her birthday. She called me from the dressing room after she opened it. She said the fit was perfect. She ordered five more — one in every color she loved — the same afternoon. That is the BBW4LIFE effect. One experience and queens are converted for life. Thank you for making something this good.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Nov-10</span></div>
+          <div class="rv-card-right"><h4>Xochitl F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Mexico — the bra that changed my mornings</h5>
+        <p>Pedí desde Ciudad de México. Llegó en 17 días, perfectamente empacado. Lake Blue talla 2XL. Llevo tres semanas usándolo cada mañana. Cambia cómo empiezo el día — cómoda, soportada, bella desde las bases. Las mañanas son mejores cuando tu ropa interior te hace sentir así. BBW4LIFE lo entendió. Las curvas merecen fundamentos hermosos también.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Comfort Story ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. The first bra that didn't hurt me by noon!)" required>
+            <textarea id="review-text" placeholder="Tell your story — how did this bra make you feel? How does it fit? Your words help other queens find the support they deserve. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already helping other beautiful women like you find their perfect fit.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+    <div class="sticky-atc__inner">
+        <div class="sticky-atc__product">
+            <img id="satc-img" src="" alt="" class="sticky-atc__img">
+            <div class="sticky-atc__info">
+                <span id="satc-title" class="sticky-atc__title"></span>
+                <span id="satc-price" class="sticky-atc__price"></span>
+            </div>
+        </div>
+        <div class="sticky-atc__selectors">
+            <div class="satc-field" id="satc-color-field">
+                <label class="satc-label">Color</label>
+                <div class="satc-color-wrap">
+                    <div class="satc-swatches" id="satc-swatches"></div>
+                    <span class="satc-color-name" id="satc-color-name">—</span>
+                </div>
+            </div>
+            <div class="satc-field" id="satc-size-field">
+                <label class="satc-label">Size</label>
+                <select id="satc-size" class="satc-select"></select>
+            </div>
+            <div class="satc-field">
+                <label class="satc-label">Qty</label>
+                <div class="satc-qty">
+                    <button class="satc-qty-btn" id="satc-minus">−</button>
+                    <span id="satc-qty-val">1</span>
+                    <button class="satc-qty-btn" id="satc-plus">+</button>
+                </div>
+            </div>
+        </div>
+        <button class="sticky-atc__btn" id="satc-add-btn">
+            <i class="fi fi-rr-shopping-cart"></i>
+            <span>Add to Cart</span>
+        </button>
+    </div>
+</div>
+
+</body>
+</html>

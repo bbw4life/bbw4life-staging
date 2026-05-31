@@ -2240,3 +2240,406 @@
 
 
 
+/* ════════════════════════════════════════════════════════════
+   BBW CURVE CONFIDENCE BLOCK — "The Black Effect"
+════════════════════════════════════════════════════════════ */
+
+.bbw-curve-confidence {
+    background: #000000;
+    border: 1px solid rgba(201,150,62,0.35);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    padding: 0 0 18px 0;
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.28),
+        0 0 0 1px rgba(201,150,62,0.10) inset;
+}
+.bbw-curve-confidence::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #c9963e, rgba(232,188,106,0.90), #c9963e, transparent);
+    background-size: 200% 100%;
+    animation: goldSweep 3s linear infinite;
+    pointer-events: none;
+}
+
+.bbw-curve-confidence__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px 10px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #c9963e;
+    border-bottom: 1px solid rgba(201,150,62,0.15);
+}
+.bbw-curve-confidence__header i {
+    font-size: 0.90rem;
+    color: #c9963e;
+    animation: pp-fire 2.5s ease-in-out infinite;
+}
+
+.bbw-curve-confidence__intro {
+    font-size: 13px;
+    color: rgba(253,249,244,0.72);
+    padding: 12px 18px 4px;
+    line-height: 1.65;
+    font-style: italic;
+}
+.bbw-curve-confidence__intro strong {
+    color: #c9963e;
+    font-style: normal;
+}
+
+.bbw-curve-confidence__list {
+    list-style: none;
+    margin: 0;
+    padding: 6px 0 0;
+}
+.bbw-curve-confidence__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 18px;
+    border-bottom: 1px solid rgba(201,150,62,0.08);
+    transition: background 0.2s ease;
+}
+.bbw-curve-confidence__list li:last-child {
+    border-bottom: none;
+}
+.bbw-curve-confidence__list li:hover {
+    background: rgba(201,150,62,0.04);
+}
+.bbw-curve-confidence__list li i {
+    color: #c9963e;
+    font-size: 0.82rem;
+    flex-shrink: 0;
+    margin-top: 3px;
+    filter: drop-shadow(0 0 4px rgba(201,150,62,0.40));
+}
+.bbw-curve-confidence__list li span {
+    font-size: 13px;
+    color: rgba(253,249,244,0.72);
+    line-height: 1.60;
+}
+.bbw-curve-confidence__list li strong {
+    color: #e8bc6a;
+}
+
+@media (max-width: 480px) {
+    .bbw-curve-confidence__header { padding: 12px 14px 8px; font-size: 0.68rem; }
+    .bbw-curve-confidence__intro  { padding: 10px 14px 4px; font-size: 12px; }
+    .bbw-curve-confidence__list li { padding: 8px 14px; }
+    .bbw-curve-confidence__list li span { font-size: 12px; }
+}
+
+
+
+
+
+/* ══════════════════════════════════════
+   BBW CONFIDENCE STRIP
+   (bloc unique p22 — bande de confiance sensuelle)
+══════════════════════════════════════ */
+@keyframes confidenceGlow {
+    0%, 100% { opacity: 0.7; }
+    50%       { opacity: 1; }
+}
+
+.bbw-confidence-strip {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: #000000;
+    border: 1px solid rgba(201,150,62,0.40);
+    border-radius: 14px;
+    padding: 14px 18px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+}
+.bbw-confidence-strip::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.60), transparent);
+    pointer-events: none;
+}
+.bbw-confidence-strip__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+}
+.bbw-confidence-strip__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+}
+.bbw-confidence-strip__icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(201,150,62,0.12);
+    border: 1px solid rgba(201,150,62,0.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c9963e;
+    font-size: 13px;
+    animation: confidenceGlow 3s ease-in-out infinite;
+}
+.bbw-confidence-strip__text {
+    flex: 1;
+    min-width: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(253,249,244,0.85);
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.bbw-confidence-strip__text strong {
+    color: #c9963e;
+    font-weight: 800;
+}
+.bbw-confidence-strip__divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.25), transparent);
+    margin: 2px 0;
+    width: 100%;
+}
+
+/* ══════════════════════════════════════
+   BBW NIGHT GUIDE
+   (section "Quand porter" spécifique lingerie)
+══════════════════════════════════════ */
+.bbw-night-guide {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-night-guide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.40), transparent);
+    pointer-events: none;
+}
+.bbw-night-guide__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-night-guide__header i {
+    color: #c9963e;
+    font-size: 0.90rem;
+}
+.bbw-night-guide__list {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0;
+}
+.bbw-night-guide__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(201,150,62,0.08);
+    transition: background 0.22s ease;
+}
+.bbw-night-guide__item:last-child {
+    border-bottom: none;
+}
+.bbw-night-guide__item:hover {
+    background: rgba(201,150,62,0.04);
+}
+.bbw-night-guide__emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 32px;
+    text-align: center;
+}
+.bbw-night-guide__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+.bbw-night-guide__info strong {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a1005;
+}
+.bbw-night-guide__info span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.55);
+    line-height: 1.45;
+}
+.bbw-night-guide__check {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(34,197,94,0.10);
+    border: 1px solid rgba(34,197,94,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #22c55e;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW FIT GUIDE — Bra Measurement Block (product23)
+════════════════════════════════════════════════════════════ */
+
+.bbw-fit-guide {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.35);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+}
+.bbw-fit-guide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.70), transparent);
+    pointer-events: none;
+}
+
+.bbw-fit-guide__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px 10px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-fit-guide__header i {
+    color: #c9963e;
+    font-size: 15px;
+}
+
+.bbw-fit-guide__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.bbw-fit-guide__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(201,150,62,0.10);
+    transition: background 0.2s ease;
+}
+.bbw-fit-guide__step:last-child {
+    border-bottom: none;
+}
+.bbw-fit-guide__step:hover {
+    background: rgba(201,150,62,0.06);
+}
+
+.bbw-fit-guide__num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(201,150,62,0.12);
+    border: 1px solid rgba(201,150,62,0.40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #c9963e;
+    margin-top: 1px;
+}
+
+.bbw-fit-guide__text {
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+.bbw-fit-guide__text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1005;
+    margin-bottom: 3px;
+}
+.bbw-fit-guide__text span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.58);
+    line-height: 1.5;
+}
+
+.bbw-fit-guide__tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    padding: 12px 18px 14px;
+    background: rgba(201,150,62,0.06);
+    border-top: 1px solid rgba(201,150,62,0.12);
+}
+.bbw-fit-guide__tip i {
+    color: #c9963e;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.bbw-fit-guide__tip span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.58);
+    line-height: 1.55;
+    min-width: 0;
+    word-break: break-word;
+}
+.bbw-fit-guide__tip span strong {
+    color: #c9963e;
+    font-weight: 700;
+}
+
+

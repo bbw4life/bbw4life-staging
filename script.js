@@ -1773,7 +1773,6 @@ function showErrorPopup(message) {
       const miniSliderEl = document.getElementById('mini-product-slider');
       if (miniSliderEl) {
 
-        // SVG wishlist définis une seule fois
         const WISHLIST_SVG = `
           <svg class="wishlist-icon-empty" width="30px" height="30px" viewBox="0 0 24 24" fill="none" stroke="#d4b60c" stroke-width="2">
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
@@ -1782,63 +1781,110 @@ function showErrorPopup(message) {
             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
           </svg>`;
 
+        const sliderCfg   = (settings.mini_product_slider) || {};
+        const sliderTitle = sliderCfg.title || 'Queens Also Love These';
+        const sliderIds   = sliderCfg.product_ids || [];
+
+        const titleEl = miniSliderEl.querySelector('.section-title');
+        if (titleEl) titleEl.textContent = sliderTitle;
+
         const sliderTrack = miniSliderEl.querySelector('.product-slider');
 
-        document.querySelectorAll('#mini-product-slider .product-item').forEach(item => {
-          const pid  = item.dataset.productId;
+        /* ── flags pause ── */
+        let miniAutoSliderPaused   = false;
+        let miniImageSlidersPaused = false;
+        let miniPauseTimer         = null;
+
+        function miniPause() {
+          miniAutoSliderPaused   = true;
+          miniImageSlidersPaused = true;
+          clearTimeout(miniPauseTimer);
+          miniPauseTimer = setTimeout(() => {
+            miniAutoSliderPaused   = false;
+            miniImageSlidersPaused = false;
+          }, 3000);
+        }
+
+        if (sliderTrack) {
+          /* ── Pause sur scroll manuel (desktop + mobile) ── */
+          sliderTrack.addEventListener('scroll',     miniPause, { passive: true });
+
+          /* ── Pause sur touch (mobile) ── */
+          sliderTrack.addEventListener('touchstart', miniPause, { passive: true });
+          sliderTrack.addEventListener('touchmove',  miniPause, { passive: true });
+
+          /* ── Pause sur mousedown + mousemove (desktop drag) ── */
+          sliderTrack.addEventListener('mousedown',  miniPause);
+          sliderTrack.addEventListener('mousemove',  miniPause);
+        }
+
+        /* ── Injecter les items depuis les IDs du setting ── */
+        sliderIds.forEach(pid => {
           const prod = products.find(p => p.id === pid);
+          if (!prod) return;
 
-          // Injecter SVG wishlist
+          const productUrl = getProductUrl(pid);
+          const item = document.createElement('div');
+          item.className        = 'product-item';
+          item.dataset.productId = pid;
+
+          item.innerHTML = `
+            <div class="product-image">
+              <a href="${productUrl}" class="mini-product-link">
+                <div class="mini-media-slider" id="mini-slider-${pid}"></div>
+              </a>
+              <div class="mini-discount-badge"></div>
+              <span class="mini-wishlist-icon" data-id="${pid}"></span>
+            </div>
+            <div class="product-info">
+              <p class="product-price">
+                <span class="current-price"></span>
+                <span class="compare-price"></span>
+              </p>
+            </div>`;
+
+          sliderTrack.appendChild(item);
+
+          /* Wishlist SVG */
           const wishlistIcon = item.querySelector('.mini-wishlist-icon');
-          if (wishlistIcon) {
-            wishlistIcon.dataset.id = pid;
-            wishlistIcon.innerHTML  = WISHLIST_SVG;
+          if (wishlistIcon) wishlistIcon.innerHTML = WISHLIST_SVG;
+
+          /* Prix + badge */
+          const currentPriceEl = item.querySelector('.current-price');
+          const comparePriceEl = item.querySelector('.compare-price');
+          const discountBadge  = item.querySelector('.mini-discount-badge');
+          if (currentPriceEl) currentPriceEl.textContent = `$${prod.price.toFixed(2)}`;
+          if (comparePriceEl) comparePriceEl.textContent = `$${prod.compare_price.toFixed(2)}`;
+          if (discountBadge && prod.compare_price > prod.price) {
+            const pct = Math.round(((prod.compare_price - prod.price) / prod.compare_price) * 100);
+            discountBadge.textContent   = `${pct}% OFF`;
+            discountBadge.style.display = 'block';
+          } else if (discountBadge) {
+            discountBadge.style.display = 'none';
           }
 
-          // URL depuis JSON
-          const link = item.querySelector('.mini-product-link');
-          if (link && prod && prod.url) link.href = prod.url;
-
-          // Prix + badge
-          if (prod) {
-            const currentPriceEl = item.querySelector('.current-price');
-            const comparePriceEl = item.querySelector('.compare-price');
-            const discountBadge  = item.querySelector('.mini-discount-badge');
-            if (currentPriceEl) currentPriceEl.textContent = `$${prod.price.toFixed(2)}`;
-            if (comparePriceEl) comparePriceEl.textContent = `$${prod.compare_price.toFixed(2)}`;
-            if (discountBadge && prod.compare_price > prod.price) {
-              const pct = Math.round(((prod.compare_price - prod.price) / prod.compare_price) * 100);
-              discountBadge.textContent   = `${pct}% OFF`;
-              discountBadge.style.display = 'block';
-            } else if (discountBadge) {
-              discountBadge.style.display = 'none';
-            }
-          }
+          /* Media slider */
+          const sliderDiv = item.querySelector(`#mini-slider-${pid}`);
+          if (sliderDiv && prod.media) populateMiniSlider(sliderDiv, prod.media);
         });
 
-        // Auto-slide toutes les 7 secondes
+        sliderTrack.querySelectorAll('.mini-wishlist-icon').forEach(icon => {
+          icon.addEventListener('click', toggleWishlist);
+        });
+        updateWishlistIcons();
+
+        /* ── Auto-slide produits ── */
         if (sliderTrack) {
           const items = sliderTrack.querySelectorAll('.product-item');
           if (items.length > 1) {
-            let currentSlide = 0, isHovered = false, isPaused = false, pauseTimer = null;
-
-            const resumeAfterDelay = () => {
-              clearTimeout(pauseTimer);
-              isPaused = true;
-              pauseTimer = setTimeout(() => { isPaused = false; }, 4000);
-            };
-
-            miniSliderEl.addEventListener('mouseenter', () => { isHovered = true;  });
-            miniSliderEl.addEventListener('mouseleave', () => { isHovered = false; });
-            sliderTrack.addEventListener('scroll',     resumeAfterDelay, { passive: true });
-            sliderTrack.addEventListener('touchstart', resumeAfterDelay, { passive: true });
+            let currentSlide = 0;
 
             setInterval(() => {
-              if (isHovered || isPaused) return;
+              if (miniAutoSliderPaused) return;
               currentSlide = (currentSlide + 1) % items.length;
               const itemWidth = items[0].offsetWidth + parseInt(getComputedStyle(sliderTrack).gap || 0);
               sliderTrack.scrollTo({ left: currentSlide * itemWidth, behavior: 'smooth' });
-            }, 7000);
+            }, 8000);
           }
         }
       }
@@ -1857,12 +1903,30 @@ function showErrorPopup(message) {
         const next = document.createElement('div');
         prev.className = 'mini-media-slider-prev';
         next.className = 'mini-media-slider-next';
-        prev.addEventListener('click', (e) => { e.stopPropagation(); e.preventDefault(); slideMini(slider, 'prev'); });
-        next.addEventListener('click', (e) => { e.stopPropagation(); e.preventDefault(); slideMini(slider, 'next'); });
+        prev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          miniPause();
+          slideMini(slider, 'prev');
+        });
+        next.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          miniPause();
+          slideMini(slider, 'next');
+        });
+
+        /* ── Pause sur touch du media slider ── */
+        slider.addEventListener('touchstart', miniPause, { passive: true });
+        slider.addEventListener('touchmove',  miniPause, { passive: true });
+
         slider.appendChild(prev);
         slider.appendChild(next);
         if (media.length > 1) {
-          setInterval(() => slideMini(slider, 'next'), 4000);
+          setInterval(() => {
+            if (typeof miniImageSlidersPaused !== 'undefined' && miniImageSlidersPaused) return;
+            slideMini(slider, 'next');
+          }, 6000);
         }
       }
 
@@ -8765,11 +8829,6 @@ document.addEventListener('DOMContentLoaded', function () {
       return `<img src="${src}" alt="${alt}" class="cf-founder-img" style="width:100%;max-width:220px;border-radius:12px;display:block;margin:8px auto;border:2px solid rgba(201,150,62,0.40);">`;
     });
 
-
-    out = out.replace(/https?:\/\/[^\s<"]+/g, '');
-    out = out.replace(/\/(collections|products|page|policies|blog|account|checkout)[^\s<"']*/g, '');
-    out = out.replace(/\.html\b/g, '');
-
     return out
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<strong>$1</strong>')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -9066,10 +9125,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const response = await fetch('/.netlify/functions/chat', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              message: text,
-              history: conversationHistory.slice(-8),
-              detectedLang: userLang
+          body:    JSON.stringify({
+            message: text,
+            history: conversationHistory.slice(-8)
           })
         });
 

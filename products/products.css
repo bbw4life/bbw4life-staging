@@ -3175,6 +3175,10 @@ details[open] .chevron {
 
 
 
+
+
+
+
 /* ════════════════════════════════════════════════════════════
    MINI PRODUCT SLIDER — REDESIGN PREMIUM
 ════════════════════════════════════════════════════════════ */
@@ -3198,7 +3202,6 @@ details[open] .chevron {
     100% { transform: scale(1); }
 }
 
-/* ── Section wrapper ── */
 #mini-product-slider {
     padding: 0px;
     background: linear-gradient(170deg, #fdf9f4 0%, #faf4ec 55%, #f9f2e8 100%);
@@ -3226,7 +3229,6 @@ details[open] .chevron {
     z-index: 0;
 }
 
-/* ── Titre ── */
 #mini-product-slider .section-title {
     text-align: center;
     font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
@@ -3251,7 +3253,6 @@ details[open] .chevron {
     animation: mps-title-shimmer 3s linear infinite;
 }
 
-/* ── Slider container ── */
 #mini-product-slider .slider-container {
     position: relative;
     overflow: hidden;
@@ -3287,9 +3288,9 @@ details[open] .chevron {
 }
 #mini-product-slider .product-slider::-webkit-scrollbar { display: none; }
 
-/* ── Product Item ── */
+/* ── Product Item — 5 visibles desktop, 2 visibles mobile ── */
 #mini-product-slider .product-item {
-    flex: 0 0 210px;
+    flex: 0 0 calc((100% - 4 * 14px) / 5);
     text-align: center;
     scroll-snap-align: center;
     display: flex;
@@ -3310,7 +3311,6 @@ details[open] .chevron {
     overflow: hidden;
 }
 
-/* Trait shimmer haut */
 #mini-product-slider .product-item::before {
     content: '';
     position: absolute;
@@ -3325,7 +3325,6 @@ details[open] .chevron {
 }
 #mini-product-slider .product-item:hover::before { opacity: 1; }
 
-/* Orbe hover */
 #mini-product-slider .product-item::after {
     content: '';
     position: absolute;
@@ -3348,11 +3347,12 @@ details[open] .chevron {
 }
 
 @media (max-width: 768px) {
-    #mini-product-slider .product-item { flex: 0 0 170px; }
+    #mini-product-slider .product-item {
+        flex: 0 0 calc((100% - 1 * 10px) / 2);
+    }
     #mini-product-slider .product-slider { gap: 10px !important; }
 }
 
-/* ── Product Image zone ── */
 #mini-product-slider .product-image {
     position: relative;
     width: 100%;
@@ -3381,7 +3381,6 @@ details[open] .chevron {
     transform: scale(1.04);
 }
 
-/* ── Flèches navigation ── */
 #mini-product-slider .mini-media-slider-prev,
 #mini-product-slider .mini-media-slider-next {
     display: flex !important;
@@ -3411,7 +3410,6 @@ details[open] .chevron {
 #mini-product-slider .mini-media-slider-prev::before { content: '\2190'; }
 #mini-product-slider .mini-media-slider-next::before { content: '\2192'; }
 
-/* ── Discount badge ── */
 #mini-product-slider .mini-discount-badge {
     position: absolute !important;
     top: 7px !important;
@@ -3429,8 +3427,6 @@ details[open] .chevron {
     box-shadow: 0 2px 8px rgba(0,0,0,0.18) !important;
 }
 
-/* ── Wishlist icon — REDESIGN ── */
-/* Fond ivoire chaud, bordure or fine, cœur rose/gold */
 #mini-product-slider .mini-wishlist-icon {
     position: absolute;
     bottom: 7px;
@@ -3458,7 +3454,6 @@ details[open] .chevron {
     border-color: rgba(201,150,62,0.55);
 }
 
-/* SVG cœur vide — trait or discret */
 #mini-product-slider .mini-wishlist-icon .wishlist-icon-empty {
     display: block;
     width: 14px;
@@ -3472,7 +3467,6 @@ details[open] .chevron {
     stroke: #b07d28;
 }
 
-/* SVG cœur plein — rose chaud, cohérent BBW */
 #mini-product-slider .mini-wishlist-icon .wishlist-icon-filled {
     display: none;
     width: 14px;
@@ -3481,7 +3475,6 @@ details[open] .chevron {
     stroke: none;
 }
 
-/* État ajouté */
 #mini-product-slider .mini-wishlist-icon.added .wishlist-icon-empty  { display: none; }
 #mini-product-slider .mini-wishlist-icon.added .wishlist-icon-filled { display: block; }
 #mini-product-slider .mini-wishlist-icon.added {
@@ -3492,7 +3485,6 @@ details[open] .chevron {
     transform: scale(1.15);
 }
 
-/* ── Product Info ── */
 #mini-product-slider .product-info {
     margin-top: 9px !important;
     position: relative !important;
@@ -3503,7 +3495,6 @@ details[open] .chevron {
     z-index: 2 !important;
 }
 
-/* ── Prix — compact, élégant ── */
 #mini-product-slider .product-price {
     font-size: 13px !important;
     font-weight: 600 !important;
@@ -3972,6 +3963,10 @@ details[open] .chevron {
     gap: 5px;
 }
 
+.satc-swatches::-webkit-scrollbar {
+    display: none;
+}
+
 .satc-swatch {
     width: 22px;
     height: 22px;
@@ -4055,7 +4050,6 @@ details[open] .chevron {
     user-select: none;
 }
 
-/* ── CTA — fond noir, texte or, bordure or ── */
 .sticky-atc__btn {
     display: flex;
     align-items: center;
@@ -4118,11 +4112,39 @@ details[open] .chevron {
     .satc-field { flex: 1; min-width: 130px; }
     .satc-select { min-width: 0; width: 100%; }
     .sticky-atc__btn { width: 100%; justify-content: center; height: 46px; font-size: 15px; }
+
+    .satc-color-wrap {
+        overflow: hidden;
+        max-width: 150px;
+    }
+
+    .satc-swatches {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        max-width: calc(3 * 22px + 2 * 5px);
+        flex-shrink: 0;
+        scroll-snap-type: x mandatory;
+        padding: 3px 0;
+    }
+
+    .satc-swatches::-webkit-scrollbar {
+        display: none;
+    }
+
+    .satc-swatch {
+        scroll-snap-align: start;
+    }
 }
 
 @media (max-width: 400px) {
     .satc-swatch { width: 20px; height: 20px; }
     .sticky-atc__img { width: 40px; height: 40px; }
+
+    .satc-swatches {
+        max-width: calc(3 * 20px + 2 * 5px);
+    }
 }
 
 

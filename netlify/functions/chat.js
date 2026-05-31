@@ -11,7 +11,7 @@ async function loadProductsData() {
     path.join(__dirname, '..', '..', 'products.data.json'),
     path.join(__dirname, '..', '..', 'public', 'products.data.json'),
   ];
-  for (const p of localPaths) { 
+  for (const p of localPaths) {
     try {
       if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
     } catch (e) { /* continue */ }
@@ -113,6 +113,8 @@ function buildProductIndex(rawData) {
 
 /* ══════════════════════════════════════════════════════
    GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
+   On construit les listes depuis les données settings,
+   sans jamais hardcoder les IDs ici.
 ══════════════════════════════════════════════════════ */
 function buildGenderIds(settings) {
   const jrgqCols = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
@@ -349,7 +351,7 @@ function isGreeting(message) {
 }
 
 /* ══════════════════════════════════════════════════════
-   SHORT ACK DETECTION
+   SHORT ACK DETECTION (ok, merci, super, 👍, etc.).
 ══════════════════════════════════════════════════════ */
 function isShortAck(message) {
   const q = message.toLowerCase().trim();
@@ -1135,7 +1137,7 @@ exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST')   return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
 
   try {
-    const { message, history = [], detectedLang } = JSON.parse(event.body);
+    const { message, history = [] } = JSON.parse(event.body);
     if (!message || message.trim().length === 0) {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Message is required' }) };
     }
@@ -1155,9 +1157,7 @@ exports.handler = async (event, context) => {
       ? settings.allowed_languages
       : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
 
-    const userLang = body.detectedLang && allowedLanguages.includes(body.detectedLang)
-    ? body.detectedLang
-    : detectLanguage(message, allowedLanguages);
+    const userLang = detectLanguage(message, allowedLanguages);
 
     let searchData = null, blogData = null;
     try {
