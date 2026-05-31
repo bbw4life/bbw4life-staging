@@ -403,6 +403,126 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product5.html'
     },
 
+    '/products/product6.html': {
+        title: 'ColorStilettos — Vibrant Stiletto Flip Flops for Plus Size Queens | BBW4LIFE',
+        description: 'Slip on the ColorStilettos by BBW4LIFE — bold multicolor design, stiletto drama, flip flop ease. Designed for curvy queens who refuse to be invisible. Sizes EU 36 to 42. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size stiletto flip flops, BBW stiletto sandals, curvy women heels, multicolor stilettos, plus size flip flop heels, BBW4LIFE shoes, stiletto flip flop curvy, plus size beach heels, colorful stilettos BBW, curvy queen heels, vibrant stiletto sandals, plus size party heels, BBW4LIFE ColorStilettos, multicolor flip flop heels, plus size sizes 36 42, curvy woman sandals, BBW flip flop stiletto, bold heels plus size, plus size beach sandals stiletto, curvy woman party shoes, BBW colorful heels, plus size pool party shoes, stiletto heels curvy queen, BBW4LIFE vibrant heels, plus size summer stilettos, curvy woman bold shoes, BBW beach stilettos, multicolor heels plus size, curvy fashion heels, plus size confident heels',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_6_1.png?v=1778192496',
+        canonical: 'https://www.bbw4life.com/products/product6.html'
+    },
+
+    '/products/product7.html': {
+        title: 'NightChic Dress — Mock Neck Long Sleeve Printed Dress for Plus Size Queens | BBW4LIFE',
+        description: 'Own every room in the NightChic Dress by BBW4LIFE — elevated mock neck silhouette, bold printed fabric, long sleeves designed for curvy queens who command elegance effortlessly. Sizes 1XL to 4XL. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size mock neck dress, BBW printed dress, curvy women evening dress, plus size long sleeve dress, mock neck plus size, BBW4LIFE dress, curvy queen evening wear, plus size dinner dress, printed dress BBW, plus size elegant dress, curvy woman formal dress, BBW NightChic dress, mock neck curvy fashion, plus size work dress, curvy queen printed dress, BBW4LIFE NightChic, plus size gala dress, curvy woman night out dress, long sleeve plus size dress, BBW elegant dress, plus size wedding guest dress, curvy woman mock neck, printed long sleeve BBW, plus size sophisticated dress, BBW curvy dress 1XL 4XL, plus size event dress, curvy fashion evening wear, BBW4LIFE plus size dresses, mock neck printed dress curvy, plus size confident dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_7_1.png?v=1778193936',
+        canonical: 'https://www.bbw4life.com/products/product7.html'
+    },
+
+    '/products/product8.html': {
+        title: 'SlitLux Dress — Cutout Slit Round Neck Plus Size Dress | BBW4LIFE',
+        description: 'Own every room in the SlitLux Dress by BBW4LIFE — daring cutout detail, bold front slit hemline, and a flattering round neck long sleeve silhouette. Designed for curvy queens who are done hiding. Sizes 1XL to 4XL. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size cutout dress, BBW slit dress, curvy woman black dress, cutout slit dress plus size, BBW4LIFE SlitLux, curvy queen evening dress, plus size long sleeve dress, round neck cutout dress BBW, black plus size dress 1XL 4XL, curvy woman gala dress, plus size night out dress, daring plus size dress, BBW formal dress, curvy woman cutout dress, plus size slit hem dress, BBW4LIFE dresses, plus size party dress black, bold curvy woman dress, curvy queen photoshoot dress, plus size wedding guest dress, BBW round neck dress, cutout dress for curvy women, plus size black dress slit, elegant plus size dress, BBW4LIFE curvy fashion, plus size gala dress black, curvy woman long sleeve cutout, slit hem plus size black, BBW4LIFE SlitLux dress, bold black dress for curvy queens',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_8_1.png?v=1778195422',
+        canonical: 'https://www.bbw4life.com/products/product8.html'
+    },
+
+    '/products/product9.html': {
+        title: 'PlaidOverall Dress — Wide Strap Dungaree for Curvy Women | BBW4LIFE',
+        description: 'Rock the PlaidOverall Dress by BBW4LIFE — charming plaid patterns on a wide-strap overall dungaree style. Playful, casual and made for women who love comfortable chic. Available in Dark Green, Black & Caramel. Sizes 1XL to 4XL. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size plaid overall dress, BBW dungaree dress, curvy woman overall, wide strap plus size dress, plaid dress curvy queen, BBW4LIFE plaid dress, plus size dungaree style, curvy casual dress, plus size dark green dress, BBW plaid overall, curvy woman caramel dress, plus size black overall dress, BBW4LIFE dungaree, wide strap curvy dress, plaid pattern plus size, curvy woman casual chic, BBW overall dress, plus size sizes 1XL 4XL, curvy fashion casual, BBW4LIFE casual dress, plus size comfortable dress, curvy woman plaid style, BBW black plaid dress, plus size caramel dress, curvy overall fashion, BBW4LIFE curvy woman, plaid print plus size, wide strap dungaree curvy, plus size casual chic, BBW comfortable chic dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_9_1.png?v=1778198010',
+        canonical: 'https://www.bbw4life.com/products/product9.html'
+    },
+
+    '/products/product10.html': {
+        title: 'FloralFlounce Dress — Surplice Flounce Sleeve Plus Size Maxi | BBW4LIFE',
+        description: 'Slip into the FloralFlounce Dress by BBW4LIFE — a stunning surplice-neck printed maxi with flounce sleeves that flatters every curve. Feminine, flowing and made to impress. Sizes 1XL to 4XL. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size floral dress, BBW flounce dress, curvy woman maxi dress, surplice neck plus size, flounce sleeve dress curvy, plus size printed dress, BBW4LIFE floral dress, curvy woman floral maxi, plus size white dress, BBW surplice dress, flounce sleeve curvy queen, plus size sizes 1XL 4XL, curvy fashion dress, BBW4LIFE dress, plus size feminine dress, curvy woman printed maxi, BBW floral print dress, plus size occasion dress, curvy flounce maxi, BBW4LIFE FloralFlounce, plus size white floral dress, curvy woman surplice dress, BBW printed dress, plus size flattering dress, curvy maxi floral, BBW4LIFE curvy queen, floral print plus size maxi, surplice flounce curvy, plus size dress under $20, BBW feminine dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_1.png?v=1778199463',
+        canonical: 'https://www.bbw4life.com/products/product10.html'
+    },
+
+    '/products/product11.html': {
+        title: 'VintageSquare Dress — Printed Square Neck Plus Size | BBW4LIFE',
+        description: 'A vintage-inspired square neckline meets a beautiful printed fabric. Short sleeves, flattering cut — dress up or dress down. Plus size dress for curvy queens. Sizes XL to 4XL. Available in Black & Red. Free worldwide shipping.',
+        keywords: 'plus size square neck dress, BBW vintage dress, curvy women dress, square neckline plus size, printed plus size dress, short sleeve plus size dress, BBW4LIFE dress, plus size XL 4XL dress, vintage inspired curvy dress, plus size black dress, plus size red dress, BBW curvy fashion, plus size dress queen',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_11_1.png?v=1778237927',
+        canonical: 'https://www.bbw4life.com/products/product11.html'
+    },
+
+    '/products/product12.html': {
+        title: 'PaisleyBelt Dress — Orange Floral Print Belted Dress | BBW4LIFE',
+        description: 'Turn heads in this vibrant paisley print belted dress. Flattering waist belt, bold orange floral pattern, and a silhouette that celebrates every curve. Plus size queens, this one was made for you. Sizes 1X to 3X. Free worldwide shipping.',
+        keywords: 'plus size paisley dress, BBW belted dress, curvy women orange dress, floral print plus size, BBW4LIFE dress, plus size belted dress, orange floral curvy dress, plus size printed dress, BBW orange dress, curvy fashion dress, plus size 1X 2X 3X dress, belted waist plus size, paisley print curvy, BBW4LIFE fashion',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_12_1.png?v=1778239823',
+        canonical: 'https://www.bbw4life.com/products/product12.html'
+    },
+
+    '/products/product13.html': {
+        title: 'MeshDuo Set — Sheer Mesh Long Dress & Suit | BBW4LIFE',
+        description: 'Sultry sheer mesh meets structured elegance in this two-piece set. A long perspective dress paired with a matching suit jacket — designed for the bold curvy woman who refuses to be invisible. Sizes L to 4XL. Free worldwide shipping.',
+        keywords: 'plus size mesh set, BBW mesh dress, curvy women two piece set, sheer mesh plus size, plus size perspective dress, BBW two piece, mesh suit plus size, curvy mesh outfit, plus size elegant set, BBW4LIFE dress, mesh long dress curvy, plus size sultry outfit, size L to 4XL dress, two piece set curvy woman, BBW mesh two piece',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_13_1.png?v=1778251746',
+        canonical: 'https://www.bbw4life.com/products/product13.html'
+    },
+
+    '/products/product14.html': {
+        title: 'MeshGlam Dress — Solid Color Stitching Maxi | BBW4LIFE',
+        description: 'Elegant mesh stitching in solid colors creates a figure-flattering silhouette. Sultry and stylish from day to night. Plus size maxi dress in Khaki, Black & White. Sizes XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size maxi dress, BBW mesh dress, curvy women maxi dress, solid color mesh dress, plus size evening dress, mesh stitching dress, BBW4LIFE dress, size XL to 5XL dress, flattering plus size dress, curvy maxi dress, mesh glam dress, plus size solid dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_14_1.png?v=1778275804',
+        canonical: 'https://www.bbw4life.com/products/product14.html'
+    },
+
+    '/products/product15.html': {
+        title: 'LinenBreeze Dress — Cotton Linen Button-Down Plus Size | BBW4LIFE',
+        description: 'Breathable cotton-linen button-down dress that moves beautifully with you. Relaxed natural comfort in White, Black & Green. Plus size sizes M to 5XL. Free worldwide shipping. BBW4LIFE — Beauty Has No Sizes.',
+        keywords: 'plus size linen dress, BBW linen dress, curvy women button down dress, cotton linen plus size, breathable plus size dress, plus size casual dress, BBW4LIFE dress, size M to 5XL dress, natural fabric curvy dress, linen button down dress plus size, relaxed fit plus size, BBW casual dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_1.png?v=1778277908',
+        canonical: 'https://www.bbw4life.com/products/product15.html'
+    },
+
+    '/products/product16.html': {
+        title: 'StripedMini Dress — V-Neck Long Sleeve Mini | BBW4LIFE',
+        description: 'Classic stripes reimagined in a flattering V-neck mini silhouette. Fun, flirty, and perfect for any casual outing. Plus size mini dress in Burnt Coral. Sizes 1XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size mini dress, BBW striped dress, curvy women mini dress, V-neck long sleeve dress, plus size striped dress, BBW4LIFE dress, burnt coral dress, plus size casual dress, curvy mini dress, BBW long sleeve mini, plus size V-neck dress, striped plus size fashion',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_16_1.png?v=1778279617',
+        canonical: 'https://www.bbw4life.com/products/product16.html'
+    },
+
+    '/products/product17.html': {
+        title: 'LoungeRobe — Loose Plus Size Sleepwear Bathrobe | BBW4LIFE',
+        description: 'Wrap yourself in pure comfort. This loose plus-size bathrobe is your perfect home companion — soft, breathable, and deeply relaxing. Available in 5 rich colors: Black, Wine Red, Navy Blue, Indigo Blue & White. Sizes 1XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size bathrobe, BBW bathrobe, curvy women sleepwear, plus size robe, loose bathrobe women, plus size loungewear, BBW4LIFE bathrobe, comfortable robe curvy, plus size sleepwear, wine red bathrobe, navy blue robe BBW, size 1XL to 5XL robe, lounge robe plus size, soft robe BBW queen',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_1.png?v=1778283396',
+        canonical: 'https://www.bbw4life.com/products/product17.html'
+    },
+
+    '/products/product18.html': {
+        title: 'LaceNight Dress — Sexy Short Strap Lace Nightdress | BBW4LIFE',
+        description: 'Feel irresistibly beautiful in the LaceNight Dress by BBW4LIFE. Sexy short strap lace nightdress designed for curvy queens who embrace their sensuality. Wine Red. Sizes 1XL to 5XL. Free worldwide shipping. 30-day returns.',
+        keywords: 'plus size lace nightdress, BBW sexy lingerie dress, curvy women nightwear, lace strap dress plus size, BBW4LIFE LaceNight, plus size sleepwear, curvy woman lingerie, sexy nightdress BBW, wine red lace dress, plus size lace dress, BBW4LIFE nightwear, curvy lace nightgown, plus size intimate wear, BBW sleepwear lace, curvy woman sexy nightdress, lace nightdress sizes 1XL 5XL, BBW intimate dress, plus size boudoir, curvy woman confidence lingerie, BBW4LIFE lace collection',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_18_1.png?v=1778284939',
+        canonical: 'https://www.bbw4life.com/products/product18.html'
+    },
+
+    '/products/product19.html': {
+        title: 'LaceThong Set — Sheer Lace Skirt & Lingerie | BBW4LIFE',
+        description: 'Alluring sheer lace skirt paired with a matching thong — effortlessly seductive and confidently bold. Plus size lingerie designed for curvy queens. Sizes 1XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size lingerie set, BBW lingerie, curvy women lingerie, sheer lace skirt set, plus size thong set, BBW4LIFE lingerie, plus size lace set, curvy lingerie black, curvy lingerie red, sheer lingerie plus size, lace thong set, BBW lace lingerie, plus size boudoir',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_19_1.png?v=1778291669',
+        canonical: 'https://www.bbw4life.com/products/product19.html'
+    },
+
+    '/products/product20.html': {
+        title: 'SolidSexy Bikini — High Waist Hot Swimsuit | BBW4LIFE',
+        description: 'Bold, beautiful and made for your curves. Solid-color high-waist bikini that turns heads at the pool. Plus size swimwear designed for queens who love their body. Sizes 0XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size bikini, BBW bikini, curvy women swimwear, high waist bikini plus size, solid color bikini, plus size swimsuit, BBW4LIFE swimwear, curvy bikini, plus size pool outfit, high waist swimsuit curvy, BBW swimwear, solid sexy bikini',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_20_1.jpg?v=1778292621',
+        canonical: 'https://www.bbw4life.com/products/product20.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */

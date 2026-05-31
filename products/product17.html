@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">Your home is your sanctuary. You deserve to feel like royalty in every single room — wrapped in softness, breathing in peace.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product17">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">You give so much of yourself every day. You hold others up, show up, push through. <strong>The LoungeRobe exists for those sacred moments when you finally close the door — and belong entirely to yourself.</strong> Soft, loose, breathable, beautiful. Wrap yourself in it and feel what it means to truly rest. <em>You deserve this, Queen.</em></p>
+        </div>
+
+        <!-- ══ LOUNGE PROMISE BLOCK (nouveau bloc P17) ══ -->
+        <div class="lp-block" data-scroll-reveal>
+          <div class="lp-block__inner">
+            <div class="lp-block__eyebrow">
+              <span class="lp-block__eyebrow-dot"></span>
+              The BBW4LIFE Lounge Promise
+              <span class="lp-block__eyebrow-dot"></span>
+            </div>
+            <p class="lp-block__quote">"Your home should feel like the safest, most beautiful place in the world — <span>because you're in it.</span>"</p>
+            <div class="lp-block__items">
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Ultra-soft fabric</strong> — gentle on every curve, every skin, all day long</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Loose plus-size fit</strong> — designed to flow freely, never restrict, always flatter</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>5 stunning colors</strong> — Black, Wine Red, Navy Blue, Indigo Blue & White</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Sizes 1XL to 5XL</strong> — every queen included, always</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Free worldwide shipping</strong> — delivered to your door with love</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flame"></i> 57% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Plus Size Comfort Robe &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> 5 Rich Colors Available &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-home"></i> Sizes 1XL to 5XL &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flame"></i> 57% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Plus Size Comfort Robe &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> 5 Rich Colors Available &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-home"></i> Sizes 1XL to 5XL &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>47 BBW queens</strong> added this comfort robe to cart today — secure your color before it's gone!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Wrap Yourself in Comfort & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me 👑</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Me & My Queen 💕</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Robe</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Robe</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Comfort Queens Pack 🔥</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Robe 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Robe 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Robe 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ══ COZY COLOR MOOD BLOCK (nouveau bloc P17) ══ -->
+        <div class="ccm-block" data-scroll-reveal>
+          <div class="ccm-block__header">
+            <i class="fas fa-palette"></i>
+            Choose Your Mood — 5 Colors, 5 Energies
+          </div>
+          <div class="ccm-block__grid">
+            <div class="ccm-card" style="--ccm-accent:#000000;">
+              <div class="ccm-swatch" style="background:#000000;"></div>
+              <div class="ccm-info">
+                <span class="ccm-info__name">Black</span>
+                <span class="ccm-info__mood">Timeless power. The queen who walks into any room and owns it silently.</span>
+                <span class="ccm-info__tag"><i class="fas fa-crown"></i> Most Popular</span>
+              </div>
+            </div>
+            <div class="ccm-card" style="--ccm-accent:#722F37;">
+              <div class="ccm-swatch" style="background:#722F37;"></div>
+              <div class="ccm-info">
+                <span class="ccm-info__name">Wine Red</span>
+                <span class="ccm-info__mood">Deep, warm romance. Pour a glass, light a candle, belong to yourself tonight.</span>
+                <span class="ccm-info__tag"><i class="fas fa-fire"></i> Fan Favorite</span>
+              </div>
+            </div>
+            <div class="ccm-card" style="--ccm-accent:#000080;">
+              <div class="ccm-swatch" style="background:#000080;"></div>
+              <div class="ccm-info">
+                <span class="ccm-info__name">Navy Blue</span>
+                <span class="ccm-info__mood">Calm, grounded elegance. The color of deep water and deep peace.</span>
+                <span class="ccm-info__tag"><i class="fas fa-star"></i> Bestseller</span>
+              </div>
+            </div>
+            <div class="ccm-card" style="--ccm-accent:#3F51B5;">
+              <div class="ccm-swatch" style="background:#3F51B5;"></div>
+              <div class="ccm-info">
+                <span class="ccm-info__name">Indigo Blue</span>
+                <span class="ccm-info__mood">Soft dreamy magic. The color of twilight, intuition and beautiful rest.</span>
+                <span class="ccm-info__tag"><i class="fas fa-moon"></i> Evening Bliss</span>
+              </div>
+            </div>
+            <div class="ccm-card" style="--ccm-accent:#c9963e;">
+              <div class="ccm-swatch" style="background:#FFFFFF; border:2px solid rgba(201,150,62,0.40);"></div>
+              <div class="ccm-info">
+                <span class="ccm-info__name">White</span>
+                <span class="ccm-info__mood">Pure softness. Like wrapping yourself in a cloud after a long, hard day.</span>
+                <span class="ccm-info__tag"><i class="fas fa-feather"></i> Soft & Clean</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-sparkles"></i>
+            <span>Complete Your Queen Lounge Experience</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who build their comfort ritual feel unstoppable — pair your LoungeRobe with the perfect self-care essentials.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing this comfort robe right now.</span>
+          </p>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select">
+          </select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches">
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SEASON GUIDE (bloc existant, adapté P17) -->
+        <div class="bbw-season-guide" data-scroll-reveal>
+          <div class="bbw-season-guide__header">
+            <i class="fas fa-calendar-alt"></i>
+            <span>When Can You Wear Your LoungeRobe?</span>
+          </div>
+          <div class="bbw-season-guide__list">
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-moon"></i></span>
+              <div>
+                <strong>Every Evening</strong>
+                <span>The moment you walk through your door — slip on your LoungeRobe and instantly decompress. This is your daily ritual of peace, Queen.</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-sun"></i></span>
+              <div>
+                <strong>Lazy Sunday Mornings</strong>
+                <span>Coffee in hand, robe on, nowhere to be. The LoungeRobe was born for Sunday mornings that belong entirely to you.</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-bath"></i></span>
+              <div>
+                <strong>After Your Bath or Shower</strong>
+                <span>Wrap yourself in softness the moment you step out. The breathable fabric keeps you warm without overheating — pure comfort.</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-gift"></i></span>
+              <div>
+                <strong>The Perfect Gift Year-Round</strong>
+                <span>For your mother, your sister, your best friend — because every woman deserves to feel held and cared for. The gift that says "you matter."</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Which size is right for me?</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">LoungeRobe — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_1.png?v=1778283396" alt="LoungeRobe Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                The LoungeRobe is designed with a generous, loose fit for maximum comfort. The fabric is soft and breathable. Measure your bust and use the chart below. When between sizes, go <strong>up</strong> for the most comfortable, relaxed drape — this robe is made to flow freely.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> How to Measure</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <ul>
+                <li><strong>Bust:</strong> Measure around the fullest part of your chest, keeping the tape parallel to the ground.</li>
+                <li><strong>Waist:</strong> Measure around your natural waistline, the narrowest part of your torso.</li>
+                <li><strong>Hips:</strong> Measure around the fullest part of your hips, about 8 inches below the waist.</li>
+                <li><strong>Tip:</strong> The LoungeRobe has a relaxed loose fit — sizing up gives you the most comfortable, flowing drape.</li>
+              </ul>
+              <h3><i class="fi fi-rr-ruler-triangle"></i> Size Conversion Chart</h3>
+              <table>
+                <thead>
+                  <tr><th>Size</th><th>US Size</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hips (cm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>1XL</strong></td><td>16–18</td><td>104–110</td><td>86–92</td><td>110–116</td></tr>
+                  <tr><td><strong>2XL</strong></td><td>20–22</td><td>112–118</td><td>94–100</td><td>118–124</td></tr>
+                  <tr><td><strong>3XL</strong></td><td>24</td><td>120–126</td><td>102–108</td><td>126–132</td></tr>
+                  <tr><td><strong>4XL</strong></td><td>26–28</td><td>128–134</td><td>110–116</td><td>134–140</td></tr>
+                  <tr><td><strong>5XL</strong></td><td>30–32</td><td>136–142</td><td>118–124</td><td>142–148</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-palette"></i> Available Colors</h3>
+              <table>
+                <thead><tr><th>Color</th><th>Mood &amp; Vibe</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>⚫ Black</strong></td><td>Timeless, powerful, effortlessly elegant for any queen</td></tr>
+                  <tr><td><strong>🍷 Wine Red</strong></td><td>Warm, deep romance — for cozy evenings that belong to you</td></tr>
+                  <tr><td><strong>🔵 Navy Blue</strong></td><td>Calm, grounded, deeply elegant — the color of peaceful nights</td></tr>
+                  <tr><td><strong>💙 Indigo Blue</strong></td><td>Dreamy, soft and beautiful — twilight wrapped around your curves</td></tr>
+                  <tr><td><strong>⚪ White</strong></td><td>Pure softness, clean energy — like a cloud made for your body</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">Why every plus size queen needs a quality robe?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>For years, plus size women were given robes that were just scaled-up versions of standard sizes — wrong proportions, uncomfortable fits, fabric that pulled or bunched. <strong>The LoungeRobe was designed specifically for plus size bodies</strong>, with a generous loose silhouette that flows freely and drapes beautifully.</p>
+              <p>A quality robe isn't a luxury — it's self-care. It's the daily ritual that reminds you that your comfort matters, that your body deserves softness, that you are worth taking care of. <strong>Every queen deserves a robe that fits her power, not apologizes for it.</strong></p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Arrives carefully packaged — ready to become your favorite thing you own.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your comfort and satisfaction are everything to us.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> Loose comfortable sleepwear bathrobe</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Colors:</strong> Black, Wine Red, Navy Blue, Indigo Blue, White</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> 1XL through 5XL</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fit:</strong> Loose, relaxed — designed to flow freely</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fabric:</strong> Soft, breathable, lightweight</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Occasion:</strong> Loungewear, sleepwear, post-bath, home comfort, gifting</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Machine wash cold, gentle cycle, hang to dry</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_2.png?v=1778283395" alt="LoungeRobe — the loose fit that sets you free" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-home"></i> The Fit That Sets You Free</div>
+                <div class="slide-text">Loose by design. The LoungeRobe never pulls, pinches or restricts. It flows around your curves like it was made for them — because it was.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_4.png?v=1778283391" alt="LoungeRobe — 5 stunning colors" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-palette"></i> 5 Colors, 5 Energies</div>
+                <div class="slide-text">Black, Wine Red, Navy, Indigo & White. Each color is a different mood, a different version of you — all of them beautiful, all of them valid.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_6.png?v=1778283397" alt="LoungeRobe — breathable fabric" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Breathable All Year Round</div>
+                <div class="slide-text">Soft enough for summer evenings, cozy enough for winter mornings. The LoungeRobe adapts to your season, your mood, your comfort level.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_8.png?v=1778283397" alt="LoungeRobe — sizes 1XL to 5XL" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-crown"></i> 1XL to 5XL — Every Queen Included</div>
+                <div class="slide-text">BBW4LIFE doesn't stop at 3XL. Every queen deserves the same softness, the same quality, the same experience. No queen left behind — ever.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is this robe good for plus size bodies specifically?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p><strong>Yes — it was designed specifically for plus size bodies, not adapted from a smaller pattern.</strong> The loose silhouette, generous proportions and soft fabric were chosen with curvy queens in mind. Queens from 1XL to 5XL report that the fit is comfortable, non-restrictive and genuinely flattering. This robe celebrates your body — it doesn't just cover it.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is the fabric soft enough for sensitive skin?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Our queens consistently describe the fabric as <strong>gentle, soft and non-irritating</strong>. The breathable material is designed to be worn directly against the skin without discomfort. If you have very sensitive skin, we recommend washing before the first wear to soften the fabric even further. The overwhelming feedback is: "it's even softer than I expected."</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I wear this in summer? Won't it be too warm?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Absolutely — the LoungeRobe's breathable fabric is lightweight enough for summer evenings. <strong>It's not a thick terry cloth robe — it's a soft, flowing loungewear robe</strong> that regulates temperature naturally. Queens in warm climates wear it year-round. The loose fit also means air circulation, so you stay comfortable without overheating.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Which size should I order?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>The LoungeRobe runs generously. <strong>If you're between sizes, we recommend going up</strong> for the most comfortable, flowing drape. Use your bust measurement as the primary guide — check the size chart above. Queens who prioritize a more relaxed fit often go up one full size and love it. The loose design means a little extra room only adds comfort.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is this a good gift idea?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>It's one of the best gifts you can give a plus size woman. <strong>A quality robe says "your comfort matters. Your rest matters. You matter."</strong> It's the gift that keeps giving — worn daily, cherished for years. Available in 5 beautiful colors so you can match her personality. Many of our queens receive this as a gift and say it's the most thoughtful thing anyone has given them.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your LoungeRobe will arrive in <strong>12–20 business days</strong> with standard free worldwide shipping. Express options are available at checkout. Every order is carefully packaged — because your comfort robe deserves to arrive feeling like a gift from BBW4LIFE straight to your door.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+ <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+<section id="rv-section" class="rv-section" style="display:none;">
+  <div class="rv-header">
+    <div class="rv-header-left">
+      <span class="rv-eyebrow">Your Journey</span>
+      <h2 class="rv-title">Recently Viewed</h2>
+    </div>
+    <div class="rv-header-right">
+      <button class="rv-nav-btn" id="rv-prev" aria-label="Previous">
+        <i class="fi fi-rr-angle-left"></i>
+      </button>
+      <button class="rv-nav-btn" id="rv-next" aria-label="Next">
+        <i class="fi fi-rr-angle-right"></i>
+      </button>
+      <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history">
+        <i class="fi fi-rr-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="rv-slider-wrap">
+    <div class="rv-track" id="rv-track"></div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="col-marquee-section">
+  <div class="col-marquee-track">
+    <div class="col-marquee-inner">
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+    </div>
+  </div>
+</div>
+
+  <!-- ══════════════ CUSTOM BANNER ══════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_9.png?v=1778283393" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_10.png?v=1778283396" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        Your Rest Is Sacred
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "Close the door.<br>Wrap yourself in softness.<br>This moment is yours."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        Loose Plus Size Bathrobe · 5 Rich Colors<br class="bbw-cb-br">Sizes 1XL–5XL · Free Worldwide Shipping
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider">
+        <div class="product-item" data-product-id="Pdg-Francenel-product18">
+          <div class="product-image">
+            <a href="/products/product18.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product18"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product18"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product61">
+          <div class="product-image">
+            <a href="/products/product61.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product61"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product61"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product62">
+          <div class="product-image">
+            <a href="/products/product62.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product62"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product62"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product68">
+          <div class="product-image">
+            <a href="/products/product68.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product68"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product68"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product58">
+          <div class="product-image">
+            <a href="/products/product58.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product58"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product58"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product22">
+          <div class="product-image">
+            <a href="/products/product22.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product22"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product22"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product66">
+          <div class="product-image">
+            <a href="/products/product66.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product66"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product66"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bbw-wave-divider">
+  <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+      <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+      <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+      <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+    </path>
+  </svg>
+</section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:72%;"></div></div><span id="count-5">53</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:18%;"></div></div><span id="count-4">13</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:7%;"></div></div><span id="count-3">5</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:3%;"></div></div><span id="count-2">2</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_1.png?v=1778283396" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_2.png?v=1778283395" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_3.png?v=1778283392" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_4.png?v=1778283391" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_5.png?v=1778283395" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_6.png?v=1778283397" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_7.png?v=1778283395" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_8.png?v=1778283397" alt="Review photo">
+          <div class="review-photos-more">8+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 PREMIÈRES REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-May-18</span></div>
+          <div class="rv-card-right"><h4>Marcia D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>This robe changed my relationship with rest.</h5>
+        <p>Size 3XL in Black. I put it on after my shower on the first day and just stood in front of the mirror for five minutes. I looked rested, soft and beautiful — not "in my robe," but actually beautiful. The fabric is incredibly gentle and the loose fit moves with my body perfectly. I've ordered two more as gifts because I want every woman I love to feel this way. BBW4LIFE understands that rest is self-love.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_1.png?v=1778283396" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-14</span></div>
+          <div class="rv-card-right"><h4>Anika S.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The Wine Red is even more gorgeous in person.</h5>
+        <p>Size 2XL in Wine Red. I gasped when I opened the package — the color is so rich and deep in real life, like a fine burgundy wine. I wore it for an entire Sunday morning: coffee, book, window light, absolute peace. My partner called me "the most beautiful thing in this house" and I fully agreed. BBW4LIFE knows how to make a woman feel like she lives in a five-star hotel every single day.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-May-09</span></div>
+          <div class="rv-card-right"><h4>Fatou B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Size 5XL — and the fit is absolutely perfect.</h5>
+        <p>I cannot tell you how difficult it is to find a robe that actually fits a 5XL body with dignity and style. Most robes at this size are shapeless, thin, or just wrong. This LoungeRobe in Navy Blue, size 5XL — I cried putting it on. Not because of sadness. Because of relief. Because something finally fit. BBW4LIFE includes us. All of us. I will be a loyal customer forever.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_3.png?v=1778283392" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">T</div><span class="date">2026-May-03</span></div>
+          <div class="rv-card-right"><h4>Tanya R.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore this every day for 3 weeks straight.</h5>
+        <p>Size 1XL in White. I work from home and this robe became my uniform. Morning routine, work breaks, evening wind-down — the LoungeRobe was always on. The fabric hasn't pilled, the color hasn't faded, the seams are still perfect after dozens of washes. This is quality built to last. I'm ordering the Black and the Indigo Blue next because one is simply not enough.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Apr-27</span></div>
+          <div class="rv-card-right"><h4>Céleste A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Paris — arrivé en 16 jours, parfait.</h5>
+        <p>Taille 2XL en Bleu Indigo. Reçu à Paris en 16 jours dans un emballage soigné. La couleur est absolument magnifique — un bleu doux et profond qui donne l'impression de porter le ciel du soir. Le tissu est ultra doux et le tombé est élégant même pour une robe de chambre. Je l'ai portée pour prendre mon café le matin et je me suis sentie comme dans un palace. BBW4LIFE livre parfaitement en France. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Apr-20</span></div>
+          <div class="rv-card-right"><h4>Gloria N.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I gave this as a Mother's Day gift and she sobbed.</h5>
+        <p>Size 4XL in Wine Red for my mother, who has always had difficulty finding comfortable plus size loungewear. She opened the package, held it up, felt the fabric and immediately put it on. Then she hugged me and cried because she said "I didn't know someone made something this beautiful for my body." BBW4LIFE doesn't just sell robes. They restore dignity. This gift was the most meaningful thing I've given in years.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-Apr-12</span></div>
+          <div class="rv-card-right"><h4>Natasha O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My anxiety ritual starts with this robe every evening.</h5>
+        <p>Size 3XL in Black. I have anxiety and one of my therapist's recommendations was to create an evening decompression ritual. My robe is now the centerpiece of that ritual. The moment I put on my LoungeRobe, my nervous system starts to calm. Something about the softness, the looseness, the way it wraps around me — it signals safety. BBW4LIFE created something that heals, whether they knew it or not. I'm endlessly grateful.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">R</div><span class="date">2026-Apr-05</span></div>
+          <div class="rv-card-right"><h4>Roseline M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Haiti — Mési anpil BBW4LIFE! ❤️</h5>
+        <p>Mwen kòmande LoungeRobe a tay 2XL Navy Blue depi Ayiti. Li rive nan 19 jou nan yon embalaj solid. Koule a bèl anpil epi twal la dous tankou yon rèv. M mete li chak swa lè m fin travay. BBW4LIFE pa bliye Ayiti — nou la epi nou bèl. Mési pou robe sa a ki fè m santi m rèn lakay mwen. Queens ayisyèn yo, kòmande san pe! ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE LEFT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Sandra T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My Sunday morning ritual</p><p class="rv-mq-quote">Coffee. LoungeRobe. Silence. This is what Sunday morning should feel like. 2XL Black. I never want to take it off. BBW4LIFE changed my weekends.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Pearl W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The Navy Blue is stunning</p><p class="rv-mq-quote">The color is deep, rich and absolutely beautiful. Navy Blue 3XL. Ordered for my birthday and it was the best gift I gave myself. Pure luxury feeling.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Bea A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Softer than anything I own</p><p class="rv-mq-quote">I have expensive robes from department stores. This $6 BBW4LIFE robe is softer than all of them. Size 1XL White. I'm genuinely in disbelief.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Diane F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My daughter stole it immediately</p><p class="rv-mq-quote">Ordered the Wine Red in 2XL for myself. My daughter put it on before I could. She said "this is mine now." I ordered her own. Both obsessed. BBW4LIFE!</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">J</div><div class="rv-mq-meta"><p class="rv-mq-name">Joy E.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Washes perfectly every time</p><p class="rv-mq-quote">20+ washes and the Indigo Blue hasn't faded one shade. The fabric stays soft, the seams hold. BBW4LIFE quality is real. 4XL. Highly recommend.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">O</div><div class="rv-mq-meta"><p class="rv-mq-name">Oluchi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Nigeria represent! 🇳🇬</p><p class="rv-mq-quote">Ordered from Lagos, arrived in 18 days. LoungeRobe 3XL Navy Blue. Absolutely gorgeous. Nigerian queens — kpele fear! BBW4LIFE ships perfectly here ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Lina M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best self-care purchase ever</p><p class="rv-mq-quote">I've spent more on skincare that didn't make me feel half as good as this robe does. LoungeRobe 2XL White. True self-care. BBW4LIFE gets it right.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">V</div><div class="rv-mq-meta"><p class="rv-mq-name">Vivian C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My 5XL is a dream</p><p class="rv-mq-quote">Finally a robe in 5XL that doesn't feel like an afterthought. LoungeRobe Black 5XL fits beautifully, feels incredible. BBW4LIFE includes all of us ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Sandra T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My Sunday morning ritual</p><p class="rv-mq-quote">Coffee. LoungeRobe. Window light. The perfect morning. 2XL Black. This robe is my daily reminder that I deserve beautiful things. BBW4LIFE forever.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Pearl W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Luxury at an impossible price</p><p class="rv-mq-quote">This robe costs less than a lunch and feels like a luxury spa treatment every single morning. LoungeRobe 3XL Navy. Absurdly good value. Love BBW4LIFE.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 7 REVIEWS SUIVANTES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2026-Mar-28</span></div>
+          <div class="rv-card-right"><h4>Esther K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I ordered all 5 colors over time — no regrets.</h5>
+        <p>Yes, all five. Black first. Then Wine Red. Then Navy. Then White. Then Indigo Blue last week. Each color has its own personality and I wear them based on my mood. The quality is identical across all five. This is the best $6–7 I spend every time. BBW4LIFE has created something remarkable — a robe that costs almost nothing and means everything. I rotate through them like a luxury wardrobe.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_5.png?v=1778283395" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">K</div><span class="date">2026-Mar-21</span></div>
+          <div class="rv-card-right"><h4>Kezia P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My husband says I look more beautiful in this robe than any dress.</h5>
+        <p>Size 3XL, Wine Red. My husband is not a man of many compliments. He watched me put on the LoungeRobe for the first time and said "you look incredible." Not "nice." Incredible. I nearly fell over. There is something about the way this robe drapes on a plus size body that is genuinely stunning. Soft, elegant, flowing. BBW4LIFE makes us look beautiful in our own homes. That matters so much.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Mar-14</span></div>
+          <div class="rv-card-right"><h4>Ife A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Perfect for my postpartum recovery weeks.</h5>
+        <p>Size 4XL in White. I ordered this during my postpartum recovery period when my body felt unfamiliar and tender. The LoungeRobe was the most compassionate thing I owned those weeks — soft enough for my healing skin, loose enough for a changing body, beautiful enough to make me feel like myself again. BBW4LIFE created something that met me exactly where I was. I will never forget that.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Mar-07</span></div>
+          <div class="rv-card-right"><h4>Harriet N.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful — size up for the most relaxed drape</h5>
+        <p>The LoungeRobe is gorgeous — the Indigo Blue is even more beautiful in person. I ordered my usual 2XL and it fits well with some structure. If you want the really flowing, relaxed drape (which I'd recommend — it's beautiful that way), go up one size. The quality and fabric are excellent at any size. Would absolutely order again and recommend to everyone.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Z</div><span class="date">2026-Feb-28</span></div>
+          <div class="rv-card-right"><h4>Zara K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Dominican Republic — arrived beautifully.</h5>
+        <p>Pedí desde Santo Domingo. LoungeRobe talla 3XL en Negro. Llegó en 17 días perfectamente empacada. El color es elegante y la tela es mucho más suave de lo esperado. Me la pongo todas las noches después del trabajo y es literalmente lo mejor de mi día. Dominicanas, pidan sin miedo — BBW4LIFE envía perfectamente a RD y la calidad es absolutamente real. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Feb-18</span></div>
+          <div class="rv-card-right"><h4>Queen B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My 60-year-old mother wears this every single day.</h5>
+        <p>Size 5XL in Navy Blue for my mother, who is 60 and has always struggled to find comfortable plus size loungewear that actually looks beautiful. She received the LoungeRobe and hasn't stopped wearing it. She calls it "the best thing in her wardrobe." She feels elegant and cared for — not just covered. BBW4LIFE builds products for real women at every age and every size. The impact on my mother's daily joy is immeasurable.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Feb-09</span></div>
+          <div class="rv-card-right"><h4>Uju M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>This robe reminded me that I'm allowed to rest.</h5>
+        <p>As a plus size woman and mother of three, I gave myself permission to rest maybe twice a year. The LoungeRobe in Wine Red, size 4XL, changed something in me. Putting it on every evening became a ritual that said "you are allowed to stop now." My children see me in it and know: Mama is resting. That boundary, that softness, that visible self-care — it changed our household. BBW4LIFE gave me permission to rest beautifully.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE RIGHT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--right">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Adaeze C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The most used item I own</p><p class="rv-mq-quote">I use this robe more than anything else I own. Every single day. 2XL Black. It's become part of who I am at home. BBW4LIFE created my daily ritual.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Tolu B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My spa at home</p><p class="rv-mq-quote">I light candles, put on my Wine Red LoungeRobe and feel like I'm in a five-star spa. 3XL. BBW4LIFE made home feel like paradise. Every queen needs this.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">W</div><div class="rv-mq-meta"><p class="rv-mq-name">Wura M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Perfect gift for any woman</p><p class="rv-mq-quote">Gave this to my sister for her birthday. She called me crying — happy tears. Said it was the most thoughtful gift she'd received. LoungeRobe White 2XL. ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">N</div><div class="rv-mq-meta"><p class="rv-mq-name">Ngozi S.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Arrived fast to South Africa</p><p class="rv-mq-quote">Cape Town to doorstep in 17 days. LoungeRobe 3XL Indigo Blue. The color is absolutely dreamy. South African queens, order without fear! BBW4LIFE delivers ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rose N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Breathable even in summer</p><p class="rv-mq-quote">I live in a hot climate and was worried. The LoungeRobe breathes beautifully — I wear it year round. 4XL White. Light, soft and perfect in summer. BBW4LIFE!</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chiamaka O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My whole family wants one now</p><p class="rv-mq-quote">I wore my LoungeRobe at a family gathering. By the end of the evening, four family members asked for the link. We all ordered. BBW4LIFE is a family affair now.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Lorena V.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best $7 I ever spent on myself</p><p class="rv-mq-quote">Seven dollars. The most impactful seven dollars I've spent this year. LoungeRobe 3XL Navy. I feel like royalty in my own home. BBW4LIFE is extraordinary.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Damilola A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Healed my home relationship</p><p class="rv-mq-quote">I used to dread evenings at home. Now I look forward to them — because my LoungeRobe is waiting. 4XL Black. BBW4LIFE made home my favorite place again.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Adaeze C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The most used item I own</p><p class="rv-mq-quote">Every morning. Every evening. Every lazy weekend. My LoungeRobe is always there. 2XL Black. BBW4LIFE built the most essential item in my wardrobe.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Tolu B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My spa at home</p><p class="rv-mq-quote">Candles, wine, LoungeRobe Wine Red 3XL — this is my Friday night ritual now. BBW4LIFE made me realize I don't need a spa. I just need the right robe. ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 10 HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Feb-01</span></div>
+          <div class="rv-card-right"><h4>Queenie B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My therapist noticed a change in how I talk about myself.</h5>
+        <p>Size 3XL in Indigo Blue. This sounds dramatic but my therapist asked me what changed in our last session because I was speaking about myself with more kindness. I said "I bought a LoungeRobe and started having an evening ritual." She said "keep doing that." BBW4LIFE created something that contributes to mental health. That is not a small thing. That is extraordinary. Thank you for existing.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Jan-24</span></div>
+          <div class="rv-card-right"><h4>Uma A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore this during chemotherapy recovery — it became my safety.</h5>
+        <p>Size 2XL in White. I was recovering from chemotherapy when I ordered this robe. My body was sensitive, tired and unfamiliar. The LoungeRobe was the softest thing touching my skin those weeks. It became associated with safety, rest and healing. I've since recovered and I still wear it every morning because it reminds me of my own strength. BBW4LIFE unknowingly held me during one of the hardest seasons of my life.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Jan-16</span></div>
+          <div class="rv-card-right"><h4>Hope M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Three of us in the same house — three different colors.</h5>
+        <p>My roommate, my sister and I all ordered LoungeRobes together. We each picked a different color: I got Black, my roommate got Wine Red, my sister got Navy Blue. On Sunday mornings we make breakfast together in our robes and it is the most joyful, beautiful domestic moment. BBW4LIFE created something that connects women. These robes are part of our friendship now. ❤️</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_7.png?v=1778283395" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2026-Jan-08</span></div>
+          <div class="rv-card-right"><h4>Emeka T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Bought for my wife after her surgery — she hasn't taken it off.</h5>
+        <p>My wife had surgery and I ordered the LoungeRobe in White, size 4XL, while she was recovering. The softness, the looseness, the breathability — everything was exactly what her recovering body needed. Three months later she still wears it every morning and says it's her most cherished item. What I thought was a simple practical purchase became something deeply meaningful. BBW4LIFE makes beautiful things for hard moments.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2025-Dec-30</span></div>
+          <div class="rv-card-right"><h4>Olumide F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Still perfect after 15 washes. Zero fading, zero pilling.</h5>
+        <p>I've been wearing my LoungeRobe in Navy Blue, size 1XL, for three months now. Washed 15 times minimum. The color is exactly as deep and rich as when I received it. The fabric has not pilled. The seams have not frayed. The shape has held beautifully. This is the quality test that separates real products from disposable ones. BBW4LIFE passes the test with full marks. This robe was built to last.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2025-Dec-22</span></div>
+          <div class="rv-card-right"><h4>Celestine A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My Christmas morning robe — and every morning since.</h5>
+        <p>I ordered the Wine Red LoungeRobe as my own Christmas gift, size 3XL. I opened it Christmas morning, put it on immediately, made hot cocoa and sat by my tree in complete peace. That was the most beautiful Christmas morning I've had as an adult. BBW4LIFE helped me create a memory I will hold forever. Every morning since has started with that same robe and that same sense of peace. Thank you.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2025-Dec-14</span></div>
+          <div class="rv-card-right"><h4>Josephine M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I'm 55 and I have never felt this beautiful in my own home.</h5>
+        <p>Size 4XL in Black. I am 55 years old, plus size my entire adult life, and I have never felt elegant in my own home. This LoungeRobe changed that completely. I wear it every morning and evening and I walk through my own house with a different posture — straighter, softer, more at home in my body. BBW4LIFE gave me something that fifty-five years of fashion never did: the feeling of being beautiful exactly where I am.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">P</div><span class="date">2025-Dec-05</span></div>
+          <div class="rv-card-right"><h4>Patience O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>This robe stopped me from apologizing for my body at home.</h5>
+        <p>I used to wear old, shapeless things at home because I thought I didn't deserve better in private. The LoungeRobe in Indigo Blue, size 5XL, taught me that I deserve beauty everywhere — especially in my own home, especially when no one is watching. The act of putting on something this soft and beautiful daily is an act of self-love I'd never practiced before. BBW4LIFE didn't sell me a robe. They sold me a habit of self-respect.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_17_11.png?v=1778283397" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Nov-26</span></div>
+          <div class="rv-card-right"><h4>Xena K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Five stars will never be enough for what this robe means.</h5>
+        <p>Size 2XL, Wine Red. I don't have the words for how this robe has changed my daily experience at home. I feel cared for by myself — which is something I've struggled with my whole life as a plus size woman who was always told she should be working on herself instead of loving herself. BBW4LIFE creates things that give us permission to love ourselves as we are, right now, today. This robe is an act of radical self-care. Five stars is not enough.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">B</div><span class="date">2025-Nov-15</span></div>
+          <div class="rv-card-right"><h4>Blessing T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My sister sent this as a "just because I love you" gift.</h5>
+        <p>My sister ordered me the LoungeRobe in White, size 3XL, with a note that said "you deserve softness." I put it on and called her immediately. We talked for two hours while I sat in my robe and drank tea. That conversation healed something between us. BBW4LIFE created the context for that healing — a gift that said "rest, you are safe, you are loved." I still wear it every day and think of her every time. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Comfort Queen Moment ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. This robe is the best thing I own!)" required>
+            <textarea id="review-text" placeholder="Tell your story — how does this robe make you feel? What does your morning look like now? Your words inspire other queens. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already inspiring other beautiful women like you.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<!-- FOOTER -->
+<div id="footer-container"></div>
+
+<!-- WIDGETS -->
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+  <div class="sticky-atc__inner">
+    <div class="sticky-atc__product">
+      <img id="satc-img" src="" alt="" class="sticky-atc__img">
+      <div class="sticky-atc__info">
+        <span id="satc-title" class="sticky-atc__title"></span>
+        <span id="satc-price" class="sticky-atc__price"></span>
+      </div>
+    </div>
+    <div class="sticky-atc__selectors">
+      <div class="satc-field" id="satc-color-field">
+        <label class="satc-label">Color</label>
+        <div class="satc-color-wrap">
+          <div class="satc-swatches" id="satc-swatches"></div>
+          <span class="satc-color-name" id="satc-color-name">—</span>
+        </div>
+      </div>
+      <div class="satc-field" id="satc-size-field">
+        <label class="satc-label">Size</label>
+        <select id="satc-size" class="satc-select"></select>
+      </div>
+      <div class="satc-field">
+        <label class="satc-label">Qty</label>
+        <div class="satc-qty">
+          <button class="satc-qty-btn" id="satc-minus">−</button>
+          <span id="satc-qty-val">1</span>
+          <button class="satc-qty-btn" id="satc-plus">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="sticky-atc__btn" id="satc-add-btn">
+      <i class="fi fi-rr-shopping-cart"></i>
+      <span>Add to Cart</span>
+    </button>
+  </div>
+</div>
+
+</body>
+</html>

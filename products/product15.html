@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">The queen who breathes freely in beautiful linen doesn't need permission to take up space.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product15">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">You deserve a dress that breathes with you, moves with you, and celebrates you — not one that fights your body. <strong>The LinenBreeze Dress was crafted for the curvy queen who wants effortless natural elegance, every single day.</strong> Soft. Relaxed. Button-down freedom in three timeless colors. <em>Your signature linen dress is finally here.</em></p>
+        </div>
+
+        <!-- BBW STYLE GUIDE — How to Style -->
+        <div class="bbw-style-guide" data-scroll-reveal>
+          <div class="bbw-style-guide__header">
+            <i class="fas fa-magic"></i>
+            <span>How to Style Your LinenBreeze Dress</span>
+          </div>
+          <div class="bbw-style-guide__steps">
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">1</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Casual Effortless Queen</strong>
+                <span>White LinenBreeze + flat sandals + straw bag. The definition of effortless summer queen energy — you look put together without trying at all.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">2</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Belted & Bold</strong>
+                <span>Black LinenBreeze + wide leather belt at the waist + block heels. Cinch it, define your silhouette, and walk in like you own the room.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">3</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Nature Goddess</strong>
+                <span>Green LinenBreeze + gold jewelry + wedge espadrilles. Earth tones, flowing fabric, pure goddess. The garden party look that stops conversations.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">4</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Open & Layered</strong>
+                <span>Leave the LinenBreeze open over a fitted tank + wide leg trousers. Two looks in one — the versatility of linen working hard for your wardrobe.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- COLOR MOOD — 3 couleurs -->
+        <div class="bbw-color-mood" data-scroll-reveal>
+          <div class="bbw-color-mood__header">
+            <i class="fas fa-palette"></i>
+            <span>Choose Your Color Energy</span>
+          </div>
+          <div class="bbw-color-mood__grid">
+            <div class="bbw-color-mood__card">
+              <div class="bbw-color-mood__dot" style="background:#FFFFFF; border: 2px solid rgba(201,150,62,0.40);"></div>
+              <div class="bbw-color-mood__name">White</div>
+              <div class="bbw-color-mood__tag">Pure & Luminous</div>
+              <div class="bbw-color-mood__desc">Summer walks, beach days, brunch — radiant and fresh every time you wear it</div>
+            </div>
+            <div class="bbw-color-mood__card">
+              <div class="bbw-color-mood__dot" style="background:#000000;"></div>
+              <div class="bbw-color-mood__name">Black</div>
+              <div class="bbw-color-mood__tag">Bold & Timeless</div>
+              <div class="bbw-color-mood__desc">The classic that never fails — dress it up, dress it down, always iconic on your curves</div>
+            </div>
+            <div class="bbw-color-mood__card">
+              <div class="bbw-color-mood__dot" style="background:#9CAE84;"></div>
+              <div class="bbw-color-mood__name">Green</div>
+              <div class="bbw-color-mood__tag">Nature & Power</div>
+              <div class="bbw-color-mood__desc">Earth energy, goddess vibes — the green LinenBreeze is the statement color of the season</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flame"></i> 54% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Linen Dress Made for Queens &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Breathable, Natural & Beautiful &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-dress"></i> Sizes M to 5XL Available &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flame"></i> 54% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Linen Dress Made for Queens &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Breathable, Natural & Beautiful &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-dress"></i> Sizes M to 5XL Available &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>47 BBW queens</strong> added this linen dress to cart today — breathe freely, don't wait!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Breathe Easy & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me 👑</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Me & My Sister 💕</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Dress</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Dress</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Linen Queens Pack 🔥</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Dress 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Dress 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Dress 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-sparkles"></i>
+            <span>Complete Your Natural Queen Look</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who complete their look feel unstoppable — pair your LinenBreeze with the perfect finishing pieces.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing this linen dress right now.</span>
+          </p>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select">
+          </select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches">
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SEASON GUIDE -->
+        <div class="bbw-season-guide" data-scroll-reveal>
+          <div class="bbw-season-guide__header">
+            <i class="fas fa-calendar-alt"></i>
+            <span>When Can You Wear This Dress?</span>
+          </div>
+          <div class="bbw-season-guide__list">
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-sun"></i></span>
+              <div>
+                <strong>Summer</strong>
+                <span>Beach days, outdoor markets, garden parties — the breathable linen keeps you cool and stunning</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-seedling"></i></span>
+              <div>
+                <strong>Spring</strong>
+                <span>Farmers markets, park afternoons, casual brunches — natural fabric for the freshest season</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-leaf"></i></span>
+              <div>
+                <strong>Autumn</strong>
+                <span>Layer it open over knitwear for transitional styling — linen is warmer than you think</span>
+              </div>
+            </div>
+            <div class="bbw-season-guide__item">
+              <span class="bbw-season-guide__icon"><i class="fas fa-home"></i></span>
+              <div>
+                <strong>Year-Round Everyday</strong>
+                <span>Work from home, casual errands, relaxed evenings — the dress that replaces everything else</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- LINEN CARE GUIDE — NOUVEAU BLOC -->
+        <div class="bbw-linen-care" data-scroll-reveal>
+          <div class="bbw-linen-care__header">
+            <i class="fas fa-hand-sparkles"></i>
+            <span>How to Care for Your LinenBreeze Dress</span>
+          </div>
+          <div class="bbw-linen-care__grid">
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-tint"></i></div>
+              <div class="bbw-linen-care__title">Gentle Wash</div>
+              <div class="bbw-linen-care__text">Machine wash cold on a gentle cycle or hand wash. Linen gets softer and more beautiful with every wash — it improves over time.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-wind"></i></div>
+              <div class="bbw-linen-care__title">Air Dry</div>
+              <div class="bbw-linen-care__text">Hang to dry in the air rather than machine drying. Natural air drying preserves the fabric's texture and keeps colors rich and vibrant.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-temperature-low"></i></div>
+              <div class="bbw-linen-care__title">Low Heat Iron</div>
+              <div class="bbw-linen-care__text">Iron slightly damp on low-medium heat. Light wrinkles are natural and part of linen's effortless character — embrace them, they're chic.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-box-open"></i></div>
+              <div class="bbw-linen-care__title">Store Loosely</div>
+              <div class="bbw-linen-care__text">Hang or fold loosely in a cool dry space. Avoid tight compression — linen breathes best when given room, just like the queen wearing it.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Which size is right for me?</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">LinenBreeze Dress — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_1.png?v=1778277908" alt="LinenBreeze Dress Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                The LinenBreeze Dress is cut in a relaxed fit designed to drape beautifully over plus size curves. Measure your bust and hips and refer to the chart. When between sizes, go <strong>up</strong> for the most comfortable, breathable feel.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> How to Measure</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <ul>
+                <li><strong>Bust:</strong> Measure around the fullest part of your chest, keeping the tape parallel to the ground.</li>
+                <li><strong>Waist:</strong> Measure around your natural waistline, the narrowest part of your torso.</li>
+                <li><strong>Hips:</strong> Measure around the fullest part of your hips, about 8 inches below the waist.</li>
+                <li><strong>When in doubt:</strong> Size up — the relaxed linen drape always looks better with a little extra room.</li>
+              </ul>
+              <h3><i class="fi fi-rr-ruler-triangle"></i> Size Conversion Chart</h3>
+              <table>
+                <thead>
+                  <tr><th>Size</th><th>US Size</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hips (cm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>M</strong></td><td>8–10</td><td>88–92</td><td>70–74</td><td>94–98</td></tr>
+                  <tr><td><strong>L</strong></td><td>12–14</td><td>96–100</td><td>78–82</td><td>102–106</td></tr>
+                  <tr><td><strong>XL</strong></td><td>16</td><td>104–108</td><td>86–90</td><td>110–114</td></tr>
+                  <tr><td><strong>2XL</strong></td><td>18–20</td><td>112–116</td><td>94–98</td><td>118–122</td></tr>
+                  <tr><td><strong>3XL</strong></td><td>22</td><td>120–124</td><td>102–106</td><td>126–130</td></tr>
+                  <tr><td><strong>4XL</strong></td><td>24</td><td>128–132</td><td>110–114</td><td>134–138</td></tr>
+                  <tr><td><strong>5XL</strong></td><td>26–28</td><td>136–140</td><td>118–122</td><td>142–146</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-palette"></i> Available Colors</h3>
+              <table>
+                <thead><tr><th>Color</th><th>Mood &amp; Occasion</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>⚪ White</strong></td><td>Fresh and luminous — perfect for summer, beach days and outdoor occasions</td></tr>
+                  <tr><td><strong>⚫ Black</strong></td><td>Timeless and powerful — pairs with everything, elevates every look effortlessly</td></tr>
+                  <tr><td><strong>🟢 Green</strong></td><td>Nature goddess energy — the statement color for the bold, confident BBW queen</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">What makes this linen dress special?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The <strong>LinenBreeze Dress</strong> is the answer to every plus size queen who said "I can never find a dress that feels comfortable AND looks beautiful." The cotton-linen blend breathes unlike synthetic fabrics — no sticking, no sweating, no discomfort.</p>
+              <p>The single-breasted button-down design gives you total control — fully buttoned for a complete elegant look, or open as a duster layer over your favourite outfit. Available in White, Black and Green, sizes M to 5XL — <strong>your perfect natural everyday dress that works harder than anything else in your wardrobe.</strong></p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Arrives carefully packaged — ready to make your natural queen entrance.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your satisfaction is everything to us.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fabric:</strong> Cotton-linen blend — breathable, natural, soft</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> Single-breasted button-down relaxed silhouette</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Colors:</strong> White, Black, Green</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> M through 5XL</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Season:</strong> Spring, Summer, Autumn — year-round versatility</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Occasion:</strong> Casual, everyday wear, outdoor events, home comfort</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Gentle machine wash cold, air dry, low heat iron</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_2.png?v=1778277908" alt="LinenBreeze White — pure summer elegance" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-fire"></i> White — Pure Summer Elegance</div>
+                <div class="slide-text">The White LinenBreeze is your summer uniform. Fresh, radiant, and effortlessly beautiful — pair it with sandals and feel the sun on your skin.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_3.png?v=1778277908" alt="LinenBreeze Black — timeless power" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Black — Timeless Power</div>
+                <div class="slide-text">Black linen is a revelation. Structured yet relaxed, powerful yet breathable. The Black LinenBreeze works for every occasion you can imagine.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_4.png?v=1778277905" alt="LinenBreeze Green — nature goddess" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> Green — Nature Goddess</div>
+                <div class="slide-text">Green linen is having its moment and you deserve to be the one wearing it. Earth energy, goddess presence — this is the color queens choose when they want to be remembered.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_5.png?v=1778277909" alt="LinenBreeze — relaxed fit all day" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-crown"></i> Relaxed Fit, All-Day Comfort</div>
+                <div class="slide-text">Built for queens who live fully. The relaxed drape moves beautifully with your body — morning coffee to evening dinners, always effortlessly you.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Will this dress look good on plus size women?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Queen, this dress was designed with your body in mind. <strong>The relaxed linen silhouette drapes beautifully over plus size curves</strong> — it flows with your shape rather than fighting against it. The button-down front lets you choose your level of openness, giving you complete control over your look. Queens from size M to 5XL have worn this dress and every single one said the same thing: it finally feels like fashion made for me.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is linen comfortable for curvy bodies?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Yes — and it's one of the best fabrics for plus size queens. <strong>Cotton-linen blends breathe better than almost any other fabric</strong>, which means you stay cool, comfortable and dry in heat. Unlike synthetics that stick to your skin, linen moves freely and creates airflow. The LinenBreeze queens have worn this through hot summer days, outdoor events and all-day workdays — zero discomfort reported.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How can I style this dress multiple ways?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>The LinenBreeze gives you at least four completely different looks. Fully buttoned with a belt = polished and defined. Open over a tank and trousers = layered and editorial. Fully buttoned with sandals = effortless summer queen. Tied at the waist = casual goddess. <strong>One dress, unlimited combinations — that's the power of a great linen piece in your plus size wardrobe.</strong></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Which color should I choose?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>White is the most breathable-feeling and freshest color — perfect for summer and beach occasions. Black is the most versatile and works for every season and every occasion. Green is the bold statement — the color queens choose when they want to be remembered. <strong>Many queens end up ordering two or three colors — our bundle pricing makes the Linen Queens Pack the most sensible choice.</strong></p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Does linen wrinkle easily?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Linen does have a natural relaxed texture that some queens call "effortless wrinkles." <strong>This is actually part of linen's charm</strong> — it looks intentionally casual and chic. If you prefer a crisper look, a quick low-heat iron while the fabric is slightly damp gives a smooth finish. But many queens wear their LinenBreeze straight from the hanger and love the lived-in aesthetic. Natural is always beautiful.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your LinenBreeze Dress will arrive in <strong>12–20 business days</strong> with standard free worldwide shipping. Express options are available at checkout. Every order arrives carefully packaged — because your queen delivery deserves to feel like a gift from BBW4LIFE.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+<section id="rv-section" class="rv-section" style="display:none;">
+  <div class="rv-header">
+    <div class="rv-header-left">
+      <span class="rv-eyebrow">Your Journey</span>
+      <h2 class="rv-title">Recently Viewed</h2>
+    </div>
+    <div class="rv-header-right">
+      <button class="rv-nav-btn" id="rv-prev" aria-label="Previous">
+        <i class="fi fi-rr-angle-left"></i>
+      </button>
+      <button class="rv-nav-btn" id="rv-next" aria-label="Next">
+        <i class="fi fi-rr-angle-right"></i>
+      </button>
+      <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history">
+        <i class="fi fi-rr-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="rv-slider-wrap">
+    <div class="rv-track" id="rv-track"></div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="col-marquee-section">
+  <div class="col-marquee-track">
+    <div class="col-marquee-inner">
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+    </div>
+  </div>
+</div>
+
+  <!-- ══════════════ CUSTOM BANNER ══════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_6.png?v=1778277910" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_7.png?v=1778277906" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        Natural Elegance For Every Queen
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "The dress that breathes with you —<br>because you were born to be free."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        Soft. Relaxed. Effortlessly elevated.<br class="bbw-cb-br">White, Black & Green. Sizes M–5XL.
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider">
+        <div class="product-item" data-product-id="Pdg-Francenel-product7">
+          <div class="product-image">
+            <a href="/products/product7.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product7"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product7"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product9">
+          <div class="product-image">
+            <a href="/products/product9.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product9"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product9"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product10">
+          <div class="product-image">
+            <a href="/products/product10.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product10"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product10"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product11">
+          <div class="product-image">
+            <a href="/products/product11.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product11"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product11"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product16">
+          <div class="product-image">
+            <a href="/products/product16.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product16"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product16"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product8">
+          <div class="product-image">
+            <a href="/products/product8.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product8"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product8"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product71">
+          <div class="product-image">
+            <a href="/products/product71.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product71"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product71"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bbw-wave-divider">
+  <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+      <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+      <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+      <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+    </path>
+  </svg>
+</section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:70%;"></div></div><span id="count-5">51</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:20%;"></div></div><span id="count-4">15</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:7%;"></div></div><span id="count-3">5</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:2%;"></div></div><span id="count-2">2</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_1.png?v=1778277908" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_2.png?v=1778277908" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_3.png?v=1778277908" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_4.png?v=1778277905" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_5.png?v=1778277909" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_6.png?v=1778277910" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_7.png?v=1778277906" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_8.png?v=1778277908" alt="Review photo">
+          <div class="review-photos-more">9+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 PREMIÈRES REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-18</span></div>
+          <div class="rv-card-right"><h4>Amara J.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wear this dress every single week and it still looks perfect.</h5>
+        <p>White LinenBreeze, size 2XL. I ordered skeptically because I thought linen would be too stiff on my plus size body. I was completely wrong. The fabric is so soft and breathable — nothing sticks, nothing restricts. I've worn it to the market, to lunch, to a family event. Every time someone asks where I got it. BBW4LIFE delivered something extraordinary for this price.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_1.png?v=1778277908" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">T</div><span class="date">2026-May-14</span></div>
+          <div class="rv-card-right"><h4>Tanya M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The Green LinenBreeze is the most compliment-generating dress I own.</h5>
+        <p>Green, size 3XL. I wore this to a garden brunch and four women asked me where they could buy it before I even sat down. The color is so rich and beautiful in person — much more vibrant than the photos. The relaxed fit is incredibly flattering because it skims rather than clings. This is my new favorite dress in my entire wardrobe. BBW4LIFE, you outdid yourselves.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-May-09</span></div>
+          <div class="rv-card-right"><h4>Fatou D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Black linen is everything I never knew I needed.</h5>
+        <p>Black LinenBreeze, size XL. I belted it at the waist and wore it to a work event — my manager asked if it was a designer piece. Linen in black is such a sophisticated statement. The button-down front means I can adjust how I wear it depending on the temperature and occasion. Size XL fits me perfectly at a size 16 UK. This is not a $10 dress experience — it feels premium.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_black.png?v=1778277909" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-May-03</span></div>
+          <div class="rv-card-right"><h4>Ngozi A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I ordered all 3 colors in the bundle and have no regrets.</h5>
+        <p>Linen Queens Pack — White, Black, Green in size 4XL. I rotate them every few days and every single time feel like a different queen. The White is for weekends, the Black for when I need to look sharp, the Green for when I want to stop traffic. All three arrived together in perfect condition. The bundle savings were very real. BBW4LIFE knows how to take care of their queens.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Apr-27</span></div>
+          <div class="rv-card-right"><h4>Gloria K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Worn open over a tank and wide trousers — the layered look is stunning.</h5>
+        <p>White LinenBreeze, size 5XL. I wear it fully open as a layer over a white fitted tank and wide linen trousers. The effect is architectural and completely effortless. I've had people think I was a fashion editor. The size 5XL fits generously and drapes beautifully — BBW4LIFE genuinely designed this for every size, not just as an afterthought. This is fashion for real women.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Apr-20</span></div>
+          <div class="rv-card-right"><h4>Sophie B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Shipped to Paris — arrivé en 17 jours, parfait.</h5>
+        <p>LinenBreeze verte, taille L. Arrivé en 17 jours depuis Paris dans un emballage soigné. La qualité du lin est vraiment remarquable pour ce prix — on paierait 80€ minimum en boutique ici pour cette qualité. Je l'ai portée à un déjeuner en terrasse et tout le monde voulait savoir d'où elle venait. BBW4LIFE livre parfaitement en France et la qualité est au rendez-vous. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">P</div><span class="date">2026-Apr-14</span></div>
+          <div class="rv-card-right"><h4>Precious O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Finally comfortable in a summer dress as a plus size woman.</h5>
+        <p>I spent years avoiding summer dresses because synthetic fabrics made me so uncomfortable in heat. Black LinenBreeze, size 3XL — the first summer dress I've worn comfortably in years. No sticking, no sweating through, no misery. Just beautiful, breezy comfort. I feel like myself again. BBW4LIFE didn't just sell me a dress — they gave me my summer back.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_8.png?v=1778277908" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">R</div><span class="date">2026-Apr-07</span></div>
+          <div class="rv-card-right"><h4>Rose N.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My confidence came back the moment I put this on.</h5>
+        <p>Green LinenBreeze, size 2XL. I haven't bought a dress in 2 years because nothing ever felt right on my body. This dress felt right from the first second I put it on. The way it moves, the way it drapes, the color — I looked in the mirror and saw myself the way I deserve to be seen. BBW4LIFE, you gave me something that goes beyond fashion. You gave me my confidence back.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE LEFT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zara O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Size 5XL fits beautifully</p><p class="rv-mq-quote">Never found a linen dress that went above 4XL. White LinenBreeze, 5XL — perfect drape, gorgeous fit. BBW4LIFE truly sees us all.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Green is my new obsession</p><p class="rv-mq-quote">Ordered Green thinking I'd prefer White. Now I own all three. The Green LinenBreeze is a complete statement. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">W</div><div class="rv-mq-meta"><p class="rv-mq-name">Wura K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore it 18 days in a row</p><p class="rv-mq-quote">I wore my White LinenBreeze 18 days in a row in different ways. It still looks brand new. BBW4LIFE quality is real. Size XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Patience B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My daughter called me the fashion queen</p><p class="rv-mq-quote">I'm 57. My daughter called me "the fashion queen" after I wore my Green LinenBreeze to her event. Best day of my year. Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">E</div><div class="rv-mq-meta"><p class="rv-mq-name">Esther D.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Linen + belt = always stunning</p><p class="rv-mq-quote">Black LinenBreeze with a wide gold belt is the formula I've been looking for all my life. Size 4XL. Iconic every time I wear it.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">H</div><div class="rv-mq-meta"><p class="rv-mq-name">Harriet M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Full day in heat — zero discomfort</p><p class="rv-mq-quote">Full outdoor day in 32°C heat in my White LinenBreeze. Zero discomfort, zero sweating through. White, size M. This fabric is magic.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Lorena C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Ordered from Dominican Republic</p><p class="rv-mq-quote">Pedí desde RD. Llegaron en 19 días perfectos. LinenBreeze verde talla L — preciosa. Dominicanas, ordenen sin miedo!</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chioma F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">This dress is my confidence</p><p class="rv-mq-quote">Every time I put on my Black LinenBreeze I walk taller. There's something about this dress that activates my inner queen. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zara O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Size 5XL fits beautifully</p><p class="rv-mq-quote">Never found a linen dress that went above 4XL. White LinenBreeze, 5XL — perfect drape, gorgeous fit. BBW4LIFE truly sees us all.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Green is my new obsession</p><p class="rv-mq-quote">Ordered Green thinking I'd prefer White. Now I own all three. The Green LinenBreeze is a complete statement. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 7 REVIEWS SUIVANTES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">V</div><span class="date">2026-Mar-30</span></div>
+          <div class="rv-card-right"><h4>Viviane C.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My stylist asked where I found this piece.</h5>
+        <p>My personal stylist saw my Green LinenBreeze and asked where it came from. A professional stylist. Asking me. I told her BBW4LIFE and she said "excellent source." Under $15 for a dress that looks like $120? That's queen math. Size L. Never been prouder of a fashion purchase in my life.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Mar-24</span></div>
+          <div class="rv-card-right"><h4>Monique T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>This dress was part of my body acceptance journey.</h5>
+        <p>I started buying beautiful things for myself this year as part of accepting my plus size body. White LinenBreeze, size 5XL. I put it on for my first solo beach day and felt completely, powerfully myself for the first time in years. BBW4LIFE doesn't just sell dresses. They celebrate women. I feel that in every stitch of this fabric.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_White.png?v=1778277908" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Mar-17</span></div>
+          <div class="rv-card-right"><h4>Grace A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>At 63, I found the dress of my life.</h5>
+        <p>I'm 63 years old and I haven't felt this elegant in a casual dress in over a decade. Black LinenBreeze, size 2XL. My granddaughter saw me wearing it and said "Grandma you look so chic." That is the highest compliment I have ever received from a teenager. BBW4LIFE — you are giving women their elegance back at every age, every size.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2026-Mar-10</span></div>
+          <div class="rv-card-right"><h4>Jasmine P.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful — size up if you prefer more relaxed drape</h5>
+        <p>The dress is genuinely gorgeous — Green in my usual size XL was perfect for a fitted look. But I wanted a more relaxed drape so exchanged for 2XL and it's absolutely perfect. If you like your linen with that effortless airy silhouette, go one size up from your usual. Quality is excellent and the color is even richer in real life than the photos. Absolutely recommend.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Mar-03</span></div>
+          <div class="rv-card-right"><h4>Ifeoma N.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Lagos, Nigeria — arrived in 19 days, perfect condition.</h5>
+        <p>Ordered from Lagos. White LinenBreeze, size 3XL. Arrived in 19 days in beautiful packaging. The quality exceeded my expectations significantly for this price point. I wore it to a Sunday outdoor event and multiple people asked where it came from. Nigerian queens — order with full confidence. BBW4LIFE ships to us properly and the quality is absolutely there. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">D</div><span class="date">2026-Feb-24</span></div>
+          <div class="rv-card-right"><h4>Diana F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The relaxed silhouette is so incredibly flattering on plus size bodies.</h5>
+        <p>I always thought loose dresses wouldn't work on my plus size figure. I was completely wrong. The relaxed linen silhouette actually creates such a flattering effect — it skims your curves without showing everything, which is exactly the right balance. Green, size 4XL. My proportions look beautiful in this dress. BBW4LIFE designed with real bodies in mind and it shows powerfully.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_Green.png?v=1778277910" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Feb-15</span></div>
+          <div class="rv-card-right"><h4>Oluwakemi S.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Birthday gift to myself — absolute best decision of the year.</h5>
+        <p>I turned 42 and decided to stop waiting for someone to celebrate me. I ordered all 3 LinenBreeze colors as my birthday gift to myself. White, Black and Green — size 3XL. When they arrived I tried them all on and felt like a different queen in each one. My birthday was everything I deserved. BBW4LIFE — you helped me celebrate myself in the most beautiful way.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE RIGHT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--right">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Green + gold jewelry = unbeatable</p><p class="rv-mq-quote">Green LinenBreeze with gold hoop earrings and sandals is the most effortlessly chic look I own. Simple, powerful, me. Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore to my promotion dinner</p><p class="rv-mq-quote">Black LinenBreeze belted to my promotion celebration dinner. My boss said I looked "extremely put together." I agreed. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rosemary P.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">True to size every time</p><p class="rv-mq-quote">Ordered my exact size, perfect fit first try. White LinenBreeze — so fresh and clean in person. No guessing needed. Size XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Amina L.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Haïti represent — mèsi BBW4LIFE!</p><p class="rv-mq-quote">Mwen kòmande de Ayiti. Yo rive nan 18 jou. LinenBreeze blan, tay 2XL. Li bèl anpil. Ayisyèn yo, pase kòmand! ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Shade A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My whole office wanted the link</p><p class="rv-mq-quote">Wore Green LinenBreeze to work Monday. By lunch, 6 colleagues asked for the BBW4LIFE link. Three already ordered. Size L.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">N</div><div class="rv-mq-meta"><p class="rv-mq-name">Ngozi R.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Back after body changes — I'm home</p><p class="rv-mq-quote">I stopped buying beautiful dresses after weight gain. BBW4LIFE reminded me I deserve elegance. White LinenBreeze, size 5XL. Home at last.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chiamaka T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">All 3 colors in my wardrobe now</p><p class="rv-mq-quote">Started with Black. Ordered Green next week. Got White last month. My linen wardrobe is complete. BBW4LIFE forever. Size 4XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Damilola B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best value I've ever spent on a dress</p><p class="rv-mq-quote">At this price, the quality is beyond any expectation. Worn 20+ times. Still perfect. Green LinenBreeze, size 3XL. BBW4LIFE is unreal.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Green + gold jewelry = unbeatable</p><p class="rv-mq-quote">Green LinenBreeze with gold hoop earrings is the most effortlessly chic look I own. Simple, powerful, completely me. Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore to my promotion dinner</p><p class="rv-mq-quote">Black LinenBreeze belted to my promotion dinner. My boss said I looked extremely put together. I agreed completely. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 10 HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Feb-08</span></div>
+          <div class="rv-card-right"><h4>Queen T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My name is Queen. This is a Queen dress.</h5>
+        <p>My actual name is Queen. My mother named me that. And for 28 years I never wore a dress that matched the name. White LinenBreeze, size 3XL. For the first time, the dress I'm wearing lives up to who I am. Thank you BBW4LIFE — you gave me something that finally matches my name.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Jan-31</span></div>
+          <div class="rv-card-right"><h4>Leticia M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>All 3 in the Linen Queens bundle — perfection.</h5>
+        <p>Linen Queens Pack — White, Black, Green. All three arrived together, all in perfect condition. Size 4XL across the board — all fit identically. Consistent, beautifully made, genuinely high quality. The bundle savings were real and significant. This is how fashion for plus size women should always work. BBW4LIFE is the real deal.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_9.png?v=1778277906" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Jan-23</span></div>
+          <div class="rv-card-right"><h4>Uju B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore to my graduation. Felt unstoppable.</h5>
+        <p>Black LinenBreeze belted at my master's graduation ceremony. I walked across that stage feeling powerful and elegant — not stiff and uncomfortable the way I usually feel in formal clothes. My professor said I had "an extremely commanding presence." Size 2XL. I didn't tell him it was the dress. I just smiled. BBW4LIFE was with me at one of the biggest moments of my life.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Jan-15</span></div>
+          <div class="rv-card-right"><h4>Helen K.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful — the Green runs slightly more fitted, size up for drape</h5>
+        <p>The dress is stunning — the Green color is genuinely vibrant and rich. I found the Green ran slightly more fitted than White and Black in my usual size XL, so sized up to 2XL for that flowing linen drape. Perfect at the larger size. Quality is excellent. Would absolutely recommend the Green — just go one size up if you want the relaxed silhouette.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Jan-08</span></div>
+          <div class="rv-card-right"><h4>Omolara T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My therapist said do something beautiful for yourself. I ordered this.</h5>
+        <p>My therapist's homework was "do one thing this week that makes you feel beautiful." I ordered White LinenBreeze. When it arrived I put it on, looked in the mirror and messaged her: "homework complete, and I feel like a queen." She replied: "that is exactly the assignment." Size 4XL. Healing comes in many beautiful forms, and BBW4LIFE is one of them.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2025-Dec-26</span></div>
+          <div class="rv-card-right"><h4>Marie-Claire B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Paris — arrivé en 17 jours, superbe</h5>
+        <p>LinenBreeze noire, taille XL. Arrivé depuis Paris en 17 jours dans un emballage magnifique. La qualité du tissu est vraiment impressionnante — le mélange coton-lin est si doux et fluide. Je l'ai portée partout cet hiver ouverte sur un pull — l'effet superposé est parfait. Tout le monde me demande d'où elle vient. BBW4LIFE livre en France parfaitement et la qualité est vraiment là. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2025-Dec-18</span></div>
+          <div class="rv-card-right"><h4>Celestine O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I stopped hiding my body. This dress helped.</h5>
+        <p>I wore loose, shapeless clothes every day for 5 years because I was ashamed of my plus size body. Green LinenBreeze, size 3XL. I wore it to Sunday church and felt something I hadn't felt in years — beautiful. The way the fabric flows, the way the color lights up my face, the way it moves when I walk. I don't need to hide anymore. BBW4LIFE changed something in me forever.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2025-Dec-09</span></div>
+          <div class="rv-card-right"><h4>Josephine A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Christmas gift to myself — the best decision of my year.</h5>
+        <p>I ordered all 3 LinenBreeze colors as my Christmas gift to myself — size 2XL. Wore the White one on New Year's Day with gold jewelry and my family thought I had bought something designer. "Where did you get that dress, it looks so expensive!" At that price, I just smiled and said BBW4LIFE. New year, new queen energy — this is how I'm entering every year from now on.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_15_5.png?v=1778277909" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2025-Nov-30</span></div>
+          <div class="rv-card-right"><h4>Esther M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My confidence transformed. This dress did that.</h5>
+        <p>Something about wearing a beautiful natural dress every day changed how I carry myself. Black LinenBreeze, size 5XL. I walk differently now. I take up space in meetings without apologizing for it. I hold my head higher. My coworkers asked what changed about me. I said "my dress." BBW4LIFE, thank you for giving plus size women clothing that makes them feel powerful and worthy.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Nov-22</span></div>
+          <div class="rv-card-right"><h4>Xena P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The packaging made me emotional. Being seen matters.</h5>
+        <p>When the LinenBreeze package arrived it felt like a gift — not just an order. Something about how BBW4LIFE packages their products says "you matter and you deserve this." Green, size 4XL. Put it on, looked in the mirror, felt tears. Because when you've spent years feeling like fashion wasn't made for your body, being seen by a brand that was genuinely created for you — that changes something deep and permanent. BBW4LIFE sees us.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Queen Moment ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. I feel like a natural queen every day!)" required>
+            <textarea id="review-text" placeholder="Tell your story — how did this linen dress make you feel? Where did you wear it? Your words inspire other queens. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already inspiring other beautiful women like you.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<!-- FOOTER -->
+<div id="footer-container"></div>
+
+<!-- WIDGETS -->
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+  <div class="sticky-atc__inner">
+    <div class="sticky-atc__product">
+      <img id="satc-img" src="" alt="" class="sticky-atc__img">
+      <div class="sticky-atc__info">
+        <span id="satc-title" class="sticky-atc__title"></span>
+        <span id="satc-price" class="sticky-atc__price"></span>
+      </div>
+    </div>
+    <div class="sticky-atc__selectors">
+      <div class="satc-field" id="satc-color-field">
+        <label class="satc-label">Color</label>
+        <div class="satc-color-wrap">
+          <div class="satc-swatches" id="satc-swatches"></div>
+          <span class="satc-color-name" id="satc-color-name">—</span>
+        </div>
+      </div>
+      <div class="satc-field" id="satc-size-field">
+        <label class="satc-label">Size</label>
+        <select id="satc-size" class="satc-select"></select>
+      </div>
+      <div class="satc-field">
+        <label class="satc-label">Qty</label>
+        <div class="satc-qty">
+          <button class="satc-qty-btn" id="satc-minus">−</button>
+          <span id="satc-qty-val">1</span>
+          <button class="satc-qty-btn" id="satc-plus">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="sticky-atc__btn" id="satc-add-btn">
+      <i class="fi fi-rr-shopping-cart"></i>
+      <span>Add to Cart</span>
+    </button>
+  </div>
+</div>
+
+</body>
+</html>

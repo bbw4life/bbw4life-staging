@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">The woman who dresses in florals doesn't follow fashion — she creates her own garden wherever she walks.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product10">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">You were never meant to hide behind plain colors. <strong>The FloralFlounce Dress was born for you</strong> — for the woman who walks into a room and fills it with light, with warmth, with her own irreplaceable energy. <em>That woman is you. Wear her proudly.</em></p>
+        </div>
+
+        <!-- FLORAL STYLE GUIDE — existing bbw-style-guide block, adapted -->
+        <div class="bbw-style-guide" data-scroll-reveal>
+          <div class="bbw-style-guide__header">
+            <i class="fi fi-rr-flower"></i>
+            How to Style the FloralFlounce Dress
+          </div>
+          <div class="bbw-style-guide__steps">
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">1</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Daytime Elegance — Brunch Queen</strong>
+                <span>Pair with nude block heels and a wicker bag. Add gold hoop earrings. The white floral print glows in natural light — heads will turn before you even sit down.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">2</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Evening Statement — Dinner & Events</strong>
+                <span>Slip on strappy heeled sandals, a clutch, and bold red lips. The surplice neckline and flounce sleeves do all the work — you just walk in and own the room.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">3</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Casual Chic — Weekend Glow</strong>
+                <span>Wear flat white sandals, simple jewelry, sunglasses. The flounce sleeves flutter as you move — effortless, feminine, and completely unforgettable.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">4</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Special Occasions — Weddings & Celebrations</strong>
+                <span>This dress was designed for memorable moments. Wear it to weddings, baby showers, church, or family gatherings — and let the compliments come to you.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flower"></i> Floral Print That Flatters Every Curve &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Surplice Neck — Queen Approved &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Flounce Sleeves That Flow With You &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-dress"></i> Sizes 1XL to 4XL &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flower"></i> Floral Print That Flatters Every Curve &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Surplice Neck — Queen Approved &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> Flounce Sleeves That Flow With You &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-dress"></i> Sizes 1XL to 4XL &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> 30-Day Hassle-Free Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>47 curvy queens</strong> have this dress in their cart right now — Don't miss yours!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Bloom Together & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me 🌸</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Me & My Sister 💕</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Dress</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Dress</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Floral Squad Pack 🌺</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Dress 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Dress 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Dress 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-sparkles"></i>
+            <span>Complete Your Floral Queen Look</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who complete their look feel 2× more confident — and they show it in every step and every smile.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing this dress right now.</span>
+          </p>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select">
+          </select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches">
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BENEFITS -->
+        <div class="pp-benefits-block">
+          <div class="pp-benefits-header">
+            <i class="fas fa-check-circle"></i>
+            <span>Why BBW Queens are obsessed with this dress</span>
+          </div>
+          <ul class="pp-benefits-list">
+            <li><i class="fas fa-check"></i><span>Surplice V-neckline creates a stunning décolleté that flatters every plus size body</span></li>
+            <li><i class="fas fa-check"></i><span>Flounce sleeves flutter and flow — adding drama without adding bulk, only beauty</span></li>
+            <li><i class="fas fa-check"></i><span>Printed floral pattern on white — luminous, feminine, and impossible to ignore</span></li>
+            <li><i class="fas fa-check"></i><span>Sizes 1XL to 4XL — because every curvy queen deserves to find her perfect fit</span></li>
+            <li><i class="fas fa-check"></i><span>Versatile enough for brunch, weddings, events, church — one dress, endless occasions</span></li>
+          </ul>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- OCCASION GUIDE — bbw-occasion-guide existing block adapted -->
+        <div class="bbw-occasion-guide" data-scroll-reveal>
+          <div class="bbw-occasion-header">
+            <i class="fi fi-rr-calendar"></i>
+            Perfect Occasions for the FloralFlounce Dress
+          </div>
+          <div class="bbw-occasion-list">
+            <div class="bbw-occasion-item">
+              <div class="bbw-occasion-icon"><i class="fi fi-rr-glass-cheers"></i></div>
+              <div class="bbw-occasion-color">Weddings</div>
+              <div class="bbw-occasion-arrow">→</div>
+              <div class="bbw-occasion-desc"><i class="fi fi-rr-check"></i> Guest-ready elegance. The floral print adds celebration to every step.</div>
+            </div>
+            <div class="bbw-occasion-item">
+              <div class="bbw-occasion-icon"><i class="fi fi-rr-sun"></i></div>
+              <div class="bbw-occasion-color">Brunch</div>
+              <div class="bbw-occasion-arrow">→</div>
+              <div class="bbw-occasion-desc"><i class="fi fi-rr-check"></i> Breezy daytime chic. Florals and sunshine were made for each other.</div>
+            </div>
+            <div class="bbw-occasion-item">
+              <div class="bbw-occasion-icon"><i class="fi fi-rr-heart"></i></div>
+              <div class="bbw-occasion-color">Church</div>
+              <div class="bbw-occasion-arrow">→</div>
+              <div class="bbw-occasion-desc"><i class="fi fi-rr-check"></i> Modest, feminine and graceful. The surplice neckline is perfectly refined.</div>
+            </div>
+            <div class="bbw-occasion-item">
+              <div class="bbw-occasion-icon"><i class="fi fi-rr-star"></i></div>
+              <div class="bbw-occasion-color">Events</div>
+              <div class="bbw-occasion-arrow">→</div>
+              <div class="bbw-occasion-desc"><i class="fi fi-rr-check"></i> Parties, baby showers, family reunions — arrive and be remembered.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Which size is right for me?</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">FloralFlounce Dress — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_1.png?v=1778199463" alt="FloralFlounce Dress Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                This dress fits <strong>true to plus size</strong>. The surplice wrap-style neckline is adjustable and the flounce sleeves accommodate all arm shapes. When between sizes, go <strong>up</strong> for a relaxed, flowing fit.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> How to Measure for the Perfect Fit</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <ul>
+                <li><strong>Step 1:</strong> Measure your bust at the fullest point.</li>
+                <li><strong>Step 2:</strong> Measure your natural waist.</li>
+                <li><strong>Step 3:</strong> Measure your hips at the widest point.</li>
+                <li>The surplice neckline ties at the waist — great for adjustable fit at any size.</li>
+              </ul>
+              <h3><i class="fi fi-rr-ruler-triangle"></i> Plus Size Conversion Chart</h3>
+              <table>
+                <thead>
+                  <tr><th>Size</th><th>US Size</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hip (cm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>1XL</strong></td><td>14–16</td><td>102–108</td><td>84–90</td><td>112–118</td></tr>
+                  <tr><td><strong>2XL</strong></td><td>18–20</td><td>110–116</td><td>92–98</td><td>120–126</td></tr>
+                  <tr><td><strong>3XL</strong></td><td>22–24</td><td>118–124</td><td>100–106</td><td>128–134</td></tr>
+                  <tr><td><strong>4XL</strong></td><td>26–28</td><td>126–132</td><td>108–114</td><td>136–142</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-info"></i> Fit Tips for Curvy Queens</h3>
+              <table>
+                <thead><tr><th>Body Shape</th><th>Styling Tip</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Hourglass</strong></td><td>Tie the waist snugly — it will accentuate your silhouette beautifully</td></tr>
+                  <tr><td><strong>Apple</strong></td><td>Let the surplice hang loose — it creates a flattering A-line flow</td></tr>
+                  <tr><td><strong>Pear</strong></td><td>The flounce sleeves balance your hips — stunning combination</td></tr>
+                  <tr><td><strong>Rectangle</strong></td><td>The wrap style creates the illusion of a defined waist — gorgeous</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">What makes this dress so special for curvy women?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The <strong>FloralFlounce Dress</strong> was designed with the curvy woman in mind from the very first stitch. The surplice V-neckline creates a natural décolleté that elongates the silhouette without exposing too much — it is both elegant and flattering. The flounce sleeves are the secret weapon: they add movement, femininity, and visual lightness to the upper body, balancing curves beautifully.</p>
+              <p>The printed fabric flows rather than clings — meaning it drapes over your curves in the most flattering way possible. <strong>You don't dress around this dress. The dress dresses around you.</strong></p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Arrives carefully packaged — because your floral queen package deserves to arrive like a gift.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your complete satisfaction is our priority.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> Surplice V-neck with flounce sleeves</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Print:</strong> Floral printed fabric — white base</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Silhouette:</strong> Flowing, flattering — drapes over curves</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> 1XL through 4XL</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Closure:</strong> Wrap-style with self-tie at waist</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Occasion:</strong> Weddings, brunch, events, church, casual chic</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Hand wash or gentle cycle. Hang to dry.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_2.png?v=1778199463" alt="FloralFlounce Dress — front view" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-flower"></i> Flounce Sleeves That Flow</div>
+                <div class="slide-text">Every move you make is accompanied by the graceful flutter of the flounce sleeves — effortless feminine energy.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_3.png?v=1778199463" alt="FloralFlounce surplice neckline" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-crown"></i> Surplice Neckline — Queen Approved</div>
+                <div class="slide-text">The V-neckline creates an elongating effect, celebrating your décolleté without revealing too much. Elegant and bold at once.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_4.png?v=1778199464" alt="FloralFlounce floral print" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Florals Made For Queens</div>
+                <div class="slide-text">The white floral print is luminous, vibrant and unmistakably feminine. A dress that says everything before you even speak.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_5.png?v=1778199462" alt="FloralFlounce plus size occasion dress" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> One Dress. Every Occasion.</div>
+                <div class="slide-text">From weddings to brunch to church, the FloralFlounce does it all. Versatility is the ultimate luxury for a curvy queen.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Will this dress flatter my plus size figure?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Queen, this dress was engineered to flatter your body — not the other way around. <strong>The surplice neckline creates a V shape that elongates your torso</strong>. The flounce sleeves draw attention upward, creating beautiful visual balance. The floral print on white fabric is luminous and adds an aura of lightness that flatters every curve. When you put this dress on, you will not see a dress that "fits big." You will see a woman in full bloom — radiant, feminine, and completely herself.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is white a good color for plus size women?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Absolutely yes — and let us be very clear about this. <strong>The idea that plus size women should avoid white is one of the most harmful fashion myths ever created.</strong> White on curvy women is luminous, powerful, and unforgettable. The FloralFlounce Dress in white floral proves it. The floral print breaks up the white beautifully — creating depth, texture, and an irresistible feminine energy. Queens who wear this dress in white report more compliments than any other garment they own.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I wear this to a wedding as a guest?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Yes — this dress is absolutely wedding-guest appropriate. <strong>The surplice neckline is elegant and refined.</strong> The flounce sleeves add a celebratory, feminine touch. The floral print is festive without being overwhelming. Pair with strappy heels and statement jewelry and you will be the most beautifully dressed guest in the room. Just be careful — you might accidentally look better than the bridesmaids.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How do the flounce sleeves fit on fuller arms?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>The flounce sleeves are designed to be generous and comfortable for all arm sizes. <strong>They have a loose, flowing structure</strong> — not a fitted or tight cut. This means they drape beautifully over fuller arms without squeezing or pulling. The flounce actually creates a flattering effect by adding visual interest above the elbow rather than hugging the arm. Queens with fuller arms consistently report that this sleeve design is one of their favorites because it feels effortless and looks stunning.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">What shoes go best with this dress?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Almost everything works with this dress — that is part of its magic. <strong>For formal occasions:</strong> nude or gold block heels or strappy stiletto sandals. <strong>For casual:</strong> flat white or nude sandals. <strong>For church or events:</strong> wedge heels in nude, white, or metallic gold. <strong>For brunch:</strong> platform sandals or espadrilles. The white floral print is a neutral in disguise — it harmonizes with almost every shoe color. Gold is always the most stunning choice if you want to make a statement.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your FloralFlounce Dress will arrive in <strong>12–20 business days</strong> with standard free worldwide shipping. Express options are available at checkout if you need it sooner. Every order is carefully packaged — because this dress deserves to arrive like the gift it is.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+<section id="rv-section" class="rv-section" style="display:none;">
+  <div class="rv-header">
+    <div class="rv-header-left">
+      <span class="rv-eyebrow">Your Journey</span>
+      <h2 class="rv-title">Recently Viewed</h2>
+    </div>
+    <div class="rv-header-right">
+      <button class="rv-nav-btn" id="rv-prev" aria-label="Previous">
+        <i class="fi fi-rr-angle-left"></i>
+      </button>
+      <button class="rv-nav-btn" id="rv-next" aria-label="Next">
+        <i class="fi fi-rr-angle-right"></i>
+      </button>
+      <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history">
+        <i class="fi fi-rr-trash"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="rv-slider-wrap">
+    <div class="rv-track" id="rv-track"></div>
+  </div>
+</section>
+
+<!-- MARQUEE STRIP -->
+<div class="col-marquee-section">
+  <div class="col-marquee-track">
+    <div class="col-marquee-inner">
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — never forget that</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-sun"></i> Make today yours — you deserve it</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-star"></i> Your curves are your power — wear them proud</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-fire"></i> You don't need to change — the world needs to catch up</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-gem"></i> Dress for you — not for them</span>
+      <span class="col-marquee-sep">✦</span>
+      <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+      <span class="col-marquee-sep">✦</span>
+    </div>
+  </div>
+</div>
+
+  <!-- ═══════════════════════════════════════
+     BBW4LIFE — BANNER
+  ═══════════════════════════════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_6.png?v=1778199462" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_7.png?v=1778199463" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        BBW4LIFE Statement
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "She wore flowers like she owned<br>every garden in the world."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        Surplice neck. Flounce sleeves. Floral print.<br class="bbw-cb-br">Sizes 1XL–4XL. Made for queens.
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider">
+        <div class="product-item" data-product-id="Pdg-Francenel-product7">
+          <div class="product-image">
+            <a href="/products/product7.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product7"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product7"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product8">
+          <div class="product-image">
+            <a href="/products/product8.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product8"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product8"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product9">
+          <div class="product-image">
+            <a href="/products/product9.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product9"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product9"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product11">
+          <div class="product-image">
+            <a href="/products/product11.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product11"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product11"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product12">
+          <div class="product-image">
+            <a href="/products/product12.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product12"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product12"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product15">
+          <div class="product-image">
+            <a href="/products/product15.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product15"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product15"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+        <div class="product-item" data-product-id="Pdg-Francenel-product16">
+          <div class="product-image">
+            <a href="/products/product16.html" class="mini-product-link">
+              <div class="mini-media-slider" id="mini-slider-Pdg-Francenel-product16"></div>
+            </a>
+            <div class="mini-discount-badge"></div>
+            <span class="mini-wishlist-icon" data-id="Pdg-Francenel-product16"></span>
+          </div>
+          <div class="product-info"><p class="product-price"><span class="current-price"></span><span class="compare-price"></span></p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bbw-wave-divider">
+  <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+      <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+      <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+      <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+    </path>
+  </svg>
+</section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:70%;"></div></div><span id="count-5">51</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:20%;"></div></div><span id="count-4">15</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:6%;"></div></div><span id="count-3">4</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:3%;"></div></div><span id="count-2">2</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:1%;"></div></div><span id="count-1">1</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_1.png?v=1778199463" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_2.png?v=1778199463" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_3.png?v=1778199463" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_4.png?v=1778199464" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_5.png?v=1778199462" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_6.png?v=1778199462" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_7.png?v=1778199463" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_8.png?v=1778199462" alt="Review photo">
+          <div class="review-photos-more">15+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 PREMIÈRES REVIEWS VISIBLES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-May-14</span></div>
+          <div class="rv-card-right"><h4>Nadège M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore this to a wedding and stopped traffic.</h5>
+        <p>I wore the FloralFlounce Dress to my cousin's wedding as a guest. When I walked in, the whole room turned. Someone asked if I was in the wedding party. Size 2XL, fits beautifully — the surplice neckline is exactly my style. The flounce sleeves made me feel like I was floating. BBW4LIFE, you changed how I feel about myself.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_1.png?v=1778199463" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-May-10</span></div>
+          <div class="rv-card-right"><h4>Clarisse B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The flounce sleeves are EVERYTHING.</h5>
+        <p>I have fuller arms and I always dread sleeve shopping. These flounce sleeves are a revelation. They flow around my arms without squeezing. I feel elegant and free at the same time. Size 3XL, true to size. The white floral print is even more beautiful in person — luminous and vibrant. I have already ordered two more BBW4LIFE dresses. This brand is for real.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-07</span></div>
+          <div class="rv-card-right"><h4>Aminata D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>White florals on a plus size woman — STUNNING.</h5>
+        <p>Everyone told me not to wear white because of my size. I wore this dress to Easter Sunday and my mother cried when she saw me. She said she had never seen me look so beautiful. Size 1XL, the fit is perfect. The surplice V is so flattering. I told everyone in church where I bought it. Half of them have already ordered. BBW4LIFE is a blessing.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_3.png?v=1778199463" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">V</div><span class="date">2026-Apr-28</span></div>
+          <div class="rv-card-right"><h4>Valérie T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My body shape finally has a dress that works.</h5>
+        <p>I have an apple body shape and I have struggled for years to find dresses that don't cling around my middle. The FloralFlounce surplice neckline creates a beautiful A-line flow from the waist down. I look SLEEK. Size 4XL — they have my size and it fits like it was made for me. I wore it to my work anniversary dinner. My manager said I looked radiant. I felt it. 100%.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-Apr-21</span></div>
+          <div class="rv-card-right"><h4>Fatoumata K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Senegal — arrived beautiful.</h5>
+        <p>Je commande depuis le Sénégal. La robe est arrivée en 18 jours, parfaitement emballée. La qualité est exceptionnelle pour ce prix. La jupe est fluide, le col surplice est parfait, les manches à volants sont élégantes. Taille 2XL, exactement ma taille. Mes amies ont toutes demandé où je l'avais achetée. BBW4LIFE, merci infiniment. 🌸</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Apr-15</span></div>
+          <div class="rv-card-right"><h4>Shaniqua R.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Bought the trio bundle. Best decision ever.</h5>
+        <p>I ordered three FloralFlounce dresses — one for me, one for my mom, and one for my sister — using the Squad Goals bundle. We wore them to a family photoshoot and the pictures came out STUNNING. Size 3XL for me, 2XL for mom, 1XL for sis — all fit perfectly. The savings were real and the quality was consistent. BBW4LIFE truly serves the whole family.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Apr-09</span></div>
+          <div class="rv-card-right"><h4>Marlène P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I never thought I'd cry putting on a dress.</h5>
+        <p>I have struggled with my body image for years. When I put the FloralFlounce on for the first time and looked in the mirror, I teared up. I saw a woman. A beautiful, radiant, floral woman. Not "the fat woman in the corner." A QUEEN. Size 4XL. Thank you BBW4LIFE for making me feel this way. You are changing lives with your clothes.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">R</div><span class="date">2026-Apr-02</span></div>
+          <div class="rv-card-right"><h4>Roseline O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Church approved. Queen certified. Size 3XL.</h5>
+        <p>I wear this to church every Sunday I can get away with it. The surplice neckline is modest but elegant. The flounce sleeves look like something from a fashion magazine. The floral print glows under church light. Size 3XL, perfect fit. My pastor's wife asked me who dressed me. I said BBW4LIFE. Now half the congregation has ordered. Praise fashion.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_5.png?v=1778199462" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE LEFT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">G</div><div class="rv-mq-meta"><p class="rv-mq-name">Grace N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My hourglass figure never looked better</p><p class="rv-mq-quote">The surplice ties at the waist and it accentuates my hourglass perfectly. I look like a sculpture. Size 2XL. BBW4LIFE forever.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Prisca W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best under $15 dress I've ever owned</p><p class="rv-mq-quote">I have spent $200 on dresses that looked worse than this. The quality is shocking at this price. Size 1XL. Incredible.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Thérèse A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore to my baby shower. Magical.</p><p class="rv-mq-quote">The floral print and flounce sleeves made my baby shower photos look like a magazine spread. Size 3XL, fits my bump beautifully.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">E</div><div class="rv-mq-meta"><p class="rv-mq-name">Estelle M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The fabric quality surprised me</p><p class="rv-mq-quote">I expected cheap fabric at this price. The print is crisp, the fabric flows beautifully — it hangs and moves like a much more expensive dress.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">J</div><div class="rv-mq-meta"><p class="rv-mq-name">Joëlle C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">From Haiti — arrived perfectly</p><p class="rv-mq-quote">Mwen te kòmande depi Ayiti. Robe a te rive nan 17 jou. Bèl anpil. Size 2XL. BBW4LIFE, mèsi anpil. ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Brigitte O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My pear shape has never been celebrated like this</p><p class="rv-mq-quote">The flounce sleeves balance my wider hips perfectly. For the first time I feel proportioned and beautiful. Size 4XL, true to size.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">I</div><div class="rv-mq-meta"><p class="rv-mq-name">Imelda S.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My mother and I ordered together</p><p class="rv-mq-quote">Mom and I did the duo bundle. We wore matching dresses to a family photo. Everyone asked if we had a stylist. We said BBW4LIFE. ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Danielle F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore to my graduation dinner. Perfect.</p><p class="rv-mq-quote">I celebrated my PhD in the FloralFlounce Dress. I felt like a scholar and a queen all at once. Size 2XL. Photos are breathtaking.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <!-- Duplicates -->
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">G</div><div class="rv-mq-meta"><p class="rv-mq-name">Grace N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My hourglass figure never looked better</p><p class="rv-mq-quote">The surplice ties at the waist and it accentuates my hourglass perfectly. I look like a sculpture. Size 2XL. BBW4LIFE forever.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Prisca W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best under $15 dress I've ever owned</p><p class="rv-mq-quote">I have spent $200 on dresses that looked worse than this. The quality is shocking at this price. Size 1XL. Incredible.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 7 REVIEWS SUIVANTES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2026-Mar-26</span></div>
+          <div class="rv-card-right"><h4>Henriette G.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My 60-year-old body has never felt this celebrated.</h5>
+        <p>I am 60 years old, size 3XL, and I have spent decades in shapeless clothes. I bought this dress as a gift to myself for my birthday. When I walked into my family dinner, my children said I looked 10 years younger. I didn't lose weight. I just wore a dress made for a queen. BBW4LIFE gave me that. I am wearing florals for the rest of my life.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Mar-20</span></div>
+          <div class="rv-card-right"><h4>Lydie A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Brunch outfit. 12 compliments. Not exaggerating.</h5>
+        <p>I wore the FloralFlounce to Sunday brunch with my girls. I counted — I received 12 compliments before the food arrived. Twelve. Our waiter, two strangers, all my friends, a woman from a table across the room. Size 2XL, flat nude sandals. The dress does everything. All you have to do is show up and smile. Thank you BBW4LIFE. ❤️</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_2.png?v=1778199463" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">K</div><span class="date">2026-Mar-14</span></div>
+          <div class="rv-card-right"><h4>Kafui N.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Ghana — packaging made me feel special.</h5>
+        <p>I was worried about ordering internationally for the first time. The dress arrived in 19 days to Ghana, wrapped beautifully. I felt like I was opening a luxury gift. Size 1XL, perfect fit — I can still breathe and sit comfortably. The quality is real. Ghanaian queens: order without fear. BBW4LIFE delivers on every promise.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Z</div><span class="date">2026-Mar-07</span></div>
+          <div class="rv-card-right"><h4>Zara W.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful dress, slightly shorter than expected</h5>
+        <p>The dress is genuinely beautiful — the flounce sleeves and surplice neckline are stunning, and the white floral print is vibrant. I would note that the length on tall women (I'm 5'10") falls just above the knee rather than mid-calf. Still beautiful. Size 2XL fits perfectly in bust and hips. I wear it with heels and it looks chic. Would definitely order again.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Feb-28</span></div>
+          <div class="rv-card-right"><h4>Olivia M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My first online order. I trusted BBW4LIFE. Never looking back.</h5>
+        <p>I have always been afraid to shop online for clothes because of my size — nothing ever fits. A friend convinced me to try BBW4LIFE. My FloralFlounce Dress in size 3XL arrived in 15 days. I put it on. It fit. It was BEAUTIFUL. I have now ordered 5 items from BBW4LIFE. This brand understands curvy women in a way no other brand I have ever found does.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Feb-20</span></div>
+          <div class="rv-card-right"><h4>Ulrica B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My therapist said "do something beautiful for yourself." I did.</h5>
+        <p>I've been working on body acceptance for two years. My therapist said "do one thing this month that makes you feel beautiful." I ordered the FloralFlounce. When it arrived and I put it on, I took a photo and sent it to her. She replied: "That is the most radiant I have ever seen you look." Size 4XL. This dress is part of my healing journey now.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">W</div><span class="date">2026-Feb-12</span></div>
+          <div class="rv-card-right"><h4>Wura J.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore to a 3-day conference. Received compliments all 3 days.</h5>
+        <p>I had a professional 3-day conference and I wanted to look polished but comfortable. The FloralFlounce was my answer every day. Paired with nude block heels on day 1, gold sandals on day 2, and white flats on day 3. Three completely different looks. Three days of compliments. The surplice neckline is perfect for professional settings — elegant without being revealing. Size 2XL.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_4.png?v=1778199464" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE RIGHT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--right">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Celestine P.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Ordered three and kept all three</p><p class="rv-mq-quote">I bought the trio bundle for me, my aunt and my cousin. We all kept ours. No returns here — just three queens in florals. ❤️ Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Amélie T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The surplice tie makes it adjustable — genius</p><p class="rv-mq-quote">I can tie it tight for a fitted look or loose for a relaxed flow. This one dress adapts to how I feel that day. Total genius. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">N</div><div class="rv-mq-meta"><p class="rv-mq-name">Nadia F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore to my first date in 4 years</p><p class="rv-mq-quote">He said "you look absolutely stunning." I said thank you and thought about BBW4LIFE the whole time. Size 1XL. Second date confirmed. 🌸</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Séraphine K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My daughter said "Mom, you look like a queen"</p><p class="rv-mq-quote">My 14-year-old looked at me in this dress and said "Mom, you look like a queen." I haven't stopped smiling. Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">M</div><div class="rv-mq-meta"><p class="rv-mq-name">Mirande L.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Print doesn't fade after washing</p><p class="rv-mq-quote">Washed it gently 5 times already. The floral print is still vibrant and crisp. The fabric still flows beautifully. Quality that lasts. Size 4XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yolanda A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My rectangle body shape has a waist now</p><p class="rv-mq-quote">The wrap surplice creates the illusion of a defined waist I don't have naturally. I feel so feminine and shaped. Size 2XL. Magical.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rachelle B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Ordered for my sister's bachelorette</p><p class="rv-mq-quote">All 5 of us wore FloralFlounce dresses to my sister's bachelorette brunch. We looked like a photoshoot. Everyone in the restaurant was staring. ❤️</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">V</div><div class="rv-mq-meta"><p class="rv-mq-name">Viviane N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The confidence boost is real</p><p class="rv-mq-quote">I walk differently in this dress. Head higher. Shoulders back. Smile wider. Clothing really does affect confidence — and BBW4LIFE gets it. Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <!-- Duplicates -->
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Celestine P.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Ordered three and kept all three</p><p class="rv-mq-quote">I bought the trio bundle for me, my aunt and my cousin. We all kept ours. Three queens in florals. ❤️ Size 3XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Amélie T.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">The surplice tie makes it adjustable</p><p class="rv-mq-quote">I can tie it tight or loose. This one dress adapts to how I feel that day. Total genius. Size 2XL.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 10 HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Feb-05</span></div>
+          <div class="rv-card-right"><h4>Quiana M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The first dress I've bought for myself in 3 years.</h5>
+        <p>After gaining weight during a difficult period of my life, I stopped buying nice clothes. I told myself I would buy beautiful things again "when I lost the weight." BBW4LIFE reminded me that I deserve beautiful things NOW. FloralFlounce, size 4XL. I wore it to my own birthday dinner. I felt radiant. The weight didn't change. My mindset did. Thank you, from the bottom of my heart.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Jan-29</span></div>
+          <div class="rv-card-right"><h4>Lorraine T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore to a garden party. I WAS the garden.</h5>
+        <p>There was a garden-themed party at my friend's home and I showed up in the FloralFlounce Dress in size 2XL. My friend said: "You didn't come to the garden party — you ARE the garden party." I have never felt more perfectly dressed for any occasion in my life. The flounce sleeves caught the breeze all afternoon. I was floating. Pure magic.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_6.png?v=1778199462" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Jan-21</span></div>
+          <div class="rv-card-right"><h4>Idowu A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Shipped to Nigeria in 16 days. Absolutely perfect.</h5>
+        <p>I was skeptical — I have had bad experiences with international shipping before. My FloralFlounce Dress arrived in 16 days to Lagos, packaged carefully, in perfect condition. Size 1XL, exactly as described and shown. Nigerian queens: BBW4LIFE is trustworthy. I have already recommended them to everyone in my office. This brand is special.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">E</div><span class="date">2026-Jan-14</span></div>
+          <div class="rv-card-right"><h4>Esther V.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore white. The world didn't end. It bloomed.</h5>
+        <p>I am plus size. I wore white. Not only did the world not end — it bloomed. The FloralFlounce dress in size 3XL looked absolutely luminous on me. My skin glows against the white fabric. The floral print adds depth and life. Anyone who tells a plus size woman not to wear white has never seen a BBW queen in the FloralFlounce. It's their loss. It's our gain.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Jan-07</span></div>
+          <div class="rv-card-right"><h4>Colette M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>At 70, I feel like a woman in full bloom.</h5>
+        <p>I am 70 years old. I have been plus size my entire adult life. I have spent 50 years in clothes that were functional but joyless. My granddaughter found BBW4LIFE and ordered me the FloralFlounce for my birthday. Size 4XL. I put it on. I looked in the mirror. I saw a woman in full bloom. Not an old woman. Not a big woman. A woman. A blooming, glowing, floral queen. I wept with joy.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">B</div><span class="date">2025-Dec-30</span></div>
+          <div class="rv-card-right"><h4>Bénédicte A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>New Year's Eve in florals. Best decision of 2025.</h5>
+        <p>I wore the FloralFlounce to ring in the New Year. Everyone else was in black. I walked in wearing white florals and the room genuinely gasped. My boyfriend said I was the most beautiful woman at the party. I agreed. Size 2XL — perfect fit. I went into 2026 feeling like the queen I am. BBW4LIFE gave me that entrance.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2025-Dec-22</span></div>
+          <div class="rv-card-right"><h4>Félicité O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Christmas family photos — best ever taken of me.</h5>
+        <p>My family takes Christmas photos every year and I have always dreaded them because of how I look. This year I wore the FloralFlounce. When we got the photos back, my mother said: "These are the most beautiful Christmas photos we have ever taken." I was in every single one. Size 3XL. BBW4LIFE helped me stop hiding and start shining. Forever grateful.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">T</div><span class="date">2025-Dec-15</span></div>
+          <div class="rv-card-right"><h4>Tatiana R.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I bought this as self-love. It paid off with interest.</h5>
+        <p>I have been working on loving myself more. I decided to buy this dress as an act of self-love — to choose something beautiful just because I deserve it. Size 1XL. When I put it on, I felt it — that shift in how you see yourself. I wore it to dinner alone. Sat at my table. Enjoyed my meal. Felt like a queen the entire time. That is worth everything. Thank you BBW4LIFE.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">P</div><span class="date">2025-Dec-08</span></div>
+          <div class="rv-card-right"><h4>Pascale W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Cameroon. I felt seen for the first time.</h5>
+        <p>Je commande depuis le Cameroun. La robe est arrivée parfaitement en 20 jours. Taille 2XL — exactement ce qu'il me faut. Je n'ai jamais trouvé une marque qui comprend vraiment les femmes rondes comme BBW4LIFE. La FloralFlounce est magnifique sur moi. Les manches à volants sont absolument élégantes. Merci BBW4LIFE, vous m'avez fait me sentir belle pour la première fois depuis très longtemps. ❤️</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Nov-30</span></div>
+          <div class="rv-card-right"><h4>Xena A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>This dress was at every milestone moment of my year.</h5>
+        <p>Brunch with friends in April. My daughter's school recital in May. A family reunion in July. A friend's wedding in September. My anniversary dinner in November. The same FloralFlounce Dress, size 4XL. Different accessories. Different occasions. Always flawless. I called it my "one dress year" and I am not even a little ashamed. BBW4LIFE made that possible.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_10_7.png?v=1778199463" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Floral Queen Moment ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. I felt like a queen in florals!)" required>
+            <textarea id="review-text" placeholder="Tell your story — where did you wear this dress? How did it make you feel? Your words inspire other queens. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already inspiring other beautiful women like you.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<!-- FOOTER -->
+<div id="footer-container"></div>
+
+<!-- WIDGETS -->
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+    <div class="sticky-atc__inner">
+        <div class="sticky-atc__product">
+            <img id="satc-img" src="" alt="" class="sticky-atc__img">
+            <div class="sticky-atc__info">
+                <span id="satc-title" class="sticky-atc__title"></span>
+                <span id="satc-price" class="sticky-atc__price"></span>
+            </div>
+        </div>
+        <div class="sticky-atc__selectors">
+            <div class="satc-field" id="satc-color-field">
+                <label class="satc-label">Color</label>
+                <div class="satc-color-wrap">
+                    <div class="satc-swatches" id="satc-swatches"></div>
+                    <span class="satc-color-name" id="satc-color-name">—</span>
+                </div>
+            </div>
+            <div class="satc-field" id="satc-size-field">
+                <label class="satc-label">Size</label>
+                <select id="satc-size" class="satc-select"></select>
+            </div>
+            <div class="satc-field">
+                <label class="satc-label">Qty</label>
+                <div class="satc-qty">
+                    <button class="satc-qty-btn" id="satc-minus">−</button>
+                    <span id="satc-qty-val">1</span>
+                    <button class="satc-qty-btn" id="satc-plus">+</button>
+                </div>
+            </div>
+        </div>
+        <button class="sticky-atc__btn" id="satc-add-btn">
+            <i class="fi fi-rr-shopping-cart"></i>
+            <span>Add to Cart</span>
+        </button>
+    </div>
+</div>
+
+</body>
+</html>

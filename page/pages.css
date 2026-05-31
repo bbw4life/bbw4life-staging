@@ -6751,32 +6751,7 @@ a.au-offer-card {
   box-shadow: 0 8px 22px rgba(192,56,94,0.32);
 }
 
-/* Error popup */
-.error-popup {
-  position: fixed;
-  top: 20px; right: 20px;
-  background: var(--charcoal);
-  color: #fff;
-  padding: 16px 22px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lift);
-  z-index: 99999;
-  max-width: 360px;
-  border-left: 3px solid var(--rose);
-  animation: slideInRight 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  display: none;
-}
-.error-popup.show { display: block; }
-.error-popup.hidden { display: none; }
 
-.error-popup .popup-text { font-size: 0.90rem; color: rgba(255,255,255,0.90); margin-bottom: 10px; }
-.error-popup .popup-btn {
-  background: var(--rose); color: #fff; border: none;
-  padding: 7px 18px; border-radius: var(--radius-full);
-  cursor: pointer; font-family: var(--font-body); font-size: 0.82rem;
-  font-weight: 600; transition: var(--transition);
-}
-.error-popup .popup-btn:hover { background: var(--rose-light); transform: scale(1.04); }
 
 
 /* ══════════════════════════════════════════════════════════════
