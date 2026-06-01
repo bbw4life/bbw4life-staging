@@ -1444,19 +1444,16 @@ exports.handler = async (event, context) => {
 
     const data  = await groqResponse.json();
     const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);
+    const founderPhotoUrl = settings.founder?.photo || '';
+
+    // Détecter si c'est une question sur le fondateur
+    const isFounderQuery = /fondateur|founder|francenel|paul|admin|créateur|creator|histoire|story|about|à propos|qui est|who is/i.test(message);
+    const shouldShowFounderPhoto = isFounderQuery && founderPhotoUrl && !shortAck && intent !== 'product' && relevantProducts.length === 0 && !topStarterRequest && !isBadgeQuery;
 
     const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
       && intent !== 'product'
       && (isContactIntent || reply.includes('👇'));
     const cleanReply = reply.replace(/👇[\s]*/g, '').trim();
-
-      const founderPhotoUrl = settings.founder?.photo || '';
-      const isFounderQuestion = /fondateur|founder|francenel|qui.+(fond|créat|creat)|admin|directeur|ceo|about|à propos|histoire|story|qui est/i.test(message);
-      let finalReplyWithPhoto = cleanReply;
-      if (isFounderQuestion && founderPhotoUrl && !cleanReply.includes(founderPhotoUrl)) {
-        finalReplyWithPhoto = `![${founderName}](${founderPhotoUrl})\n\n` + cleanReply;
-      }
-
 
     const suppressPages = isGreeting(message) || isShortAck(message);
     const pageMatches   = suppressPages ? [] : [...cleanReply.matchAll(/🔗\[PAGE:([^\]]+)\]/g)];
@@ -1492,19 +1489,24 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200, headers,
-      body: JSON.stringify({
-        reply:       finalReplyWithPhoto.replace(/🔗\[PAGE:([^\]]+)\]/g, '').trim(),
-        products:    productCards,
-        intent:      (topStarterRequest || isBadgeQuery) ? 'product' : intent,
-        isVague,
-        showContact: showContactButtons,
-        contactInfo: showContactButtons ? {
-          whatsapp: contactInfo.hasWhatsapp ? contactInfo.whatsappUrl : null,
-          telegram: contactInfo.hasTelegram ? contactInfo.telegramUrl : null,
-          page:     contactInfo.contactPage
-        } : null,
-        pageButtons
-      })
+     body: JSON.stringify({
+      reply:       finalReply,
+      products:    productCards,
+      intent:      (topStarterRequest || isBadgeQuery) ? 'product' : intent,
+      isVague,
+      showContact: showContactButtons,
+      contactInfo: showContactButtons ? {
+        whatsapp: contactInfo.hasWhatsapp ? contactInfo.whatsappUrl : null,
+        telegram: contactInfo.hasTelegram ? contactInfo.telegramUrl : null,
+        page:     contactInfo.contactPage
+      } : null,
+      pageButtons,
+      founderPhoto: shouldShowFounderPhoto ? {
+        url:  founderPhotoUrl,
+        name: settings.founder?.full_name || 'Paul Francenel',
+        title: settings.founder?.title   || 'CEO & Founder'
+      } : null
+    })
     };
 
   } catch (error) {

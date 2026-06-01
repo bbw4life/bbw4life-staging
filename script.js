@@ -8763,7 +8763,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ── Welcome ── */
     function addWelcomeMessage() {
-      addMessage(welcomeMessages['en'], 'ai', [], null, []);
+      addMessage(welcomeMessages['en'], 'ai', [], null, [], null);
     }
 
     /* ══════════════════════════════════════
@@ -8911,7 +8911,7 @@ document.addEventListener('DOMContentLoaded', function () {
        ADD MESSAGE
        pageButtons: array of { url, label, icon }
     ══════════════════════════════════════ */
-    function addMessage(text, role, products, contactInfo, pageButtons) {
+    function addMessage(text, role, products, contactInfo, pageButtons, founderPhoto) {
       const msgEl  = document.createElement('div');
       msgEl.className = `cf-message cf-message--${role}`;
 
@@ -8921,6 +8921,23 @@ document.addEventListener('DOMContentLoaded', function () {
       msgEl.appendChild(bubble);
 
       attachPromoCodeCopyEvents(bubble);
+
+      /* ── Founder photo ── */
+      if (role === 'ai' && founderPhoto && founderPhoto.url && (!products || products.length === 0)) {
+        const photoWrap = document.createElement('div');
+        photoWrap.className = 'cf-founder-photo-wrap';
+        photoWrap.innerHTML = `
+          <img
+            src="${founderPhoto.url}"
+            alt="${founderPhoto.name}"
+            class="cf-founder-img"
+            loading="lazy"
+            onerror="this.closest('.cf-founder-photo-wrap').style.display='none'"
+          >
+          <p class="cf-founder-caption">${founderPhoto.name} — ${founderPhoto.title}</p>
+        `;
+        msgEl.appendChild(photoWrap);
+      }
 
       /* ── Product cards ── */
       if (role === 'ai' && Array.isArray(products) && products.length > 0) {
@@ -9154,7 +9171,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const contactInfo = data.contactInfo || null;
         const pageButtons = data.pageButtons || [];
 
-        addMessage(aiReply, 'ai', products, showContact ? contactInfo : null, pageButtons);
+        addMessage(aiReply, 'ai', products, showContact ? contactInfo : null, pageButtons, data.founderPhoto || null);
         conversationHistory.push({ role: 'assistant', content: aiReply });
         try { sessionStorage.setItem('cf_history', JSON.stringify(conversationHistory.slice(-20))); } catch(e) {}
 
