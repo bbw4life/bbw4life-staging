@@ -4916,8 +4916,14 @@ if (rcCheckoutBtn) {
         const footerTop    = footer.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
 
-        // Afficher quand le footer est à 50% de la hauteur de la fenêtre
-        const nearFooter = footerTop < windowHeight * 4.5;
+        const isMobileStickyAtc = window.innerWidth <= 768;
+          const mobileThreshold = parseFloat(
+            ((window.__allProducts || []).find(p => p.type === 'settings') || {}).sticky_atc_mobile_threshold || 6.0
+          );
+          const desktopThreshold = parseFloat(
+            ((window.__allProducts || []).find(p => p.type === 'settings') || {}).sticky_atc_desktop_threshold || 4.5
+          );
+          const nearFooter = footerTop < windowHeight * (isMobileStickyAtc ? mobileThreshold : desktopThreshold);
 
         // Cacher si le bouton principal ATC est visible à l'écran
         let mainBtnVisible = false;
@@ -6894,8 +6900,12 @@ document.addEventListener('click', function(e) {
   if (e.target.closest('.swatch')) {
     const isMobile = window.innerWidth <= 768 || /Mobi|Android|iPhone/i.test(navigator.userAgent);
     if (isMobile) {
-      const mediaSlider = document.getElementById('main-image-slider');
-      if (mediaSlider) setTimeout(() => { mediaSlider.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+      const settings = (window.__allProducts || []).find(p => p.type === 'settings') || {};
+      const swatchScroll = (settings.swatch_scroll_mobile || 'yes').toLowerCase() === 'yes';
+      if (swatchScroll) {
+        const mediaSlider = document.getElementById('main-image-slider');
+        if (mediaSlider) setTimeout(() => { mediaSlider.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+      }
     }
   }
 });

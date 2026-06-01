@@ -4126,7 +4126,7 @@ details[open] .chevron {
         max-width: calc(3 * 22px + 2 * 5px);
         flex-shrink: 0;
         scroll-snap-type: x mandatory;
-        padding: 3px 0;
+        padding: 4px 0;
     }
 
     .satc-swatches::-webkit-scrollbar {

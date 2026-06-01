@@ -113,25 +113,26 @@ function buildProductIndex(rawData) {
 
 /* ══════════════════════════════════════════════════════
    GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
-   On construit les listes depuis les données settings,
-   sans jamais hardcoder les IDs ici.
 ══════════════════════════════════════════════════════ */
 function buildGenderIds(settings) {
   const jrgqCols = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
 
-  /* IDs hommes : collection "men-plus-size" */
   const menCol = jrgqCols.find(c => c.id === 'men-plus-size');
   const MALE_PRODUCT_IDS = menCol
     ? menCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
     : [];
 
-  /* IDs femmes : collection "curvy-woman" */
   const womanCol = jrgqCols.find(c => c.id === 'curvy-woman');
   const FEMALE_ONLY_IDS = womanCol
     ? womanCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
     : [];
 
-  return { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS };
+  const beautyCol = jrgqCols.find(c => c.id === 'curvy-beauty');
+  const BEAUTY_PRODUCT_IDS = beautyCol
+    ? beautyCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
+    : [];
+
+  return { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS, BEAUTY_PRODUCT_IDS };
 }
 
 /* ══════════════════════════════════════════════════════
@@ -171,7 +172,6 @@ function detectLanguage(message, allowedLanguages) {
   if (/[\u0400-\u04FF]/.test(text)) scores.ru += 10;
   if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) scores.ja += 10;
 
-  /* Créole haïtien — détection renforcée */
   if (/\b(bonjou|bonswa|mesi|kijan|koman|ki|sa|ou|mwen|nou|yo|ak|nan|pou|sou|gen|pa|fe|di|ale|vini|achte|pri|livrezon|koulè|gwosè|disponib|konbyen|kote|ki lè|ki sa|pwodwi|bèl|chèk|kado|rabi|promo|kòd|réduksyon|kite|rete|deja|toujou|ansanm|zanmi|fanmi|ede|sipò|ekip|kontak|whatsapp|telegram|wap|map|pap|tap)\b/.test(text)) scores.ht += 5;
   if (/\b(m pa|m vle|m bezwen|m renmen|m ap|ou a|li a|nou yo|yo pa|sa a|kisa|poukisa|eske|wi|non|oui|mersi|tanpri|plis|mwens|gwo|piti|bèl|cho|fre)\b/.test(text)) scores.ht += 3;
   ['bonjou','bonswa','mesi','kijan','mwen','nou','ak','nan','pou','sou','gen','pa','fe','di','ale','vini','wi','non'].forEach(w => { if (words.includes(w)) scores.ht += 2; });
@@ -202,12 +202,9 @@ function detectLanguage(message, allowedLanguages) {
   }
   if (best === 0) detected = 'en';
 
-  /* Si la langue détectée est dans la liste autorisée → on l'utilise */
   if (allowedLanguages && allowedLanguages.length > 0) {
     if (allowedLanguages.includes(detected)) return detected;
-    /* Langue non autorisée → anglais par défaut (si disponible) */
     if (allowedLanguages.includes('en')) return 'en';
-    /* Sinon on prend la première langue autorisée */
     return allowedLanguages[0];
   }
 
@@ -271,8 +268,7 @@ function detectIntent(message) {
     /curvafit|curva.?fit/i,
     /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|bonjou|bonswa)\b/,
     /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno|mesi|wi|non|oke|dakò)\b/,
-    /* Petites réponses courtes de confirmation/acquiescement */
-    /^(ok|okay|k|ok|oke|ugh|ah|oh|wow|nice|cool|perfect|parfait|super|bien|good|great|noted|noted|got it|compris|noté|alright|sure|yep|yup|nope|nah|true|exactly|right|correct|absolutely|definitely|of course|bien sûr|exactement|précisément|merci|thanks|thx|ty|np|no problem|no worries|pas de problème|d'accord|c'est bon|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰)[\s!.,]*$/i,
+    /^(ok|okay|k|ok|oke|ugh|ah|oh|wow|nice|cool|perfect|parfait|super|bien|good|great|noted|got it|compris|noté|alright|sure|yep|yup|nope|nah|true|exactly|right|correct|absolutely|definitely|of course|bien sûr|exactement|précisément|merci|thanks|thx|ty|np|no problem|no worries|pas de problème|d'accord|c'est bon|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰)[\s!.,]*$/i,
   ];
 
   for (const pattern of generalPatterns) {
@@ -343,7 +339,7 @@ function isTopStarterRequest(message) {
 }
 
 /* ══════════════════════════════════════════════════════
-   GREETING DETECTION (court message sans intention produit)
+   GREETING DETECTION
 ══════════════════════════════════════════════════════ */
 function isGreeting(message) {
   const q = message.toLowerCase().trim();
@@ -351,16 +347,18 @@ function isGreeting(message) {
 }
 
 /* ══════════════════════════════════════════════════════
-   SHORT ACK DETECTION (ok, merci, super, 👍, etc.).
+   SHORT ACK DETECTION
 ══════════════════════════════════════════════════════ */
 function isShortAck(message) {
   const q = message.toLowerCase().trim();
-  /* Message de moins de 5 mots ET correspond à un acquiescement */
   const wordCount = q.split(/\s+/).filter(w => w.length > 0).length;
   if (wordCount > 5) return false;
   return /^(ok|okay|k|oui|non|wi|non|merci|mesi|thanks|thx|ty|super|parfait|génial|great|bien|bueno|nice|cool|perfect|noted|got it|compris|alright|sure|yep|yup|nope|d'accord|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰|ah|oh|wow|true|right|correct|exactly|absolutely|definitely|of course|bien sûr|exactement|np|no problem|no worries|pas de problème|c'est bon)[\s!.,🙏❤️😊🥰]*$/.test(q);
 }
 
+/* ══════════════════════════════════════════════════════
+   GENDER DETECTION
+══════════════════════════════════════════════════════ */
 function detectGender(message) {
   const q = message.toLowerCase();
 
@@ -376,9 +374,15 @@ function detectGender(message) {
     /\b(taille femme|size women|vêtement femme|clothing women|mode femme|fashion women|chaussure femme|women.?s shoe|zapatos mujer)\b/,
   ];
 
-  const hasMale   = malePatterns.some(p  => p.test(q));
-  const hasFemale = femalePatterns.some(p => p.test(q));
+  const beautyPatterns = [
+    /\b(beauty|beauté|maquillage|makeup|soin|skincare|nail|ongle|mascara|eyebrow|sourcil|lip|lèvre|cheveux|hair|serum|crème|cream|huile|oil|vernis|gloss|mascara|brow|nails)\b/,
+  ];
 
+  const hasMale   = malePatterns.some(p   => p.test(q));
+  const hasFemale = femalePatterns.some(p => p.test(q));
+  const hasBeauty = beautyPatterns.some(p => p.test(q));
+
+  if (hasBeauty && !hasMale && !hasFemale) return 'beauty';
   if (hasMale && !hasFemale) return 'male';
   if (hasFemale && !hasMale) return 'female';
   return null;
@@ -395,7 +399,7 @@ function isBrandQuery(message) {
 /* ══════════════════════════════════════════════════════
    PRODUCT SEARCH
 ══════════════════════════════════════════════════════ */
-function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS) {
+function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS, BEAUTY_PRODUCT_IDS) {
   if (!query) return { results: [], isVague: false };
   const q        = query.toLowerCase();
   const keywords = q.split(/\s+/).filter(k => k.length >= 2);
@@ -404,8 +408,21 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
   let baseProducts = products;
   if (genderFilter === 'male') {
     baseProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
+    if (baseProducts.length === 0) {
+      console.warn('[Chat] Gender filter male returned 0 products — check MALE_PRODUCT_IDS in settings');
+    }
   } else if (genderFilter === 'female') {
     baseProducts = products.filter(p => FEMALE_ONLY_IDS.includes(p.id));
+    if (baseProducts.length === 0) {
+      console.warn('[Chat] Gender filter female returned 0 products — check FEMALE_ONLY_IDS in settings');
+    }
+  } else if (genderFilter === 'beauty') {
+    baseProducts = BEAUTY_PRODUCT_IDS.length
+      ? products.filter(p => BEAUTY_PRODUCT_IDS.includes(p.id))
+      : products;
+    if (baseProducts.length === 0) {
+      console.warn('[Chat] Gender filter beauty returned 0 products — check BEAUTY_PRODUCT_IDS in settings');
+    }
   }
 
   const scored = baseProducts.map(p => {
@@ -418,7 +435,6 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
       p.sizes.forEach(s  => { if (String(s).toLowerCase().includes(kw)) score += 1; });
     });
 
-    /* Boost meilleur noté */
     if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test(q)) {
       if (p.rating && p.rating >= 4.5) score += 8;
       if (p.reviewsCount && p.reviewsCount >= 50) score += 5;
@@ -430,7 +446,6 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
     if ((q.includes('new arrival') || q.includes('new arriv') || q.includes('nouvel') || q.includes('nouveau') || q.includes('nueva llegada')) && badgeLower.includes('new')) score += 15;
     if ((q.includes('top sale') || q.includes('top deal') || q.includes('meilleure offre') || q.includes('mejor oferta')) && (badgeLower.includes('top sale') || badgeLower.includes('best deal'))) score += 15;
 
-    /* Boosts thématiques par mots-clés */
     const themes = [
       { words: ['glam','heel','stiletto','cross strap','sandale'],      id: 'Pdg-Francenel-product1',  boost: 12 },
       { words: ['retrorun','sneaker','chunky','street','retro'],        id: 'Pdg-Francenel-product2',  boost: 12 },
@@ -572,37 +587,39 @@ function buildBlogContext(blogData) {
 }
 
 /* ══════════════════════════════════════════════════════
-   PAGE NAVIGATION MAP — BBW4LIFE
-   Labels adaptés — "Disclaimer" simplifié (pas "Medical")
+   PAGE_MAP — toutes les pages connues du site
 ══════════════════════════════════════════════════════ */
 const PAGE_MAP = {
-  '/index.html':                              { label: 'Home',                   icon: '🏠' },
-  '/collections/bbw4life-all-product.html':   { label: 'Shop All',               icon: '🛍️' },
-  '/collections/bbw4life-all-collections.html':{ label: 'Collections',           icon: '🗂️' },
-  '/collections/curvy-woman.html':            { label: 'Curvy Woman',            icon: '💃' },
-  '/collections/curvy-dresses.html':          { label: 'Curvy Dresses',          icon: '👗' },
-  '/collections/curvy-beauty.html':           { label: 'Curvy Beauty',           icon: '💄' },
-  '/collections/main-plus-size.html':         { label: 'Men Plus Size',          icon: '👔' },
-  '/collections/bbw4life-pants-skirts.html':  { label: 'Pants & Shorts',         icon: '👖' },
-  '/collections/most-popular.html':           { label: 'Most Popular',           icon: '🔥' },
-  '/collections/bbw-features-products.html':  { label: 'BBW Featured',           icon: '✨' },
-  '/blog/blog.html':                          { label: 'Blog',                   icon: '📝' },
-  '/page/our-story.html':                     { label: 'Our Story',              icon: '💖' },
-  '/page/about.html':                         { label: 'About Us',               icon: 'ℹ️' },
-  '/page/contact.html':                       { label: 'Contact',                icon: '📩' },
-  '/account.html':                            { label: 'My Account',             icon: '👤' },
-  '/page/order-tracking.html':                { label: 'Order Tracking',         icon: '📦' },
-  '/page/faq.html':                           { label: 'FAQ',                    icon: '❓' },
-  '/policies/privacy.html':                   { label: 'Privacy Policy',         icon: '🔒' },
-  '/policies/refund.html':                    { label: 'Refund Policy',          icon: '↩️' },
-  '/policies/shipping.html':                  { label: 'Shipping Info',          icon: '🚚' },
-  '/policies/terms.html':                     { label: 'Terms & Conditions',     icon: '📄' },
-  '/page/disclaimer.html':                    { label: 'Disclaimer',             icon: '📋' },
-  '/page/products-care.html':                 { label: 'Product Care Guide',     icon: '✨' },
+  '/index.html':                               { label: 'Home',               icon: '🏠' },
+  '/collections/bbw4life-all-product.html':    { label: 'Shop All',           icon: '🛍️' },
+  '/collections/bbw4life-all-collections.html':{ label: 'Collections',        icon: '🗂️' },
+  '/collections/curvy-woman.html':             { label: 'Curvy Woman',        icon: '💃' },
+  '/collections/curvy-dresses.html':           { label: 'Curvy Dresses',      icon: '👗' },
+  '/collections/curvy-beauty.html':            { label: 'Curvy Beauty',       icon: '💄' },
+  '/collections/men-plus-size.html':           { label: 'Men Plus Size',      icon: '👔' },
+  '/collections/main-plus-size.html':          { label: 'Men Plus Size',      icon: '👔' },
+  '/collections/bbw4life-pants-skirts.html':   { label: 'Pants & Shorts',     icon: '👖' },
+  '/collections/most-popular.html':            { label: 'Most Popular',       icon: '🔥' },
+  '/collections/bbw-features-products.html':   { label: 'BBW Featured',       icon: '✨' },
+  '/collections/shoes-sandals.html':           { label: 'Shoes & Sandals',    icon: '👟' },
+  '/cart.html':                                { label: 'My Cart',            icon: '🛒' },
+  '/blog/blog.html':                           { label: 'Blog',               icon: '📝' },
+  '/page/our-story.html':                      { label: 'Our Story',          icon: '💖' },
+  '/page/about.html':                          { label: 'About Us',           icon: 'ℹ️' },
+  '/page/contact.html':                        { label: 'Contact',            icon: '📩' },
+  '/account.html':                             { label: 'My Account',         icon: '👤' },
+  '/page/order-tracking.html':                 { label: 'Order Tracking',     icon: '📦' },
+  '/page/faq.html':                            { label: 'FAQ',                icon: '❓' },
+  '/policies/privacy.html':                    { label: 'Privacy Policy',     icon: '🔒' },
+  '/policies/refund.html':                     { label: 'Refund Policy',      icon: '↩️' },
+  '/policies/shipping.html':                   { label: 'Shipping Info',      icon: '🚚' },
+  '/policies/terms.html':                      { label: 'Terms & Conditions', icon: '📄' },
+  '/page/disclaimer.html':                     { label: 'Disclaimer',         icon: '📋' },
+  '/page/products-care.html':                  { label: 'Product Care Guide', icon: '✨' },
 };
 
 /* ══════════════════════════════════════════════════════
-   BUILD SYSTEM PROMPT — BBW4LIFE
+   BUILD SYSTEM PROMPT
 ══════════════════════════════════════════════════════ */
 function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
   const contactEmails  = settings.contact_emails || {};
@@ -618,7 +635,6 @@ function buildSystemPrompt(products, settings, contactInfo, searchData, blogData
     ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items`).join('\n')
     : '• No active promo codes at this time';
 
-  /* BBW Featured products — lus depuis settings */
   const jrgqCols      = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
   const featuredCol   = jrgqCols.find(c => c.id === 'bbw-features-products');
   const featuredIds   = (featuredCol && featuredCol.product_ids) || [];
@@ -626,7 +642,6 @@ function buildSystemPrompt(products, settings, contactInfo, searchData, blogData
 
   const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
 
-  /* Titres des produits BBW Featured */
   const featuredTitles = EXCLUDED_IDS
     .map(id => products.find(p => p.id === id))
     .filter(Boolean)
@@ -677,7 +692,6 @@ PRODUCT ${i + 1}:
   const searchContext = buildSearchDataContext(searchData);
   const blogContext   = buildBlogContext(blogData);
 
-  /* ── Shipping options depuis settings ── */
   const shippingOptions = [
     settings.shipping_standard_delay ? `• Standard (free over $${freeShipThresh}, ${settings.shipping_standard_delay})` : null,
     settings.shipping_dhl_delay      ? `• Express DHL (${settings.shipping_dhl_delay})`                                  : null,
@@ -686,7 +700,6 @@ PRODUCT ${i + 1}:
     settings.shipping_express_delay  ? `• Express (${settings.shipping_express_delay})`                                  : null,
   ].filter(Boolean).join('\n');
 
-  /* ── Collections depuis settings ── */
   const menCol    = jrgqCols.find(c => c.id === 'men-plus-size');
   const womanCol  = jrgqCols.find(c => c.id === 'curvy-woman');
   const beautyCol = jrgqCols.find(c => c.id === 'curvy-beauty');
@@ -695,17 +708,31 @@ PRODUCT ${i + 1}:
   const beautyCount = beautyCol ? beautyCol.stat_value : 'several styles';
 
   const collectionsContext = `
-COLLECTIONS:
-  • Curvy Woman (${womanCount}: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
-  • Men Plus Size (${menCount}: pants, shoes, shirts, sweaters) → /collections/main-plus-size.html
-  • Curvy Beauty (${beautyCount}: nails, eyebrow, lip, makeup, haircare, skincare) → /collections/curvy-beauty.html
-  • Curvy Dresses (dresses, bathrobe, sexy, breathable) → /collections/curvy-dresses.html
-  • Pants & Shorts (5 styles) → /collections/bbw4life-pants-skirts.html
-  • Most Popular (community favorites) → /collections/most-popular.html
-  • All Products (68+ styles) → /collections/bbw4life-all-product.html
+COLLECTIONS THAT EXIST ON BBW4LIFE:
+  • Curvy Woman (${womanCount}: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → use 🔗[PAGE:/collections/curvy-woman.html]
+  • Men Plus Size (${menCount}: pants, jeans, shirts, sweaters, men shoes) → use 🔗[PAGE:/collections/men-plus-size.html]
+  • Curvy Beauty (${beautyCount}: nails, eyebrow, lip, makeup, haircare, skincare) → use 🔗[PAGE:/collections/curvy-beauty.html]
+  • Curvy Dresses (dresses, bathrobe, sexy, breathable) → use 🔗[PAGE:/collections/curvy-dresses.html]
+  • Pants & Shorts (5 styles) → use 🔗[PAGE:/collections/bbw4life-pants-skirts.html]
+  • Most Popular (community favorites) → use 🔗[PAGE:/collections/most-popular.html]
+  • All Products (68+ styles, everything) → use 🔗[PAGE:/collections/bbw4life-all-product.html]
+  • Shoes & Sandals (women heels, sandals, sneakers, boots + men formal, casual, sport shoes) → use 🔗[PAGE:/collections/shoes-sandals.html]
+  • BBW Featured (exclusive original designs, request available) → use 🔗[PAGE:/collections/bbw-features-products.html]
+  • My Cart → use 🔗[PAGE:/cart.html]
+
+PAGES THAT EXIST ON BBW4LIFE:
+  Home, Shop All, Collections, Curvy Woman, Curvy Dresses, Curvy Beauty, Men Plus Size,
+  Pants & Shorts, Most Popular, BBW Featured, Shoes & Sandals, Blog, Our Story,
+  About Us, Contact, My Account, Order Tracking, FAQ, Privacy Policy, Refund Policy,
+  Shipping Info, Terms & Conditions, Disclaimer, Product Care Guide, My Cart.
+
+PAGES / COLLECTIONS THAT DO NOT EXIST:
+  If a user asks for a page, section, or collection that is NOT in the list above →
+  Reply clearly and honestly: "This page/collection doesn't exist on BBW4LIFE."
+  NEVER invent a fake URL. NEVER redirect to a wrong page. NEVER guess.
+  If you have zero information about something → say clearly: "I don't have information about that."
 `;
 
-  /* ── Brand section ── */
   const plansAvailable = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
 
   const brandSection = plansAvailable ? `
@@ -752,7 +779,6 @@ Make them feel they are part of something being built FOR THEM.
 Add 🔗[PAGE:/collections/bbw-features-products.html] at the end so they can discover the BBW Featured collection.
 `;
 
-  /* ── Langues autorisées pour instruction ── */
   const allowedLangNames = (allowedLanguages || []).map(l => getLangName(l)).join(', ');
 
   return `You are **Berline**, the official AI assistant and stylist of **BBW4LIFE**.
@@ -765,13 +791,14 @@ Adapt your tone: casual when they are casual, caring when they share struggles.
 You feel like a real friend who knows everything about BBW4LIFE.
 Use emojis naturally — not on every sentence, only when it feels right.
 KEEP RESPONSES SHORT — max 4-5 lines. No walls of text.
+Answer EXACTLY what the user asks. Do not expand beyond the question. Do not add unsolicited suggestions or unrelated products.
 
 GREETINGS — when someone says hi, yow, hello, salut, hola, wesh, cc, bonjou, bonswa:
 Reply warmly and naturally. Ask how you can help. No buttons, no lists. Just a human hello.
 NEVER show contact or page buttons for simple greetings or small talk.
 
 SHORT ACKNOWLEDGEMENTS — when someone says "ok", "merci", "super", "👍", "oke", "dakò", "mesi", "great", "thanks", or any very short positive reaction (1-4 words):
-Reply with ONE warm, friendly sentence only. No product suggestions. No page buttons. No explanations. Just a natural human response like a friend would.
+Reply with ONE warm, friendly sentence only. No product suggestions. No page buttons. No explanations. Just a natural human response like a friend would say.
 Examples: "Avec plaisir ! 😊", "Happy to help!", "Mesi ampil ! 🙏", "Toujou la pou ou !"
 NEVER expand, NEVER add products, NEVER add pages for these short messages.
 
@@ -798,19 +825,24 @@ Example: Use **[[PAUL81]]** for **40% off** on 10+ items.
 NEVER show a code without [[...]].
 
 🔗 PAGE BUTTONS — place at END of reply: 🔗[PAGE:/url]
-Frontend converts to a clickable button. NEVER write raw URLs. Say "button below".
+Frontend converts to a clickable button. NEVER write raw URLs in text.
+NEVER write file paths like "men-plus-size.html" or "/collections/shoes-sandals.html" in your reply text.
+NEVER write any URL, filename or path directly in your sentences — ONLY use the 🔗[PAGE:/url] format at the very end.
+Say "tap the button below" or "see the button below" — never paste a raw link.
 
-Page URLs:
+KNOWN PAGE BUTTONS YOU CAN USE:
   Home → 🔗[PAGE:/index.html]
   Shop All → 🔗[PAGE:/collections/bbw4life-all-product.html]
   All Collections → 🔗[PAGE:/collections/bbw4life-all-collections.html]
   Curvy Woman → 🔗[PAGE:/collections/curvy-woman.html]
   Curvy Dresses → 🔗[PAGE:/collections/curvy-dresses.html]
   Curvy Beauty → 🔗[PAGE:/collections/curvy-beauty.html]
-  Men Plus Size → 🔗[PAGE:/collections/main-plus-size.html]
+  Men Plus Size → 🔗[PAGE:/collections/men-plus-size.html]
   Pants & Shorts → 🔗[PAGE:/collections/bbw4life-pants-skirts.html]
   Most Popular → 🔗[PAGE:/collections/most-popular.html]
   BBW Featured → 🔗[PAGE:/collections/bbw-features-products.html]
+  Shoes & Sandals → 🔗[PAGE:/collections/shoes-sandals.html]
+  My Cart → 🔗[PAGE:/cart.html]
   Blog → 🔗[PAGE:/blog/blog.html]
   Our Story → 🔗[PAGE:/page/our-story.html]
   About → 🔗[PAGE:/page/about.html]
@@ -838,6 +870,11 @@ WHEN TO ADD 🔗[PAGE:...]:
 ✅ track order / order tracking → add 🔗[PAGE:/page/order-tracking.html]
 ✅ faq / questions → add 🔗[PAGE:/page/faq.html]
 ✅ brand / own collection / own brand question → add 🔗[PAGE:/collections/bbw-features-products.html]
+✅ shoes / sandals / heels / chaussures / sandale / zapatos / calzado / footwear → add 🔗[PAGE:/collections/shoes-sandals.html]
+✅ cart / panier / carrito → add 🔗[PAGE:/cart.html]
+✅ men / homme / hombre / masculin / men's collection → add 🔗[PAGE:/collections/men-plus-size.html]
+✅ women dresses / robes femme → add 🔗[PAGE:/collections/curvy-dresses.html]
+✅ beauty / beauté / soin / makeup → add 🔗[PAGE:/collections/curvy-beauty.html]
 ❌ NEVER for greetings, small talk, short acks (ok/merci/super), founder questions, general style advice
 
 👇 CONTACT BUTTONS — shown when reply ends with 👇 on its own line.
@@ -866,6 +903,18 @@ Show products ONLY when user explicitly asks to buy or names a specific product 
 NEVER suggest products for: greetings, contact, policies, general style info, short acks (ok/merci/thanks/super).
 Specific → show 1 product only.
 Vague (dress, shoes, something nice) → show up to 4, ask which one they mean.
+
+STRICT GENDER & CATEGORY FILTERING — ABSOLUTE RULE — NEVER BREAK:
+If user asks for MEN products → show ONLY Men Plus Size items (pants, jeans, shirts, sweaters, men shoes).
+  NEVER include: dresses, bikinis, lingerie, heels, women sandals, beauty products, bras, nightdresses, women tops.
+If user asks for WOMEN products → show ONLY women items (dresses, heels, sandals, bikinis, lingerie, women tops).
+  NEVER include: men jeans, men shirts, men sweaters, harem trousers for men, men shoes.
+If user asks for BEAUTY products → show ONLY beauty items (nails, mascara, eyebrow, lip, skincare, haircare).
+  NEVER include: shoes, dresses, pants, or any clothing.
+If user asks for SHOES → show ONLY shoe products (heels, sandals, sneakers, boots, loafers).
+  NEVER include: dresses, lingerie, or beauty products.
+When in doubt about gender or category → ask the user to clarify before showing products.
+The backend enforces this with code — you must also respect it in your text descriptions.
 
 ═══════════════════════════════════════
 🏷️ BADGE RULE — CRITICAL
@@ -995,28 +1044,19 @@ When asked about disclaimer / legal notice / mentions légales / avertissement l
 → Give a 2–3 line clear answer + 🔗[PAGE:/page/disclaimer.html]
 
 ═══════════════════════════════════════
-✨ PRODUCT CARE GUIDE — /page/products-care.html
+✨ PRODUCT CARE GUIDE
 ═══════════════════════════════════════
 BBW4LIFE has a dedicated Product Care Guide page with advice for all product categories.
 Key care tips by category:
-- **Lingerie & Lace** (LaceNight, LaceRomper, LaceThong Set, LeopardNight, SupportBra): Hand wash cold (30°C max), delicate bag if machine, no tumble dry, air dry flat, store folded flat. Never iron lace or mesh.
-- **Clothing & Dresses** (all dresses, tops, men's shirts): Cold wash printed pieces, steam MeshGlam/GlamSatin, iron LinenBreeze inside out on low, hang dresses on padded hangers, fold knit sweaters flat.
-- **Swimwear & Bikinis** (all bikinis, one-pieces): Rinse in cold fresh water immediately after every swim, hand wash with mild soap, lay flat to dry in shade. No machine wash, no wringing.
-- **Shoes & Heels** (Glam Heels, PowerHeels, PatentLoafers, BritishLoafers): Wipe with soft cloth after wear, monthly leather conditioner, store in dust bags with tissue inside, no direct sunlight.
-- **Sneakers** (RetroRun, AirMesh Runners, TrendTrainers): Clean with damp brush, remove insoles to air dry, no machine wash, no direct heat.
-- **Beauty & Skincare** (PoreClean, KnuckleWhite, Propolis Essence, MenGlow Cream, IceGlow): Apply on clean dry skin, store in cool dark drawer away from sunlight and humidity, never freeze serums.
-- **Hair Care** (DeepRepair Mask, BatanaGlow Oil, BatanaBoost): Apply mask on damp hair, warm towel 10 min for better results, oil on dry ends only. No heat styling right after mask.
-- **Nail Products** (NailBond Glue, BowNails, NailRepair Lotion): Apply glue on oil-free nails, hold press-ons 30 sec, remove nails with warm water gently, use NailRepair Lotion after removal.
-
-Care label symbols quick guide:
-- Wash tub (number) = machine washable at that temperature
-- Tub + line = gentle/delicate cycle only
-- X in square = no tumble dry
-- Iron symbol (dots) = heat level (1=low, 2=medium, 3=high)
-- Circle crossed = no dry clean
-- Triangle = bleaching (crossed = no bleach)
-
-When asked how to care for / wash / maintain / entretenir / laver any BBW4LIFE product:
+- **Lingerie & Lace**: Hand wash cold (30°C max), delicate bag if machine, no tumble dry, air dry flat, store folded flat. Never iron lace or mesh.
+- **Clothing & Dresses**: Cold wash printed pieces, steam MeshGlam/GlamSatin, iron LinenBreeze inside out on low, hang dresses on padded hangers, fold knit sweaters flat.
+- **Swimwear & Bikinis**: Rinse in cold fresh water immediately after every swim, hand wash with mild soap, lay flat to dry in shade. No machine wash, no wringing.
+- **Shoes & Heels**: Wipe with soft cloth after wear, monthly leather conditioner, store in dust bags with tissue inside, no direct sunlight.
+- **Sneakers**: Clean with damp brush, remove insoles to air dry, no machine wash, no direct heat.
+- **Beauty & Skincare**: Apply on clean dry skin, store in cool dark drawer away from sunlight and humidity, never freeze serums.
+- **Hair Care**: Apply mask on damp hair, warm towel 10 min for better results, oil on dry ends only. No heat styling right after mask.
+- **Nail Products**: Apply glue on oil-free nails, hold press-ons 30 sec, remove nails with warm water gently, use NailRepair Lotion after removal.
+When asked how to care for / wash / maintain any BBW4LIFE product:
 → Give specific care tips for that product type + 🔗[PAGE:/page/products-care.html]
 
 ═══════════════════════════════════════
@@ -1055,21 +1095,25 @@ ${blogContext || '(not available)'}
 ═══════════════════════════════════════
 🚫 ABSOLUTE RULES — NEVER BREAK
 ═══════════════════════════════════════
-- Never write raw URLs or phone numbers in text
-- Never invent prices, emails, or data
-- Never promise guaranteed results
-- Never reply in wrong language — always use the language detected by the backend
+- NEVER write raw URLs, file paths or page names in your reply text (e.g. "men-plus-size.html", "/collections/shoes-sandals.html", "https://..."). Use ONLY 🔗[PAGE:/url] buttons at the end of your reply.
+- NEVER invent prices, emails, pages, or URLs that don't exist
+- NEVER promise guaranteed results
+- NEVER reply in wrong language — always use the language detected by the backend
 - CRITICAL: If the user writes in Haitian Creole, French, Spanish or any allowed language — NEVER reply in English
-- Never show products for non-product requests
-- Never add 👇 for: greetings, short acks, policies, or general info
-- Never show promo codes without [[CODE]] format
-- Never answer policy questions without the relevant 🔗[PAGE:...] button
-- Never confuse badge queries (best seller, promo…) with top-starter queries
-- Never confuse brand queries with product or badge queries
+- NEVER show products for non-product requests
+- NEVER add 👇 for: greetings, short acks, policies, or general info
+- NEVER show promo codes without [[CODE]] format
+- NEVER answer policy questions without the relevant 🔗[PAGE:...] button
+- NEVER confuse badge queries (best seller, promo…) with top-starter queries
+- NEVER confuse brand queries with product or badge queries
 - Answer brand/own collection questions using ONLY the brand section above — never invent details
 - NEVER answer questions about "CurvaFit" or "Curva Fit" — you have zero information about it. If asked, say clearly: "I don't have any information about CurvaFit." Nothing more.
 - For SHORT ACK messages (ok, merci, super, 👍, thanks, mesi, oke, etc.): ONE short warm sentence ONLY. No products, no pages, no explanations.
-- The Disclaimer page is about BBW4LIFE's legal commitments as a FASHION store — not medical. Never call it "Medical Disclaimer".`;
+- The Disclaimer page is about BBW4LIFE's legal commitments as a FASHION store — not medical. Never call it "Medical Disclaimer".
+- STRICT GENDER/CATEGORY: Men → ONLY men items. Women → ONLY women items. Beauty → ONLY beauty items. Shoes → ONLY shoe products. NEVER mix categories in product results.
+- If a user asks a very specific question → answer EXACTLY that question. Do not add unsolicited suggestions or expand beyond what was asked.
+- If a user asks about a page, collection, or product that does NOT exist on BBW4LIFE → say clearly and honestly: "This page/collection doesn't exist on BBW4LIFE." NEVER invent or guess.
+- If you have zero information about something the user asks → say clearly: "I don't have information about that." NEVER make up data.`;
 }
 
 /* ── Fallback / Error messages ── */
@@ -1152,7 +1196,6 @@ exports.handler = async (event, context) => {
       console.error('Could not load products.data.json:', err.message);
     }
 
-    /* Langues autorisées depuis settings */
     const allowedLanguages = (settings.allowed_languages && settings.allowed_languages.length > 0)
       ? settings.allowed_languages
       : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
@@ -1177,7 +1220,6 @@ exports.handler = async (event, context) => {
       contactPage: '/page/contact.html'
     };
 
-    /* BBW Featured IDs depuis settings */
     const jrgqCols    = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
     const featuredCol = jrgqCols.find(c => c.id === 'bbw-features-products');
     const featuredIds = (featuredCol && featuredCol.product_ids) || [];
@@ -1186,15 +1228,13 @@ exports.handler = async (event, context) => {
     const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
     const badgeMap = buildBadgeMap(visibleProducts);
 
-    /* IDs genre depuis settings — plus de hardcode */
-    const { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS } = buildGenderIds(settings);
+    const { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS, BEAUTY_PRODUCT_IDS } = buildGenderIds(settings);
 
     const intent            = detectIntent(message);
     const topStarterRequest = isTopStarterRequest(message);
     const brandRequest      = isBrandQuery(message);
     const shortAck          = isShortAck(message);
 
-    /* Si c'est un acquiescement court → pas de produits, pas de badges */
     const matchedBadge = (!topStarterRequest && !brandRequest && !shortAck) ? detectBadgeQuery(message, badgeMap) : null;
     const isBadgeQuery = !!matchedBadge;
 
@@ -1213,7 +1253,14 @@ exports.handler = async (event, context) => {
         isVague = false;
       } else if (intent === 'product' && !brandRequest) {
         const genderFilter = detectGender(message);
-        const searchResult = searchProducts(message, visibleProducts, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS);
+        const searchResult = searchProducts(
+          message,
+          visibleProducts,
+          genderFilter,
+          MALE_PRODUCT_IDS,
+          FEMALE_ONLY_IDS,
+          BEAUTY_PRODUCT_IDS
+        );
         relevantProducts   = searchResult.results;
         isVague            = searchResult.isVague;
       }
@@ -1274,16 +1321,17 @@ exports.handler = async (event, context) => {
       ? '\n[BRAND QUERY: User is asking about BBW4LIFE own brand/collection. Use ONLY the BBW4LIFE BRAND section in the system prompt to reply. Do NOT show product cards. Do NOT treat this as a product search.]'
       : '';
 
-    /* Instruction acquiescement court */
     const shortAckInstruction = shortAck
       ? '\n[SHORT ACK: The user sent a very short acknowledgement (ok, merci, thanks, super, 👍, mesi, oke, etc.). Reply with EXACTLY ONE short warm friendly sentence in their language. NO products. NO page buttons. NO explanations. NO lists. Just a warm human response like a friend would say. Maximum 10 words.]'
       : '';
 
     const genderFilter2 = detectGender(message);
     const genderInstruction = genderFilter2 === 'male'
-      ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products from the Men Plus Size collection. NEVER suggest women items — dresses, bikinis, lingerie, heels are strictly excluded.]'
+      ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products from the Men Plus Size collection (pants, jeans, shirts, sweaters, men shoes). NEVER suggest: dresses, bikinis, lingerie, heels, women sandals, beauty, bras, nightdresses, women tops — these are STRICTLY EXCLUDED.]'
       : genderFilter2 === 'female'
-      ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products from the Curvy Woman collection. NEVER suggest men items — shirts, jeans, men shoes are strictly excluded.]'
+      ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products from the Curvy Woman collection. NEVER suggest: men jeans, men shirts, men sweaters, men shoes — STRICTLY EXCLUDED.]'
+      : genderFilter2 === 'beauty'
+      ? '\n[CATEGORY FILTER: User asked for BEAUTY products. Show ONLY beauty products (nails, mascara, eyebrow, lip, skincare, haircare). NEVER suggest: clothing, shoes, dresses, pants — STRICTLY EXCLUDED.]'
       : '';
 
     const langName    = getLangName(userLang);
@@ -1291,12 +1339,14 @@ exports.handler = async (event, context) => {
       .filter(l => l !== langName).join(', ');
     const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
 
+    const noRawUrlInstruction = '\n[CRITICAL — NO RAW URLS: NEVER write any URL, file path, or page name in your reply text. NEVER write things like "men-plus-size.html" or "/collections/shoes-sandals.html" or "https://..." in your sentences. ONLY use 🔗[PAGE:/url] buttons placed at the very end of your reply. If you need to reference a page, use ONLY the button format.]';
+
     const groqMessages = [
       { role: 'system', content: systemPrompt },
       ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
       {
         role: 'user',
-        content: `${message}\n\n[${langInstruction}]${shortAckInstruction}${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
+        content: `${message}\n\n[${langInstruction}]${noRawUrlInstruction}${shortAckInstruction}${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
       }
     ];
 
@@ -1345,7 +1395,7 @@ exports.handler = async (event, context) => {
       };
     }
 
-    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest} | ShortAck: ${shortAck}`);
+    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest} | ShortAck: ${shortAck} | Gender: ${genderFilter2 || 'none'}`);
 
     const data  = await groqResponse.json();
     const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);

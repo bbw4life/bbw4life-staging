@@ -11999,3 +11999,16 @@ body {
     -webkit-backdrop-filter: none !important;
   }
 }
+
+
+/* Hide icons until fonts loaded */
+i[class*="fi"],
+i[class*="fa"] {
+    visibility: hidden;
+}
+
+.fonts-loaded i[class*="fi"],
+.fonts-loaded i[class*="fa"] {
+    visibility: visible;
+}
+
