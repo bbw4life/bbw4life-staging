@@ -4216,6 +4216,32 @@
       "typing_label": "Berline is typing…",
       "powered_by": "Powered by BBW4LIFE AI · Press Enter to send"
     },
+    "founder": {
+        "name": "Francenel",
+        "full_name": "Paul Francenel",
+        "title": "CEO & Founder — BBW4LIFE",
+        "age": 26,
+        "photo": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg_Francenel.jpg?v=1778926866",
+        "founded": "June 18, 2025",
+        "nationality": "Haitian",
+        "bio": "Paul Francenel is a 26-year-old young entrepreneur deeply passionate about the beauty of plus-size women. His inspiration came from a real and deeply personal story — his relationship with a plus-size woman who was radiant, confident, and full of life. Despite her inner strength, the weight of society's judgment slowly began to affect her. That moment changed everything for him. He created BBW4LIFE with one clear purpose: to tell plus-size women that they are the beauty of this world, that they have nothing to be ashamed of, that their size is not a flaw — it is their power.",
+        "mission": "To celebrate every curve, fight imposed beauty standards, and build a family where every woman is loved exactly as she is — because Beauty Has No Sizes.",
+        "personality": "Warm, sincere, motivating, and visionary. He speaks from the heart, not from a script. He believes every woman deserves to feel seen, loved, and celebrated.",
+        "values": [
+          "Authenticity — everything at BBW4LIFE comes from a real story",
+          "Inclusion — every size, every color, every background is welcome",
+          "Empowerment — every woman has the right to feel powerful in her own body",
+          "Community — no one should feel alone in their journey"
+        ],
+        "fun_facts": [
+          "He founded BBW4LIFE at age 25",
+          "The inspiration came from a real love story",
+          "He speaks French, Haitian Creole, English and Spanish",
+          "He believes beauty has absolutely no size",
+          "He created BBW4LIFE not just to sell — but to change lives"
+        ],
+        "quote": "I want every woman who discovers BBW4LIFE to feel one thing: that she is loved, respected, and valued. I didn't create this to sell. I created it to change lives."
+      },
     "chat_quick_chips": [
       { "icon": "fi fi-sr-dress",         "label": "Find my style",    "msg": "Help me find an outfit that fits my curves and makes me feel confident." },
       { "icon": "fi fi-sr-star",          "label": "Best sellers",     "msg": "What are your best selling plus size products right now?" },
@@ -5218,8 +5244,6 @@
   "default_country": "us",
   "options": [
     { "code": "us", "label": "USA",        "name": "United States",    "flag": "🇺🇸", "lang": "en", "currency": "$ USD"   },
-    { "code": "do", "label": "Dom. Rep.",  "name": "Dominican Rep.",   "flag": "🇩🇴", "lang": "es", "currency": "DOP"     },
-    { "code": "ht", "label": "Haiti",      "name": "Haïti",            "flag": "🇭🇹", "lang": "ht", "currency": "HTG"     },
     { "code": "ca", "label": "Canada",     "name": "Canada",           "flag": "🇨🇦", "lang": "en", "currency": "CAD"     },
     { "code": "gb", "label": "UK",         "name": "United Kingdom",   "flag": "🇬🇧", "lang": "en", "currency": "£ GBP"   },
     { "code": "au", "label": "Australia",  "name": "Australia",        "flag": "🇦🇺", "lang": "en", "currency": "AUD"     },
@@ -5257,6 +5281,8 @@
     { "code": "co", "label": "Colombia",  "name": "Colombia",         "flag": "🇨🇴", "lang": "es", "currency": "COP"     },
     { "code": "cl", "label": "Chile",     "name": "Chile",            "flag": "🇨🇱", "lang": "es", "currency": "CLP"     },
     { "code": "pe", "label": "Perú",      "name": "Perú",             "flag": "🇵🇪", "lang": "es", "currency": "S/ PEN"  },
+    { "code": "ht", "label": "Haiti",      "name": "Haïti",            "flag": "🇭🇹", "lang": "ht", "currency": "HTG"     },
+    { "code": "do", "label": "Dom. Rep.",  "name": "Dominican Rep.",   "flag": "🇩🇴", "lang": "es", "currency": "DOP"     },
     { "code": "ro", "label": "România",   "name": "România",          "flag": "🇷🇴", "lang": "ro", "currency": "lei RON" },
     { "code": "ae", "label": "UAE",       "name": "United Arab Em.",  "flag": "🇦🇪", "lang": "ar", "currency": "د.إ AED" },
     { "code": "nz", "label": "N. Zealand","name": "New Zealand",      "flag": "🇳🇿", "lang": "en", "currency": "NZD"     },

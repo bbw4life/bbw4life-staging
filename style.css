@@ -12012,3 +12012,34 @@ i[class*="fa"] {
     visibility: visible;
 }
 
+
+
+/* ══════════════════════════════════════
+   FOUNDER PHOTO — Chat Widget
+══════════════════════════════════════ */
+.cf-founder-img {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 14px;
+  display: block;
+  margin: 10px auto;
+  border: 2px solid rgba(201, 150, 62, 0.45);
+  box-shadow: 0 4px 20px rgba(192, 56, 94, 0.18);
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cf-founder-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 30px rgba(192, 56, 94, 0.28);
+}
+
+/* ── Caption sous la photo ── */
+.cf-founder-caption {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--os-muted, #999);
+  margin-top: 4px;
+  font-style: italic;
+}
+

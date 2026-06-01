@@ -622,6 +622,24 @@ const PAGE_MAP = {
    BUILD SYSTEM PROMPT
 ══════════════════════════════════════════════════════ */
 function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
+  /* ── Founder context from settings ── */
+const founder = settings.founder || {};
+const founderName        = founder.full_name    || 'Paul Francenel';
+const founderAge         = founder.age          || 26;
+const founderTitle       = founder.title        || 'CEO & Founder';
+const founderPhoto       = founder.photo        || '';
+const founderFounded     = founder.founded      || 'June 18, 2025';
+const founderNationality = founder.nationality  || 'Haitian';
+const founderBio         = founder.bio          || '';
+const founderMission     = founder.mission      || '';
+const founderPersonality = founder.personality  || '';
+const founderQuote       = founder.quote        || '';
+const founderValues      = (founder.values      || []).map(v => `  • ${v}`).join('\n');
+const founderFunFacts    = (founder.fun_facts   || []).map(f => `  • ${f}`).join('\n');
+const founderPhotoLine   = founderPhoto
+  ? `\n**Founder photo:** ![${founderName}](${founderPhoto})`
+  : '';
+  
   const contactEmails  = settings.contact_emails || {};
   const emailsText     = Object.entries(contactEmails).map(([k, v]) => `• ${k}: ${v}`).join('\n') || '• No emails configured';
   const promos         = settings.promos      || [];
@@ -950,17 +968,39 @@ Always end with 👇 on its own line for contact requests.
 ═══════════════════════════════════════
 🏢 ABOUT BBW4LIFE & THE FOUNDER
 ═══════════════════════════════════════
-**BBW4LIFE** was born on **June 18, 2025**, from a real and deeply personal story.
+FOUNDER DATA — ALWAYS TRANSLATE TO USER'S LANGUAGE BEFORE REPLYING:
+Name: ${founderName}
+Age: ${founderAge} years old
+Title: ${founderTitle}
+Founded: ${founderFounded}
+Nationality: ${founderNationality}
+Biography: ${founderBio}
+Mission: ${founderMission}
+Personality: ${founderPersonality}
+Values:
+${founderValues}
+Fun Facts:
+${founderFunFacts}
+Quote: "${founderQuote}"
+${founderPhotoLine}
 
-**Francenel** — founder and CEO of **BBW4LIFE** — was in a relationship with a plus-size woman who was incredibly beautiful, radiant, and full of life. Despite her confidence in herself, the weight of others' judgment began to wear her down. Day after day, looks, remarks, and criticism started to affect her — until she began considering changing herself, not for her own happiness, but to fit into a standard imposed by others.
+TRANSLATION RULE — ABSOLUTE:
+All founder data above is in English. You MUST translate it naturally into the user's detected language before replying. Never read the English data out loud — always translate first.
+French → reply in French | Spanish → reply in Spanish | Haitian Creole → reply in Creole | English → reply in English.
 
-**Founder photo:** ![PDG Francenel](https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg_Francenel.jpg?v=1778926866)
+---
 
-That moment changed everything. **Francenel** realized she wasn't alone — thousands of women live under the same pressure. Women who are magnificent, yet filled with self-doubt because of unrealistic beauty standards.
+**BBW4LIFE** was born on **${founderFounded}**, from a real and deeply personal story.
+
+**${founderName}** — ${founderTitle} of **BBW4LIFE** — was in a relationship with a plus-size woman who was incredibly beautiful, radiant, and full of life. Despite her confidence in herself, the weight of others' judgment began to wear her down. Day after day, looks, remarks, and criticism started to affect her — until she began considering changing herself, not for her own happiness, but to fit into a standard imposed by others.
+
+**Founder photo:** ![${founderName}](${founderPhoto})
+
+That moment changed everything. **${founderName}** realized she wasn't alone — thousands of women live under the same pressure. Women who are magnificent, yet filled with self-doubt because of unrealistic beauty standards.
 
 So he made a decision: create **BBW4LIFE**.
 
-**Our mission:** To tell plus-size women a simple but essential truth — *You are beautiful as you are. Your body doesn't need to be corrected. Beauty has no sizes.*
+**Our mission:** ${founderMission}
 
 **What we stand for:**
 - A movement, not just a brand
@@ -975,7 +1015,12 @@ So he made a decision: create **BBW4LIFE**.
 - Beauty & skincare recommendations
 - A genuine community to share, exchange, and feel understood
 
-When asked about "administrateur" or "admin" → same answer as founder. It refers to **Francenel**.
+**Founder's personality:** ${founderPersonality}
+
+**Founder's own words:** "${founderQuote}"
+
+When asked about "administrateur" or "admin" → same answer as founder. It refers to **${founderName}**.
+When asked about the founder's age, nationality, story, personality, values or fun facts → use the FOUNDER DATA above and translate naturally into the user's language.
 Give a warm, inspiring 3–4 line answer. Not too long. Make it feel real and human.
 
 ${brandSection}
@@ -1399,6 +1444,7 @@ exports.handler = async (event, context) => {
 
     const data  = await groqResponse.json();
     const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);
+     const founderPhotoUrl = settings.founder?.photo || '';
 
     const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
       && intent !== 'product'
