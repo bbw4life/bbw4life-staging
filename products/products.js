@@ -751,10 +751,16 @@ function addOptimisticReview(name, rating, title, text, imagesBase64 = []) {
         `<img src="${b64}" alt="Review photo">`
     ).join('');
     newReview.innerHTML = `
-        <div class="avatar">${avatarLetter}</div>
-        <h4>${name}</h4>
-        <div class="stars">${stars}</div>
-        <span class="date">${dateStr}</span>
+        <div class="rv-card-header">
+            <div class="rv-card-left">
+                <div class="avatar">${avatarLetter}</div>
+                <span class="date">${dateStr}</span>
+            </div>
+            <div class="rv-card-right">
+                <h4>${name}</h4>
+                <div class="stars">${stars}</div>
+            </div>
+        </div>
         <h5>${title}</h5>
         <p>${text}</p>
         <div class="review-images">${imagesHTML}</div>
@@ -783,10 +789,16 @@ async function loadDynamicReviews() {
                   `<img src="${url}" alt="Review photo">`
               ).join('');
                 newReview.innerHTML = `
-                    <div class="avatar">${avatarLetter}</div>
-                    <h4>${review.fullName}</h4>
-                    <div class="stars">${stars}</div>
-                    <span class="date">${review.date}</span>
+                    <div class="rv-card-header">
+                        <div class="rv-card-left">
+                            <div class="avatar">${avatarLetter}</div>
+                            <span class="date">${review.date}</span>
+                        </div>
+                        <div class="rv-card-right">
+                            <h4>${review.fullName}</h4>
+                            <div class="stars">${stars}</div>
+                        </div>
+                    </div>
                     <h5>${review.title}</h5>
                     <p>${review.text}</p>
                     <div class="review-images">${imagesHTML}</div>

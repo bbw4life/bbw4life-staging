@@ -4126,6 +4126,7 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
+  // ── Séparateur
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -4145,43 +4146,66 @@ if (window.innerWidth <= 768) {
   }
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-  const currentPath = window.location.pathname;
+  function build(title) {
+    const currentPath  = window.location.pathname;
+    const currentTitle = title.split('|')[0].trim() || title;
 
-  function getBreadcrumbTitle() {
-    const path = window.location.pathname;
-    if (window.__SEO_MAP && window.__SEO_MAP[path]) {
-      return window.__SEO_MAP[path].title.split('|')[0].trim();
+    const BC_KEY = 'bc_visited';
+    const BC_MAX = 6;
+
+    let visited = [];
+    try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+
+    visited = visited.filter(p => p.url !== currentPath);
+
+    if (currentPath !== '/' && currentPath !== '/index.html') {
+      visited.unshift({ url: currentPath, title: currentTitle });
     }
-    return document.title.split('|')[0].trim()
-      || document.querySelector('h1')?.textContent?.trim()
-      || path.split('/').pop().replace('.html','').replace(/-/g,' ');
+
+    if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+
+    try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+
+    list.innerHTML = `
+      <li class="bc-item">
+        <a href="/index.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Home
+        </a>
+      </li>`;
+
+    visited.forEach(page => {
+      const isActive = page.url === currentPath;
+      const li = document.createElement('li');
+      li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+      li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+      list.appendChild(li);
+    });
+
+    nav.style.display = 'block';
   }
-  const currentTitle = getBreadcrumbTitle();
 
-  list.innerHTML = `
-    <li class="bc-item">
-      <a href="/index.html">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 21V12h6v9"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Home
-      </a>
-    </li>`;
+  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
+  if (window.__seoTitle) {
+    build(window.__seoTitle);
+  } else {
+    // ✅ On attend l'event seo:ready
+    document.addEventListener('seo:ready', function(e) {
+      build(e.detail.title);
+    }, { once: true });
 
-  if (currentPath !== '/' && currentPath !== '/index.html') {
-    const li = document.createElement('li');
-    li.className = 'bc-item bc-active';
-    li.innerHTML = `<a href="${currentPath}">${currentTitle}</a>`;
-    list.appendChild(li);
+    // ✅ Fallback plus long pour laisser le temps à head.js
+    setTimeout(() => {
+      if (!window.__seoTitle) build(document.title);
+    }, 2000);
   }
-
-  nav.style.display = 'block';
 
 })();
-
 
 
 
