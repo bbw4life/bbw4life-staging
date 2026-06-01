@@ -12043,3 +12043,19 @@ i[class*="fa"] {
   font-style: italic;
 }
 
+/* ══════════════════════════════════════
+   Masuqer background link a
+══════════════════════════════════════ */
+a {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  outline: none;
+}
+
+a:focus,
+a:focus-visible,
+a:active {
+  outline: none;
+  background-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}

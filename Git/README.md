@@ -18324,652 +18324,1417 @@ function initStockBar(cjId) {
 }
 
 
-/* ================================================================
-   BBW4LIFE AI CHATBOT — FRONTEND JS
-================================================================ */
-document.addEventListener('DOMContentLoaded', function () {
-  (function () {
-    'use strict';
+const fetch = require('node-fetch');
+const path  = require('path');
+const fs    = require('fs');
 
-    /* ── DOM refs ── */
-    const widget   = document.getElementById('cf-chat-widget');
-    const toggle   = document.getElementById('cf-chat-toggle');
-    const window_  = document.getElementById('cf-chat-window');
-    const messages = document.getElementById('cf-messages');
-    const input    = document.getElementById('cf-input');
-    const sendBtn  = document.getElementById('cf-send-btn');
-    const typing   = document.getElementById('cf-typing');
-    const closeBtn = document.getElementById('cf-close-btn');
-    const chips    = document.querySelectorAll('.cf-chip');
-    const iconOpen  = toggle ? toggle.querySelector('.cf-icon-open')  : null;
-    const iconClose = toggle ? toggle.querySelector('.cf-icon-close') : null;
-    const notifDot  = toggle ? toggle.querySelector('.cf-notif-dot')  : null;
+/* ── Load products.data.json ── */
+async function loadProductsData() {
+  const localPaths = [
+    path.join(process.cwd(), 'products.data.json'),
+    path.join(process.cwd(), 'public', 'products.data.json'),
+    path.join(process.cwd(), 'dist', 'products.data.json'),
+    path.join(__dirname, '..', '..', 'products.data.json'),
+    path.join(__dirname, '..', '..', 'public', 'products.data.json'),
+  ];
+  for (const p of localPaths) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (e) { /* continue */ }
+  }
+  const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+  const res = await fetch(`${siteUrl}/products.data.json`);
+  if (!res.ok) throw new Error(`Cannot load products.data.json: ${res.status}`);
+  return res.json();
+}
 
-    if (!widget || !toggle || !window_ || !messages || !input || !sendBtn) return;
+async function loadSearchData() {
+  const localPaths = [
+    path.join(process.cwd(), 'search.data.json'),
+    path.join(process.cwd(), 'public', 'search.data.json'),
+    path.join(__dirname, '..', '..', 'search.data.json'),
+    path.join(__dirname, '..', '..', 'public', 'search.data.json'),
+  ];
+  for (const p of localPaths) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (e) { /* continue */ }
+  }
+  try {
+    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+    const res = await fetch(`${siteUrl}/search.data.json`);
+    if (res.ok) return res.json();
+  } catch (e) { /* ignore */ }
+  return null;
+}
 
-    /* ── State ── */
-    let isOpen    = false;
-    let isLoading = false;
-    let notifShown = false;
+async function loadBlogArticles() {
+  const localPaths = [
+    path.join(process.cwd(), 'blog', 'blog-articles.json'),
+    path.join(process.cwd(), 'public', 'blog', 'blog-articles.json'),
+    path.join(__dirname, '..', '..', 'blog', 'blog-articles.json'),
+    path.join(__dirname, '..', '..', 'public', 'blog', 'blog-articles.json'),
+  ];
+  for (const p of localPaths) {
+    try {
+      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (e) { /* continue */ }
+  }
+  try {
+    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+    const res = await fetch(`${siteUrl}/blog/blog-articles.json`);
+    if (res.ok) return res.json();
+  } catch (e) { /* ignore */ }
+  return null;
+}
 
-    /* Persistance sessionStorage */
-    let conversationHistory = [];
-    try { conversationHistory = JSON.parse(sessionStorage.getItem('cf_history') || '[]'); } catch(e) {}
+/* ── Build product index ── */
+function buildProductIndex(rawData) {
+  const allActive = rawData.filter(p => p.type !== 'settings' && p.id && p.active);
+  const settings  = rawData.find(p => p.type === 'settings') || {};
 
-    /* ── Client-side language detection ── */
-    function detectUILanguage(text) {
-      const t = (text || '').toLowerCase().trim();
+  const products = allActive.map((item, index) => {
+    const colorsWithImages = (item.colors || [])
+      .filter(c => c.active !== false)
+      .map(c => ({ name: c.name, hex: c.hex || '', image: c.image || item.image || '' }));
 
-      const frWords = ['je','tu','il','elle','nous','vous','les','des','une','est','sont','avec','dans','pour','sur','très','bien','aussi','mais','comment','quand','bonjour','merci','oui','salut','bonsoir','pourquoi','quoi','quel','quelle','cette','ce','mon','ma','mes','leur','leurs'];
-      const esWords = ['yo','tú','él','ella','nosotros','los','las','con','por','para','sobre','más','también','pero','porque','qué','cómo','cuándo','dónde','hola','gracias','sí','señor','señora','buenas','buenos','tiene','tengo','quiero','necesito','puedo','comprar','precio','envío','producto'];
-      const enWords = ['i','you','he','she','it','we','they','the','and','for','with','this','that','what','how','when','where','why','who','which','have','your','want','need','does','can','would','could','should','hello','hi','hey','thank','please'];
+    const variantPrices = (item.variants || []).map(v => v.price).filter(Boolean);
+    const minPrice = variantPrices.length ? Math.min(...variantPrices) : item.price;
 
-      const words = t.split(/\s+/);
-      let frScore = 0, esScore = 0, enScore = 0;
+    return {
+      id:            item.id,
+      productNumber: index + 1,
+      title:         item.title,
+      description:   item.description,
+      price:         minPrice,
+      maxPrice:      item.price,
+      compare_price: item.compare_price,
+      image:         item.image,
+      colors:        colorsWithImages,
+      sizes:         item.sizes || [],
+      variants:      (item.variants || []).map(v => ({
+        vid:   v.vid,
+        color: v.color || null,
+        size:  v.size  || null,
+        price: v.price || item.price,
+        image: v.image || colorsWithImages.find(c => c.name === v.color)?.image || item.image || ''
+      })),
+      discounts: {
+        single: item.single_discount || 0,
+        duo:    item.duo_discount    || 0,
+        trio:   item.trio_discount   || 0
+      },
+      startDate:    item.start_date || '',
+      endDate:      item.end_date   || '',
+      rating:       item.rating        || null,
+      reviewsCount: item.reviews_count || null,
+      badge:        item.badge ? (item.badge.text || '') : '',
+      url:          `/products/product${index + 1}.html`,
+      cj_id:        item.cj_id
+    };
+  });
 
-      words.forEach(w => {
-        const clean = w.replace(/[^a-záàâçèêëéíîïóôùûüñú]/gi, '');
-        if (frWords.includes(clean)) frScore += 2;
-        if (esWords.includes(clean)) esScore += 2;
-        if (enWords.includes(clean)) enScore += 1;
-      });
+  return { products, settings };
+}
 
-      if (/[áéíóúüñ¿¡]/.test(t)) esScore += 3;
-      if (/[àâçèêëîïôùûü]/.test(t)) frScore += 3;
+/* ══════════════════════════════════════════════════════
+   GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
+   On construit les listes depuis les données settings,
+   sans jamais hardcoder les IDs ici.
+══════════════════════════════════════════════════════ */
+function buildGenderIds(settings) {
+  const jrgqCols = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
 
-      if (frScore === 0 && esScore === 0 && enScore === 0) return 'en';
-      if (frScore >= esScore && frScore >= enScore) return 'fr';
-      if (esScore > frScore && esScore >= enScore) return 'es';
-      return 'en';
+  /* IDs hommes : collection "men-plus-size" */
+  const menCol = jrgqCols.find(c => c.id === 'men-plus-size');
+  const MALE_PRODUCT_IDS = menCol
+    ? menCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
+    : [];
+
+  /* IDs femmes : collection "curvy-woman" */
+  const womanCol = jrgqCols.find(c => c.id === 'curvy-woman');
+  const FEMALE_ONLY_IDS = womanCol
+    ? womanCol.product_ids.filter(id => typeof id === 'string' && !id.startsWith('--'))
+    : [];
+
+  return { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS };
+}
+
+/* ══════════════════════════════════════════════════════
+   BADGE DETECTION
+══════════════════════════════════════════════════════ */
+function buildBadgeMap(products) {
+  const map = new Map();
+  for (const p of products) {
+    const b = (p.badge || '').trim();
+    if (b) map.set(b.toLowerCase(), b);
+  }
+  return map;
+}
+
+function detectBadgeQuery(message, badgeMap) {
+  if (!badgeMap.size) return null;
+  const q = message.toLowerCase().trim();
+  const sorted = [...badgeMap.keys()].sort((a, b) => b.length - a.length);
+  for (const badgeLower of sorted) {
+    if (q.includes(badgeLower)) return badgeLower;
+  }
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════
+   LANGUAGE DETECTION
+══════════════════════════════════════════════════════ */
+function detectLanguage(message, allowedLanguages) {
+  const text = message.toLowerCase().trim();
+  const words = text.split(/\s+/).map(w => w.replace(/[^a-záàâçèêëéíîïóôùûüñúkouwòèe]/gi, ''));
+
+  let scores = { en: 0, fr: 0, es: 0, ar: 0, zh: 0, hi: 0, pt: 0, ru: 0, de: 0, ja: 0, ht: 0 };
+
+  if (/[\u0600-\u06FF]/.test(text)) scores.ar += 10;
+  if (/[\u4E00-\u9FFF\u3400-\u4DBF]/.test(text)) scores.zh += 10;
+  if (/[\u0900-\u097F]/.test(text)) scores.hi += 10;
+  if (/[\u0400-\u04FF]/.test(text)) scores.ru += 10;
+  if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) scores.ja += 10;
+
+  /* Créole haïtien — détection renforcée */
+  if (/\b(bonjou|bonswa|mesi|kijan|koman|ki|sa|ou|mwen|nou|yo|ak|nan|pou|sou|gen|pa|fe|di|ale|vini|achte|pri|livrezon|koulè|gwosè|disponib|konbyen|kote|ki lè|ki sa|pwodwi|bèl|chèk|kado|rabi|promo|kòd|réduksyon|kite|rete|deja|toujou|ansanm|zanmi|fanmi|ede|sipò|ekip|kontak|whatsapp|telegram|wap|map|pap|tap)\b/.test(text)) scores.ht += 5;
+  if (/\b(m pa|m vle|m bezwen|m renmen|m ap|ou a|li a|nou yo|yo pa|sa a|kisa|poukisa|eske|wi|non|oui|mersi|tanpri|plis|mwens|gwo|piti|bèl|cho|fre)\b/.test(text)) scores.ht += 3;
+  ['bonjou','bonswa','mesi','kijan','mwen','nou','ak','nan','pou','sou','gen','pa','fe','di','ale','vini','wi','non'].forEach(w => { if (words.includes(w)) scores.ht += 2; });
+
+  if (/\b(bonjour|bonsoir|salut|merci|comment|c'est|je|vous|nous|les|des|une|pour|avec|dans|sur|mais|très|aussi|peut|plus|produit|livraison|taille|couleur|disponible|combien|où|quand|prix|acheter|réduction)\b/.test(text)) scores.fr += 3;
+  if (/[àâçèêëîïôùûü]/.test(text)) scores.fr += 3;
+  ['je','tu','il','elle','nous','vous','ils','elles','le','la','les','un','une','des','du','et','est','sont','avec','dans','pour','sur','pas','plus','très','bien','aussi','mais','ou','donc','car','que','qui','quoi','comment','quand','où','pourquoi','quel','quelle','bonjour','merci','oui','non'].forEach(w => { if (words.includes(w)) scores.fr += 2; });
+
+  if (/\b(hola|buenas|buenos|cómo|como|puedo|quiero|necesito|tienes|tengo|gracias|ayuda|precio|envío|producto|comprar|descuento|talla|disponible|cuánto|dónde|también)\b/.test(text)) scores.es += 3;
+  if (/[áéíóúüñ¿¡]/.test(text)) scores.es += 3;
+  ['yo','él','ella','nosotros','ellos','ellas','los','las','del','al','con','por','para','sobre','más','muy','también','pero','porque','quien','cuando','donde','hola','gracias','sí','tener','ser','estar','hacer','poder','querer'].forEach(w => { if (words.includes(w)) scores.es += 2; });
+
+  if (/\b(olá|oi|obrigado|obrigada|como|você|produto|preço|comprar|ajuda|envio|disponível|desconto)\b/.test(text)) scores.pt += 3;
+  if (/[ãõâêôáéíóúàü]/.test(text)) scores.pt += 2;
+  ['você','nós','eles','elas','uma','por','para','com','mas','também','não','sim','obrigado','como','onde','quando','porque','produto','preço'].forEach(w => { if (words.includes(w)) scores.pt += 2; });
+
+  if (/\b(hallo|guten|danke|bitte|wie|was|wo|wann|warum|ich|sie|wir|der|die|das|und|für|mit|auf|ist|sind|haben|kaufen|produkt|preis|versand|verfügbar|rabatt)\b/.test(text)) scores.de += 3;
+  if (/[äöüß]/.test(text)) scores.de += 3;
+  ['ich','du','er','sie','es','wir','ihr','der','die','das','und','ist','sind','mit','auf','für','von','zu','an','ein','eine','nicht','auch','aber','oder','wie','was','wo','wann'].forEach(w => { if (words.includes(w)) scores.de += 2; });
+
+  if (/\b(hello|hi|hey|what|how|can|could|would|should|where|when|why|which|who|the|and|for|with|this|that|have|your|you|want|need|does|do|is|are|was|were|help|price|shipping|color|size|available|discount|product|buy|order)\b/.test(text)) scores.en += 3;
+  ['i','you','he','she','it','we','they','the','a','an','is','are','was','were','have','has','had','do','does','did','will','would','can','could','should','may','might','and','or','but','for','with','at','by','from','to','in','on','of','that','this','what','how','when','where','why','who','which'].forEach(w => { if (words.includes(w)) scores.en += 1; });
+
+  let detected = 'en';
+  let best = 0;
+  for (const [lang, score] of Object.entries(scores)) {
+    if (score > best) { best = score; detected = lang; }
+  }
+  if (best === 0) detected = 'en';
+
+  /* Si la langue détectée est dans la liste autorisée → on l'utilise */
+  if (allowedLanguages && allowedLanguages.length > 0) {
+    if (allowedLanguages.includes(detected)) return detected;
+    /* Langue non autorisée → anglais par défaut (si disponible) */
+    if (allowedLanguages.includes('en')) return 'en';
+    /* Sinon on prend la première langue autorisée */
+    return allowedLanguages[0];
+  }
+
+  return detected;
+}
+
+function getLangName(code) {
+  const names = {
+    en: 'ENGLISH', fr: 'FRENCH', es: 'SPANISH', ar: 'ARABIC',
+    zh: 'CHINESE', hi: 'HINDI', pt: 'PORTUGUESE', ru: 'RUSSIAN',
+    de: 'GERMAN', ja: 'JAPANESE', ht: 'HAITIAN CREOLE'
+  };
+  return names[code] || 'ENGLISH';
+}
+
+/* ══════════════════════════════════════════════════════
+   SMART INTENT DETECTION
+══════════════════════════════════════════════════════ */
+function detectIntent(message) {
+  const q = message.toLowerCase();
+
+  const generalPatterns = [
+    /fondateur|founder|qui.+(fond|cre[aé]t)|francenel|administrateur|admin/,
+    /objectif|mission|but de bbw|about bbw|à propos/,
+    /\bequipe\b|\bteam\b|\bstaff\b/,
+    /c.est quoi bbw|what is bbw|what.s bbw4life/,
+    /histoire|story|origin|origine/,
+    /pourquoi.+(cre|fond|lanc)|why.+(creat|found|launch)/,
+    /mouvement|movement|communauté|community|famille|family/,
+    /beauté|beauty|courbes|curves|plus.?size|taille.+plus/,
+    /conseils?|advice|astuce|tips?/,
+    /confiance|confidence|acceptation|acceptance|estime de soi|self.esteem/,
+    /stress|anxiet|depress|mental|moral/,
+    /contact|joindre|reach|parler.+(humain|person|quelqu)|message|whatsapp|telegram/,
+    /support|aide.+(équipe|team)/,
+    /blog|article|post|read|lire/,
+    /\bcompte\b|\baccount\b|\bcuenta\b/,
+    /mon profil|my profile|mi perfil/,
+    /mes commandes|my orders|mis pedidos/,
+    /historique.+(commande|order|pedido)/,
+    /mode.+paiement|payment method|método.+pago/,
+    /changer.+(mot de passe|password|contraseña)/,
+    /wishlist|liste.+(souhaits|envie)|saved items/,
+    /suivre.+(commande|colis)|track.+(order|package)|rastrear/,
+    /collection|catalogue|catalog|tous les produits|all products|todas las colecciones/,
+    /frais.+(port|livraison)|shipping cost|costo.+envío/,
+    /livraison|shipping.+info|delivery.+time|délai/,
+    /taxes|impôts|impuestos/,
+    /stripe|paypal|apple pay|google pay|carte.+crédit|credit card|tarjeta/,
+    /privacy|confidentialit|privacidad|données.+person|personal.+data/,
+    /remboursement|refund|reembolso|retour|return|devolution/,
+    /conditions.+(utilisation|service|vente)|terms.+(service|conditions|use)|términos/,
+    /disclaimer|avertissement|advertencia/,
+    /politique|policy|politica/,
+    /cookies|tracking|pistage/,
+    /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)/i,
+    /your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)/i,
+    /tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia/i,
+    /bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)/i,
+    /marque propre|propre marque|brand propre|own brand|marca propia/i,
+    /curvafit|curva.?fit/i,
+    /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|bonjou|bonswa)\b/,
+    /^(merci|thank|thanks|gracias|ok|okay|d.accord|super|parfait|génial|great|bien|bueno|mesi|wi|non|oke|dakò)\b/,
+    /* Petites réponses courtes de confirmation/acquiescement */
+    /^(ok|okay|k|ok|oke|ugh|ah|oh|wow|nice|cool|perfect|parfait|super|bien|good|great|noted|noted|got it|compris|noté|alright|sure|yep|yup|nope|nah|true|exactly|right|correct|absolutely|definitely|of course|bien sûr|exactement|précisément|merci|thanks|thx|ty|np|no problem|no worries|pas de problème|d'accord|c'est bon|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰)[\s!.,]*$/i,
+  ];
+
+  for (const pattern of generalPatterns) {
+    if (pattern.test(q)) return 'general';
+  }
+
+  const productPatterns = [
+    /acheter|buy|commander|order|comprar|pedir|ordenar/,
+    /produit|product|article|producto|artículo/,
+    /recommande.+(produit|article)|recommend.+(product|item)|recomienda.+(producto)/,
+    /quel.+(produit|article)|which.+(product|item)|qué.+(producto)/,
+    /montre.+(produit)|show.+(product|me)|muestra.+(producto)/,
+    /robe|dress|vestido|chaussure|shoe|zapato|sandale|sandal|sandalia/,
+    /soutien.gorge|bra|sujetador|bikini|maillot|swimsuit|traje.+baño/,
+    /jean|pantalon|pant|trouser|short|shorts|veste|jacket|manteau/,
+    /haut|top|chemise|shirt|blouse|pull|sweat|sweater|robe.+nuit|nightdress/,
+    /lingerie|ensemble|set|peignoir|robe.+chambre|bathrobe/,
+    /vernis|nail|ongle|mascara|eye|sourcil|eyebrow|brow|rouge.+lèvre|lipstick|lipgloss/,
+    /soin|serum|crème|cream|masque|mask|huile|oil|nettoyant|cleanser/,
+    /cheveux|hair|coiffure|shampooing|shampoo/,
+    /beauty|beauté|maquillage|makeup/,
+    /taille.+(disponible|dispo)|available.+(color|size)|qué.+(color|talla)/,
+    /existe.+(couleur|taille)|come in.+(color|size)|viene.+(color|talla)/,
+    /\$\d+|under \$|moins de \$|budget.+(produit|product)|menos de \$/,
+    /combien.+(coûte|cost).+(ce|this|le|la)|cuánto.+(cuesta|vale)/,
+    /best.?seller|meilleure?.+vente|más.+vendido|top.+vente/,
+    /en promotion|in promotion|on sale|en promo/,
+    /new.?arrival|nouvel?.+arriv|nueva?.+llegad/,
+    /top.+deal|meilleure?.+offre|mejor.+oferta/,
+  ];
+
+  for (const pattern of productPatterns) {
+    if (pattern.test(q)) return 'product';
+  }
+
+  return 'general';
+}
+
+/* ══════════════════════════════════════════════════════
+   TOP STARTER REQUEST
+══════════════════════════════════════════════════════ */
+function isTopStarterRequest(message) {
+  const q = message.toLowerCase();
+  const patterns = [
+    /produits?.+(pour commencer|pour débuter|pour démarrer)/,
+    /pour.+(commencer|débuter|démarrer).+(mon style|ma garde.robe|ma beauté|ma transform)/,
+    /par où commencer/,
+    /que me recommandes.+pour commencer/,
+    /quels? produits?.+commencer/,
+    /pour bien commencer/,
+    /je (suis |)nouveau.+(ici|cliente?)/,
+    /kit.+(départ|débutant|starter)/,
+    /pack.+(débutant|commencer|démarrer)/,
+    /products?.+to (get started|start my journey|begin my journey)/,
+    /where (do i |should i |can i |)(start|begin)/,
+    /what.*recommend.*to start/,
+    /best products?.+for (absolute )?beginners?/,
+    /starter.+products?/,
+    /i('m| am) new (here|to bbw4life)/,
+    /to start my (journey|transformation|style journey)/,
+    /get started (with|on) bbw4life/,
+    /productos?.+(para empezar|para comenzar|para iniciar)/,
+    /por dónde empezar/,
+    /qué me recomiendas para empezar/,
+    /soy nueva.+(aquí|cliente)/,
+  ];
+  return patterns.some(p => p.test(q));
+}
+
+/* ══════════════════════════════════════════════════════
+   GREETING DETECTION (court message sans intention produit)
+══════════════════════════════════════════════════════ */
+function isGreeting(message) {
+  const q = message.toLowerCase().trim();
+  return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes|bonjou|bonswa)[\s!.,]*$/.test(q);
+}
+
+/* ══════════════════════════════════════════════════════
+   SHORT ACK DETECTION (ok, merci, super, 👍, etc.).
+══════════════════════════════════════════════════════ */
+function isShortAck(message) {
+  const q = message.toLowerCase().trim();
+  /* Message de moins de 5 mots ET correspond à un acquiescement */
+  const wordCount = q.split(/\s+/).filter(w => w.length > 0).length;
+  if (wordCount > 5) return false;
+  return /^(ok|okay|k|oui|non|wi|non|merci|mesi|thanks|thx|ty|super|parfait|génial|great|bien|bueno|nice|cool|perfect|noted|got it|compris|alright|sure|yep|yup|nope|d'accord|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰|ah|oh|wow|true|right|correct|exactly|absolutely|definitely|of course|bien sûr|exactement|np|no problem|no worries|pas de problème|c'est bon)[\s!.,🙏❤️😊🥰]*$/.test(q);
+}
+
+function detectGender(message) {
+  const q = message.toLowerCase();
+
+  const malePatterns = [
+    /\b(homme|hommes|masculin|masculins|pour homme|pour les hommes|men|man|male|hombre|hombres|para hombre|masculino|garçon|garçons|boy|boys|chico|chicos|monsieur|messieurs|mec|mecs|gars)\b/,
+    /\b(men'?s|menswear|pour lui|for him|para él|pour un homme|for a man)\b/,
+    /\b(taille homme|size men|vêtement homme|clothing men|mode homme|fashion men|chaussure homme|men.?s shoe|zapatos hombre)\b/,
+  ];
+
+  const femalePatterns = [
+    /\b(femme|femmes|féminin|pour femme|pour les femmes|women|woman|female|mujer|mujeres|para mujer|femenino|dame|dames|lady|ladies|señora|señoras)\b/,
+    /\b(women'?s|womenswear|pour elle|for her|para ella|pour une femme|for a woman)\b/,
+    /\b(taille femme|size women|vêtement femme|clothing women|mode femme|fashion women|chaussure femme|women.?s shoe|zapatos mujer)\b/,
+  ];
+
+  const hasMale   = malePatterns.some(p  => p.test(q));
+  const hasFemale = femalePatterns.some(p => p.test(q));
+
+  if (hasMale && !hasFemale) return 'male';
+  if (hasFemale && !hasMale) return 'female';
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════
+   BRAND QUERY DETECTION
+══════════════════════════════════════════════════════ */
+function isBrandQuery(message) {
+  const q = message.toLowerCase();
+  return /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)|your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)|tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia|bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)|marque propre|propre marque|brand propre|own brand|marca propia/.test(q);
+}
+
+/* ══════════════════════════════════════════════════════
+   PRODUCT SEARCH
+══════════════════════════════════════════════════════ */
+function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS) {
+  if (!query) return { results: [], isVague: false };
+  const q        = query.toLowerCase();
+  const keywords = q.split(/\s+/).filter(k => k.length >= 2);
+
+  /* ── FILTRE GENRE STRICT depuis settings ── */
+  let baseProducts = products;
+  if (genderFilter === 'male') {
+    baseProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
+  } else if (genderFilter === 'female') {
+    baseProducts = products.filter(p => FEMALE_ONLY_IDS.includes(p.id));
+  }
+
+  const scored = baseProducts.map(p => {
+    let score = 0;
+    const searchText = `${p.title} ${p.description}`.toLowerCase();
+    keywords.forEach(kw => {
+      if (searchText.includes(kw)) score += 3;
+      if (p.title.toLowerCase().includes(kw)) score += 2;
+      p.colors.forEach(c => { if (c.name.toLowerCase().includes(kw)) score += 2; });
+      p.sizes.forEach(s  => { if (String(s).toLowerCase().includes(kw)) score += 1; });
+    });
+
+    /* Boost meilleur noté */
+    if (/meilleur|best|top|plus vendu|most sold|más vendido|popular|populaire/.test(q)) {
+      if (p.rating && p.rating >= 4.5) score += 8;
+      if (p.reviewsCount && p.reviewsCount >= 50) score += 5;
     }
 
-    /* Welcome messages per language — Berline / BBW4LIFE */
-    const welcomeMessages = {
-      fr: `Salut ! 👋 Je suis **Berline**, ta styliste personnelle BBW4LIFE !\n\nJe suis là pour t'aider avec :\n- 👗 Mode & style plus size\n- 💄 Beauté & soins\n- 👟 Chaussures & accessoires\n- 🛍️ Recommandations de produits\n\nComment puis-je t'aider aujourd'hui ? 😊`,
-      es: `¡Hola! 👋 Soy **Berline**, tu estilista personal de BBW4LIFE!\n\nEstoy aquí para ayudarte con:\n- 👗 Moda & estilo plus size\n- 💄 Belleza & cuidado personal\n- 👟 Zapatos & accesorios\n- 🛍️ Recomendaciones de productos\n\n¿En qué puedo ayudarte hoy? 😊`,
-      en: `Hi! 👋 I'm **Berline**, your personal BBW4LIFE stylist!\n\nI'm here to help you with:\n- 👗 Plus size fashion & style\n- 💄 Beauty & skincare\n- 👟 Shoes & accessories\n- 🛍️ Product recommendations\n\nWhat can I help you with today? 😊`
+    const badgeLower = (p.badge || '').toLowerCase();
+    if ((q.includes('best seller') || q.includes('meilleure vente') || q.includes('meilleur vente') || q.includes('top vente') || q.includes('más vendido')) && badgeLower.includes('best seller')) score += 15;
+    if ((q.includes('promotion') || q.includes('promo') || q.includes('on sale') || q.includes('en promo') || q.includes('in promotion')) && badgeLower.includes('promotion')) score += 15;
+    if ((q.includes('new arrival') || q.includes('new arriv') || q.includes('nouvel') || q.includes('nouveau') || q.includes('nueva llegada')) && badgeLower.includes('new')) score += 15;
+    if ((q.includes('top sale') || q.includes('top deal') || q.includes('meilleure offre') || q.includes('mejor oferta')) && (badgeLower.includes('top sale') || badgeLower.includes('best deal'))) score += 15;
+
+    /* Boosts thématiques par mots-clés */
+    const themes = [
+      { words: ['glam','heel','stiletto','cross strap','sandale'],      id: 'Pdg-Francenel-product1',  boost: 12 },
+      { words: ['retrorun','sneaker','chunky','street','retro'],        id: 'Pdg-Francenel-product2',  boost: 12 },
+      { words: ['boho','flip','sandal','summer','embroid'],             id: 'Pdg-Francenel-product3',  boost: 12 },
+      { words: ['powerheels','stiletto pump','12cm','queen'],           id: 'Pdg-Francenel-product4',  boost: 12 },
+      { words: ['winterboost','boot','ankle boot','court'],             id: 'Pdg-Francenel-product5',  boost: 12 },
+      { words: ['colorstilett','stiletto flip flop','vibrant'],        id: 'Pdg-Francenel-product6',  boost: 12 },
+      { words: ['nightchic','mock neck','long sleeve','dress'],         id: 'Pdg-Francenel-product7',  boost: 12 },
+      { words: ['slitlux','cutout','slit','round neck'],                id: 'Pdg-Francenel-product8',  boost: 12 },
+      { words: ['plaid','overall','dungaree','wide strap'],             id: 'Pdg-Francenel-product9',  boost: 12 },
+      { words: ['floral','flounce','surplice','printed'],               id: 'Pdg-Francenel-product10', boost: 12 },
+      { words: ['vintage','square neck','short sleeve','imprim'],       id: 'Pdg-Francenel-product11', boost: 12 },
+      { words: ['paisley','belt','orange','belted'],                    id: 'Pdg-Francenel-product12', boost: 12 },
+      { words: ['mesh duo','perspective','two piece','sheer'],          id: 'Pdg-Francenel-product13', boost: 12 },
+      { words: ['meshglam','solid','stitching','maxi'],                 id: 'Pdg-Francenel-product14', boost: 12 },
+      { words: ['linen','breeze','cotton','button.down'],               id: 'Pdg-Francenel-product15', boost: 12 },
+      { words: ['striped','mini','v.neck','vneck'],                     id: 'Pdg-Francenel-product16', boost: 12 },
+      { words: ['loungerobe','bathrobe','sleepwear','peignoir'],        id: 'Pdg-Francenel-product17', boost: 12 },
+      { words: ['lacenight','nightdress','strap','night dress'],        id: 'Pdg-Francenel-product18', boost: 12 },
+      { words: ['lacethong','lingerie','sheer skirt','set lingerie'],   id: 'Pdg-Francenel-product19', boost: 12 },
+      { words: ['solid','bikini','high waist','swimsuit'],              id: 'Pdg-Francenel-product20', boost: 12 },
+      { words: ['curvebikini','curve','swimwear','solid color'],        id: 'Pdg-Francenel-product21', boost: 12 },
+      { words: ['leopard','mesh','pajama','pyjama'],                    id: 'Pdg-Francenel-product22', boost: 12 },
+      { words: ['supportbra','bra','breathable','large cup'],           id: 'Pdg-Francenel-product23', boost: 12 },
+      { words: ['laceromper','romper','jumpsuit','lace'],               id: 'Pdg-Francenel-product24', boost: 12 },
+      { words: ['striped','print','stripes','swimwear'],                id: 'Pdg-Francenel-product25', boost: 12 },
+      { words: ['tube','tube top','swimsuit','swimming'],               id: 'Pdg-Francenel-product26', boost: 12 },
+      { words: ['ruffle','ruffle','one piece','v.neck swim'],           id: 'Pdg-Francenel-product27', boost: 12 },
+      { words: ['bandage','bandage bikini','swimsuit'],                 id: 'Pdg-Francenel-product28', boost: 12 },
+      { words: ['contrast','contrasting','one.piece','swim'],          id: 'Pdg-Francenel-product29', boost: 12 },
+      { words: ['premium','plus size','swimsuit collection'],           id: 'Pdg-Francenel-product30', boost: 12 },
+      { words: ['irregular','top','loose','round neck'],                id: 'Pdg-Francenel-product31', boost: 12 },
+      { words: ['christmas','sweat','sweatshirt','casual'],             id: 'Pdg-Francenel-product32', boost: 12 },
+      { words: ['dalmatian','dalmation','shorts','high waist'],         id: 'Pdg-Francenel-product33', boost: 12 },
+      { words: ['leopard','shirt','irregular collar','blouse'],         id: 'Pdg-Francenel-product34', boost: 12 },
+      { words: ['drawstring','pants','pockets','casual'],               id: 'Pdg-Francenel-product35', boost: 12 },
+      { words: ['crop','slim','cropped','drawstring pants'],            id: 'Pdg-Francenel-product36', boost: 12 },
+      { words: ['harem','printed','trouser','cuffed'],                  id: 'Pdg-Francenel-product37', boost: 12 },
+      { words: ['loose','jeans','relaxed','denim'],                     id: 'Pdg-Francenel-product38', boost: 12 },
+      { words: ['british','loafer','formal','tassel'],                  id: 'Pdg-Francenel-product39', boost: 12 },
+      { words: ['airmesh','runner','sport','sneaker','mesh shoe'],      id: 'Pdg-Francenel-product40', boost: 12 },
+      { words: ['leather','casual','flat','breathable'],                id: 'Pdg-Francenel-product41', boost: 12 },
+      { words: ['business','formal','wedding','dress shoe'],            id: 'Pdg-Francenel-product42', boost: 12 },
+      { words: ['hollow','mesh','big size','fashion shoe'],             id: 'Pdg-Francenel-product43', boost: 12 },
+      { words: ['trendtrainer','outdoor','sport shoe','trainer'],       id: 'Pdg-Francenel-product44', boost: 12 },
+      { words: ['patent','loafer','luxury','party shoe'],               id: 'Pdg-Francenel-product45', boost: 12 },
+      { words: ['collar','shirt','button.down','chemise'],              id: 'Pdg-Francenel-product46', boost: 12 },
+      { words: ['geo','polo','geometric','print polo'],                 id: 'Pdg-Francenel-product47', boost: 12 },
+      { words: ['striped collar','sweater','knit','collar sweater'],   id: 'Pdg-Francenel-product48', boost: 12 },
+      { words: ['turtleneck','lux','long sleeve','pull'],               id: 'Pdg-Francenel-product49', boost: 12 },
+      { words: ['hike','jacket','waterproof','outdoor'],                id: 'Pdg-Francenel-product50', boost: 12 },
+      { words: ['roundneck','sweatshirt','pullover','mens'],            id: 'Pdg-Francenel-product51', boost: 12 },
+      { words: ['nail','glue','uv','adhesive'],                         id: 'Pdg-Francenel-product52', boost: 12 },
+      { words: ['bow','nail','fake nail','almond'],                     id: 'Pdg-Francenel-product53', boost: 12 },
+      { words: ['nail','repair','lotion','nourish'],                    id: 'Pdg-Francenel-product54', boost: 12 },
+      { words: ['brow','eyebrow','pencil','waterproof'],                id: 'Pdg-Francenel-product55', boost: 12 },
+      { words: ['mascara','volumizing','4d','lash'],                    id: 'Pdg-Francenel-product56', boost: 12 },
+      { words: ['browkit','eyebrow kit','stencil','cream'],             id: 'Pdg-Francenel-product57', boost: 12 },
+      { words: ['obsidian','lip','balm','moisture'],                    id: 'Pdg-Francenel-product58', boost: 12 },
+      { words: ['lip gloss','tearoff','peel.off','long.lasting'],       id: 'Pdg-Francenel-product59', boost: 12 },
+      { words: ['ginger','lemon','makeup remover','clean pad'],         id: 'Pdg-Francenel-product60', boost: 12 },
+      { words: ['hair mask','repair','moisturize','smooth'],            id: 'Pdg-Francenel-product61', boost: 12 },
+      { words: ['batana','oil','hair oil','glow'],                      id: 'Pdg-Francenel-product62', boost: 12 },
+      { words: ['batanaboost','conditioner','hair growth','120ml'],     id: 'Pdg-Francenel-product63', boost: 12 },
+      { words: ['poreclean','exfoliant','anti-acne','pore'],            id: 'Pdg-Francenel-product64', boost: 12 },
+      { words: ['knuckle','white','serum','brightener'],                id: 'Pdg-Francenel-product65', boost: 12 },
+      { words: ['propolis','glow','essence','brightening'],             id: 'Pdg-Francenel-product66', boost: 12 },
+      { words: ['menglow','men','concealing','lazy cream'],             id: 'Pdg-Francenel-product67', boost: 12 },
+      { words: ['ice','grid','silicone','cooling','facial'],            id: 'Pdg-Francenel-product68', boost: 12 },
+    ];
+
+    themes.forEach(t => {
+      if (p.id === t.id && t.words.some(w => q.includes(w))) score += t.boost;
+    });
+
+    if ((q.includes('cheap') || q.includes('budget') || q.includes('pas cher') || q.includes('barato') || q.includes('économico')) && p.price < 20) score += 5;
+    return { ...p, score };
+  });
+
+  const filtered = scored.filter(p => p.score > 0).sort((a, b) => b.score - a.score);
+  if (filtered.length === 0) return { results: [], isVague: false };
+
+  const topScore    = filtered[0].score;
+  const secondScore = filtered[1]?.score || 0;
+  const gap         = topScore - secondScore;
+
+  if (topScore >= 14 && gap >= 6) return { results: filtered.slice(0, 1), isVague: false };
+  if (filtered.length >= 3 && gap <= 4) return { results: filtered.slice(0, 4), isVague: true };
+  return { results: filtered.slice(0, 2), isVague: false };
+}
+
+/* ── Format delivery dates ── */
+function formatDelivery(startDate, endDate) {
+  if (!startDate || !endDate) return null;
+  try {
+    const opts = { day: '2-digit', month: '2-digit', year: '2-digit' };
+    const s = new Date(startDate + 'T00:00:00').toLocaleDateString('en-GB', opts);
+    const e = new Date(endDate   + 'T00:00:00').toLocaleDateString('en-GB', opts);
+    return `${s} – ${e}`;
+  } catch (_) { return null; }
+}
+
+function buildSearchDataContext(searchData) {
+  if (!searchData || !Array.isArray(searchData)) return '';
+  const pages    = searchData.filter(i => i.type === 'page');
+  const policies = searchData.filter(i => i.type === 'policy');
+  const blogs    = searchData.filter(i => i.type === 'blog');
+  let text = '';
+  if (pages.length)    { text += '\nSITE PAGES:\n';    pages.forEach(p    => { text += `  • ${p.title} → ${p.url}\n`; }); }
+  if (policies.length) { text += '\nPOLICIES:\n';      policies.forEach(p => { text += `  • ${p.title} → ${p.url}\n`; }); }
+  if (blogs.length)    { text += '\nBLOG ARTICLES:\n'; blogs.forEach(p    => { text += `  • ${p.title} → ${p.url}\n`; }); }
+  return text;
+}
+
+function buildBlogContext(blogData) {
+  if (!blogData) return '';
+  let articles = [];
+  if (Array.isArray(blogData)) { articles = blogData; }
+  else if (blogData.articles && Array.isArray(blogData.articles)) { articles = blogData.articles; }
+  else if (typeof blogData === 'object') {
+    for (const key of Object.keys(blogData)) { if (Array.isArray(blogData[key])) { articles = blogData[key]; break; } }
+  }
+  if (!articles.length) return '';
+  let text = '\nBLOG ARTICLES:\n';
+  articles.forEach(a => {
+    const title   = a.title    || a.name    || 'Untitled';
+    const url     = a.url      || a.slug    || a.link    || '/blog/blog.html';
+    const summary = a.summary  || a.excerpt || a.description || '';
+    const cat     = a.category || a.tag     || '';
+    const date    = a.date     || a.published_at || '';
+    text += `  • "${title}"`;
+    if (cat)  text += ` [${cat}]`;
+    if (date) text += ` (${date})`;
+    text += ` → ${url}`;
+    if (summary) text += `\n    Summary: ${summary.substring(0, 150)}${summary.length > 150 ? '...' : ''}`;
+    text += '\n';
+  });
+  return text;
+}
+
+/* ══════════════════════════════════════════════════════
+   PAGE NAVIGATION MAP — BBW4LIFE
+   Labels adaptés — "Disclaimer" simplifié (pas "Medical")
+══════════════════════════════════════════════════════ */
+const PAGE_MAP = {
+  '/index.html':                              { label: 'Home',                   icon: '🏠' },
+  '/collections/bbw4life-all-product.html':   { label: 'Shop All',               icon: '🛍️' },
+  '/collections/bbw4life-all-collections.html':{ label: 'Collections',           icon: '🗂️' },
+  '/collections/curvy-woman.html':            { label: 'Curvy Woman',            icon: '💃' },
+  '/collections/curvy-dresses.html':          { label: 'Curvy Dresses',          icon: '👗' },
+  '/collections/curvy-beauty.html':           { label: 'Curvy Beauty',           icon: '💄' },
+  '/collections/main-plus-size.html':         { label: 'Men Plus Size',          icon: '👔' },
+  '/collections/bbw4life-pants-skirts.html':  { label: 'Pants & Shorts',         icon: '👖' },
+  '/collections/most-popular.html':           { label: 'Most Popular',           icon: '🔥' },
+  '/collections/bbw-features-products.html':  { label: 'BBW Featured',           icon: '✨' },
+  '/blog/blog.html':                          { label: 'Blog',                   icon: '📝' },
+  '/page/our-story.html':                     { label: 'Our Story',              icon: '💖' },
+  '/page/about.html':                         { label: 'About Us',               icon: 'ℹ️' },
+  '/page/contact.html':                       { label: 'Contact',                icon: '📩' },
+  '/account.html':                            { label: 'My Account',             icon: '👤' },
+  '/page/order-tracking.html':                { label: 'Order Tracking',         icon: '📦' },
+  '/page/faq.html':                           { label: 'FAQ',                    icon: '❓' },
+  '/policies/privacy.html':                   { label: 'Privacy Policy',         icon: '🔒' },
+  '/policies/refund.html':                    { label: 'Refund Policy',          icon: '↩️' },
+  '/policies/shipping.html':                  { label: 'Shipping Info',          icon: '🚚' },
+  '/policies/terms.html':                     { label: 'Terms & Conditions',     icon: '📄' },
+  '/page/disclaimer.html':                    { label: 'Disclaimer',             icon: '📋' },
+  '/page/products-care.html':                 { label: 'Product Care Guide',     icon: '✨' },
+};
+
+/* ══════════════════════════════════════════════════════
+   BUILD SYSTEM PROMPT — BBW4LIFE
+══════════════════════════════════════════════════════ */
+function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
+  const contactEmails  = settings.contact_emails || {};
+  const emailsText     = Object.entries(contactEmails).map(([k, v]) => `• ${k}: ${v}`).join('\n') || '• No emails configured';
+  const promos         = settings.promos      || [];
+  const shipping       = settings.cart_drawer || {};
+  const taxRate        = settings.tax_rate      || 0.5;
+  const shippingCost   = settings.shipping_cost || 40.0;
+  const taxPercent     = Math.round(taxRate * 100);
+  const freeShipThresh = shipping.free_shipping_threshold || 350;
+
+  const promosText = promos.length
+    ? promos.map(p => `• Code **[[${p.code}]]** → **${p.percent}% off** on ${p.items}+ items`).join('\n')
+    : '• No active promo codes at this time';
+
+  /* BBW Featured products — lus depuis settings */
+  const jrgqCols      = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
+  const featuredCol   = jrgqCols.find(c => c.id === 'bbw-features-products');
+  const featuredIds   = (featuredCol && featuredCol.product_ids) || [];
+  const EXCLUDED_IDS  = featuredIds;
+
+  const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+
+  /* Titres des produits BBW Featured */
+  const featuredTitles = EXCLUDED_IDS
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean)
+    .map(p => `**${p.title}**`)
+    .join(', ') || 'exclusive original designs';
+
+  const catalogText = visibleProducts.map((p, i) => {
+    const colorsList = p.colors.map(c => c.name).join(', ');
+    const sizesList  = p.sizes.length ? p.sizes.join(', ') : 'No size needed';
+    const discounts  = [
+      p.discounts.single ? `1 item: -${p.discounts.single}%` : '',
+      p.discounts.duo    ? `2 items: -${p.discounts.duo}%`   : '',
+      p.discounts.trio   ? `3 items: -${p.discounts.trio}%`  : '',
+    ].filter(Boolean).join(' | ') || 'No discount';
+    const delivery  = formatDelivery(p.startDate, p.endDate) || 'Contact us';
+    const rating    = p.rating ? `${p.rating}/5 (${p.reviewsCount || 0} reviews)` : 'N/A';
+    const badgeLine = p.badge ? `\n  Badge: ${p.badge}` : '';
+    return `
+PRODUCT ${i + 1}:
+  Title: ${p.title}
+  Description: ${p.description}
+  Price: $${p.price}${p.maxPrice !== p.price ? ` to $${p.maxPrice}` : ''} (was $${p.compare_price})
+  Rating: ${rating}${badgeLine}
+  Colors: ${colorsList || 'N/A'}
+  Sizes: ${sizesList}
+  Discounts: ${discounts}
+  Delivery: ${delivery}
+  Page: ${p.url}`;
+  }).join('\n');
+
+  const realBadgeList = [...badgeMap.values()].join(', ') || 'none';
+
+  const topStarter      = settings.top_starter_products || {};
+  const topStarterIds   = topStarter.product_ids || [];
+  const topStarterLabel = topStarter.label || 'Best products to discover BBW4LIFE';
+  const topStarterList  = topStarterIds
+    .filter(id => !EXCLUDED_IDS.includes(id))
+    .map(id => {
+      const prod = visibleProducts.find(p => p.id === id);
+      return prod ? `  • ${prod.title} → ${prod.url}` : null;
+    }).filter(Boolean).join('\n');
+
+  const contactChannels = [];
+  if (contactInfo.hasWhatsapp) contactChannels.push('WhatsApp');
+  if (contactInfo.hasTelegram) contactChannels.push('Telegram');
+  contactChannels.push('Contact page');
+
+  const searchContext = buildSearchDataContext(searchData);
+  const blogContext   = buildBlogContext(blogData);
+
+  /* ── Shipping options depuis settings ── */
+  const shippingOptions = [
+    settings.shipping_standard_delay ? `• Standard (free over $${freeShipThresh}, ${settings.shipping_standard_delay})` : null,
+    settings.shipping_dhl_delay      ? `• Express DHL (${settings.shipping_dhl_delay})`                                  : null,
+    settings.shipping_priority_delay ? `• Priority (${settings.shipping_priority_delay})`                                : null,
+    settings.shipping_economy_delay  ? `• Economy (${settings.shipping_economy_delay})`                                  : null,
+    settings.shipping_express_delay  ? `• Express (${settings.shipping_express_delay})`                                  : null,
+  ].filter(Boolean).join('\n');
+
+  /* ── Collections depuis settings ── */
+  const menCol    = jrgqCols.find(c => c.id === 'men-plus-size');
+  const womanCol  = jrgqCols.find(c => c.id === 'curvy-woman');
+  const beautyCol = jrgqCols.find(c => c.id === 'curvy-beauty');
+  const menCount    = menCol    ? menCol.stat_value    : 'several styles';
+  const womanCount  = womanCol  ? womanCol.stat_value  : 'several styles';
+  const beautyCount = beautyCol ? beautyCol.stat_value : 'several styles';
+
+  const collectionsContext = `
+COLLECTIONS:
+  • Curvy Woman (${womanCount}: shoes, dresses, bathrobe, sexy, breathable, bikini, tops) → /collections/curvy-woman.html
+  • Men Plus Size (${menCount}: pants, shoes, shirts, sweaters) → /collections/main-plus-size.html
+  • Curvy Beauty (${beautyCount}: nails, eyebrow, lip, makeup, haircare, skincare) → /collections/curvy-beauty.html
+  • Curvy Dresses (dresses, bathrobe, sexy, breathable) → /collections/curvy-dresses.html
+  • Pants & Shorts (5 styles) → /collections/bbw4life-pants-skirts.html
+  • Most Popular (community favorites) → /collections/most-popular.html
+  • All Products (68+ styles) → /collections/bbw4life-all-product.html
+`;
+
+  /* ── Brand section ── */
+  const plansAvailable = (settings.plans_available || 'no').toLowerCase().trim() === 'yes';
+
+  const brandSection = plansAvailable ? `
+═══════════════════════════════════════
+🏷️ BBW4LIFE — OWN BRAND & COLLECTION
+═══════════════════════════════════════
+YES — BBW4LIFE IS AN ESTABLISHED BRAND with its own original designs.
+
+When someone asks "do you have your own brand / your own collection / your own designs / est-ce que bbw4life a sa propre marque / tienen su propia marca":
+
+Reply as a proud and warm brand ambassador. Key points to communicate naturally:
+- **BBW4LIFE** is a real brand — not a reseller. We design our own pieces.
+- Our collection was built around one mission: **Beauty Has No Sizes**
+- Every piece is designed SPECIFICALLY for plus-size women — not adapted, but created FOR them
+- The community votes for styles, colors and cuts — we bring them to life
+- Available in **sizes S to 6XL**
+- Founded on **June 18, 2025** by **Francenel**
+- Categories available: dresses, shoes, lingerie, swimwear, beauty, tops, and more
+
+Tone: proud, inspiring, like a real brand ambassador presenting something they genuinely believe in.
+Invite them to discover the full collection.
+Add 🔗[PAGE:/collections/bbw4life-all-product.html] at the end.
+Add 🔗[PAGE:/collections/bbw-features-products.html] to show BBW Featured designs.
+` : `
+═══════════════════════════════════════
+🏷️ BBW4LIFE — NEW BRAND, BEING BUILT
+═══════════════════════════════════════
+BBW4LIFE IS A NEW BRAND currently being built with heart and purpose.
+
+When someone asks "do you have your own brand / your own collection / your own designs / est-ce que bbw4life a sa propre marque / tienen su propia marca":
+
+Reply honestly but with warmth, excitement and pride — like someone sharing something beautiful in progress.
+Key points to communicate naturally:
+- Yes, **BBW4LIFE** is a new brand born from a real, deeply personal story
+- We are going through legal procedures and brand-building steps to deliver the best possible service
+- It takes time to do things right — the mission is clear: **Beauty Has No Sizes**
+- In the meantime, our **BBW Featured** collection already presents our current original designs
+- These designs include: ${featuredTitles}
+- On each of these product pages, there is a **Request** button — clients can request one of our designs (size, color, custom details)
+- The team contacts them within **24–48 hours** to finalize the custom order
+
+Tone: genuine, optimistic, proud — never apologetic or uncertain. This is an exciting journey.
+Make them feel they are part of something being built FOR THEM.
+Add 🔗[PAGE:/collections/bbw-features-products.html] at the end so they can discover the BBW Featured collection.
+`;
+
+  /* ── Langues autorisées pour instruction ── */
+  const allowedLangNames = (allowedLanguages || []).map(l => getLangName(l)).join(', ');
+
+  return `You are **Berline**, the official AI assistant and stylist of **BBW4LIFE**.
+
+═══════════════════════════════════════
+🎯 YOUR IDENTITY & PERSONALITY
+═══════════════════════════════════════
+You are warm, human, motivating, and natural — never robotic or stiff.
+Adapt your tone: casual when they are casual, caring when they share struggles.
+You feel like a real friend who knows everything about BBW4LIFE.
+Use emojis naturally — not on every sentence, only when it feels right.
+KEEP RESPONSES SHORT — max 4-5 lines. No walls of text.
+
+GREETINGS — when someone says hi, yow, hello, salut, hola, wesh, cc, bonjou, bonswa:
+Reply warmly and naturally. Ask how you can help. No buttons, no lists. Just a human hello.
+NEVER show contact or page buttons for simple greetings or small talk.
+
+SHORT ACKNOWLEDGEMENTS — when someone says "ok", "merci", "super", "👍", "oke", "dakò", "mesi", "great", "thanks", or any very short positive reaction (1-4 words):
+Reply with ONE warm, friendly sentence only. No product suggestions. No page buttons. No explanations. Just a natural human response like a friend would.
+Examples: "Avec plaisir ! 😊", "Happy to help!", "Mesi ampil ! 🙏", "Toujou la pou ou !"
+NEVER expand, NEVER add products, NEVER add pages for these short messages.
+
+═══════════════════════════════════════
+🌍 LANGUAGE RULE — ABSOLUTE — NO EXCEPTION
+═══════════════════════════════════════
+The backend has already detected the user's language and tells you which one to use.
+You MUST reply in exactly that language — no mixing, no switching, no exception.
+NEVER mix languages in your response.
+
+The languages allowed on this store are: ${allowedLangNames}
+If the user writes in a language NOT in this list, reply in ENGLISH (or the store's primary language).
+If the user writes in HAITIAN CREOLE (ht), you MUST reply 100% in Haitian Creole.
+If the user writes in FRENCH, reply in FRENCH. If in SPANISH, reply in SPANISH. Etc.
+NEVER reply in English if the user wrote in another allowed language.
+
+═══════════════════════════════════════
+✏️ FORMATTING RULES
+═══════════════════════════════════════
+Bold: **Francenel**, **BBW4LIFE**, product names, key prices.
+
+🎟️ PROMO CODES — always: **[[CODE]]**
+Example: Use **[[PAUL81]]** for **40% off** on 10+ items.
+NEVER show a code without [[...]].
+
+🔗 PAGE BUTTONS — place at END of reply: 🔗[PAGE:/url]
+Frontend converts to a clickable button. NEVER write raw URLs. Say "button below".
+
+Page URLs:
+  Home → 🔗[PAGE:/index.html]
+  Shop All → 🔗[PAGE:/collections/bbw4life-all-product.html]
+  All Collections → 🔗[PAGE:/collections/bbw4life-all-collections.html]
+  Curvy Woman → 🔗[PAGE:/collections/curvy-woman.html]
+  Curvy Dresses → 🔗[PAGE:/collections/curvy-dresses.html]
+  Curvy Beauty → 🔗[PAGE:/collections/curvy-beauty.html]
+  Men Plus Size → 🔗[PAGE:/collections/main-plus-size.html]
+  Pants & Shorts → 🔗[PAGE:/collections/bbw4life-pants-skirts.html]
+  Most Popular → 🔗[PAGE:/collections/most-popular.html]
+  BBW Featured → 🔗[PAGE:/collections/bbw-features-products.html]
+  Blog → 🔗[PAGE:/blog/blog.html]
+  Our Story → 🔗[PAGE:/page/our-story.html]
+  About → 🔗[PAGE:/page/about.html]
+  Contact → 🔗[PAGE:/page/contact.html]
+  My Account → 🔗[PAGE:/account.html]
+  Order Tracking → 🔗[PAGE:/page/order-tracking.html]
+  FAQ → 🔗[PAGE:/page/faq.html]
+  Privacy Policy → 🔗[PAGE:/policies/privacy.html]
+  Refund Policy → 🔗[PAGE:/policies/refund.html]
+  Shipping Info → 🔗[PAGE:/policies/shipping.html]
+  Terms & Conditions → 🔗[PAGE:/policies/terms.html]
+  Disclaimer → 🔗[PAGE:/page/disclaimer.html]
+  Product Care Guide → 🔗[PAGE:/page/products-care.html]
+  Product N → 🔗[PAGE:/products/productN.html]
+
+WHEN TO ADD 🔗[PAGE:...]:
+✅ User asks to go to / visit a page → add that page button
+✅ privacy / data / GDPR / cookies → add 🔗[PAGE:/policies/privacy.html]
+✅ refund / return / remboursement / reembolso / cancel → add 🔗[PAGE:/policies/refund.html]
+✅ shipping / livraison / envío → add 🔗[PAGE:/policies/shipping.html]
+✅ terms / conditions / CGV / términos → add 🔗[PAGE:/policies/terms.html]
+✅ disclaimer / legal notice / avertissement / mentions légales → add 🔗[PAGE:/page/disclaimer.html]
+✅ care / entretien / comment laver / how to wash / how to care / prendre soin → add 🔗[PAGE:/page/products-care.html]
+✅ account / orders / profile / password → add 🔗[PAGE:/account.html]
+✅ track order / order tracking → add 🔗[PAGE:/page/order-tracking.html]
+✅ faq / questions → add 🔗[PAGE:/page/faq.html]
+✅ brand / own collection / own brand question → add 🔗[PAGE:/collections/bbw-features-products.html]
+❌ NEVER for greetings, small talk, short acks (ok/merci/super), founder questions, general style advice
+
+👇 CONTACT BUTTONS — shown when reply ends with 👇 on its own line.
+Backend uses this to show WhatsApp / Telegram / Contact page buttons.
+
+WHEN TO ADD 👇 — EVERY TIME one of these is detected, add 👇 NO EXCEPTION:
+✅ comment vous contacter / joindre / écrire / rejoindre
+✅ je veux parler à quelqu'un / un humain / un agent / un conseiller
+✅ service client / support / aide équipe
+✅ votre whatsapp / telegram / email
+✅ how to contact / reach / message you
+✅ I want to speak to someone / a human / an agent
+✅ customer service / support
+✅ your whatsapp / telegram / email
+✅ cómo contactarlos / hablar con alguien / servicio al cliente
+✅ su whatsapp / telegram / email
+
+IMPORTANT: Even if the user asked about contact before → ALWAYS add 👇 again.
+The frontend needs it EVERY TIME to show the buttons. Never skip it.
+❌ NEVER add 👇 for: greetings, short acks, founder info, products, style advice, policies, ok/merci/thanks.
+
+═══════════════════════════════════════
+🚦 PRODUCT DISPLAY RULES
+═══════════════════════════════════════
+Show products ONLY when user explicitly asks to buy or names a specific product type.
+NEVER suggest products for: greetings, contact, policies, general style info, short acks (ok/merci/thanks/super).
+Specific → show 1 product only.
+Vague (dress, shoes, something nice) → show up to 4, ask which one they mean.
+
+═══════════════════════════════════════
+🏷️ BADGE RULE — CRITICAL
+═══════════════════════════════════════
+The real badge texts in our catalog are: ${realBadgeList}
+These are read directly from products.data.json. Do not invent others.
+
+When the backend detects a badge query, it:
+1. Identifies which badge the user means
+2. Filters products strictly — ONLY products with that exact badge
+3. Injects those products into your context below
+
+Your job for badge queries:
+- Describe the injected products naturally in the user's language
+- Translate the badge name naturally (you already know how)
+- NEVER mention or show products not injected for this badge
+- If zero products injected → tell user honestly: no product has this badge currently
+
+Badge queries are DIFFERENT from top-starter queries. Never confuse them.
+
+═══════════════════════════════════════
+🤝 CONTACT CHANNELS
+═══════════════════════════════════════
+Available: ${contactChannels.join(' · ')}
+
+EMAILS — use ONLY these, NEVER invent:
+${emailsText}
+
+When contact is requested → reply warmly, mention buttons (👇), give right email if needed.
+Vary your contact reply wording naturally each time.
+Always end with 👇 on its own line for contact requests.
+
+═══════════════════════════════════════
+🏢 ABOUT BBW4LIFE & THE FOUNDER
+═══════════════════════════════════════
+**BBW4LIFE** was born on **June 18, 2025**, from a real and deeply personal story.
+
+**Francenel** — founder and CEO of **BBW4LIFE** — was in a relationship with a plus-size woman who was incredibly beautiful, radiant, and full of life. Despite her confidence in herself, the weight of others' judgment began to wear her down. Day after day, looks, remarks, and criticism started to affect her — until she began considering changing herself, not for her own happiness, but to fit into a standard imposed by others.
+
+**Founder photo:** ![PDG Francenel](https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg_Francenel.jpg?v=1778926866)
+
+That moment changed everything. **Francenel** realized she wasn't alone — thousands of women live under the same pressure. Women who are magnificent, yet filled with self-doubt because of unrealistic beauty standards.
+
+So he made a decision: create **BBW4LIFE**.
+
+**Our mission:** To tell plus-size women a simple but essential truth — *You are beautiful as you are. Your body doesn't need to be corrected. Beauty has no sizes.*
+
+**What we stand for:**
+- A movement, not just a brand
+- A space where every woman feels proud of her body
+- A voice against judgment and imposed norms
+- A community where no one is judged — only loved and supported
+- Because every curve tells a story. Every body is unique.
+
+**What we offer:**
+- Plus-size fashion (shoes, dresses, lingerie, swimwear, tops, beauty)
+- Style advice adapted for plus-size bodies
+- Beauty & skincare recommendations
+- A genuine community to share, exchange, and feel understood
+
+When asked about "administrateur" or "admin" → same answer as founder. It refers to **Francenel**.
+Give a warm, inspiring 3–4 line answer. Not too long. Make it feel real and human.
+
+${brandSection}
+
+═══════════════════════════════════════
+🎟️ PROMO CODES
+═══════════════════════════════════════
+${promosText}
+Free shipping over $${freeShipThresh}
+
+═══════════════════════════════════════
+💰 TAXES & SHIPPING
+═══════════════════════════════════════
+Tax: ${taxPercent}% at checkout. Standard shipping: $${shippingCost}.
+Free shipping on orders over $${freeShipThresh}. Returns: 30 days.
+
+Shipping options available at checkout:
+${shippingOptions || '• Contact us for shipping options'}
+
+═══════════════════════════════════════
+👤 ACCOUNT PAGE
+═══════════════════════════════════════
+Profile, order history, order tracking, delivery addresses, payment methods, password change, wishlist.
+Everything is in the account area. → 🔗[PAGE:/account.html]
+Track your order → 🔗[PAGE:/page/order-tracking.html]
+
+═══════════════════════════════════════
+🔒 PRIVACY POLICY
+═══════════════════════════════════════
+- NEVER sell personal data. NEVER share data with advertisers. NEVER store card details.
+- GDPR rights: access, correction, deletion, portability.
+- Cookies: essential (required) · analytics (anonymized) · marketing (opt-in only).
+When asked → 2–3 line reassuring answer + 🔗[PAGE:/policies/privacy.html]
+
+═══════════════════════════════════════
+↩️ REFUND POLICY
+═══════════════════════════════════════
+- Product returns: original condition, within 30 days.
+- Refund processed up to 30 days after approval.
+- Non-refundable: used or damaged items.
+- Contact: support email with order number and purchase email.
+When asked → 2–3 line clear answer + 🔗[PAGE:/policies/refund.html]
+
+═══════════════════════════════════════
+📄 TERMS & CONDITIONS
+═══════════════════════════════════════
+- Payments via Stripe or PayPal. Card details never stored by BBW4LIFE.
+- Cancel subscription anytime.
+- No guaranteed results — individual results vary.
+When asked → 2–3 line clear answer + 🔗[PAGE:/policies/terms.html]
+
+═══════════════════════════════════════
+📋 DISCLAIMER — BBW4LIFE LEGAL NOTICE
+═══════════════════════════════════════
+This page explains who BBW4LIFE is, our commitments, and our legal position.
+Key points:
+- BBW4LIFE is a FASHION & BEAUTY store — NOT a medical brand, NOT a health provider.
+- We do NOT sell pills, detox products, or unregulated health supplements.
+- Style and beauty recommendations are editorial suggestions, not professional prescriptions.
+- BBW4LIFE is a new brand (founded June 18, 2025), currently completing official brand registration.
+- We work with trusted partner platforms while our own label matures.
+- All BBW4LIFE content (texts, visuals, brand identity) is protected intellectual property © 2025.
+- Third-party links on the site are provided for convenience — BBW4LIFE is not responsible for external sites.
+- This disclaimer may be updated as the brand grows. Current version: v3.0 — May 2026.
+When asked about disclaimer / legal notice / mentions légales / avertissement légal:
+→ Give a 2–3 line clear answer + 🔗[PAGE:/page/disclaimer.html]
+
+═══════════════════════════════════════
+✨ PRODUCT CARE GUIDE — /page/products-care.html
+═══════════════════════════════════════
+BBW4LIFE has a dedicated Product Care Guide page with advice for all product categories.
+Key care tips by category:
+- **Lingerie & Lace** (LaceNight, LaceRomper, LaceThong Set, LeopardNight, SupportBra): Hand wash cold (30°C max), delicate bag if machine, no tumble dry, air dry flat, store folded flat. Never iron lace or mesh.
+- **Clothing & Dresses** (all dresses, tops, men's shirts): Cold wash printed pieces, steam MeshGlam/GlamSatin, iron LinenBreeze inside out on low, hang dresses on padded hangers, fold knit sweaters flat.
+- **Swimwear & Bikinis** (all bikinis, one-pieces): Rinse in cold fresh water immediately after every swim, hand wash with mild soap, lay flat to dry in shade. No machine wash, no wringing.
+- **Shoes & Heels** (Glam Heels, PowerHeels, PatentLoafers, BritishLoafers): Wipe with soft cloth after wear, monthly leather conditioner, store in dust bags with tissue inside, no direct sunlight.
+- **Sneakers** (RetroRun, AirMesh Runners, TrendTrainers): Clean with damp brush, remove insoles to air dry, no machine wash, no direct heat.
+- **Beauty & Skincare** (PoreClean, KnuckleWhite, Propolis Essence, MenGlow Cream, IceGlow): Apply on clean dry skin, store in cool dark drawer away from sunlight and humidity, never freeze serums.
+- **Hair Care** (DeepRepair Mask, BatanaGlow Oil, BatanaBoost): Apply mask on damp hair, warm towel 10 min for better results, oil on dry ends only. No heat styling right after mask.
+- **Nail Products** (NailBond Glue, BowNails, NailRepair Lotion): Apply glue on oil-free nails, hold press-ons 30 sec, remove nails with warm water gently, use NailRepair Lotion after removal.
+
+Care label symbols quick guide:
+- Wash tub (number) = machine washable at that temperature
+- Tub + line = gentle/delicate cycle only
+- X in square = no tumble dry
+- Iron symbol (dots) = heat level (1=low, 2=medium, 3=high)
+- Circle crossed = no dry clean
+- Triangle = bleaching (crossed = no bleach)
+
+When asked how to care for / wash / maintain / entretenir / laver any BBW4LIFE product:
+→ Give specific care tips for that product type + 🔗[PAGE:/page/products-care.html]
+
+═══════════════════════════════════════
+🗂️ COLLECTIONS
+═══════════════════════════════════════
+${collectionsContext}
+When user asks to browse, see the catalog, or visit the shop → add 🔗[PAGE:/collections/bbw4life-all-product.html]
+When user asks about a specific collection → add that collection's button.
+
+═══════════════════════════════════════
+🛍️ PRODUCT CATALOG
+═══════════════════════════════════════
+NEVER use internal IDs. Use exact product titles and prices.
+Each product has a Badge field — use it to answer badge-related questions accurately.
+${catalogText}
+
+═══════════════════════════════════════
+🏆 TOP STARTER PRODUCTS
+═══════════════════════════════════════
+Label: "${topStarterLabel}"
+These are ONLY for when the client explicitly asks which products to start with, what to buy first, "par où commencer", "where do I start", "por dónde empezar", "I'm new here", etc.
+This is NOT a badge query. Do NOT use this for "best seller" or similar questions.
+Show ALL of these product cards — exactly in this order:
+${topStarterList || '(none configured)'}
+
+═══════════════════════════════════════
+🌐 SITE CONTENT
+═══════════════════════════════════════
+${searchContext || '(not available)'}
+
+═══════════════════════════════════════
+📝 BLOG
+═══════════════════════════════════════
+${blogContext || '(not available)'}
+
+═══════════════════════════════════════
+🚫 ABSOLUTE RULES — NEVER BREAK
+═══════════════════════════════════════
+- Never write raw URLs or phone numbers in text
+- Never invent prices, emails, or data
+- Never promise guaranteed results
+- Never reply in wrong language — always use the language detected by the backend
+- CRITICAL: If the user writes in Haitian Creole, French, Spanish or any allowed language — NEVER reply in English
+- Never show products for non-product requests
+- Never add 👇 for: greetings, short acks, policies, or general info
+- Never show promo codes without [[CODE]] format
+- Never answer policy questions without the relevant 🔗[PAGE:...] button
+- Never confuse badge queries (best seller, promo…) with top-starter queries
+- Never confuse brand queries with product or badge queries
+- Answer brand/own collection questions using ONLY the brand section above — never invent details
+- NEVER answer questions about "CurvaFit" or "Curva Fit" — you have zero information about it. If asked, say clearly: "I don't have any information about CurvaFit." Nothing more.
+- For SHORT ACK messages (ok, merci, super, 👍, thanks, mesi, oke, etc.): ONE short warm sentence ONLY. No products, no pages, no explanations.
+- The Disclaimer page is about BBW4LIFE's legal commitments as a FASHION store — not medical. Never call it "Medical Disclaimer".`;
+}
+
+/* ── Fallback / Error messages ── */
+function getFallbackMessage(lang) {
+  const msgs = {
+    fr: "Je suis très sollicitée en ce moment 😅 Réessayez dans quelques secondes !",
+    es: "Estoy muy ocupada en este momento 😅 ¡Inténtalo de nuevo en unos segundos!",
+    de: "Ich bin gerade sehr beschäftigt 😅 Bitte versuche es in ein paar Sekunden erneut!",
+    pt: "Estou muito ocupada agora 😅 Tente novamente em alguns segundos!",
+    ar: "أنا مشغولة جداً الآن 😅 يرجى المحاولة مرة أخرى بعد ثوانٍ!",
+    zh: "我现在很忙 😅 请几秒后再试！",
+    hi: "मैं अभी बहुत व्यस्त हूँ 😅 कृपया कुछ सेकंड बाद पुनः प्रयास करें!",
+    ru: "Я сейчас очень занята 😅 Пожалуйста, повторите попытку через несколько секунд!",
+    ja: "ただいま混み合っています 😅 数秒後にもう一度お試しください！",
+    ht: "Mwen trè okipe kounye a 😅 Tanpri eseye ankò nan kèk segonn!",
+  };
+  return msgs[lang] || "I'm a bit overloaded right now 😅 Please try again in a few seconds!";
+}
+
+function getErrorMessage(lang) {
+  const msgs = {
+    fr: "Désolée, j'ai un petit problème technique. Réessayez dans un instant ! 🙏",
+    es: "Lo siento, tengo un pequeño problema técnico. ¡Inténtalo de nuevo! 🙏",
+    de: "Entschuldigung, ich habe ein kleines technisches Problem. Bitte versuche es erneut! 🙏",
+    pt: "Desculpe, estou com um pequeno problema técnico. Tente novamente! 🙏",
+    ar: "عذراً، أواجه مشكلة تقنية بسيطة. يرجى المحاولة مرة أخرى! 🙏",
+    zh: "抱歉，我遇到了一个小技术问题。请再试一次！🙏",
+    hi: "क्षमा करें, मुझे एक छोटी तकनीकी समस्या है। कृपया पुनः प्रयास करें! 🙏",
+    ru: "Извините, у меня небольшая техническая проблема. Пожалуйста, попробуйте снова! 🙏",
+    ja: "申し訳ありません、少し技術的な問題が発生しています。もう一度お試しください！🙏",
+    ht: "Eskize mwen, gen yon ti pwoblèm teknik. Tanpri eseye ankò! 🙏",
+  };
+  return msgs[lang] || "Sorry, I'm having a little trouble right now. Please try again in a moment! 🙏";
+}
+
+/* ══════════════════════════════════════════════════════
+   MODEL ROTATION STATE
+══════════════════════════════════════════════════════ */
+const MODELS = [
+  'llama-3.3-70b-versatile',
+  'moonshotai/kimi-k2-instruct',
+  'meta-llama/llama-4-scout-17b-16e-instruct',
+  'qwen/qwen3-32b',
+  'openai/gpt-oss-120b',
+  'openai/gpt-oss-20b',
+  'moonshotai/kimi-k2-instruct-0905',
+  'openai/gpt-oss-safeguard-20b',
+  'llama-3.1-8b-instant',
+  'meta-llama/llama-prompt-guard-2-22m',
+];
+let currentModelIndex = 0;
+
+/* ══════════════════════════════════════════════════════
+   MAIN HANDLER
+══════════════════════════════════════════════════════ */
+exports.handler = async (event, context) => {
+  const headers = {
+    'Access-Control-Allow-Origin':  '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
+  if (event.httpMethod !== 'POST')   return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+
+  try {
+    const { message, history = [] } = JSON.parse(event.body);
+    if (!message || message.trim().length === 0) {
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Message is required' }) };
+    }
+
+    let products = [], settings = {};
+    try {
+      const rawData = await loadProductsData();
+      const built   = buildProductIndex(rawData);
+      products = built.products;
+      settings = built.settings;
+    } catch (err) {
+      console.error('Could not load products.data.json:', err.message);
+    }
+
+    /* Langues autorisées depuis settings */
+    const allowedLanguages = (settings.allowed_languages && settings.allowed_languages.length > 0)
+      ? settings.allowed_languages
+      : ['en', 'fr', 'es', 'ar', 'zh', 'ht', 'hi', 'pt', 'ru', 'de', 'ja'];
+
+    const userLang = detectLanguage(message, allowedLanguages);
+
+    let searchData = null, blogData = null;
+    try {
+      [searchData, blogData] = await Promise.all([
+        loadSearchData().catch(e   => { console.warn('search.data.json failed:', e.message);   return null; }),
+        loadBlogArticles().catch(e => { console.warn('blog-articles.json failed:', e.message); return null; })
+      ]);
+    } catch (err) { console.warn('Could not load search/blog data:', err.message); }
+
+    const contactSettings = settings.contact      || {};
+    const socials         = settings.social_links || {};
+    const contactInfo = {
+      hasWhatsapp: !!(contactSettings.whatsapp_url || socials.whatsapp),
+      hasTelegram: !!(contactSettings.telegram_url),
+      whatsappUrl: contactSettings.whatsapp_url || socials.whatsapp || '',
+      telegramUrl: contactSettings.telegram_url || '',
+      contactPage: '/page/contact.html'
     };
 
-    /* ══════════════════════════════════════
-       DRAG — inchangé
-    ══════════════════════════════════════ */
-    (function initDrag() {
-      let isDragging = false;
-      let startX, startY, origLeft, origBottom, hasMoved;
+    /* BBW Featured IDs depuis settings */
+    const jrgqCols    = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
+    const featuredCol = jrgqCols.find(c => c.id === 'bbw-features-products');
+    const featuredIds = (featuredCol && featuredCol.product_ids) || [];
+    const EXCLUDED_IDS = featuredIds;
 
-      function applyPosition(left, bottom) {
-        toggle.style.left   = left   + 'px';
-        toggle.style.bottom = bottom + 'px';
-        toggle.style.right  = 'auto';
-        toggle.style.top    = 'auto';
-        widget.style.left   = left   + 'px';
-        widget.style.bottom = bottom + 'px';
-        widget.style.right  = 'auto';
-        widget.style.top    = 'auto';
-        updateWindowPos(left, bottom);
-      }
+    const visibleProducts = products.filter(p => !EXCLUDED_IDS.includes(p.id));
+    const badgeMap = buildBadgeMap(visibleProducts);
 
-      function startDrag(clientX, clientY) {
-        isDragging = true;
-        hasMoved   = false;
-        startX     = clientX;
-        startY     = clientY;
-        const rect = toggle.getBoundingClientRect();
-        origLeft   = rect.left;
-        origBottom = window.innerHeight - rect.bottom;
-        widget.classList.add('cf-dragging');
-        applyPosition(origLeft, origBottom);
-      }
+    /* IDs genre depuis settings — plus de hardcode */
+    const { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS } = buildGenderIds(settings);
 
-      function moveDrag(clientX, clientY) {
-        if (!isDragging) return;
-        const dx = clientX - startX;
-        const dy = clientY - startY;
-        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) hasMoved = true;
-        if (!hasMoved) return;
-        const bW = toggle.offsetWidth;
-        const bH = toggle.offsetHeight;
-        const nl = Math.max(8, Math.min(window.innerWidth  - bW - 8, origLeft + dx));
-        const nb = Math.max(8, Math.min(window.innerHeight - bH - 8, origBottom - dy));
-        applyPosition(nl, nb);
-      }
+    const intent            = detectIntent(message);
+    const topStarterRequest = isTopStarterRequest(message);
+    const brandRequest      = isBrandQuery(message);
+    const shortAck          = isShortAck(message);
 
-      /* Mouse */
-      toggle.addEventListener('mousedown', (e) => {
-        startDrag(e.clientX, e.clientY);
-        e.preventDefault();
-      });
-      document.addEventListener('mousemove', (e) => moveDrag(e.clientX, e.clientY));
-      document.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        widget.classList.remove('cf-dragging');
-        if (!hasMoved) { isOpen ? closeChat() : openChat(); }
-      });
+    /* Si c'est un acquiescement court → pas de produits, pas de badges */
+    const matchedBadge = (!topStarterRequest && !brandRequest && !shortAck) ? detectBadgeQuery(message, badgeMap) : null;
+    const isBadgeQuery = !!matchedBadge;
 
-      /* Touch */
-      toggle.addEventListener('touchstart', (e) => {
-        startDrag(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: false });
+    let relevantProducts = [], isVague = false;
 
-      toggle.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        moveDrag(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: false });
-
-      toggle.addEventListener('touchend', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        isDragging = false;
-        widget.classList.remove('cf-dragging');
-        if (!hasMoved) { isOpen ? closeChat() : openChat(); }
-      }, { passive: false });
-
-    })();
-
-    function updateWindowPos(left, bottom) {
-      widget.classList.toggle('cf-right', left   > window.innerWidth  / 2);
-      widget.classList.toggle('cf-top',   bottom > window.innerHeight / 2);
-    }
-
-    /* ── Open / Close ── */
-    function openChat() {
-      isOpen = true;
-      window_.classList.add('cf-open');
-      window_.setAttribute('aria-hidden', 'false');
-      if (iconOpen)  iconOpen.style.display  = 'none';
-      if (iconClose) iconClose.style.display = '';
-      if (notifDot)  notifDot.style.display  = 'none';
-      input.focus();
-
-      if (messages.children.length === 0) {
-        const savedHTML = sessionStorage.getItem('cf_messages_html') || '';
-        if (savedHTML) {
-          messages.innerHTML = savedHTML;
-          reattachCardEvents();
-          scrollToBottom();
-          const chipsEl = document.getElementById('cf-quick-chips');
-          if (chipsEl && conversationHistory.length > 0) chipsEl.style.display = 'none';
-        } else {
-          addWelcomeMessage();
-        }
+    if (!shortAck) {
+      if (isBadgeQuery) {
+        relevantProducts = visibleProducts.filter(p => (p.badge || '').toLowerCase().trim() === matchedBadge);
+        isVague = false;
+      } else if (topStarterRequest) {
+        const topStarterIds = (settings.top_starter_products || {}).product_ids || [];
+        relevantProducts = topStarterIds
+          .filter(id => !EXCLUDED_IDS.includes(id))
+          .map(id => visibleProducts.find(p => p.id === id))
+          .filter(Boolean);
+        isVague = false;
+      } else if (intent === 'product' && !brandRequest) {
+        const genderFilter = detectGender(message);
+        const searchResult = searchProducts(message, visibleProducts, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS);
+        relevantProducts   = searchResult.results;
+        isVague            = searchResult.isVague;
       }
     }
 
-    function closeChat() {
-      isOpen = false;
-      window_.classList.remove('cf-open');
-      window_.setAttribute('aria-hidden', 'true');
-      if (iconOpen)  iconOpen.style.display  = '';
-      if (iconClose) iconClose.style.display = 'none';
-    }
+    const EXPLICIT_CONTACT_PATTERNS = [
+      /parler\s+(à\s+)?(un\s+)?(humain|agent|conseiller|quelqu|personne)/i,
+      /joindre\s+(votre|l['']|notre)?\s*(équipe|support|service)/i,
+      /contacter\s+(votre|l['']|notre)?\s*(équipe|support|service|team)/i,
+      /laisser\s+un\s+message/i,
+      /service\s+client/i,
+      /comment\s+(vous\s+)?(contacter|joindre|écrire|rejoindre)/i,
+      /je\s+veux\s+(vous\s+)?(contacter|écrire|parler)/i,
+      /moyen\s+de\s+contact/i,
+      /votre\s+(whatsapp|telegram|email|mail)\b/i,
+      /speak\s+(to\s+)?(a\s+)?(human|agent|person|someone|real)/i,
+      /contact\s+(your|the|our)?\s*(team|support|us|service)/i,
+      /leave\s+(a\s+)?message/i,
+      /customer\s+serv/i,
+      /how\s+(can\s+I\s+)?(contact|reach|message)\s+(you|the\s+team)/i,
+      /I\s+want\s+to\s+(contact|reach|talk\s+to)/i,
+      /how\s+do\s+I\s+reach\s+you/i,
+      /get\s+in\s+touch/i,
+      /your\s+(whatsapp|telegram|email)\b/i,
+      /hablar\s+(con\s+)?(un\s+)?(humano|agente|persona|alguien)/i,
+      /contactar\s+(a\s+)?(su|tu|el|nuestro)?\s*(equipo|soporte|servicio)/i,
+      /dejar\s+un\s+mensaje/i,
+      /servicio\s+al\s+cliente/i,
+      /cómo\s+(puedo\s+)?(contactar|escribir|hablar)/i,
+      /su\s+(whatsapp|telegram|email)\b/i,
+    ];
 
-    if (closeBtn) closeBtn.addEventListener('click', closeChat);
+    const isContactIntent = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
+      && intent !== 'product'
+      && EXPLICIT_CONTACT_PATTERNS.some(p => p.test(message));
 
-    /* Notif dot after 3s */
-    setTimeout(() => {
-      if (!isOpen && !notifShown && notifDot) {
-        notifDot.style.display = 'block';
-        notifShown = true;
+    const systemPrompt = buildSystemPrompt(
+      visibleProducts, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages
+    );
+
+    const contactInstruction = isContactIntent
+      ? '\n[CONTACT REQUEST: User wants to reach the team. You MUST end your reply with 👇 on its own line — no exception.]'
+      : '';
+
+    const vagueInstruction = isVague
+      ? '\n[VAGUE PRODUCT: Show up to 4 products and ask which one they mean.]'
+      : '\n[SPECIFIC PRODUCT: Show ONLY the 1 most relevant product.]';
+
+    const topStarterInstruction = topStarterRequest
+      ? '\n[TOP STARTER REQUEST: User asks which products to discover first or start with. Show ALL the top starter products from the TOP STARTER PRODUCTS section. Introduce them warmly. This is NOT a badge/best-seller question.]'
+      : '';
+
+    const badgeInstruction = isBadgeQuery
+      ? `\n[BADGE QUERY: Backend detected badge "${matchedBadge}" and injected ONLY products with exactly this badge. Present ONLY those products. If none injected, say honestly no product has this badge right now. Translate the badge name naturally in the user's language.]`
+      : '';
+
+    const brandInstruction = brandRequest
+      ? '\n[BRAND QUERY: User is asking about BBW4LIFE own brand/collection. Use ONLY the BBW4LIFE BRAND section in the system prompt to reply. Do NOT show product cards. Do NOT treat this as a product search.]'
+      : '';
+
+    /* Instruction acquiescement court */
+    const shortAckInstruction = shortAck
+      ? '\n[SHORT ACK: The user sent a very short acknowledgement (ok, merci, thanks, super, 👍, mesi, oke, etc.). Reply with EXACTLY ONE short warm friendly sentence in their language. NO products. NO page buttons. NO explanations. NO lists. Just a warm human response like a friend would say. Maximum 10 words.]'
+      : '';
+
+    const genderFilter2 = detectGender(message);
+    const genderInstruction = genderFilter2 === 'male'
+      ? '\n[GENDER FILTER: User asked for MEN products. Show ONLY men products from the Men Plus Size collection. NEVER suggest women items — dresses, bikinis, lingerie, heels are strictly excluded.]'
+      : genderFilter2 === 'female'
+      ? '\n[GENDER FILTER: User asked for WOMEN products. Show ONLY women products from the Curvy Woman collection. NEVER suggest men items — shirts, jeans, men shoes are strictly excluded.]'
+      : '';
+
+    const langName    = getLangName(userLang);
+    const otherLangs  = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE','HAITIAN CREOLE']
+      .filter(l => l !== langName).join(', ');
+    const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
+
+    const groqMessages = [
+      { role: 'system', content: systemPrompt },
+      ...history.slice(-8).map(h => ({ role: h.role, content: h.content })),
+      {
+        role: 'user',
+        content: `${message}\n\n[${langInstruction}]${shortAckInstruction}${(intent === 'product' && !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck) ? vagueInstruction : ''}${topStarterInstruction}${badgeInstruction}${brandInstruction}${contactInstruction}${genderInstruction}`
       }
-    }, 3000);
+    ];
 
-    /* ── Welcome ── */
-    function addWelcomeMessage() {
-      addMessage(welcomeMessages['en'], 'ai', [], null, []);
-    }
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    let groqResponse = null, usedModel = null, modelSuccess = false;
 
-    /* ══════════════════════════════════════
-       FORMAT MARKDOWN + Promo Code Highlighting
-    ══════════════════════════════════════ */
-    function formatMarkdown(text) {
-      /* Strip any raw internal product IDs that might leak */
-      const internalIds = [
-        'Pdg-Francenel-product1','Pdg-Francenel-product2','Pdg-Francenel-product3',
-        'Pdg-Francenel-product4','Pdg-Francenel-product5','Pdg-Francenel-product6',
-        'Pdg-Francenel-product7','Pdg-Francenel-product8','Pdg-Francenel-product9',
-        'Pdg-Francenel-product10','Pdg-Francenel-product11','Pdg-Francenel-product12',
-        'Pdg-Francenel-product13','Pdg-Francenel-product14','Pdg-Francenel-product15',
-        'Pdg-Francenel-product16','Pdg-Francenel-product17','Pdg-Francenel-product18',
-        'Pdg-Francenel-product19','Pdg-Francenel-product20','Pdg-Francenel-product21',
-        'Pdg-Francenel-product22','Pdg-Francenel-product23','Pdg-Francenel-product24',
-        'Pdg-Francenel-product25','Pdg-Francenel-product26','Pdg-Francenel-product27',
-        'Pdg-Francenel-product28','Pdg-Francenel-product29','Pdg-Francenel-product30',
-        'Pdg-Francenel-product31','Pdg-Francenel-product32','Pdg-Francenel-product33',
-        'Pdg-Francenel-product34','Pdg-Francenel-product35','Pdg-Francenel-product36',
-        'Pdg-Francenel-product37','Pdg-Francenel-product38','Pdg-Francenel-product39',
-        'Pdg-Francenel-product40','Pdg-Francenel-product41','Pdg-Francenel-product42',
-        'Pdg-Francenel-product43','Pdg-Francenel-product44','Pdg-Francenel-product45',
-        'Pdg-Francenel-product46','Pdg-Francenel-product47','Pdg-Francenel-product48',
-        'Pdg-Francenel-product49','Pdg-Francenel-product50','Pdg-Francenel-product51',
-        'Pdg-Francenel-product52','Pdg-Francenel-product53','Pdg-Francenel-product54',
-        'Pdg-Francenel-product55','Pdg-Francenel-product56','Pdg-Francenel-product57',
-        'Pdg-Francenel-product58','Pdg-Francenel-product59','Pdg-Francenel-product60',
-        'Pdg-Francenel-product61','Pdg-Francenel-product62','Pdg-Francenel-product63',
-        'Pdg-Francenel-product64','Pdg-Francenel-product65','Pdg-Francenel-product66',
-        'Pdg-Francenel-product67','Pdg-Francenel-product68',
-        'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
-        'Pdg-Francenel-product72','Pdg-Francenel-product73','Pdg-Francenel-product74',
-        'Pdg-Francenel-product75'
-      ];
-      let out = text;
-      internalIds.forEach(id => {
-        out = out.replace(new RegExp('\\b' + id + '\\b', 'gi'), '');
-      });
+    for (let attempt = 0; attempt < MODELS.length; attempt++) {
+      const idx   = (currentModelIndex + attempt) % MODELS.length;
+      const model = MODELS[idx];
+      let modelOk = false;
 
-      /* Render [[CODE]] as a highlighted promo badge */
-      out = out.replace(/\[\[([A-Z0-9_-]+)\]\]/g, (match, code) => {
-        return `<span class="cf-promo-code" data-code="${code}" title="Click to copy">${code}<svg class="cf-promo-copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></span>`;
-      });
-
-      out = out.replace(
-        /\[([^\]]+)\]\(([^)]+)\)/g,
-        (match, label, url) => {
-          if (url.startsWith('/') || url.startsWith('http')) {
-            return `<a href="${url}" class="cf-link-btn" target="${url.startsWith('http') ? '_blank' : '_self'}">${label} →</a>`;
-          }
-          return `<strong>${label}</strong>`;
-        }
-      );
-
-      /* Auto-linkify known BBW4LIFE page paths */
-      out = out.replace(
-        /(\/products\/product\d+\.html|\/page\/contact\.html|\/collections\/bbw4life-all-product\.html|\/page\/about\.html|\/account\.html|\/page\/order-tracking\.html)/g,
-        (url) => {
-          const labels = {
-            '/page/contact.html':                      'Contact us',
-            '/collections/bbw4life-all-product.html':  'Shop All',
-            '/page/about.html':                        'About Us',
-            '/account.html':                           'My Account',
-            '/page/order-tracking.html':               'Order Tracking',
-          };
-          const label = labels[url] || 'View';
-          return `<a href="${url}" class="cf-link-btn">${label} →</a>`;
-        }
-      );
-
-     out = out.replace(/!\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g, (match, alt, src) => {
-      return `<img src="${src}" alt="${alt}" class="cf-founder-img" style="width:100%;max-width:220px;border-radius:12px;display:block;margin:8px auto;border:2px solid rgba(201,150,62,0.40);">`;
-    });
-
-    return out
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<strong>$1</strong>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g,     '<em>$1</em>')
-      .replace(/`(.+?)`/g,       '<code>$1</code>')
-      .replace(/\n\n/g, '<br><br>')
-      .replace(/\n/g,   '<br>');
-    }
-
-    function getTime() {
-      return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    /* Copy promo code on click */
-    function attachPromoCodeCopyEvents(container) {
-      container.querySelectorAll('.cf-promo-code').forEach(el => {
-        el.addEventListener('click', function (e) {
-          e.stopPropagation();
-          const code = this.dataset.code;
-          if (!code) return;
-          navigator.clipboard.writeText(code).then(() => {
-            this.classList.add('cf-promo-code--copied');
-            const originalHTML = this.innerHTML;
-            this.innerHTML = code + ' ✓ Copied!';
-            setTimeout(() => {
-              this.classList.remove('cf-promo-code--copied');
-              this.innerHTML = originalHTML;
-            }, 2000);
-          }).catch(() => {
-            const range = document.createRange();
-            range.selectNode(this);
-            window.getSelection().removeAllRanges();
-            window.getSelection().addRange(range);
-          });
-        });
-      });
-    }
-
-    /* Reattach events on cards restored from sessionStorage */
-    function reattachCardEvents() {
-      document.querySelectorAll('.cf-product-card').forEach(card => {
-        const mainImg    = card.querySelector('.cf-pc-img');
-        const swatches   = card.querySelectorAll('.cf-pc-swatch');
-        const colorLabel = card.querySelector('.cf-pc-color-label');
-        const productUrl = card.dataset.productUrl;
-
-        if (mainImg && productUrl) {
-          mainImg.style.cursor = 'pointer';
-          mainImg.onclick = () => window.location.href = productUrl;
-        }
-
-        swatches.forEach(sw => {
-          const activate = () => {
-            swatches.forEach(s => s.classList.remove('cf-pc-swatch--active'));
-            sw.classList.add('cf-pc-swatch--active');
-            if (colorLabel) colorLabel.textContent = sw.dataset.name;
-            if (mainImg && sw.dataset.img && sw.dataset.img !== 'undefined' && sw.dataset.img !== '') {
-              mainImg.src = sw.dataset.img;
-            }
-          };
-          sw.addEventListener('mouseenter', activate);
-          sw.addEventListener('click',      activate);
-        });
-      });
-
-      attachPromoCodeCopyEvents(messages);
-    }
-
-    /* ══════════════════════════════════════
-       ADD MESSAGE
-       pageButtons: array of { url, label, icon }
-    ══════════════════════════════════════ */
-    function addMessage(text, role, products, contactInfo, pageButtons) {
-      const msgEl  = document.createElement('div');
-      msgEl.className = `cf-message cf-message--${role}`;
-
-      const bubble = document.createElement('div');
-      bubble.className = 'cf-msg-bubble';
-      bubble.innerHTML = formatMarkdown(text);
-      msgEl.appendChild(bubble);
-
-      attachPromoCodeCopyEvents(bubble);
-
-      /* ── Product cards ── */
-      if (role === 'ai' && Array.isArray(products) && products.length > 0) {
-        const cardsWrap = document.createElement('div');
-        cardsWrap.className = 'cf-product-cards';
-
-        products.forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'cf-product-card';
-          card.dataset.productUrl = p.url;
-
-          let imgHTML = '';
-          if (p.image) {
-            imgHTML = `
-              <div class="cf-pc-img-wrap">
-                <img class="cf-pc-img" src="${p.image}" alt="${p.title}" loading="lazy"
-                     onerror="this.closest('.cf-pc-img-wrap').style.display='none'">
-              </div>`;
-          }
-
-          const ratingHTML = p.rating
-            ? `<div class="cf-pc-rating">⭐ ${p.rating}/5</div>`
-            : '';
-
-          const priceHTML = `
-            <div class="cf-pc-price">
-              <span class="cf-pc-price-current">$${Number(p.price).toFixed(2)}</span>
-              <span class="cf-pc-price-compare">$${Number(p.compare_price).toFixed(2)}</span>
-            </div>`;
-
-          let colorsHTML = '';
-          if (p.colors && p.colors.length > 0) {
-            const swatchesHTML = p.colors.slice(0, 6).map(c => {
-              let variantImg = c.image || '';
-              if (!variantImg && p.variants) {
-                const v = p.variants.find(vv => vv.color === c.name);
-                if (v && v.image) variantImg = v.image;
-              }
-              return `<span
-                class="cf-pc-swatch"
-                title="${c.name}"
-                style="background:${c.hex || '#ccc'}"
-                data-img="${variantImg}"
-                data-name="${c.name}"
-              ></span>`;
-            }).join('');
-            const moreHTML = p.colors.length > 6
-              ? `<span class="cf-pc-swatch-more">+${p.colors.length - 6}</span>` : '';
-            colorsHTML = `
-              <div class="cf-pc-colors">${swatchesHTML}${moreHTML}</div>
-              <div class="cf-pc-color-label"></div>`;
-          }
-
-          const sizesHTML = (p.sizes && p.sizes.length > 0)
-            ? `<div class="cf-pc-sizes"><strong>Sizes:</strong> ${p.sizes.join(' · ')}</div>` : '';
-
-          const deliveryHTML = (p.delivery)
-            ? `<div class="cf-pc-delivery">🚚 ${p.delivery}</div>` : '';
-
-          const ctaHTML = `
-            <a href="${p.url}" class="cf-pc-btn" onclick="event.stopPropagation()">
-              View Product
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
-                <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </a>`;
-
-          card.innerHTML = `
-            ${imgHTML}
-            <div class="cf-pc-info">
-              <div class="cf-pc-title">${p.title}</div>
-              ${ratingHTML}
-              ${priceHTML}
-              ${colorsHTML}
-              ${sizesHTML}
-              ${deliveryHTML}
-              ${ctaHTML}
-            </div>`;
-
-          const imgEl = card.querySelector('.cf-pc-img');
-          if (imgEl) {
-            imgEl.style.cursor = 'pointer';
-            imgEl.addEventListener('click', (e) => {
-              e.stopPropagation();
-              window.location.href = p.url;
-            });
-          }
-
-          const swatches   = card.querySelectorAll('.cf-pc-swatch');
-          const colorLabel = card.querySelector('.cf-pc-color-label');
-          const mainImg    = card.querySelector('.cf-pc-img');
-
-          swatches.forEach(sw => {
-            const activate = () => {
-              swatches.forEach(s => s.classList.remove('cf-pc-swatch--active'));
-              sw.classList.add('cf-pc-swatch--active');
-              if (colorLabel) colorLabel.textContent = sw.dataset.name;
-              if (mainImg && sw.dataset.img && sw.dataset.img !== 'undefined' && sw.dataset.img !== '') {
-                mainImg.src = sw.dataset.img;
-              }
-            };
-            sw.addEventListener('mouseenter', activate);
-            sw.addEventListener('click',      activate);
+      for (let retry = 1; retry <= 2; retry++) {
+        try {
+          groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model, messages: groqMessages, max_tokens: 400, temperature: 0.70, stream: false })
           });
 
-          cardsWrap.appendChild(card);
-        });
+          if (groqResponse.status === 429) {
+            console.log(`[Chat] 429 on "${model}" (retry ${retry}/2)`);
+            if (retry < 2) { await sleep(1500); continue; }
+            currentModelIndex = (idx + 1) % MODELS.length;
+            break;
+          }
+          if (!groqResponse.ok) { console.error(`[Chat] HTTP ${groqResponse.status} on "${model}"`); break; }
 
-        msgEl.appendChild(cardsWrap);
-      }
-
-      /* ── Contact buttons ── */
-      if (role === 'ai' && contactInfo) {
-        const btnsWrap = document.createElement('div');
-        btnsWrap.className = 'cf-contact-btns';
-
-        if (contactInfo.whatsapp) {
-          const waBtn = document.createElement('a');
-          waBtn.href      = contactInfo.whatsapp;
-          waBtn.target    = '_blank';
-          waBtn.rel       = 'noopener noreferrer';
-          waBtn.className = 'cf-contact-btn cf-contact-btn--whatsapp';
-          waBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> WhatsApp';
-          btnsWrap.appendChild(waBtn);
-        }
-
-        if (contactInfo.telegram) {
-          const tgBtn = document.createElement('a');
-          tgBtn.href      = contactInfo.telegram;
-          tgBtn.target    = '_blank';
-          tgBtn.rel       = 'noopener noreferrer';
-          tgBtn.className = 'cf-contact-btn cf-contact-btn--telegram';
-          tgBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg> Telegram';
-          btnsWrap.appendChild(tgBtn);
-        }
-
-        if (contactInfo.page) {
-          const pgBtn = document.createElement('a');
-          pgBtn.href      = contactInfo.page;
-          pgBtn.className = 'cf-contact-btn cf-contact-btn--page';
-          pgBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> Contact Page';
-          btnsWrap.appendChild(pgBtn);
-        }
-
-        if (btnsWrap.children.length > 0) {
-          msgEl.appendChild(btnsWrap);
+          usedModel = model; modelOk = true; modelSuccess = true; currentModelIndex = idx;
+          break;
+        } catch (fetchErr) {
+          console.error(`[Chat] Fetch error on "${model}" (retry ${retry}/2):`, fetchErr.message);
+          if (retry < 2) { await sleep(1000); continue; }
+          break;
         }
       }
-
-      /* ── PAGE NAVIGATION BUTTONS ── */
-      if (role === 'ai' && Array.isArray(pageButtons) && pageButtons.length > 0) {
-        const pageWrap = document.createElement('div');
-        pageWrap.className = 'cf-page-btns';
-
-        pageButtons.forEach(pb => {
-          const btn = document.createElement('a');
-          btn.href      = pb.url;
-          btn.className = 'cf-page-btn';
-          btn.innerHTML = `<span class="cf-page-btn-icon">${pb.icon}</span><span class="cf-page-btn-label">${pb.label}</span><svg class="cf-page-btn-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
-          pageWrap.appendChild(btn);
-        });
-
-        msgEl.appendChild(pageWrap);
-      }
-
-      const time = document.createElement('span');
-      time.className  = 'cf-msg-time';
-      time.textContent = getTime();
-      msgEl.appendChild(time);
-
-      messages.appendChild(msgEl);
-      scrollToBottom();
-
-      try { sessionStorage.setItem('cf_messages_html', messages.innerHTML); } catch(e) {}
+      if (modelOk) break;
     }
 
-    function scrollToBottom() {
-      messages.scrollTo({ top: messages.scrollHeight, behavior: 'smooth' });
-    }
-
-    function showTyping() { if (typing) { typing.style.display = 'flex'; scrollToBottom(); } }
-    function hideTyping()  { if (typing) typing.style.display = 'none'; }
-
-    /* ── Send message ── */
-    async function sendMessage(userText) {
-      if (!userText || !userText.trim() || isLoading) return;
-      const text = userText.trim();
-
-      const userLang = detectUILanguage(text);
-
-      const chipsEl = document.getElementById('cf-quick-chips');
-      if (chipsEl) chipsEl.style.display = 'none';
-
-      addMessage(text, 'user', [], null, []);
-      conversationHistory.push({ role: 'user', content: text });
-      try { sessionStorage.setItem('cf_history', JSON.stringify(conversationHistory.slice(-20))); } catch(e) {}
-
-      input.value      = '';
-      input.style.height = 'auto';
-      sendBtn.disabled = true;
-      isLoading        = true;
-
-      showTyping();
-
-      const errorMessages = {
-        fr: "Désolée, j'ai un petit problème technique. Réessayez dans un instant! 🙏",
-        es: "Lo siento, tengo un pequeño problema técnico. ¡Inténtalo de nuevo en un momento! 🙏",
-        en: "Sorry, I'm having a little trouble right now. Please try again in a moment! 🙏"
+    if (!modelSuccess) {
+      return {
+        statusCode: 200, headers,
+        body: JSON.stringify({
+          reply: getFallbackMessage(userLang), products: [], intent: 'general',
+          isVague: false, showContact: false, contactInfo: null, pageButtons: []
+        })
       };
-
-      try {
-        const response = await fetch('/.netlify/functions/chat', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({
-            message: text,
-            history: conversationHistory.slice(-8)
-          })
-        });
-
-        hideTyping();
-
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
-
-        const aiReply     = data.reply       || errorMessages[userLang] || errorMessages['en'];
-        const products    = data.products    || [];
-        const showContact = data.showContact || false;
-        const contactInfo = data.contactInfo || null;
-        const pageButtons = data.pageButtons || [];
-
-        addMessage(aiReply, 'ai', products, showContact ? contactInfo : null, pageButtons);
-        conversationHistory.push({ role: 'assistant', content: aiReply });
-        try { sessionStorage.setItem('cf_history', JSON.stringify(conversationHistory.slice(-20))); } catch(e) {}
-
-        if (conversationHistory.length > 20) {
-          conversationHistory = conversationHistory.slice(-16);
-        }
-
-      } catch (err) {
-        hideTyping();
-        console.error('Chat error:', err);
-        addMessage(errorMessages[userLang] || errorMessages['en'], 'ai', [], null, []);
-      } finally {
-        isLoading        = false;
-        sendBtn.disabled = input.value.trim().length === 0;
-      }
     }
 
-    window.__cfSendMessage = sendMessage;
+    console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest} | ShortAck: ${shortAck}`);
 
-    /* ── Input handlers ── */
-    input.addEventListener('input', function () {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-      sendBtn.disabled  = this.value.trim().length === 0;
-    });
+    const data  = await groqResponse.json();
+    const reply = data.choices?.[0]?.message?.content || getErrorMessage(userLang);
 
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        if (!sendBtn.disabled) sendMessage(this.value);
+    const showContactButtons = !topStarterRequest && !isBadgeQuery && !brandRequest && !shortAck
+      && intent !== 'product'
+      && (isContactIntent || reply.includes('👇'));
+    const cleanReply = reply.replace(/👇[\s]*/g, '').trim();
+
+    const suppressPages = isGreeting(message) || isShortAck(message);
+    const pageMatches   = suppressPages ? [] : [...cleanReply.matchAll(/🔗\[PAGE:([^\]]+)\]/g)];
+    const pageButtons   = pageMatches.map(m => {
+      const url = m[1].trim();
+      if (PAGE_MAP[url]) return { url, label: PAGE_MAP[url].label, icon: PAGE_MAP[url].icon };
+      const pm = url.match(/^\/products\/product(\d+)\.html$/);
+      if (pm) {
+        const prod = visibleProducts[parseInt(pm[1], 10) - 1];
+        return { url, label: prod ? prod.title : `Product ${pm[1]}`, icon: '🛍️' };
       }
+      return { url, label: 'Visit Page', icon: '🔗' };
     });
 
-    sendBtn.addEventListener('click', () => {
-      if (!sendBtn.disabled) sendMessage(input.value);
-    });
+    const finalReply = cleanReply.replace(/🔗\[PAGE:([^\]]+)\]/g, '').trim();
 
-    /* ── Quick chips ── */
-    chips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        const msg = chip.dataset.msg;
-        if (msg) {
-          input.value      = msg;
-          sendBtn.disabled = false;
-          sendMessage(msg);
-        }
-      });
-    });
+    const productCards = relevantProducts.map(p => ({
+      title:         p.title,
+      description:   p.description,
+      price:         p.price,
+      compare_price: p.compare_price,
+      url:           p.url,
+      image:         p.image,
+      badge:         p.badge || '',
+      colors:        p.colors.map(c => ({ name: c.name, hex: c.hex, image: c.image })),
+      variants:      p.variants,
+      sizes:         p.sizes,
+      delivery:      formatDelivery(p.startDate, p.endDate),
+      rating:        p.rating,
+      reviewsCount:  p.reviewsCount,
+      discounts:     p.discounts
+    }));
 
-    /* ── Keyboard & outside click ── */
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && isOpen) closeChat();
-    });
+    return {
+      statusCode: 200, headers,
+      body: JSON.stringify({
+        reply:       finalReply,
+        products:    productCards,
+        intent:      (topStarterRequest || isBadgeQuery) ? 'product' : intent,
+        isVague,
+        showContact: showContactButtons,
+        contactInfo: showContactButtons ? {
+          whatsapp: contactInfo.hasWhatsapp ? contactInfo.whatsappUrl : null,
+          telegram: contactInfo.hasTelegram ? contactInfo.telegramUrl : null,
+          page:     contactInfo.contactPage
+        } : null,
+        pageButtons
+      })
+    };
 
-    document.addEventListener('click', e => {
-      if (isOpen && !widget.contains(e.target) && !toggle.contains(e.target)) closeChat();
-    });
-
-    console.log('✅ BBW4LIFE Chatbot ready — Berline is online (EN/FR/ES + multilingual)');
-  })();
-});
+  } catch (error) {
+    console.error('Chat function error:', error);
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal server error', message: error.message }) };
+  }
+};
 
 
 

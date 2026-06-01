@@ -1896,7 +1896,9 @@ function showErrorPopup(message) {
           const img     = document.createElement('img');
           img.src       = upgradeShopifyImageUrl(src);
           img.className = `mini-media-image ${i === 0 ? 'active' : ''}`;
-          img.loading   = 'lazy';
+          img.loading   = i === 0 ? 'eager' : 'lazy';
+          img.decoding  = 'async';
+          img.style.minHeight = i === 0 ? '1px' : '';
           slider.appendChild(img);
         });
         const prev = document.createElement('div');
@@ -1924,9 +1926,14 @@ function showErrorPopup(message) {
         slider.appendChild(next);
         if (media.length > 1) {
           setInterval(() => {
-            if (typeof miniImageSlidersPaused !== 'undefined' && miniImageSlidersPaused) return;
-            slideMini(slider, 'next');
-          }, 6000);
+          if (typeof miniImageSlidersPaused !== 'undefined' && miniImageSlidersPaused) return;
+          const imgs = slider.querySelectorAll('.mini-media-image');
+          const activeIdx = Array.from(imgs).findIndex(i => i.classList.contains('active'));
+          const nextIdx = (activeIdx + 1) % imgs.length;
+          const nextImg = imgs[nextIdx];
+          if (nextImg && (!nextImg.complete || nextImg.naturalWidth === 0)) return;
+          slideMini(slider, 'next');
+      }, 6000);
         }
       }
 
@@ -4199,10 +4206,20 @@ if (window.innerWidth <= 768) {
       build(e.detail.title);
     }, { once: true });
 
-    // ✅ Fallback plus long pour laisser le temps à head.js
-    setTimeout(() => {
-      if (!window.__seoTitle) build(document.title);
-    }, 2000);
+    // Attendre que head.js injecte le bon titre
+    let attempts = 0;
+    const tryBuild = setInterval(() => {
+        attempts++;
+        if (window.__seoTitle) {
+            clearInterval(tryBuild);
+            build(window.__seoTitle);
+        } else if (attempts >= 20) {
+            clearInterval(tryBuild);
+            // Fallback : prendre seulement la partie avant | et avant —
+            const cleanTitle = document.title.split('|')[0].split('—')[0].trim();
+            build(cleanTitle);
+        }
+    }, 100);
   }
 
 })();

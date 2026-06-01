@@ -634,6 +634,10 @@ function injectPageSEO() {
     /* Title */
     document.title = seo.title;
 
+
+    window.__seoTitle = seo.title.split('|')[0].split('—')[0].trim();
+document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+
     /* Helper : crée ou met à jour une meta */
     function setMeta(selector, attr, value) {
         let el = document.querySelector(selector);
