@@ -547,6 +547,62 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product23.html'
     },
 
+    '/products/product24.html': {
+        title: 'LaceRomper — Jumpsuit Lace Splicing Thong | BBW4LIFE',
+        description: 'A daring one-piece lace romper that merges style and seduction. Bold lace splicing thong detail, available in Black, White & Red. Sizes S to 4XL. Made for queens who own every room. Free worldwide shipping.',
+        keywords: 'plus size lace romper, BBW romper, curvy women jumpsuit, lace splicing thong, plus size lingerie romper, one piece lace jumpsuit, BBW4LIFE lingerie, plus size bodysuit, lace romper curvy, size S to 4XL romper, BBW one piece, plus size lace jumpsuit',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_24_1.jpg?v=1778368452',
+        canonical: 'https://www.bbw4life.com/products/product24.html'
+    },
+
+    '/products/product25.html': {
+        title: 'StripedBikini — Print Striped Plus Size Swimwear | BBW4LIFE',
+        description: 'Fun striped prints in a flattering bikini cut. Lightweight, colorful, and ready for your next beach adventure. Plus size swimwear for curvy queens — Sizes XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size bikini, BBW swimwear, curvy women bikini, striped bikini plus size, plus size swimsuit, BBW4LIFE swimwear, lake blue bikini, plus size beach wear, curvy bikini XL 2XL 3XL 4XL, striped swimwear curvy, BBW bikini, plus size striped swimsuit',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_25_1.png?v=1778369780',
+        canonical: 'https://www.bbw4life.com/products/product25.html'
+    },
+
+    '/products/product26.html': {
+        title: 'TubeBikini — Plus Size Tube Top Swimsuit | BBW4LIFE',
+        description: 'Show your curves with confidence in our TubeBikini. Plus size tube top swimsuit in Blue, Green & Gray — sizes 0XL to 4XL. Flattering coverage, maximum confidence. Free worldwide shipping.',
+        keywords: 'plus size tube top bikini, BBW swimsuit, curvy women swimwear, plus size swimsuit, tube top bikini curvy, BBW bikini, plus size bikini 4XL, curvy swimwear, BBW4LIFE swimsuit, tube swimsuit plus size, beach curvy women, plus size beach wear',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_26_1.png?v=1778372582',
+        canonical: 'https://www.bbw4life.com/products/product26.html'
+    },
+
+    '/products/product27.html': {
+        title: 'RuffleOne Bikini — V-Neck Ruffled One Piece Swimsuit | BBW4LIFE',
+        description: 'Feminine ruffles on a V-neck one-piece swimsuit made for curvy queens. Flattering, bold and beach-ready — because one piece can be just as stunning as two. Sizes 0XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size one piece swimsuit, BBW one piece, curvy women swimwear, ruffled swimsuit plus size, V-neck one piece bikini, plus size swimwear 0XL 4XL, BBW4LIFE swimsuit, one piece bikini curvy, ruffle swimwear BBW, plus size beach swimsuit, flattering one piece curvy, BBW swimwear queen',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_27_1.png?v=1778374331',
+        canonical: 'https://www.bbw4life.com/products/product27.html'
+    },
+
+    '/products/product28.html': {
+        title: 'BandageBikini — Solid Color Bandage Swimsuit | BBW4LIFE',
+        description: 'Sleek, secure and sculptural — this chic bandage-style bikini in solid deep green is designed to make you feel amazing at any size. Plus size swimwear for queens. Sizes 0XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size bandage bikini, BBW bikini, curvy women swimwear, solid color bandage swimsuit, plus size swimsuit green, BBW4LIFE bikini, size 0XL to 4XL swimwear, bandage bikini curvy, plus size beach wear, curvy queen swimsuit, BBW bandage swimsuit, plus size swimwear',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_28_1.png?v=1778375900',
+        canonical: 'https://www.bbw4life.com/products/product28.html'
+    },
+
+    '/products/product29.html': {
+        title: 'ContrastOne Piece — Contrasting Color One-Piece Swimwear | BBW4LIFE',
+        description: 'Eye-catching contrasting colors make this one-piece a true showstopper. Bold, modern, and uniquely flattering for plus size queens. Available in Green & Brown, sizes 0XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size one piece swimsuit, BBW swimwear, curvy women swimsuit, contrasting color swimsuit, plus size swimwear, BBW4LIFE bikini, one piece plus size, BBW one piece, curvy swimsuit, plus size beach wear, contrast swimsuit curvy, size 0XL to 4XL swimsuit, plus size pool wear',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_29_1.png?v=1778378000',
+        canonical: 'https://www.bbw4life.com/products/product29.html'
+    },
+
+    '/products/product30.html': {
+        title: 'PremiumBikini — Plus Size Swimsuit Collection | BBW4LIFE',
+        description: 'A premium plus-size bikini with exceptional fabric and flattering fit. Stylish and supportive for any aquatic adventure. Sizes XL to 4XL. Bold black design made for curvy queens. Free worldwide shipping.',
+        keywords: 'plus size bikini, BBW bikini, curvy women swimsuit, premium plus size swimwear, plus size black bikini, BBW swimwear, curvy bikini XL 2XL 3XL 4XL, BBW4LIFE swimwear, flattering plus size bikini, plus size pool swimsuit, curvy queen swimwear, supportive plus size bikini',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_30_1.png?v=1778417746',
+        canonical: 'https://www.bbw4life.com/products/product30.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */
@@ -633,10 +689,6 @@ function injectPageSEO() {
 
     /* Title */
     document.title = seo.title;
-
-
-    window.__seoTitle = seo.title.split('|')[0].split('—')[0].trim();
-document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
 
     /* Helper : crée ou met à jour une meta */
     function setMeta(selector, attr, value) {
