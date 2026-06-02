@@ -452,26 +452,38 @@
   }
 
   function renderRV() {
-    if (!colRvGrid || !colRecentlyViewed) return;
-    const rv = getRV();
-    if (rv.length === 0) { colRecentlyViewed.style.display = 'none'; return; }
-    colRecentlyViewed.style.display = 'block';
-    colRvGrid.innerHTML = '';
-    rv.slice(0, 6).forEach(item => {
-      const prod = allProducts.find(p => p.id === item.id) || item;
-      const url  = getProductUrl(prod.id);
-      const card = document.createElement('div');
-      card.className = 'col-rv-card';
-      card.innerHTML =
-        '<img class="col-rv-card__img" src="' + upgradeShopifyImageUrl(item.image, 300) + '" alt="' + item.title + '" loading="lazy">' +
-        '<div class="col-rv-card__info">' +
-          '<p class="col-rv-card__title">' + item.title + '</p>' +
-          '<span class="col-rv-card__price">$' + (Number(item.price) || 0).toFixed(2) + '</span>' +
-        '</div>';
-      card.addEventListener('click', () => { window.location.href = url; });
-      colRvGrid.appendChild(card);
-    });
-  }
+  if (!colRvGrid || !colRecentlyViewed) return;
+  
+  let rv = [];
+  try { rv = JSON.parse(localStorage.getItem(RV_KEY) || '[]'); } catch(e) {}
+  if (!rv.length) { colRecentlyViewed.style.display = 'none'; return; }
+
+  // Compatible avec les deux formats : tableaux d'IDs (pages produit) ou d'objets (ancienne collection)
+  colRecentlyViewed.style.display = 'block';
+  colRvGrid.innerHTML = '';
+
+  rv.slice(0, 6).forEach(entry => {
+    const id   = typeof entry === 'string' ? entry : entry.id;
+    const prod = allProducts.find(p => p.id === id) || (typeof entry === 'object' ? entry : null);
+    if (!prod) return;
+
+    const url     = getProductUrl(prod.id || id);
+    const imgSrc  = upgradeShopifyImageUrl(prod.image, 300);
+    const title   = prod.title || '';
+    const price   = Number(prod.price) || 0;
+
+    const card = document.createElement('div');
+    card.className = 'col-rv-card';
+    card.innerHTML =
+      '<img class="col-rv-card__img" src="' + imgSrc + '" alt="' + title + '" loading="lazy">' +
+      '<div class="col-rv-card__info">' +
+        '<p class="col-rv-card__title">' + title + '</p>' +
+        '<span class="col-rv-card__price">$' + price.toFixed(2) + '</span>' +
+      '</div>';
+    card.addEventListener('click', () => { window.location.href = url; });
+    colRvGrid.appendChild(card);
+  });
+}
 
   if (colRvClear) {
     colRvClear.addEventListener('click', () => {
