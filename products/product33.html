@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+      <span class="bbw-heart-banner__text">Summer belongs to every queen — bold prints, high waist, and curves that deserve to be seen.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-heart"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product33">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.7" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star half"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-star"></i></div>
+          <p class="bbw-soul-message__text">A curvy queen in high-waist shorts does not hide — she arrives. The DalmationShorts were designed for the woman who walks into summer like she owns it. <strong>Bold Dalmatian print, high waist that celebrates your silhouette, available in US sizes 14 to 24.</strong> Because summer was made for every queen — especially yours. <em>Wear them and let the world know you have arrived.</em></p>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+       <!-- BBW DALMATIAN PATTERN STORY -->
+        <div class="bbw-dalmatian-story" data-scroll-reveal>
+        <div class="bbw-dalmatian-story__header">
+            <i class="fi fi-rr-star"></i>
+            Why This Print Makes a Statement
+        </div>
+        <div class="bbw-dalmatian-story__body">
+            <div class="bbw-dalmatian-story__card">
+            <div class="bbw-dalmatian-story__dot" style="background:#ffffff; border-color: rgba(0,0,0,0.20);">
+                <i class="fi fi-rr-paw"></i>
+            </div>
+            <div class="bbw-dalmatian-story__info">
+                <strong>White Base — Pure Summer Energy</strong>
+                <span>A crisp white background that radiates summer brightness. Clean, fresh, and designed to make every curve pop under the sun with confidence.</span>
+            </div>
+            </div>
+            <div class="bbw-dalmatian-story__card">
+            <div class="bbw-dalmatian-story__dot" style="background:#1a1005; border-color: rgba(201,150,62,0.30);">
+                <i class="fi fi-rr-hexagon"></i>
+            </div>
+            <div class="bbw-dalmatian-story__info">
+                <strong>Black Spots — Bold &amp; Unapologetic</strong>
+                <span>The Dalmatian pattern is not subtle — and neither are you. Bold black spots on white say: I am here, I am beautiful, and I am not hiding for anyone.</span>
+            </div>
+            </div>
+            <div class="bbw-dalmatian-story__card">
+            <div class="bbw-dalmatian-story__dot" style="background: linear-gradient(135deg, #fff 50%, #1a1005 50%); border-color: rgba(201,150,62,0.25);">
+                <i class="fi fi-rr-circle-half"></i>
+            </div>
+            <div class="bbw-dalmatian-story__info">
+                <strong>High Contrast = Maximum Presence</strong>
+                <span>High contrast prints are scientifically proven to draw the eye and create visual impact. When a curvy queen wears high contrast, every room notices — and that is the point.</span>
+            </div>
+            </div>
+            <div class="bbw-dalmatian-story__card">
+            <div class="bbw-dalmatian-story__dot" style="background: rgba(201,150,62,0.15); border-color: rgba(201,150,62,0.40);">
+                <i class="fi fi-rr-crown"></i>
+            </div>
+            <div class="bbw-dalmatian-story__info">
+                <strong>High Waist — Your Silhouette, Elevated</strong>
+                <span>The high waist cut naturally cinches and lifts, creating an hourglass silhouette that celebrates your body exactly as it is. No shapewear needed. Just you, your shorts, and your confidence.</span>
+            </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- TRUST STRIP -->
+        <div class="pp-trust-strip">
+          <span class="pp-trust-item"><i class="fas fa-shield-alt"></i> Secure Payment</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-truck"></i> Free Shipping</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-undo"></i> 30-Day Returns</span>
+          <span class="pp-trust-sep">·</span>
+          <span class="pp-trust-item"><i class="fas fa-star"></i> 4.7 / 5</span>
+        </div>
+
+        <!-- MARQUEE -->
+        <div class="pp-marquee-wrap">
+          <div class="pp-marquee-shine"></div>
+          <div class="pp-marquee-track">
+            <span><i class="fi fi-rr-flame"></i> 53% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Dalmatian High Waist Shorts &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> US Sizes 14 to 24 &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> Bold Summer Print &nbsp;•&nbsp; <i class="fi fi-rr-shield-check"></i> High Waist Flattering Cut &nbsp;•&nbsp; <i class="fi fi-rr-undo"></i> 30-Day Returns &nbsp;•&nbsp;</span>
+            <span><i class="fi fi-rr-flame"></i> 53% OFF Today! &nbsp;•&nbsp; <i class="fi fi-rr-crown"></i> Dalmatian High Waist Shorts &nbsp;•&nbsp; <i class="fi fi-rr-heart"></i> US Sizes 14 to 24 &nbsp;•&nbsp; <i class="fi fi-rr-star"></i> Free Worldwide Shipping &nbsp;•&nbsp; <i class="fi fi-rr-check-circle"></i> Bold Summer Print &nbsp;•&nbsp; <i class="fi fi-rr-shield-check"></i> High Waist Flattering Cut &nbsp;•&nbsp; <i class="fi fi-rr-undo"></i> 30-Day Returns &nbsp;•&nbsp;</span>
+          </div>
+        </div>
+
+        <!-- PRICE -->
+        <div class="product-price-wrapper" data-scroll-reveal>
+          <div class="product-price">
+            <div class="price-wrapper">
+              <span class="compare-price"></span>
+              <span class="current-price"></span>
+              <span class="product-discount-badge discount-badge"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URGENCY -->
+        <div class="pp-urgency-bar">
+          <i class="fas fa-fire"></i>
+          <span><strong>37 queens</strong> added these summer shorts to their cart today — bold prints and plus sizes move fast under the sun!</span>
+        </div>
+
+        <!-- STOCK -->
+        <div class="pp-stock-block loading" id="pp-stock-block">
+          <div class="pp-stock-label" id="pp-stock-label"><span>Checking availability...</span></div>
+          <div class="pp-stock-bar-track">
+            <div class="pp-stock-bar-fill" id="pp-stock-bar-fill" style="width:35%;"></div>
+          </div>
+          <div class="pp-stock-hint" id="pp-stock-hint">Updating...</div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BUNDLE -->
+        <div class="bundle-save-container" data-scroll-reveal>
+          <h3 class="bundle-title">
+            <span class="title-decoration left"></span>
+            <span class="title-text">Queen, Choose Your Bundle & Save</span>
+            <span class="title-decoration right"></span>
+          </h3>
+          <div class="bundle-option bundle-single" data-bundle="single">
+            <input type="radio" id="single" name="bundle" value="single">
+            <label for="single">
+              <div class="bundle-content">
+                <div class="bundle-name">Just for Me ☀️</div>
+                <div class="bundle-description single-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="single-price"></span>
+                <span class="original-price" id="single-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-selection single-selection">
+              <div class="variant-row">
+                <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                <div class="variant-selectors variant-grid"></div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option duo-with-badge" data-bundle="duo">
+            <input type="radio" id="duo" name="bundle" value="duo">
+            <label for="duo">
+              <div class="bundle-content">
+                <div class="bundle-name">Summer Queens Duo 👯</div>
+                <div class="bundle-description duo-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="duo-price"></span>
+                <span class="original-price" id="duo-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge duo-badge">Popular</div>
+            <div class="bundle-selection duo-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">My Shorts</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Her Shorts</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+          <div class="bundle-option trio-with-badge" data-bundle="trio">
+            <input type="radio" id="trio" name="bundle" value="trio">
+            <label for="trio">
+              <div class="bundle-content">
+                <div class="bundle-name">Summer Queens Trio 🌸</div>
+                <div class="bundle-description trio-description"></div>
+              </div>
+              <div class="bundle-price">
+                <span id="trio-price"></span>
+                <span class="original-price" id="trio-original-price"></span>
+              </div>
+            </label>
+            <div class="bundle-badge trio-badge">Most Popular</div>
+            <div class="bundle-selection trio-selection">
+              <div class="variant-pair" data-index="1">
+                <strong class="pair-title">Shorts 1</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="2">
+                <strong class="pair-title">Shorts 2</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <div class="variant-pair" data-index="3">
+                <strong class="pair-title">Shorts 3</strong>
+                <div class="variant-row">
+                  <div class="variant-preview"><img src="" alt="" loading="lazy"></div>
+                  <div class="variant-selectors variant-grid"></div>
+                </div>
+              </div>
+              <button class="bundle-add-btn"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- UPSELL -->
+        <div class="p2-upsell-block" data-scroll-reveal>
+          <div class="p2-upsell-header">
+            <i class="fas fa-gem"></i>
+            <span>Complete Your Summer Queen Look</span>
+            <span class="p2-upsell-save-badge" id="p2-upsell-badge">Save 25%</span>
+          </div>
+          <p class="p2-upsell-sub">Queens who build a full summer look feel unstoppable at every gathering — because confidence is the best accessory you can wear under the sun.</p>
+          <div class="p2-upsell-items" id="p2-upsell-items"></div>
+          <div class="p2-upsell-footer">
+            <div class="p2-upsell-total-row">
+              <span>Kit Total:</span>
+              <strong id="p2-upsell-total">+ $0.00</strong>
+            </div>
+            <button class="p2-upsell-add-btn" id="p2-upsell-add-btn" disabled>
+              <i class="fas fa-plus-circle"></i> Add Selected to Cart
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing these summer shorts right now.</span>
+          </p>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW STYLE GUIDE -->
+        <div class="bbw-style-guide" data-scroll-reveal>
+          <div class="bbw-style-guide__header">
+            <i class="fi fi-rr-star"></i>
+            How to Style the DalmationShorts
+          </div>
+          <div class="bbw-style-guide__steps">
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">1</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Beach Day Queen</strong>
+                <span>Pair with a white crop top or bikini top, platform sandals and oversized sunglasses. Add a straw tote — you are the entire summer aesthetic that other women will screenshot.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">2</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>City Summer Chic</strong>
+                <span>Tuck in a fitted black bodysuit, slip on white sneakers or mule heels. Simple gold jewelry finishes the look — effortless downtown confidence without trying too hard.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">3</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Summer BBQ or Pool Party</strong>
+                <span>Layer over a colourful swimsuit and add wedge sandals. The print is your conversation starter — every queen at the party will ask where you got them. Let them look.</span>
+              </div>
+            </div>
+            <div class="bbw-style-guide__step">
+              <div class="bbw-style-guide__step-num">4</div>
+              <div class="bbw-style-guide__step-body">
+                <strong>Casual Summer Errands</strong>
+                <span>Match with a relaxed linen shirt tied at the waist and flat slides. Everyday moments deserve the same confidence as special ones — your shorts say that even a Tuesday morning is worth showing up for.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DELIVERY -->
+        <div class="delivery-info delivery-border-block1" data-scroll-reveal>
+          <p id="delivery-text">
+            <strong>Delivery between</strong>
+            <span id="start-date" class="delivery-date"></span>
+            and
+            <span id="end-date" class="delivery-date"></span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <select id="size-select"></select>
+          <span class="wishlist-icon-product" title="Add to Wishlist">
+            <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </span>
+          <label for="color-select">Select Color:</label>
+          <div class="color-swatches"></div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Find your perfect summer shorts fit</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">DalmationShorts — <strong>Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_1.png?v=1778423614" alt="DalmationShorts Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                The DalmationShorts are cut with a <strong>high waist that sits at or above the natural waist</strong>, creating a flattering silhouette for all curvy body types. The fabric has a comfortable stretch. If you are between sizes, we recommend sizing <strong>up</strong> for maximum comfort and freedom of movement.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> Shorts Size Chart (US Sizing)</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <table>
+                <thead>
+                  <tr><th>Size</th><th>US Size</th><th>Waist (cm)</th><th>Hips (cm)</th><th>Length (cm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>1X</strong></td><td>US 14–16</td><td>86–92</td><td>112–118</td><td>33–35</td></tr>
+                  <tr><td><strong>2X</strong></td><td>US 18–20</td><td>94–100</td><td>120–126</td><td>34–36</td></tr>
+                  <tr><td><strong>3X</strong></td><td>US 22–24</td><td>102–110</td><td>128–136</td><td>35–37</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-palette"></i> Available Color & Print</h3>
+              <table>
+                <thead><tr><th>Color</th><th>The Vibe</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>White / Black</strong></td><td>Classic Dalmatian print — bold, playful, and made for curvy queens who want to be seen. High contrast energy that turns every summer outing into a moment.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- BBW LINEN CARE — Fabric Guide for Shorts -->
+        <div class="bbw-linen-care" data-scroll-reveal>
+          <div class="bbw-linen-care__header">
+            <i class="fi fi-rr-star"></i>
+            Why These Shorts Feel So Good
+          </div>
+          <div class="bbw-linen-care__grid">
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-wind"></i></div>
+              <div class="bbw-linen-care__title">Breathable Fabric</div>
+              <div class="bbw-linen-care__text">Lightweight and airy — made for warm weather and long summer days. You stay cool and comfortable no matter how the heat rises.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-expand-arrows-alt"></i></div>
+              <div class="bbw-linen-care__title">Comfortable Stretch</div>
+              <div class="bbw-linen-care__text">The fabric moves naturally with your body — no pulling, no discomfort, no adjusting. Just free, beautiful movement all day long.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-ruler-vertical"></i></div>
+              <div class="bbw-linen-care__title">High Waist Structure</div>
+              <div class="bbw-linen-care__text">The waistband is structured to sit high and stay in place — giving you a naturally defined silhouette without any constriction or discomfort.</div>
+            </div>
+            <div class="bbw-linen-care__card">
+              <div class="bbw-linen-care__icon"><i class="fas fa-sync-alt"></i></div>
+              <div class="bbw-linen-care__title">Easy Care</div>
+              <div class="bbw-linen-care__text">Machine wash cold, gentle cycle, hang to dry. The Dalmatian print retains its vibrancy wash after wash — because queens deserve clothes that last.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">Why are these shorts different for plus size queens?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The <strong>DalmationShorts</strong> were not made by scaling up a regular-size pattern. The high waist is structurally designed to sit correctly on a plus-size body — sitting at the natural waist rather than folding or rolling. The fabric is chosen to have enough stretch to accommodate curves without losing its shape throughout the day.</p>
+              <p>The Dalmatian print itself was selected because high-contrast bold prints on curvy bodies create a powerful visual presence. <strong>This is not a compromise version of a short. It is designed from the beginning for queens in US sizes 14 to 24.</strong> Every stitch, every seam, every proportional choice was made with your body in mind — not adjusted after the fact.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Your shorts arrive carefully and <strong>discreetly packaged</strong> — your privacy is completely respected.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your confidence is our guarantee.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Style:</strong> High waist plus size shorts — casual summer cut</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Print:</strong> Dalmatian — bold black spots on white background</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Waist:</strong> High waist, structured band — sits at natural waist</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fabric:</strong> Lightweight, breathable with comfortable stretch</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> 1X (US 14–16), 2X (US 18–20), 3X (US 22–24)</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Machine wash cold, gentle cycle, hang to dry, do not bleach</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_1.png?v=1778423614" alt="DalmationShorts — high waist front" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> Bold Print — Arrive With Impact</div>
+                <div class="slide-text">The Dalmatian print is not background noise — it is the main event. A queen who wears bold print in a room full of solids owns every conversation without saying a word.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_3.png?v=1778423614" alt="DalmationShorts — silhouette" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> High Waist That Celebrates You</div>
+                <div class="slide-text">The high waist sits at your natural waist line, creating a beautiful curve and a silhouette that says confidence. No hiding. No adjusting. Just you.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_5.png?v=1778423614" alt="DalmationShorts — summer style" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-sun"></i> Made for Every Summer Moment</div>
+                <div class="slide-text">Beach, brunch, BBQ or barefoot in the garden — the DalmationShorts move with your life. Versatile, breathable, and impossible to ignore in the best possible way.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Do the shorts run true to size?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>The DalmationShorts are cut for a <strong>fitted high waist with a comfortable relaxed leg</strong>. They follow standard plus US sizing (1X = US 14–16, 2X = US 18–20, 3X = US 22–24). If you are between sizes or prefer a looser feel around the hips, we recommend sizing up. The waistband is structured so it holds without being restrictive — use the size chart on this page to measure your waist and hips for the most accurate fit.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Will the Dalmatian print fade after washing?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>The Dalmatian print is designed for durability. To maintain maximum vibrancy: <strong>wash inside out in cold water on a gentle cycle</strong>, hang to dry and avoid direct heat from a dryer. Queens who follow these care instructions find their shorts look just as bold after many washes as when they first arrived. The high-contrast white and black is resilient — it was designed to look as striking on day 100 as on day one.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I wear these beyond summer?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Absolutely. <strong>The DalmationShorts are a year-round piece for queens who live in warm climates or love their summer style</strong>. In cooler weather, pair with opaque black tights and ankle boots for a bold autumn look. The print is timeless — Dalmatian never goes out of style — and the high waist silhouette works across all seasons. Many queens who buy them in summer wear them through September, October and beyond.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Are these a good gift for a curvy queen?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>They are one of the most thoughtful summer gifts you can give — because they say: <em>I want you to feel bold, beautiful and completely yourself this summer.</em> <strong>The duo or trio bundle lets you order matching or different sizes at the same time</strong>, arriving together so you and your queen can step out in matching energy. Every order arrives in discreet packaging and Berline in the chat can help you choose the right size if ordering as a surprise.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your DalmationShorts ship worldwide with <strong>free standard shipping in 12–20 business days.</strong> Express options are available at checkout. Every order is packaged discreetly. Track your order at any time — our support team is available via chat whenever you need us.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+  <section id="rv-section" class="rv-section" style="display:none;">
+    <div class="rv-header">
+      <div class="rv-header-left">
+        <span class="rv-eyebrow">Your Journey</span>
+        <h2 class="rv-title">Recently Viewed</h2>
+      </div>
+      <div class="rv-header-right">
+        <button class="rv-nav-btn" id="rv-prev" aria-label="Previous"><i class="fi fi-rr-angle-left"></i></button>
+        <button class="rv-nav-btn" id="rv-next" aria-label="Next"><i class="fi fi-rr-angle-right"></i></button>
+        <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history"><i class="fi fi-rr-trash"></i></button>
+      </div>
+    </div>
+    <div class="rv-slider-wrap">
+      <div class="rv-track" id="rv-track"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="col-marquee-section">
+    <div class="col-marquee-track">
+      <div class="col-marquee-inner">
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — wear that print and let the world see it</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-sun"></i> Bold prints designed for your curves, not against them</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> White. Bold. Summer-ready. Yours.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> US Sizes 14 to 24 — every curvy queen included</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> You are beautiful, my BBW — wear that print and let the world see it</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-sun"></i> Bold prints designed for your curves, not against them</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> White. Bold. Summer-ready. Yours.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> US Sizes 14 to 24 — every curvy queen included</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ BBW CUSTOM BANNER ══════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_7.png?v=1778423614" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_8.png?v=1778423615" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        BBW4LIFE Statement
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "A queen who wears bold prints<br>in the summer owns every moment of the season."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        Dalmatian print. High waist.<br class="bbw-cb-br">US sizes 14 to 24. Free worldwide shipping.
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider"></div>
+    </div>
+  </section>
+
+  <section class="bbw-wave-divider">
+    <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+        <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+        <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+        <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+  </section>
+
+  <!-- ══════════════ REVIEWS SECTION ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Our Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">73</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:70%;"></div></div><span id="count-5">51</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:18%;"></div></div><span id="count-4">13</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:8%;"></div></div><span id="count-3">6</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:4%;"></div></div><span id="count-2">3</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_1.png?v=1778423614" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_2.png?v=1778423615" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_3.png?v=1778423614" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_4.png?v=1778423614" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_5.png?v=1778423614" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_6.png?v=1778423615" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_7.png?v=1778423614" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_8.png?v=1778423615" alt="Review photo">
+          <div class="review-photos-more">10+</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 8 PREMIÈRES REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-10</span></div>
+          <div class="rv-card-right"><h4>Adaeze K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore these to a BBQ and every woman there asked where I got them</h5>
+        <p>Size 2X. I wore the DalmationShorts to a summer BBQ with a white crop top and wedge sandals and did not go five minutes without a compliment. Three women asked where I got them. One ordered them on her phone before the afternoon was over. The high waist is genuinely flattering — it sits exactly where it should and stays in place all day. BBW4LIFE made something that changes how you show up to summer.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_1.png?v=1778423614" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-May-05</span></div>
+          <div class="rv-card-right"><h4>Nkechi B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The print is bolder and more beautiful in person than in the photos</h5>
+        <p>Size 3X. I was slightly nervous about ordering a bold print at my size — I have been taught by the world to avoid prints that draw attention. Then I remembered that is exactly what BBW4LIFE is fighting against. The Dalmatian print on the shorts is crisp, bold and gorgeous. The white is genuinely white. The high waist sits perfectly. I wore them to the market and felt like the most stylish woman on the street — because I was.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-Apr-29</span></div>
+          <div class="rv-card-right"><h4>Fatima D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>3X and the waistband does not roll — this is what plus size design should be</h5>
+        <p>Every high waist short I have ever owned has eventually rolled down at the waistband because plus-size bodies were not actually considered when they were made. The DalmationShorts at size 3X stay exactly where they should all day. The waistband is structured, comfortable and flattering — not just a regular waistband scaled up. BBW4LIFE genuinely understands curvy bodies. This is what real plus size design looks like.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Apr-22</span></div>
+          <div class="rv-card-right"><h4>Chiamaka O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I gifted these to my sister for her birthday — she cried when she put them on</h5>
+        <p>My sister is a size 2X and has always struggled to find printed shorts that fit and flatter her body. I ordered the DalmationShorts for her birthday. When she put them on and looked in the mirror she cried. She said she looked like herself for the first time in a summer outfit — not like she was making do with what was available. BBW4LIFE makes pieces that carry emotional weight. I am so grateful they exist.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Apr-15</span></div>
+          <div class="rv-card-right"><h4>Grace A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Washed five times — print still perfect, waistband still holds</h5>
+        <p>Size 1X. I have worn and washed these shorts five times since they arrived and the Dalmatian print is still as crisp and vibrant as day one. The waistband holds its structure wash after wash. The fabric does not pill or stretch out. BBW4LIFE makes quality that lasts — and at this price point, that is genuinely extraordinary. I am recommending these to every queen I know.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Apr-08</span></div>
+          <div class="rv-card-right"><h4>Marie-Claire T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Paris — le short le plus stylé de mon été</h5>
+        <p>Taille 2X, commandé depuis Paris. Le tissu est léger et respirant — parfait pour nos étés parisiens. L'imprimé dalmatien est magnifique en vrai, beaucoup plus frappant que sur les photos. La taille haute souligne parfaitement la silhouette sans comprimer. Je l'ai porté lors d'un pique-nique au bord de la Seine avec un crop top blanc et des sandales dorées. J'étais la reine du parc. BBW4LIFE comprend ce que les femmes rondes méritent vraiment en été.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">T</div><span class="date">2026-Apr-01</span></div>
+          <div class="rv-card-right"><h4>Toyin A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ordered from Lagos — arrived in 14 days, print even better in person</h5>
+        <p>Nigerian queen. Size 2X, arrived in 14 days — perfectly packaged. The Dalmatian print is stunning in person — crisp white, bold black, exactly as described. The high waist fits my body the way high waist should: flattering, supportive, not tight. I paired with a black bodysuit and gold slides and felt like the most beautiful woman in Abuja. BBW4LIFE delivers to Nigeria and delivers quality. This brand is changing our summer.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">R</div><span class="date">2026-Mar-25</span></div>
+          <div class="rv-card-right"><h4>Rosalie B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I stopped hiding in dark colors at the beach. These shorts changed that.</h5>
+        <p>I spent years wearing dark, plain, conservative clothes at the beach and pool because I believed bold prints were not for bodies like mine. Size 3X DalmationShorts. The belief is gone. I wore them to the beach last weekend and felt beautiful, confident and completely free for the first time in years. People complimented me. I smiled and said: they are from BBW4LIFE. That brand gave me my summer back and I will never forget that.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_3.png?v=1778423614" alt="review"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE LEFT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zainab O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My entire summer look changed</p><p class="rv-mq-quote">Size 2X. I wore these to every summer event this year. The high waist gives me a silhouette I love and the Dalmatian print is always a conversation starter. BBW4LIFE gave me summer confidence.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">3X that actually sits at the waist</p><p class="rv-mq-quote">3X DalmationShorts. The waistband stays exactly where it should all day — something rare and extraordinary in plus size fashion. BBW4LIFE finally got it right.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">W</div><div class="rv-mq-meta"><p class="rv-mq-name">Wunmi J.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Wore these every week this summer</p><p class="rv-mq-quote">Size 1X. I wore these literally every week this summer. With different tops, different shoes — they work with everything. Bold prints are not just for slim bodies. BBW4LIFE proves it.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Precious W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">White that stays white all day</p><p class="rv-mq-quote">The white background is genuinely bright and stays clean looking all day. Size 2X. The contrast with the black print is stunning. A curvy queen in this print commands every room — and I do.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">E</div><div class="rv-mq-meta"><p class="rv-mq-name">Ebony R.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My squad all ordered for the summer</p><p class="rv-mq-quote">I shared in our BBW group chat. Four of us ordered. We wore them to a summer brunch in different sizes and felt unstoppable. BBW4LIFE brings queens together in confidence.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">H</div><div class="rv-mq-meta"><p class="rv-mq-name">Harriet A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Still going strong after full summer</p><p class="rv-mq-quote">Size 2X, bought at the start of summer. Worn through three months, multiple washes. Print still vibrant, waistband still perfect, fabric still soft. BBW4LIFE builds real quality.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">L</div><div class="rv-mq-meta"><p class="rv-mq-name">Lena D.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Commande depuis la Côte d'Ivoire</p><p class="rv-mq-quote">Livraison en 16 jours depuis Abidjan. Taille 3X. L'imprimé est magnifique et la taille haute est parfaite sur mes courbes. BBW4LIFE pour toutes les reines africaines. Je recommande.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chidinma B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Summer finally feels mine</p><p class="rv-mq-quote">Size 1X. I used to dread dressing for summer. Now I look forward to it because I have pieces that make me feel beautiful and powerful. BBW4LIFE gave me back my favourite season.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Z</div><div class="rv-mq-meta"><p class="rv-mq-name">Zainab O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My entire summer look changed</p><p class="rv-mq-quote">Size 2X. I wore these to every summer event this year. The high waist gives me a silhouette I love and the Dalmatian print is always a conversation starter. BBW4LIFE gave me summer confidence.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Blessing M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">3X that actually sits at the waist</p><p class="rv-mq-quote">3X DalmationShorts. The waistband stays exactly where it should all day — something rare and extraordinary in plus size fashion. BBW4LIFE finally got it right.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── 7 REVIEWS SUIVANTES ── -->
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">V</div><span class="date">2026-Mar-18</span></div>
+          <div class="rv-card-right"><h4>Vivienne O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My daughter and I wore matching DalmationShorts to a summer picnic</h5>
+        <p>My daughter is a size 1X and I am a size 3X. We both ordered the DalmationShorts and wore them to a family picnic together. My husband said we were the most beautiful pair at the entire event — two generations of queens, both in bold print, both completely themselves. BBW4LIFE made that moment happen. I will remember it for the rest of my life.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">I</div><span class="date">2026-Mar-10</span></div>
+          <div class="rv-card-right"><h4>Ifeoma W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Post-baby body — the DalmationShorts made me feel beautiful again</h5>
+        <p>Eight months after my first baby, I had completely lost my confidence in my body. I ordered a size 2X DalmationShorts and wore them to a summer market with a white shirt. For the first time since having my baby, I felt stylish, bold and completely myself. The high waist felt supportive without being restrictive around my postpartum belly. BBW4LIFE gave me myself back this summer — at the exact moment I needed it most.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">D</div><span class="date">2026-Mar-02</span></div>
+          <div class="rv-card-right"><h4>Damilola A.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The quality is above what the price suggests — genuinely impressed</h5>
+        <p>I was sceptical at this price point. Size 2X. The fabric is not the thin, see-through cotton I expected. It is structured, holds its shape, and has enough body to look intentional and polished. The print is sharp and the high waist is built properly. BBW4LIFE makes real quality at an accessible price — and that is something I never expected to find in genuine plus size fashion. Recommending to everyone.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2026-Feb-22</span></div>
+          <div class="rv-card-right"><h4>Josephine C.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful shorts — I recommend sizing up if you like a more relaxed fit</h5>
+        <p>The DalmationShorts are genuinely beautiful — size 2X. One note: the cut is a true high waist fitted style. If you prefer a more relaxed fit in the seat and thighs or are between sizes, size up. I found sizing up gave me the perfect comfortable but flattering fit. The print quality and waistband are both excellent. A strong summer choice for any curvy queen who wants to be seen.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2026-Feb-14</span></div>
+          <div class="rv-card-right"><h4>Oluwaseun F.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Valentine's Day beach walk — DalmationShorts, confidence and love</h5>
+        <p>I wore my size 1X DalmationShorts on a Valentine's Day beach walk with my partner. He said I looked like a goddess. Not in the polite way partners say things — in the genuine way where his face changed when I walked out in them. The high waist, the bold print, the way the fabric moved with the sea breeze. BBW4LIFE makes clothes that create memories. This was one of mine.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">K</div><span class="date">2026-Feb-05</span></div>
+          <div class="rv-card-right"><h4>Kemi B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Wore to a pool party, to the beach and to brunch — perfect for all three</h5>
+        <p>Three completely different occasions — pool party, beach day and Sunday brunch. Size 2X. They worked beautifully for every single one. With a swimsuit, with a white top, with a blazer for brunch. The versatility is extraordinary. BBW4LIFE makes pieces for real queens who live full, varied summer lives. These shorts have been in every single one of my best summer moments this year.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Jan-28</span></div>
+          <div class="rv-card-right"><h4>Simone L.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Livraison en Martinique — qualité au-dessus des attentes</h5>
+        <p>Commande depuis la Martinique. Livraison en 17 jours, emballage discret. Taille 3X. La qualité est vraiment surprenante pour ce prix — l'imprimé dalmatien est net, le tissu est léger et respirant, et la coupe taille haute est parfaite sous le soleil antillais. Je l'ai porté à la plage, au marché et à un anniversaire en famille. Dans chaque situation, j'étais la reine. BBW4LIFE pour les reines rondes des Antilles — enfin une marque qui nous comprend. Merci infiniment.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+    </div>
+
+    <!-- ── MARQUEE RIGHT ── -->
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--right">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My summer morning ritual</p><p class="rv-mq-quote">Every sunny morning I put on the DalmationShorts and feel the day fully. I feel bold, beautiful and completely myself. Size 1X. BBW4LIFE made this summer mine.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best summer gift for a curvy queen</p><p class="rv-mq-quote">I gift these to every curvy woman I love at summer. Nothing says "I want you to feel bold and beautiful" like bold print shorts that actually fit and celebrate her body.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rose N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">3X and they are stunning</p><p class="rv-mq-quote">3X DalmationShorts. They fit, they drape, they celebrate my body. I have waited years to write those words about plus-size shorts. BBW4LIFE made it possible. Summer is mine now.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">A</div><div class="rv-mq-meta"><p class="rv-mq-name">Amina C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Commande depuis le Sénégal</p><p class="rv-mq-quote">Dakar queen! Livraison en 15 jours. Taille 2X. L'imprimé est magnifique et la taille haute parfaite. BBW4LIFE pour toutes les reines rondes d'Afrique — je vous aime.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">S</div><div class="rv-mq-meta"><p class="rv-mq-name">Shade F.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Bold print is the most powerful choice</p><p class="rv-mq-quote">Dalmatian print on a curvy body is a masterpiece of summer confidence. Size 2X. I wear these and feel like the most stylish and bold woman in the room. BBW4LIFE chose right.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">N</div><div class="rv-mq-meta"><p class="rv-mq-name">Ngozi B.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Print still vibrant after full summer</p><p class="rv-mq-quote">Size 1X. Worn through an entire summer — multiple washes, multiple events. Print still crisp, waistband still holding. Real quality at this price. BBW4LIFE overdelivers.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">C</div><div class="rv-mq-meta"><p class="rv-mq-name">Chisom O.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My whole group ordered for summer</p><p class="rv-mq-quote">Six queens — all different sizes — all ordered the DalmationShorts for our summer brunch. We arrived together and the restaurant stopped. BBW4LIFE makes queens arrive in confidence.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Dami W.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Price to quality is extraordinary</p><p class="rv-mq-quote">For this price I expected basic quality. I got sharp print, real structure and a waistband that holds all day. Size 1X. BBW4LIFE overdelivers at this price point every single time.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">Y</div><div class="rv-mq-meta"><p class="rv-mq-name">Yetunde M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">My summer morning ritual</p><p class="rv-mq-quote">Every sunny morning I put on the DalmationShorts and feel the day fully. I feel bold, beautiful and completely myself. Size 1X. BBW4LIFE made this summer mine.</p><span class="rv-mq-badge">✔ Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Temi A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Best summer gift for a curvy queen</p><p class="rv-mq-quote">I gift these to every curvy woman I love at summer. Nothing says "I want you to feel bold and beautiful" like bold print shorts that actually fit and celebrate her body.</p><span class="rv-mq-badge">✔ Verified</span></div>
+      </div>
+    </div>
+
+    <!-- ── HIDDEN REVIEWS ── -->
+    <div class="reviews-list">
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">Q</div><span class="date">2026-Jan-20</span></div>
+          <div class="rv-card-right"><h4>Queen B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>My name is Queen and these shorts finally dressed me like one this summer</h5>
+        <p>Size 2X DalmationShorts at our family summer gathering in Jamaica. The white background, the bold Dalmatian print, the way the high waist held my silhouette — I walked into my grandmother's yard and every person there said something wonderful. For the first time at a family summer gathering I did not feel like I was managing how I looked. I just felt like a queen. My name finally fit. BBW4LIFE — you did something real here.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Jan-12</span></div>
+          <div class="rv-card-right"><h4>Leticia W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>At 52, plus size — and I have never felt more powerful in summer clothes</h5>
+        <p>I am 52 and a size 3X. The fashion world decided long ago that bold prints were not for women who look like me in the summer. DalmationShorts, size 3X, at our beach holiday in Portugal. I wore them with a white bikini top and block-heel sandals and felt every year of my life as something to be proud of. My granddaughter said I was the coolest grandmother at the beach. BBW4LIFE makes summer fashion for every woman who has decided to stop letting the world choose what she is allowed to wear.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">U</div><span class="date">2026-Jan-04</span></div>
+          <div class="rv-card-right"><h4>Uju O.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore these during a difficult season — the boldness helped me heal</h5>
+        <p>I ordered the DalmationShorts during a period of self-doubt and low confidence following a difficult breakup. Size 1X. The act of putting on something bold, something designed to be seen, something that celebrated my body rather than apologised for it — it changed something in me. BBW4LIFE creates clothes that carry emotional meaning. These shorts were part of my return to myself. I am wearing them this summer with full pride.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">H</div><span class="date">2025-Dec-22</span></div>
+          <div class="rv-card-right"><h4>Helen F.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Beautiful shorts — the sizing is generous, order your usual size</h5>
+        <p>The quality of the DalmationShorts is excellent — size 2X. One sizing note: the cut is proportioned generously for comfort. If you usually size up in bottoms for comfort, stay at your standard size here. Once I found the right size the fit was perfect — flattering, comfortable and bold. A beautiful plus size summer choice for any queen ready to make an entrance.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">O</div><span class="date">2025-Dec-14</span></div>
+          <div class="rv-card-right"><h4>Oluwakemi T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>New Year pool party — DalmationShorts — the best start to a new year</h5>
+        <p>I wore the DalmationShorts on January 1st at a pool party as a declaration that this year I choose boldness, confidence and myself. Size 2X. Something about wearing something that announces your presence — it sets the entire year's tone. BBW4LIFE was part of the best first day I have had in years. Every queen needs to start the year this way.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2025-Dec-06</span></div>
+          <div class="rv-card-right"><h4>Marie-Josée B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Commandé depuis Haïti — le short le plus beau que j'aie jamais porté</h5>
+        <p>Commande depuis Port-au-Prince. Livraison en 17 jours, emballage discret. Taille 2X. Le tissu est léger et respirant — parfait pour notre chaleur haïtienne. L'imprimé dalmatien est magnifique en vrai, la taille haute souligne parfaitement mes courbes. Je l'ai porté pour une sortie en famille au bord de la mer et je me suis sentie la plus belle. BBW4LIFE comprend les reines rondes partout dans le monde, même à Haïti. Ayiti bèl! Mèsi anpil.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2025-Nov-28</span></div>
+          <div class="rv-card-right"><h4>Chisom E.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I stopped wearing dark colours to hide at events. These are the line I drew.</h5>
+        <p>For years I wore dark, solid, unremarkable clothes to summer events because I believed I did not deserve to be seen. DalmationShorts, size 3X. I drew the line. This print is designed, it is beautiful, it celebrates me in summer. I wore them on the most perfect summer afternoon and felt like the most beautiful woman at the gathering. BBW4LIFE drew the line between what curvy queens were given before and what we actually deserve.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">X</div><span class="date">2025-Nov-15</span></div>
+          <div class="rv-card-right"><h4>Xochitl M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Pedí desde México — los shorts que cambiaron mi verano</h5>
+        <p>Pedí desde Ciudad de México. Llegó en 13 días, perfectamente empacado. Talla 2X. Ahora espero con emoción vestirme para el verano. Antes me daba vergüenza. Estos shorts me quitaron esa vergüenza. El estampado dálmata es atrevido y precioso, la cintura alta me favorece completamente, y el tejido es ligero y fresco. BBW4LIFE me devolvió el verano. Para siempre agradecida.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <!-- ══════════ REVIEW MODAL ══════════ -->
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">✕</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Summer Story, Queen ❤️</h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 ★ — Absolutely Amazing</option>
+              <option value="4">4 ★ — Really Good</option>
+              <option value="3">3 ★ — Pretty Good</option>
+              <option value="2">2 ★ — Could Be Better</option>
+              <option value="1">1 ★ — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. I finally owned the summer!)" required>
+            <textarea id="review-text" placeholder="Tell your summer story — how did the DalmationShorts make you feel? How do they fit? Your words help other queens find the confidence they deserve this season. ❤️" rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review 👑</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">✓</div>
+          <h4>Thank you, Queen! ❤️</h4>
+          <p>Your review is live and already helping other beautiful women like you find the confidence and boldness they deserve this summer.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════ ZOOM MODAL ══════════════ -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══════════════ NEWSLETTER ══════════════ -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- ══════════════ STICKY ATC ══════════════ -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+    <div class="sticky-atc__inner">
+        <div class="sticky-atc__product">
+            <img id="satc-img" src="" alt="" class="sticky-atc__img">
+            <div class="sticky-atc__info">
+                <span id="satc-title" class="sticky-atc__title"></span>
+                <span id="satc-price" class="sticky-atc__price"></span>
+            </div>
+        </div>
+        <div class="sticky-atc__selectors">
+            <div class="satc-field" id="satc-color-field">
+                <label class="satc-label">Color</label>
+                <div class="satc-color-wrap">
+                    <div class="satc-swatches" id="satc-swatches"></div>
+                    <span class="satc-color-name" id="satc-color-name">—</span>
+                </div>
+            </div>
+            <div class="satc-field" id="satc-size-field">
+                <label class="satc-label">Size</label>
+                <select id="satc-size" class="satc-select"></select>
+            </div>
+            <div class="satc-field">
+                <label class="satc-label">Qty</label>
+                <div class="satc-qty">
+                    <button class="satc-qty-btn" id="satc-minus">−</button>
+                    <span id="satc-qty-val">1</span>
+                    <button class="satc-qty-btn" id="satc-plus">+</button>
+                </div>
+            </div>
+        </div>
+        <button class="sticky-atc__btn" id="satc-add-btn">
+            <i class="fi fi-rr-shopping-cart"></i>
+            <span>Add to Cart</span>
+        </button>
+    </div>
+</div>
+
+</body>
+</html>

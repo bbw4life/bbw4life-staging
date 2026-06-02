@@ -603,6 +603,38 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product30.html'
     },
 
+    '/products/product31.html': {
+        title: 'IrregularTop — Loose Round Neck Irregular Hem | BBW4LIFE',
+        description: 'An effortlessly cool irregular hem top in classic black. Loose fit, round neck, and spring-summer ready for any occasion. Plus size tops made for curvy queens. Sizes 1XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size top BBW, curvy women blouse, irregular hem top, loose fit top plus size, round neck top curvy, BBW4LIFE tops, plus size black top, spring summer plus size, 1XL 2XL 3XL 4XL top, curvy fashion top, BBW irregular hem, plus size casual top',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_31_1.png?v=1778419713',
+        canonical: 'https://www.bbw4life.com/products/product31.html'
+    },
+
+    '/products/product32.html': {
+        title: 'ChristmasSweat — Casual Plus Size Holiday Sweatshirt | BBW4LIFE',
+        description: 'Festive, soft and cozy — the ChristmasSweat is your perfect holiday companion. Plus size casual Christmas sweatshirt in black polyester. Sizes S to 2XL. Free worldwide shipping. Made for queens who celebrate in comfort.',
+        keywords: 'plus size christmas sweatshirt, BBW holiday sweater, curvy women christmas top, plus size festive sweatshirt, casual christmas pullover, BBW4LIFE sweatshirt, plus size holiday outfit, christmas top curvy, cozy plus size sweater, christmas casual top BBW, plus size S to 2XL sweatshirt, festive curvy fashion',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_32_1.png?v=1778421249',
+        canonical: 'https://www.bbw4life.com/products/product32.html'
+    },
+
+    '/products/product33.html': {
+        title: 'DalmationShorts — High Waist Dalmatian Print Shorts | BBW4LIFE',
+        description: 'Playful Dalmatian print on high-waist shorts designed for curvy queens. Bold white background, eye-catching pattern — perfect for summer. US sizes 14 to 24. Free worldwide shipping.',
+        keywords: 'plus size shorts, BBW high waist shorts, curvy women shorts, dalmatian print shorts, plus size summer shorts, BBW4LIFE shorts, plus size white shorts, high waist plus size, curvy shorts, BBW print shorts, size 14 to 24 shorts, plus size casual shorts',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_33_1.png?v=1778423614',
+        canonical: 'https://www.bbw4life.com/products/product33.html'
+    },
+
+    '/products/product34.html': {
+        title: 'LeopardShirt — Irregular Collar Spliced Blouse | BBW4LIFE',
+        description: 'Wild leopard print meets an irregular collar in this striking spliced blouse — bold enough to make any outfit unforgettable. Plus size tops for curvy queens. Sizes 1XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size leopard blouse, BBW leopard shirt, curvy women top, irregular collar blouse, plus size print top, leopard spliced blouse, BBW4LIFE tops, 1XL 2XL 3XL 4XL blouse, plus size bold print shirt, curvy leopard top, BBW blouse, plus size fashion top',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_34_1.png?v=1778424988',
+        canonical: 'https://www.bbw4life.com/products/product34.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */

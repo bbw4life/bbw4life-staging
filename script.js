@@ -1994,9 +1994,6 @@ function showErrorPopup(message) {
           populateMainProductMedia(prod.media);
 
 
-
-
-
           // ════════════════════════════════════════════════
             //   PRODUCT SHARE — inject button + popup
             // ════════════════════════════════════════════════
@@ -2252,12 +2249,6 @@ function showErrorPopup(message) {
               });
 
             })();
-            // ════════════════════════════════════════════════
-            //   END PRODUCT SHARE
-            // ════════════════════════════════════════════════
-
-
-
 
 
           // ── INJECT PRODUCT BADGE FROM JSON ──
