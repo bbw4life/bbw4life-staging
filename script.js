@@ -4037,27 +4037,58 @@ initAnnouncementBar();
     if (productSection) {
       const pid = productSection.dataset.productId;
       if (pid && isFeaturedProduct(pid)) {
-        if (!plansOn) {
-          /* Hide ATC / qty / buy-now, show request button */
+       if (!plansOn) {
           productSection.classList.add('bbw-featured-request-mode');
 
-          /* Ensure request button wrapper is visible */
-          const reqWrap = document.getElementById('plan-request-trigger-wrap');
-          if (reqWrap) reqWrap.style.display = 'flex';
 
-          /* Bind the request button to open popup pre-filled with this product */
-          const reqBtn = document.getElementById('open-plan-popup');
-          if (reqBtn) {
-            reqBtn.replaceWith(reqBtn.cloneNode(true)); /* remove old listeners */
-            const newReqBtn = document.getElementById('open-plan-popup');
-            if (newReqBtn) {
-              newReqBtn.addEventListener('click', () => {
-                if (typeof window.openProductRequestPopup === 'function') {
-                  window.openProductRequestPopup(pid);
-                }
+          const satcAddBtn = document.getElementById('satc-add-btn');
+          if (satcAddBtn) {
+            const newBtn = satcAddBtn.cloneNode(true);
+            newBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i><span>Request This Product</span>';
+            newBtn.addEventListener('click', () => {
+              if (typeof window.openProductRequestPopup === 'function') window.openProductRequestPopup(pid);
+            });
+            satcAddBtn.parentNode.replaceChild(newBtn, satcAddBtn);
+          }
+
+          /* ── 1. Injecter un bouton REQUEST à la place du bloc quantity ── */
+          const qtyWrapper = productSection.querySelector('.quantity-add-wrapper');
+          if (qtyWrapper && !qtyWrapper.querySelector('.bbw-featured-request-btn')) {
+            const reqBtnInline = document.createElement('button');
+            reqBtnInline.className = 'bbw-featured-request-btn';
+            reqBtnInline.innerHTML = '<i class="fi fi-rr-shopping-bag"></i> Request This Product';
+            reqBtnInline.addEventListener('click', () => {
+              if (typeof window.openProductRequestPopup === 'function') window.openProductRequestPopup(pid);
+            });
+            qtyWrapper.insertAdjacentElement('afterend', reqBtnInline);
+            qtyWrapper.style.display = 'none';
+          }
+
+          /* ── 2. Transformer le Sticky ATC en bouton REQUEST ── */
+          const satcBar = document.getElementById('sticky-atc');
+          if (satcBar) {
+            /* Remplacer le bouton ATC du sticky */
+            const satcAddBtn = document.getElementById('satc-add-btn');
+            if (satcAddBtn && !satcAddBtn.dataset.requestified) {
+              satcAddBtn.dataset.requestified = '1';
+              satcAddBtn.innerHTML = '<i class="fi fi-rr-shopping-bag"></i><span>Request This Product</span>';
+              satcAddBtn.style.background = 'linear-gradient(135deg, #c0385e, #7b3f6e)';
+              /* Supprimer l'ancien listener en clonant */
+              const newSatcBtn = satcAddBtn.cloneNode(true);
+              satcAddBtn.parentNode.replaceChild(newSatcBtn, satcAddBtn);
+              newSatcBtn.addEventListener('click', () => {
+                if (typeof window.openProductRequestPopup === 'function') window.openProductRequestPopup(pid);
               });
             }
+
+            /* Masquer les selectors taille/couleur/qty dans le sticky — inutiles pour une request */
+            const satcSelectors = satcBar.querySelector('.sticky-atc__selectors');
+            if (satcSelectors) satcSelectors.style.display = 'none';
           }
+
+          /* ── 3. Masquer le bloc plan-request-section (bouton en bas de page) et afficher le nôtre ── */
+          const reqSection = document.getElementById('bbw-request-section');
+          if (reqSection) reqSection.style.display = 'none';
         } else {
           /* plans_available = yes — hide request button */
           const reqWrap = document.getElementById('plan-request-trigger-wrap');
@@ -5125,17 +5156,20 @@ if (rcCheckoutBtn) {
             satcQtyVal.textContent = satcQty;
         });
 
+      
+
         // ── Add to Cart ──
         satcAddBtn.addEventListener('click', () => {
-            // Vérifications
-            if (hasColors && !satcSelectedColor) {
-                showErrorPopup('Please select a color.');
-                return;
-            }
-            if (hasSizes && !satcSelectedSize) {
-                showErrorPopup('Please select a size.');
-                return;
-            }
+              if (document.querySelector('.product-section.bbw-featured-request-mode')) return;
+              // Vérifications
+              if (hasColors && !satcSelectedColor) {
+                  showErrorPopup('Please select a color.');
+                  return;
+              }
+              if (hasSizes && !satcSelectedSize) {
+                  showErrorPopup('Please select a size.');
+                  return;
+              }
 
             // Image du variant
             let itemImage = upgradeShopifyImageUrl(product.image);
@@ -5217,10 +5251,10 @@ if (rcCheckoutBtn) {
 
         // Cacher si le bouton principal ATC est visible à l'écran
         let mainBtnVisible = false;
-        if (addToCartMainBtn) {
-            const rect = addToCartMainBtn.getBoundingClientRect();
-            mainBtnVisible = rect.top >= 0 && rect.bottom <= windowHeight;
-        }
+        if (addToCartMainBtn && addToCartMainBtn.offsetParent !== null) {
+          const rect = addToCartMainBtn.getBoundingClientRect();
+          mainBtnVisible = rect.top >= 0 && rect.bottom <= windowHeight;
+      }
 
         if (nearFooter && !mainBtnVisible) {
             bar.classList.add('visible');

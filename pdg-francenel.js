@@ -669,3 +669,108 @@
   console.log('[BBW4LIFE] widgets-loader.js — widgets injectés de manière synchrone ✓');
 
 })();
+
+
+
+
+/* ══════════════════════════════════════════════════════
+   BBW4LIFE — NEWSLETTER AUTO POPUP
+══════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var SEEN_KEY       = 'bbwnl_auto_seen';
+  var SUBSCRIBED_KEY = 'bbwnl_subscribed';
+  var DISMISSED_KEY  = 'bbwnl_dismissed';
+  var autoTimer      = null;
+  var hideTimer      = null;
+
+  /* ── Déjà abonné ou déjà fermé → ne rien faire ── */
+  if (
+    localStorage.getItem(SUBSCRIBED_KEY) === 'yes' ||
+    localStorage.getItem(DISMISSED_KEY)  === 'yes'
+  ) return;
+
+  /* ── Déjà vu cette session → ne rien faire ── */
+  if (sessionStorage.getItem(SEEN_KEY) === 'yes') return;
+
+  /* ── Attendre que les settings soient chargés ── */
+  function waitAndRun() {
+    var allProducts = window.__allProducts || [];
+    var settings    = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
+    var cfg         = settings.newsletter_auto_popup || {};
+
+    var show     = (cfg.show || 'no').toLowerCase().trim() === 'yes';
+    var delay    = parseInt(cfg.delay_seconds)   || 20;
+    var duration = parseInt(cfg.duration_seconds) || 10;
+
+    if (!show) return;
+
+    /* ── Marquer comme vu pour cette session ── */
+    sessionStorage.setItem(SEEN_KEY, 'yes');
+
+    /* ── Ouvrir après delay ── */
+    autoTimer = setTimeout(function () {
+      if (typeof window.openNewsletterPopup !== 'function') return;
+
+      /* Vérifier une dernière fois au moment d'ouvrir */
+      if (
+        localStorage.getItem(SUBSCRIBED_KEY) === 'yes' ||
+        localStorage.getItem(DISMISSED_KEY)  === 'yes'
+      ) return;
+
+      window.openNewsletterPopup();
+
+      /* ── Fermer automatiquement après duration ── */
+      hideTimer = setTimeout(function () {
+        if (typeof window.closeNewsletterPopup === 'function') {
+          window.closeNewsletterPopup();
+        }
+      }, duration * 1000);
+
+    }, delay * 1000);
+  }
+
+  /* ── Marquer dismissed quand le client ferme manuellement ── */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('#bbwNlClose, #bbwNlSuccessClose');
+    if (!el) return;
+    localStorage.setItem(DISMISSED_KEY, 'yes');
+    if (hideTimer) clearTimeout(hideTimer);
+  });
+
+  /* ── Marquer subscribed quand le formulaire réussit ── */
+  var _origOpen = window.openNewsletterPopup;
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'bbwNlForm') {
+      /* On attend le succès via l'apparition de bbwNlSuccess */
+      var check = setInterval(function () {
+        var success = document.getElementById('bbwNlSuccess');
+        if (success && success.style.display !== 'none') {
+          localStorage.setItem(SUBSCRIBED_KEY, 'yes');
+          localStorage.setItem(DISMISSED_KEY,  'yes');
+          if (hideTimer) clearTimeout(hideTimer);
+          clearInterval(check);
+        }
+      }, 300);
+      setTimeout(function () { clearInterval(check); }, 10000);
+    }
+  });
+
+  /* ── Attendre __allProducts ── */
+  if (window.__allProducts && window.__allProducts.length) {
+    waitAndRun();
+  } else {
+    var tries = 0;
+    var poll = setInterval(function () {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(poll);
+        waitAndRun();
+      } else if (tries > 80) {
+        clearInterval(poll);
+      }
+    }, 100);
+  }
+
+})();

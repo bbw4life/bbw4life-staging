@@ -3041,3 +3041,1069 @@
     .bbw-dalmatian-story__info strong { font-size: 12px; }
     .bbw-dalmatian-story__info span { font-size: 11px; }
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   Strip horizontal spécifique homme plus size
+════════════════════════════════════════════════════════════ */
+@keyframes men-cs-shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+@keyframes men-cs-icon-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.18); opacity: 0.75; }
+}
+
+.bbw-men-confidence-strip {
+    display: flex;
+    align-items: stretch;
+    background: #000000;
+    border: 1px solid rgba(201,150,62,0.40);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 4px 18px rgba(0,0,0,0.20),
+        0 0 0 1px rgba(201,150,62,0.10) inset;
+}
+.bbw-men-confidence-strip::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,150,62,0.70) 30%,
+        rgba(232,188,106,1.00) 50%,
+        rgba(201,150,62,0.70) 70%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: men-cs-shimmer 3s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.bbw-men-cs-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 16px 10px;
+    border-right: 1px solid rgba(201,150,62,0.18);
+    position: relative;
+    transition: background 0.25s ease;
+    text-align: center;
+    cursor: default;
+}
+.bbw-men-cs-item:last-child {
+    border-right: none;
+}
+.bbw-men-cs-item:hover {
+    background: rgba(201,150,62,0.06);
+}
+
+.bbw-men-cs-item i {
+    font-size: 22px;
+    color: #c9963e;
+    flex-shrink: 0;
+    animation: men-cs-icon-pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(201,150,62,0.40));
+}
+.bbw-men-cs-item:nth-child(2) i { animation-delay: 0.8s; }
+.bbw-men-cs-item:nth-child(3) i { animation-delay: 1.6s; }
+.bbw-men-cs-item:nth-child(4) i { animation-delay: 2.4s; }
+
+.bbw-men-cs-item strong {
+    font-size: 12px;
+    font-weight: 800;
+    color: #c9963e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.bbw-men-cs-item span {
+    font-size: 11px;
+    color: rgba(253,249,244,0.55);
+    line-height: 1.45;
+    font-weight: 400;
+    max-width: 90px;
+}
+
+@media (max-width: 480px) {
+    .bbw-men-cs-item { padding: 12px 6px; gap: 5px; }
+    .bbw-men-cs-item i { font-size: 18px; }
+    .bbw-men-cs-item strong { font-size: 10px; }
+    .bbw-men-cs-item span { font-size: 10px; max-width: 70px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW PERFORMANCE STRIP — Product40 AirMesh Runners
+════════════════════════════════════════════════════════════ */
+@keyframes perf-shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+@keyframes perf-bar-grow {
+    0%   { width: 0%; }
+    100% { width: var(--perf-w); }
+}
+
+.bbw-performance-strip {
+    background: #000000;
+    border: 1px solid rgba(201,150,62,0.40);
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 4px 20px rgba(0,0,0,0.22),
+        0 0 0 1px rgba(201,150,62,0.08) inset;
+}
+.bbw-performance-strip::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,150,62,0.70) 30%,
+        rgba(232,188,106,1.00) 50%,
+        rgba(201,150,62,0.70) 70%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: perf-shimmer 3s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.bbw-performance-strip__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    background: rgba(201,150,62,0.06);
+    border-bottom: 1px solid rgba(201,150,62,0.18);
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+.bbw-performance-strip__header i {
+    font-size: 0.95rem;
+    color: #c9963e;
+    flex-shrink: 0;
+}
+
+.bbw-performance-strip__metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.bbw-perf-metric {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(201,150,62,0.08);
+    transition: background 0.22s ease;
+}
+.bbw-perf-metric:last-child { border-bottom: none; }
+.bbw-perf-metric:hover { background: rgba(201,150,62,0.04); }
+
+.bbw-perf-metric__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(201,150,62,0.10);
+    border: 1px solid rgba(201,150,62,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #c9963e;
+    flex-shrink: 0;
+}
+
+.bbw-perf-metric__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.bbw-perf-metric__label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.bbw-perf-metric__label {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(253,249,244,0.80);
+    letter-spacing: 0.03em;
+}
+.bbw-perf-metric__value {
+    font-size: 12px;
+    font-weight: 800;
+    color: #c9963e;
+    letter-spacing: 0.04em;
+}
+
+.bbw-perf-metric__bar-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(201,150,62,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.bbw-perf-metric__bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #c9963e, #e8bc6a);
+    width: var(--perf-w, 0%);
+    animation: perf-bar-grow 1.2s cubic-bezier(0.4,0,0.2,1) forwards;
+    position: relative;
+    overflow: hidden;
+}
+.bbw-perf-metric__bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -60%; bottom: 0; width: 60%;
+    background: rgba(255,255,255,0.30);
+    animation: shimmerBar 2s ease-in-out infinite;
+}
+
+@media (max-width: 480px) {
+    .bbw-performance-strip__header { padding: 11px 14px; font-size: 0.68rem; }
+    .bbw-perf-metric { padding: 10px 14px; gap: 10px; }
+    .bbw-perf-metric__icon { width: 28px; height: 28px; font-size: 11px; }
+    .bbw-perf-metric__label { font-size: 11px; }
+    .bbw-perf-metric__value { font-size: 11px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW SNEAKER FEATURES GRID — Product43
+════════════════════════════════════════════════════════════ */
+.bbw-sneaker-features {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-sneaker-features::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.45), transparent);
+    pointer-events: none;
+}
+.bbw-sneaker-features__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-sneaker-features__header i {
+    color: #e8bc6a;
+    font-size: 0.90rem;
+    flex-shrink: 0;
+}
+.bbw-sneaker-features__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(201,150,62,0.06);
+}
+.bbw-sf-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 15px;
+    background: rgba(255,255,255,0.85);
+    transition: background 0.22s ease, transform 0.22s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+.bbw-sf-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 60px; height: 60px;
+    background: radial-gradient(circle, rgba(201,150,62,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.26s;
+}
+.bbw-sf-card:hover::after { opacity: 1; }
+.bbw-sf-card:hover {
+    background: rgba(253,249,244,0.97);
+    transform: translateY(-2px);
+}
+.bbw-sf-card__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(201,150,62,0.10);
+    border: 1px solid rgba(201,150,62,0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #c9963e;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+    transition: background 0.22s ease, transform 0.22s ease;
+}
+.bbw-sf-card:hover .bbw-sf-card__icon {
+    background: rgba(201,150,62,0.18);
+    transform: scale(1.10) rotate(-6deg);
+}
+.bbw-sf-card__title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a1005;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+}
+.bbw-sf-card__text {
+    font-size: 12px;
+    color: rgba(30,15,5,0.55);
+    line-height: 1.60;
+}
+@media (max-width: 480px) {
+    .bbw-sneaker-features { border-radius: 16px; }
+    .bbw-sneaker-features__header { font-size: 0.68rem; padding: 10px 14px; }
+    .bbw-sneaker-features__grid { grid-template-columns: 1fr; }
+    .bbw-sf-card { padding: 12px 14px; flex-direction: row; align-items: flex-start; gap: 12px; }
+    .bbw-sf-card__icon { flex-shrink: 0; margin-bottom: 0; margin-top: 2px; }
+    .bbw-sf-card__title { font-size: 12px; }
+    .bbw-sf-card__text { font-size: 11px; }
+}
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW FORMAL OCCASION GUIDE — Product45 PatentLoafers
+════════════════════════════════════════════════════════════ */
+.bbw-formal-occasion-guide {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-formal-occasion-guide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.45), transparent);
+    pointer-events: none;
+}
+.bbw-formal-occasion-guide__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-formal-occasion-guide__header i {
+    color: #e8bc6a;
+    font-size: 0.90rem;
+    flex-shrink: 0;
+}
+.bbw-formal-occasion-guide__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(201,150,62,0.06);
+}
+.bbw-fog-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.85);
+    transition: background 0.22s ease, transform 0.22s ease;
+    cursor: default;
+}
+.bbw-fog-item:hover {
+    background: rgba(253,249,244,0.96);
+    transform: translateX(3px);
+}
+.bbw-fog-item__emoji {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 34px;
+    text-align: center;
+}
+.bbw-fog-item__info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+}
+.bbw-fog-item__info strong {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a1005;
+    letter-spacing: 0.02em;
+}
+.bbw-fog-item__info span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.55);
+    line-height: 1.45;
+}
+.bbw-fog-item__badge {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: rgba(201,150,62,0.10);
+    color: #c9963e;
+    border: 1px solid rgba(201,150,62,0.25);
+    border-radius: 50px;
+    padding: 3px 9px;
+    white-space: nowrap;
+}
+@media (max-width: 480px) {
+    .bbw-formal-occasion-guide { border-radius: 16px; }
+    .bbw-formal-occasion-guide__header { font-size: 0.68rem; padding: 10px 14px; }
+    .bbw-fog-item { padding: 10px 14px; gap: 10px; }
+    .bbw-fog-item__emoji { font-size: 18px; width: 28px; }
+    .bbw-fog-item__info strong { font-size: 12px; }
+    .bbw-fog-item__info span { font-size: 11px; }
+    .bbw-fog-item__badge { font-size: 9px; }
+}
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW COLOR WARMTH STRIP — Product51 RoundNeck Sweatshirt
+   5 couleurs en grille horizontale — style casual homme
+════════════════════════════════════════════════════════════ */
+.bbw-color-warmth {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-color-warmth::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.45), transparent);
+    pointer-events: none;
+}
+.bbw-color-warmth__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-color-warmth__header i {
+    color: #e8bc6a;
+    font-size: 0.90rem;
+    flex-shrink: 0;
+}
+.bbw-color-warmth__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: rgba(201,150,62,0.08);
+}
+.bbw-cw-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 14px 8px;
+    background: rgba(255,255,255,0.85);
+    transition: background 0.22s ease, transform 0.22s ease;
+    cursor: default;
+    text-align: center;
+}
+.bbw-cw-card:hover {
+    background: rgba(253,249,244,0.97);
+    transform: translateY(-2px);
+}
+.bbw-cw-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid rgba(201,150,62,0.22);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.14);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+.bbw-cw-card:hover .bbw-cw-dot {
+    transform: scale(1.14);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.20);
+}
+.bbw-cw-name {
+    font-size: 11px;
+    font-weight: 800;
+    color: #1a1005;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+.bbw-cw-mood {
+    font-size: 10px;
+    color: rgba(30,15,5,0.50);
+    line-height: 1.4;
+    font-style: italic;
+}
+@media (max-width: 480px) {
+    .bbw-color-warmth__grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    .bbw-color-warmth__header { font-size: 0.68rem; padding: 10px 14px; }
+    .bbw-cw-card { padding: 10px 4px; gap: 5px; }
+    .bbw-cw-dot { width: 26px; height: 26px; }
+    .bbw-cw-name { font-size: 9.5px; }
+    .bbw-cw-mood { font-size: 9px; }
+}
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW NAIL HOW-TO — Guide application ongles P52
+════════════════════════════════════════════════════════════ */
+.bbw-nail-howto {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+}
+.bbw-nail-howto::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,150,62,0.60) 30%,
+        rgba(232,188,106,0.90) 50%,
+        rgba(201,150,62,0.60) 70%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: goldSweep 3s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+.bbw-nail-howto__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+.bbw-nail-howto__header i {
+    color: #e8bc6a;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+.bbw-nail-howto__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(201,150,62,0.06);
+    position: relative;
+    z-index: 1;
+}
+.bbw-nail-howto__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 18px;
+    background: rgba(255,255,255,0.85);
+    transition: background 0.22s ease, transform 0.22s ease;
+}
+.bbw-nail-howto__step:hover {
+    background: rgba(253,249,244,0.97);
+    transform: translateX(3px);
+}
+.bbw-nail-howto__num {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 50%;
+    background: #000000;
+    color: #c9963e;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(201,150,62,0.45);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.bbw-nail-howto__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+.bbw-nail-howto__body strong {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a1005;
+    line-height: 1.3;
+}
+.bbw-nail-howto__body span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.60);
+    line-height: 1.55;
+}
+.bbw-nail-howto__tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 18px 14px;
+    background: rgba(201,150,62,0.06);
+    border-top: 1px solid rgba(201,150,62,0.12);
+}
+.bbw-nail-howto__tip i {
+    color: #c9963e;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.bbw-nail-howto__tip span {
+    font-size: 12px;
+    color: rgba(30,15,5,0.58);
+    line-height: 1.55;
+}
+.bbw-nail-howto__tip span strong {
+    color: #c9963e;
+    font-weight: 700;
+}
+@media (max-width: 480px) {
+    .bbw-nail-howto { border-radius: 16px; }
+    .bbw-nail-howto__header { font-size: 0.68rem; padding: 11px 14px; }
+    .bbw-nail-howto__step { padding: 11px 14px; gap: 12px; }
+    .bbw-nail-howto__num { width: 26px; height: 26px; min-width: 26px; font-size: 12px; }
+    .bbw-nail-howto__body strong { font-size: 12px; }
+    .bbw-nail-howto__body span { font-size: 11px; }
+    .bbw-nail-howto__tip { padding: 11px 14px 13px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW BEAUTY PROMISE STRIP — produits beauté
+════════════════════════════════════════════════════════════ */
+@keyframes bbw-bp-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.18); opacity: 0.75; }
+}
+
+.bbw-beauty-promise {
+    display: flex;
+    align-items: stretch;
+    background: #000000;
+    border: 1px solid rgba(201,150,62,0.40);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 4px 18px rgba(0,0,0,0.20),
+        0 0 0 1px rgba(201,150,62,0.10) inset;
+}
+.bbw-beauty-promise::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,150,62,0.70) 30%,
+        rgba(232,188,106,1.00) 50%,
+        rgba(201,150,62,0.70) 70%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: goldSweep 3s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+.bbw-bp-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 16px 10px;
+    border-right: 1px solid rgba(201,150,62,0.18);
+    position: relative;
+    transition: background 0.25s ease;
+    text-align: center;
+    cursor: default;
+}
+.bbw-bp-item:last-child {
+    border-right: none;
+}
+.bbw-bp-item:hover {
+    background: rgba(201,150,62,0.06);
+}
+.bbw-bp-item i {
+    font-size: 22px;
+    color: #c9963e;
+    flex-shrink: 0;
+    animation: bbw-bp-pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(201,150,62,0.40));
+}
+.bbw-bp-item:nth-child(2) i { animation-delay: 0.8s; }
+.bbw-bp-item:nth-child(3) i { animation-delay: 1.6s; }
+.bbw-bp-item:nth-child(4) i { animation-delay: 2.4s; }
+.bbw-bp-item strong {
+    font-size: 12px;
+    font-weight: 800;
+    color: #c9963e;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+.bbw-bp-item span {
+    font-size: 11px;
+    color: rgba(253,249,244,0.55);
+    line-height: 1.45;
+    font-weight: 400;
+    max-width: 90px;
+}
+@media (max-width: 480px) {
+    .bbw-bp-item { padding: 12px 6px; gap: 5px; }
+    .bbw-bp-item i { font-size: 18px; }
+    .bbw-bp-item strong { font-size: 10px; }
+    .bbw-bp-item span { font-size: 10px; max-width: 70px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW NAIL STYLE COMPARE — Product 53
+════════════════════════════════════════════════════════════ */
+.bbw-nail-style-compare {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-nail-style-compare::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.45), transparent);
+    pointer-events: none;
+}
+.bbw-nail-style-compare__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-nail-style-compare__header i {
+    color: #c9963e;
+    font-size: 0.90rem;
+    flex-shrink: 0;
+}
+.bbw-nail-style-compare__grid {
+    display: flex;
+    gap: 1px;
+    background: rgba(201,150,62,0.08);
+}
+.bbw-nsc-col {
+    flex: 1;
+    padding: 16px 14px;
+    background: rgba(255,255,255,0.85);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.bbw-nsc-col--dark {
+    background: rgba(10,6,2,0.96);
+}
+.bbw-nsc-col__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 50px;
+    width: fit-content;
+}
+.bbw-nsc-col--light .bbw-nsc-col__badge {
+    background: rgba(201,150,62,0.12);
+    color: #c9963e;
+    border: 1px solid rgba(201,150,62,0.30);
+}
+.bbw-nsc-col--dark .bbw-nsc-col__badge {
+    background: rgba(201,150,62,0.15);
+    color: #e8bc6a;
+    border: 1px solid rgba(201,150,62,0.40);
+}
+.bbw-nsc-col__title {
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.25;
+}
+.bbw-nsc-col--light .bbw-nsc-col__title { color: #1a1005; }
+.bbw-nsc-col--dark  .bbw-nsc-col__title { color: #e8bc6a; }
+.bbw-nsc-col__desc {
+    font-size: 12px;
+    line-height: 1.65;
+}
+.bbw-nsc-col--light .bbw-nsc-col__desc { color: rgba(30,15,5,0.60); }
+.bbw-nsc-col--dark  .bbw-nsc-col__desc { color: rgba(253,249,244,0.60); }
+.bbw-nsc-col__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 2px;
+}
+.bbw-nsc-col__tags span {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    letter-spacing: 0.04em;
+}
+.bbw-nsc-col--light .bbw-nsc-col__tags span {
+    background: rgba(201,150,62,0.08);
+    color: #c9963e;
+    border: 1px solid rgba(201,150,62,0.20);
+}
+.bbw-nsc-col--dark .bbw-nsc-col__tags span {
+    background: rgba(201,150,62,0.12);
+    color: #e8bc6a;
+    border: 1px solid rgba(201,150,62,0.28);
+}
+@media (max-width: 480px) {
+    .bbw-nail-style-compare__grid { flex-direction: column; }
+    .bbw-nsc-col { padding: 14px 14px; }
+}
+
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW BROW SHADES — Product55 BrowDye Pencil
+   Guide des teintes pour crayon sourcil
+════════════════════════════════════════════════════════════ */
+.bbw-brow-shades {
+    background: linear-gradient(135deg,
+        rgba(255,255,255,0.90) 0%,
+        rgba(253,249,244,0.95) 100%
+    );
+    border: 1px solid rgba(201,150,62,0.28);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 4px 24px rgba(201,150,62,0.10),
+        0 1px 0 rgba(255,255,255,0.80) inset;
+    position: relative;
+}
+.bbw-brow-shades::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,150,62,0.45), transparent);
+    pointer-events: none;
+}
+.bbw-brow-shades__header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 16px;
+    background: #000000;
+    color: #c9963e;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+}
+.bbw-brow-shades__header i {
+    color: #e8bc6a;
+    font-size: 0.90rem;
+    flex-shrink: 0;
+}
+.bbw-brow-shades__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(201,150,62,0.06);
+}
+.bbw-brow-shade-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 16px 16px;
+    background: rgba(255,255,255,0.85);
+    transition: background 0.22s ease, transform 0.22s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+.bbw-brow-shade-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 60px; height: 60px;
+    background: radial-gradient(circle, rgba(201,150,62,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.26s;
+}
+.bbw-brow-shade-card:hover::after { opacity: 1; }
+.bbw-brow-shade-card:hover {
+    background: rgba(253,249,244,0.97);
+    transform: translateY(-2px);
+}
+.bbw-brow-shade-card__swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2.5px solid rgba(201,150,62,0.25);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.16);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    margin-bottom: 2px;
+}
+.bbw-brow-shade-card:hover .bbw-brow-shade-card__swatch {
+    transform: scale(1.12);
+    box-shadow: 0 5px 16px rgba(0,0,0,0.22);
+}
+.bbw-brow-shade-card__name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a1005;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+.bbw-brow-shade-card__tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #c9963e;
+    background: rgba(201,150,62,0.10);
+    border: 1px solid rgba(201,150,62,0.22);
+    border-radius: 50px;
+    padding: 3px 10px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.bbw-brow-shade-card__desc {
+    font-size: 12px;
+    color: rgba(30,15,5,0.55);
+    line-height: 1.60;
+}
+.bbw-brow-shade-card__best {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(30,15,5,0.55);
+    margin-top: 2px;
+}
+.bbw-brow-shade-card__best i {
+    color: #c9963e;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+    .bbw-brow-shades { border-radius: 16px; }
+    .bbw-brow-shades__header { font-size: 0.68rem; padding: 10px 14px; }
+    .bbw-brow-shades__grid { grid-template-columns: 1fr; }
+    .bbw-brow-shade-card { padding: 13px 14px; flex-direction: row; align-items: flex-start; gap: 14px; }
+    .bbw-brow-shade-card__swatch { flex-shrink: 0; width: 36px; height: 36px; margin-bottom: 0; margin-top: 2px; }
+    .bbw-brow-shade-card__name { font-size: 13px; }
+    .bbw-brow-shade-card__desc { font-size: 11px; }
+}

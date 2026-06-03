@@ -635,6 +635,286 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product34.html'
     },
 
+    '/products/product35.html': {
+        title: 'DrawstringPants — Plus Size Casual Pants with Pockets | BBW4LIFE Men',
+        description: 'Relaxed drawstring pants with deep pockets in 6 bold colors. Comfortable enough for all day, stylish enough for any occasion. Plus size men M to 5XL. Free worldwide shipping.',
+        keywords: 'plus size men pants, BBW men drawstring pants, curvy men casual pants, plus size drawstring trousers, men wide fit pants, BBW4LIFE men, plus size pants with pockets, men M to 5XL pants, relaxed fit men pants, plus size casual trousers men, men BBW pants, drawstring waist pants men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_35_1.png?v=1778445842',
+        canonical: 'https://www.bbw4life.com/products/product35.html'
+    },
+
+    '/products/product36.html': {
+        title: 'CropSlimPants — Men\'s Drawstring Cropped Pants | BBW4LIFE',
+        description: 'Slim-fitting cropped pants with a drawstring waist in 8 stunning colors. Trendy, versatile, and made for the modern plus size man. Sizes M to 5XL. Free worldwide shipping.',
+        keywords: 'plus size men cropped pants, BBW men pants, drawstring cropped pants, slim fit plus size, men plus size fashion, BBW4LIFE men, cropped trousers plus size, men M to 5XL pants, plus size men style, drawstring waist pants men, crop pants men curvy, men fashion BBW4LIFE',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_36_1.png?v=1778441000',
+        canonical: 'https://www.bbw4life.com/products/product36.html'
+    },
+
+    '/products/product37.html': {
+        title: 'HaremPrints — Printed Harem Trousers for Men Plus Size | BBW4LIFE',
+        description: 'Trendy printed harem trousers with cuffed ankles. Loose, breathable plus size fit in Black, Khaki & Military Green. Sizes M to 5XL. Free worldwide shipping. Built for the man who wears style with no apology.',
+        keywords: 'plus size harem pants men, BBW men harem trousers, printed harem pants plus size, men plus size casual pants, cuffed ankle trousers, loose fit pants men plus size, harem trousers M to 5XL, BBW4LIFE men pants, military green harem pants, khaki harem trousers men, breathable plus size trousers, men curvy fashion',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_37_1.png?v=1778448798',
+        canonical: 'https://www.bbw4life.com/products/product37.html'
+    },
+
+    '/products/product38.html': {
+        title: 'LooseJeans — Men\'s Relaxed Fit Denim | BBW4LIFE',
+        description: 'Classic loose jeans built for men plus size — available in Graphite Gray, Glacier Blue & Solid Black. Relaxed fit, maximum comfort, effortless style all day long. Sizes M to XXXL. Free worldwide shipping.',
+        keywords: 'plus size men jeans, BBW mens denim, loose fit jeans plus size, relaxed fit denim men, men plus size pants, big size jeans men, graphite gray jeans, glacier blue jeans, solid black jeans men, BBW4LIFE men, men curvy denim, plus size relaxed jeans, wide fit jeans men, BBW men clothing',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_38_1.png?v=1778450709',
+        canonical: 'https://www.bbw4life.com/products/product38.html'
+    },
+
+    '/products/product39.html': {
+        title: 'BritishLoafers — Formal Tassel Party Shoes for Men | BBW4LIFE',
+        description: 'British-inspired formal loafers with tassel detailing. Slip-on elegance for weddings, parties and business events. Available in Brown, Blue & Black. Men\'s dress shoes sizes 6.5 to 12. Free worldwide shipping.',
+        keywords: 'men formal loafers, tassel loafers men plus size, BBW4LIFE men shoes, british loafers men, men party shoes, wedding shoes men, men dress shoes wide, men formal shoes sizes 6.5 to 12, slip on dress shoes men, men loafers brown black blue, BBW4LIFE men plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_39_1.png?v=1778453657',
+        canonical: 'https://www.bbw4life.com/products/product39.html'
+    },
+
+    '/products/product40.html': {
+        title: 'AirMesh Runners — Professional Sports Sneakers for Men | BBW4LIFE',
+        description: 'Breathable air-cushion mesh sneakers built for serious performance. Lightweight, shock-absorbing, and stylish from the gym to the street. Plus size men\'s sports shoes sizes 39–46. Free worldwide shipping.',
+        keywords: 'plus size men sneakers, BBW men shoes, air mesh running shoes, plus size sports shoes, men breathable sneakers, wide fit men shoes, BBW4LIFE men shoes, sizes 39 to 46 sneakers, air cushion men shoes, gym shoes plus size men, street style men sneakers, professional sports shoes men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_40_1.png?v=1778454809',
+        canonical: 'https://www.bbw4life.com/products/product40.html'
+    },
+
+    '/products/product41.html': {
+        title: 'LeatherCasuals — Men\'s Breathable Flat Sneakers | BBW4LIFE',
+        description: 'Fashion leather casual shoes that combine breathability with sharp style. Versatile enough for work, dates, and daily adventures. Plus size men\'s sneakers in Black. Sizes 6 to 11. Free worldwide shipping.',
+        keywords: 'plus size men sneakers, BBW men shoes, leather casual shoes, breathable men shoes, plus size men footwear, wide fit men sneakers, BBW4LIFE men shoes, size 6 to 11 men shoes, flat sneakers plus size, men leather casual, BBW men casual shoes, plus size king shoes',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_41_1.png?v=1778462706',
+        canonical: 'https://www.bbw4life.com/products/product41.html'
+    },
+
+    '/products/product42.html': {
+        title: 'BusinessDress Shoes — Classic Wedding Formal | BBW4LIFE',
+        description: 'Sharp, polished business formal shoes in Black and Brown. Sizes 38 to 48 — because every plus size king deserves to walk into any room with confidence. Perfect for weddings, the office, and every big moment. Free worldwide shipping.',
+        keywords: 'plus size men dress shoes, BBW men formal shoes, big size wedding shoes, plus size business shoes, men wide fit formal shoes, size 38 to 48 dress shoes, plus size king shoes, black formal shoes plus size, brown dress shoes plus size, BBW4LIFE men shoes, big men wedding shoes, formal shoes large size men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_42_1.png?v=1778465105',
+        canonical: 'https://www.bbw4life.com/products/product42.html'
+    },
+
+    '/products/product43.html': {
+        title: 'HollowSneakers — Mesh Big Size Fashion Shoes for Men | BBW4LIFE',
+        description: 'Lightweight hollow mesh sneakers built for plus size men who refuse to compromise on style. Bold colorways — Black, Green, Blue — sizes 38 to 47. Breathable, versatile, and made for kings. Free worldwide shipping.',
+        keywords: 'plus size men sneakers, big size mesh shoes, hollow mesh sneakers men, BBW4LIFE men shoes, men size 47 sneakers, plus size fashion shoes men, breathable sneakers big size, curvy men shoes, BBW men footwear, men wide fit sneakers, size 38 to 47 sneakers, mesh fashion shoes men plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_43_1.png?v=1778499238',
+        canonical: 'https://www.bbw4life.com/products/product43.html'
+    },
+
+    '/products/product44.html': {
+        title: 'TrendTrainers — Men\'s Outdoor Sport Sneakers | BBW4LIFE',
+        description: 'High-performance sport sneakers built for the active plus size man. Three striking colorways — White, Red, Black — sizes 39 to 47. Superior support, breathable build, free worldwide shipping. Kings deserve shoes that match their energy.',
+        keywords: 'plus size men sneakers, BBW men shoes, men outdoor sport shoes, big size sneakers, plus size trainers, men wide fit shoes, BBW4LIFE men shoes, size 39 to 47 sneakers, sport shoes plus size men, men athletic shoes curvy, BBW king sneakers, trendy men plus size shoes',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_44_1.png?v=1778501177',
+        canonical: 'https://www.bbw4life.com/products/product44.html'
+    },
+
+    '/products/product45.html': {
+        title: 'PatentLoafers — Luxury Patent Leather Party Shoes for Men | BBW4LIFE',
+        description: 'Patent leather point-toe loafers with tassel detailing. Slip-on elegance for weddings, galas and big nights out. Available in Black & Brown, sizes 38 to 48. Free worldwide shipping.',
+        keywords: 'plus size men loafers, patent leather shoes men, men party shoes plus size, tassel loafers men, wedding shoes men plus size, big size men shoes, BBW4LIFE men shoes, sizes 38 to 48 loafers, luxury loafers men, formal men shoes BBW4LIFE, slip on elegant shoes men, gala shoes men plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_45_1.png?v=1778507431',
+        canonical: 'https://www.bbw4life.com/products/product45.html'
+    },
+
+    '/products/product46.html': {
+        title: 'CollarShirt — Men\'s Plus Size Button-Down Shirt | BBW4LIFE',
+        description: 'A classic collared button-down shirt in 5 crisp colors — Black, Navy, Dark Gray, White, Light Blue. Professional, breathable, and perfectly fitted from M to 5XL. The shirt that makes a king look sharp every single day.',
+        keywords: 'plus size men shirt, BBW men button down, men plus size collared shirt, big size dress shirt, plus size men top, men wide fit shirt, BBW4LIFE men clothing, M to 5XL shirt, plus size formal shirt men, men breathable shirt curvy, BBW king shirt, plus size office shirt men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_46_1.png?v=1778519261',
+        canonical: 'https://www.bbw4life.com/products/product46.html'
+    },
+
+    '/products/product47.html': {
+        title: 'GeoPolo Shirt — Geometric Print Plus Size Men Polo | BBW4LIFE',
+        description: 'Bold geometric pattern polo shirt with short sleeves. Stand out effortlessly in Black or White — casual, sharp, and confident. Plus size men shirts S to XXL. Free worldwide shipping.',
+        keywords: 'plus size men polo shirt, geometric print polo men, BBW4LIFE men shirt, plus size polo shirt, men plus size casual shirt, geometric pattern shirt men, polo shirt S to XXL, bold polo men plus size, BBW4LIFE polo, curvy men shirt, plus size men fashion, men polo geometric BBW4LIFE',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_47_1.png?v=1778520664',
+        canonical: 'https://www.bbw4life.com/products/product47.html'
+    },
+
+    '/products/product48.html': {
+        title: 'StripedCollar Sweater — Men\'s Casual Knit Plus Size | BBW4LIFE',
+        description: 'A refined striped collar knit sweater for men plus size. Available in White-Coffee and Black-Gray — sizes M to XXL. Cozy, sophisticated and made for kings who dress with intention. Free worldwide shipping.',
+        keywords: 'plus size men sweater, men knit sweater big size, striped collar sweater men, BBW4LIFE men knitwear, casual sweater plus size men, men size XXL sweater, cozy knit men plus size, BBW men clothing, pullover plus size homme, striped knit sweater curvy men, men big size knitwear, BBW4LIFE sweater',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_48_1.png?v=1778600780',
+        canonical: 'https://www.bbw4life.com/products/product48.html'
+    },
+
+    '/products/product49.html': {
+        title: 'TurtleneckLux — Men\'s Plus Size Turtleneck Sweater | BBW4LIFE',
+        description: 'A warm premium turtleneck sweater in 8 rich colors — from Tangerine to Burgundy. Sizes M to 4XL. The plus size king\'s winter essential: timeless style, supreme comfort, undeniable presence. Free worldwide shipping.',
+        keywords: 'plus size men turtleneck sweater, BBW men sweater, big size turtleneck, plus size king sweater, men oversized turtleneck, size M to 4XL sweater, BBW4LIFE men sweater, plus size winter sweater, men plus size knitwear, turtleneck big men, Burgundy turtleneck plus size, Tangerine sweater men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_49_1.png?v=1778604415',
+        canonical: 'https://www.bbw4life.com/products/product49.html'
+    },
+
+    '/products/product50.html': {
+        title: 'HikeJacket — Waterproof Plus Size Outdoor Jacket | BBW4LIFE',
+        description: 'A waterproof couple\'s hiking jacket in 5 striking colors. Wind and rain resistant — adventure-ready from M to 5XL. Plus size men\'s outdoor jacket built for kings who explore. Free worldwide shipping.',
+        keywords: 'plus size men jacket, BBW men outdoor jacket, waterproof plus size jacket, hiking jacket plus size, wind resistant jacket big men, BBW4LIFE men jacket, plus size outdoor suit, couple hiking jacket, waterproof big men jacket, M to 5XL jacket, adventure jacket plus size, BBW king jacket',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_50_1.png?v=1778700002',
+        canonical: 'https://www.bbw4life.com/products/product50.html'
+    },
+
+    '/products/product51.html': {
+        title: 'RoundNeck Sweatshirt — Men\'s Plus Size Pullover | BBW4LIFE',
+        description: 'A clean round-neck sweatshirt in five great colors — Brown, Yellow, Black, Dark Gray, White. Soft, relaxed, and built for everyday wear from M to XXXL. Plus size men\'s comfort done right. Free worldwide shipping.',
+        keywords: 'plus size men sweatshirt, BBW men pullover, round neck sweatshirt plus size, men oversized sweatshirt, plus size men clothing, BBW4LIFE men sweatshirt, sizes M to XXXL sweatshirt, casual men plus size top, comfortable men sweatshirt curvy, big men pullover, men plus size sweater, round neck pullover men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_51_1.png?v=1778702303',
+        canonical: 'https://www.bbw4life.com/products/product51.html'
+    },
+
+    '/products/product52.html': {
+        title: 'NailBond Glue — Strong UV Nail Tips Adhesive | BBW4LIFE',
+        description: 'Ultra-strong nail glue gel for rhinestones, tips and gems. Dries fast, bonds hard, keeps your nail art flawless longer. Available in 20g & 30g. Curvy beauty essentials by BBW4LIFE. Free worldwide shipping.',
+        keywords: 'nail glue gel, UV nail tips adhesive, strong nail bond, rhinestone nail glue, press on nail glue, nail art adhesive, BBW4LIFE beauty, curvy beauty nails, nail gems glue, nail tips glue gel, fast drying nail glue, plus size nail care',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_52_1.png?v=1778709107',
+        canonical: 'https://www.bbw4life.com/products/product52.html'
+    },
+
+    '/products/product53.html': {
+        title: 'BowNails — Manicure Long Almond Fake Nails | BBW4LIFE',
+        description: 'Elegant bow-design almond-shaped press-on nails in Butterfly Gothic & Dark Red Bow styles. Salon-quality manicure in minutes — no lamp needed. Curvy beauty essentials by BBW4LIFE. Free worldwide shipping.',
+        keywords: 'press on nails, fake nails almond shape, bow nail art, plus size beauty, curvy beauty nails, BBW4LIFE nails, butterfly gothic nails, dark red bow nails, almond fake nails, press on manicure, nail art BBW, curvy women beauty, salon nails at home, long almond nails',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_53_1.png?v=1778711021',
+        canonical: 'https://www.bbw4life.com/products/product53.html'
+    },
+
+    '/products/product54.html': {
+        title: 'NailRepair Lotion — Nourishing Gray Nail Solution | BBW4LIFE',
+        description: 'Restore and brighten damaged nails with this nourishing lotion. Softens, moisturizes, and brings your nails back to life. Nail care by BBW4LIFE Curvy Beauty. Free worldwide shipping.',
+        keywords: 'nail repair lotion, nail nourishing solution, nail care curvy women, BBW4LIFE beauty, nail treatment lotion, damaged nail repair, nail brightening lotion, curvy beauty nail care, gray nail lotion, nail moisturizer BBW4LIFE, nail restoration lotion, press on nail care',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_54_1.png?v=1778713020',
+        canonical: 'https://www.bbw4life.com/products/product54.html'
+    },
+
+    '/products/product55.html': {
+        title: 'BrowDye Pencil — Waterproof Quick-Dry Eyebrow Pencil | BBW4LIFE',
+        description: 'Long-lasting liquid eyebrow pencil that creates natural, three-dimensional brows. Waterproof, sweat-resistant and travel-ready. Available in Dark Grey & Gold. Curvy Beauty by BBW4LIFE — free worldwide shipping.',
+        keywords: 'waterproof eyebrow pencil, BBW eyebrow, curvy beauty brow pencil, liquid eyebrow pencil, 3D brows, eyebrow dye pencil, BBW4LIFE beauty, quick dry brow pencil, dark grey eyebrow pencil, gold eyebrow pencil, natural brows curvy women, brow makeup plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_55_1.png?v=1778715182',
+        canonical: 'https://www.bbw4life.com/products/product55.html'
+    },
+
+    '/products/product56.html': {
+        title: 'Curl & Volume Mascara — 4D Waterproof Formula | BBW4LIFE',
+        description: 'Volumizing 4D mascara that curls, lifts and defines lashes. Waterproof, sweat-resistant, and built for all-day wear. Beauty made for curvy women who refuse to be invisible.',
+        keywords: 'volumizing mascara, 4D mascara, waterproof mascara, curvy women makeup, BBW4LIFE beauty, lash mascara curly, mascara volume curvy, BBW mascara, mascara all day wear, plus size beauty mascara, curling mascara, lash lift mascara',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_56_1.png?v=1778717423',
+        canonical: 'https://www.bbw4life.com/products/product56.html'
+    },
+
+    '/products/product57.html': {
+        title: 'BrowKit Pro — Waterproof Eyebrow Stencil & Cream | BBW4LIFE Beauty',
+        description: 'All-in-one eyebrow kit with stencils and smooth color cream. Natural 3D brows without smudging — easy, precise, perfect. Waterproof formula for curvy queens. Free worldwide shipping.',
+        keywords: 'eyebrow kit, brow stencil kit, waterproof eyebrow cream, 3D brows, eyebrow shaping kit, BBW4LIFE beauty, curvy women makeup, brow kit with stencils, natural eyebrows, brow color cream, eyebrow stamp kit, plus size beauty',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_57_1.png?v=1778719130',
+        canonical: 'https://www.bbw4life.com/products/product57.html'
+    },
+
+    '/products/product58.html': {
+        title: 'Obsidian Lip Balm — Warming Moisture Treatment | BBW4LIFE',
+        description: 'Warming obsidian lip balm that gently moisturizes, reduces lip lines and leaves lips soft, smooth and tenderly cared for. Beauty made for every woman. Free worldwide shipping.',
+        keywords: 'obsidian lip balm, warming lip treatment, moisturizing lip balm, lip line reduction, BBW4LIFE beauty, curvy women beauty, plus size beauty, lip care BBW, lip balm moisture, obsidian beauty treatment, soft lips balm, BBW lip care',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_58_1.png?v=1778721576',
+        canonical: 'https://www.bbw4life.com/products/product58.html'
+    },
+
+    '/products/product59.html': {
+        title: 'TearOff Lip Gloss — 4-Color Long-Lasting Peel Set | BBW4LIFE',
+        description: 'Peel-off lip gloss in 4 vibrant shades — Hot Pink, Coral Orange, Warm Terracotta and Cherry Red. Long-lasting bold lips without sticking. Free worldwide shipping.',
+        keywords: 'peel off lip gloss, tear off lip gloss, long lasting lip gloss, BBW4LIFE lip gloss, bold lip color women, lip gloss set 4 colors, hot pink lip gloss, cherry red lip gloss, curvy women makeup, BBW lip gloss, moisturizing lip color, lip gloss BBW4LIFE beauty',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_59_1.png?v=1778725120',
+        canonical: 'https://www.bbw4life.com/products/product59.html'
+    },
+
+    '/products/product60.html': {
+        title: 'GingerClean Pads — Ginger & Lemon Makeup Remover | BBW4LIFE',
+        description: 'Gentle cleansing pads infused with ginger and lemon to remove makeup thoroughly. Leaves skin clean, soft and without tightness. Curvy beauty essentials for every queen. Free worldwide shipping.',
+        keywords: 'makeup remover pads, ginger lemon cleanser, curvy beauty, BBW4LIFE beauty, gentle makeup remover, skin cleansing pads, plus size beauty, makeup remover curvy women, ginger skincare, lemon cleanser, BBW beauty essentials, face cleansing pads',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_60_1.png?v=1778726632',
+        canonical: 'https://www.bbw4life.com/products/product60.html'
+    },
+
+    '/products/product61.html': {
+        title: 'DeepRepair Hair Mask — Moisturizing & Smoothing | BBW4LIFE',
+        description: 'Intensive hair mask that moisturizes, repairs color damage, iron damage and frizz. Leaves hair silky smooth and full of life. Deep repair treatment for every hair type. Free worldwide shipping.',
+        keywords: 'deep repair hair mask, moisturizing hair mask, smoothing hair treatment, BBW4LIFE hair care, hair repair mask curvy women, frizz repair mask, color damage repair hair, BBW hair mask, intensive hair treatment, silky smooth hair mask, hair care BBW4LIFE, hair repair treatment',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_61_1.png?v=1778728182',
+        canonical: 'https://www.bbw4life.com/products/product61.html'
+    },
+
+    '/products/product62.html': {
+        title: 'BatanaGlow Oil — Moisturizing Hair Care Essential | BBW4LIFE',
+        description: 'Batana essential oil that deeply moisturizes, improves dry and damaged hair, and leaves every strand smooth and healthy. Hair care made for queens. Free worldwide shipping.',
+        keywords: 'batana oil hair care, moisturizing hair oil, damaged hair repair, BBW4LIFE hair care, curvy women beauty, batana essential oil, dry hair treatment, hair growth oil, BBW beauty, natural hair oil, hair moisturizer women, batana glow oil',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_62_1.png?v=1778729816',
+        canonical: 'https://www.bbw4life.com/products/product62.html'
+    },
+
+    '/products/product63.html': {
+        title: 'BatanaBoost Oil — 120ml Hair Growth Conditioner | BBW4LIFE',
+        description: 'Batana oil conditioner that moisturizes, repairs and promotes hair growth. Rich 120ml formula for stronger, healthier, longer hair. All hair types. Free worldwide shipping.',
+        keywords: 'batana oil hair growth, hair growth conditioner, BBW hair care, curvy woman hair oil, batana boost oil, moisturizing hair conditioner, damaged hair repair, natural hair growth oil, BBW4LIFE beauty, batana oil 120ml, hair repair conditioner, healthy hair oil',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_63_1.png?v=1778751039',
+        canonical: 'https://www.bbw4life.com/products/product63.html'
+    },
+
+    '/products/product64.html': {
+        title: 'PoreClean Gel — Deep Exfoliating Anti-Acne Gel | BBW4LIFE',
+        description: 'Deep cleansing exfoliating gel that fights blackheads and acne, tightens pores and brightens skin for a fresh radiant glow. BBW4LIFE skincare made for every curvy queen. Free worldwide shipping.',
+        keywords: 'pore cleansing gel, anti acne gel, exfoliating gel plus size, blackhead remover, pore tightening, skin brightening gel, BBW4LIFE skincare, curvy women beauty, deep cleansing face gel, acne skincare queens, BBW beauty, plus size skincare',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_64_1.png?v=1778753787',
+        canonical: 'https://www.bbw4life.com/products/product64.html'
+    },
+
+    '/products/product65.html': {
+        title: 'KnuckleWhite Serum — Hand & Joint Skin Brightener | BBW4LIFE',
+        description: 'Targeted whitening serum for knuckles and joints. Reduces melanin buildup, brightens dark spots and softens skin texture for visibly smoother, more radiant hands. Free worldwide shipping.',
+        keywords: 'knuckle whitening serum, dark knuckle treatment, joint skin brightener, BBW4LIFE beauty, hand brightening serum, melanin reduction cream, dark spots hands, knuckle cream plus size, skin brightening serum, BBW beauty skincare, hand care serum, curvy beauty skincare',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_65_1.png?v=1778755620',
+        canonical: 'https://www.bbw4life.com/products/product65.html'
+    },
+
+    '/products/product66.html': {
+        title: 'Propolis Glow Essence — Brightening Facial Serum | BBW4LIFE',
+        description: 'Propolis and nicotinamide essence that reduces acne marks, moisturizes deeply and brightens skin tone for a luminous complexion. Glow from within. Free worldwide shipping.',
+        keywords: 'propolis facial serum, brightening serum, acne marks serum, nicotinamide essence, skin glow serum, BBW4LIFE skincare, propolis skincare, face brightening essence, moisturizing serum, anti acne marks, luminous skin serum, curvy beauty skincare',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_66_1.png?v=1778757308',
+        canonical: 'https://www.bbw4life.com/products/product66.html'
+    },
+
+    '/products/product67.html': {
+        title: 'MenGlow Cream — Concealing Brightening Lazy Cream for Men | BBW4LIFE',
+        description: 'Refreshing non-greasy men\'s face cream that conceals, brightens skin tone and minimizes pores — effortless grooming every day. For men who take care of themselves. Free worldwide shipping.',
+        keywords: 'men face cream, BBW men skincare, concealing cream men, brightening cream men, lazy cream men, men glow cream, pore minimizing cream men, men grooming BBW4LIFE, non greasy face cream men, men plus size skincare, men daily face cream, skin brightening men',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_67_1.png?v=1778759407',
+        canonical: 'https://www.bbw4life.com/products/product67.html'
+    },
+
+    '/products/product68.html': {
+        title: 'IceGlow Grid Set — Silicone Facial Cooling Tool | BBW4LIFE',
+        description: 'Silicone ice grid scraping plate for facial care. Apply ice to reduce puffiness, tighten pores and refresh skin instantly. Available in 7 colors. Curvy beauty essentials by BBW4LIFE. Free worldwide shipping.',
+        keywords: 'silicone ice facial tool, facial cooling plate, ice grid face scraper, pore tightening tool, facial depuffing tool, BBW4LIFE beauty, curvy beauty skincare, silicone face massage, ice cube facial plate, BBW beauty tools, skin refresh tool, facial care curvy women',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_68_1.png?v=1778763394',
+        canonical: 'https://www.bbw4life.com/products/product68.html'
+    },
+
+    '/products/product69.html': {
+        title: 'GlamSatin Dress — Black Halter Ruched Maxi | BBW4LIFE',
+        description: 'Turn heads in this luxurious black satin halter maxi dress. Deep V-neckline, ruched waist knot detail, bold front slit — made for queens plus size. Sizes 1XL to 5XL. Free worldwide shipping. BBW4LIFE Original.',
+        keywords: 'plus size satin dress, BBW halter maxi dress, curvy women formal dress, black maxi dress plus size, ruched waist dress curvy, deep V neckline plus size, BBW4LIFE original dress, satin gown plus size, front slit dress curvy, plus size evening dress, 1XL 2XL 3XL 4XL 5XL dress, BBW formal wear, curvy queen dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_69_1.png?v=1778793476',
+        canonical: 'https://www.bbw4life.com/products/product69.html'
+    },
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */
