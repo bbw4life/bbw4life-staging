@@ -293,21 +293,21 @@
     </div>
   </div>
 
-  <!-- EXIT INTENT POPUP -->
-  <div id="colExitOverlay" class="col-exit-overlay" style="display:none">
-    <div class="col-exit-popup">
-      <button class="col-exit-close" id="colExitClose"><i class="fas fa-times"></i></button>
-      <div class="col-exit-emoji"><i class="fas fa-tag"></i></div>
-      <h2 class="col-exit-title">Wait — before you go!</h2>
-      <p class="col-exit-sub">Use code <strong>SAVE15</strong> for 15% off your order today.</p>
-      <div class="col-exit-code">
-        <span>SAVE15</span>
-        <button class="col-exit-copy" id="colExitCopy">Copy</button>
-      </div>
-      <button class="col-exit-cta" id="colExitCta">Shop Now &amp; Save 15%</button>
-      <p class="col-exit-skip" id="colExitSkip">No thanks, I'll pay full price</p>
+ <!-- EXIT INTENT POPUP -->
+<div id="colExitOverlay" class="col-exit-overlay" style="display:none">
+  <div class="col-exit-popup">
+    <button class="col-exit-close" id="colExitClose"><i class="fas fa-times"></i></button>
+    <div class="col-exit-emoji"><i class="fas fa-tag"></i></div>
+    <h2 class="col-exit-title">Wait — before you go!</h2>
+    <p class="col-exit-sub">Use code <strong id="colExitPromoCode"></strong> for <span id="colExitPromoPct"></span>% off your order today.</p>
+    <div class="col-exit-code">
+      <span id="colExitCodeSpan"></span>
+      <button class="col-exit-copy" id="colExitCopy">Copy</button>
     </div>
+    <button class="col-exit-cta" id="colExitCta">Shop Now &amp; Save <span id="colExitCtaPct"></span>%</button>
+    <p class="col-exit-skip" id="colExitSkip">No thanks, I'll pay full price</p>
   </div>
+</div>
 
   <!-- ══════════════════════════════════════════
        POPUP — MY PERSONALIZED PRODUCT

@@ -558,7 +558,7 @@
   fetch('/products.data.json')
     .then(r => r.json())
     .then(data => {
-      window.__allProducts = data.filter(p => !p.type);
+      window.__allProducts = data;
       settings = data.find(p => p.type === 'settings') || {};
 
       if (document.getElementById('all-collections-grid')) {
@@ -1404,6 +1404,7 @@
     if (e.target.id === 'colCompareOverlay')                                    { closeCompareModal(); return; }
   });
 
+  
   /* ================================================================
      EXIT INTENT POPUP
   ================================================================ */
@@ -1416,6 +1417,20 @@
       if (triggered) return;
       triggered = true;
       localStorage.setItem(SHOWN_KEY, '1');
+
+      const promos = (settings.promos || []);
+      if (promos.length) {
+        const best = promos.reduce((b, p) => p.percent > (b.percent || 0) ? p : b, {});
+        const codeEl   = document.getElementById('colExitCodeSpan');
+        const codeBold = document.getElementById('colExitPromoCode');
+        const pctEl    = document.getElementById('colExitPromoPct');
+        const ctaPct   = document.getElementById('colExitCtaPct');
+        if (codeEl)   codeEl.textContent   = best.code;
+        if (codeBold) codeBold.textContent = best.code;
+        if (pctEl)    pctEl.textContent    = best.percent;
+        if (ctaPct)   ctaPct.textContent   = best.percent;
+      }
+
       if (colExitOverlay) colExitOverlay.style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
@@ -1434,7 +1449,8 @@
 
     if (colExitCopy) {
       colExitCopy.addEventListener('click', () => {
-        navigator.clipboard.writeText('SAVE15').catch(() => {});
+        const codeEl = document.getElementById('colExitCodeSpan');
+        navigator.clipboard.writeText(codeEl ? codeEl.textContent : '').catch(() => {});
         colExitCopy.textContent = 'Copied!';
         setTimeout(() => { colExitCopy.textContent = 'Copy'; }, 2000);
       });
