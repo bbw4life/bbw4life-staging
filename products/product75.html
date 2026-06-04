@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/src/components/header.css">
+  <link rel="stylesheet" href="/products/products.css">
+  <link rel="stylesheet" href="/products/reviews.css">
+  <link rel="stylesheet" href="/products/products-globales.css">
+  <script src="/preloader-inline.js"></script>
+  <script src="/src/components/head.js"></script>
+  <link rel="stylesheet" href="/src/components/footer.css">
+</head>
+<body>
+
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+  <div id="header-container"></div>
+
+<main>
+  <div id="breadcrumb-container"></div>
+
+  <!-- ══════════════ SANAICA BANNER ══════════════ -->
+  <div class="sanaica-banner-paul" id="sanaica-banner-paul">
+    <div class="sanaica-banner-paul-video-wrapper" style="display:none;">
+      <video class="sanaica-banner-paul-video" autoplay muted loop playsinline></video>
+      <button class="sanaica-video-sound-toggle muted" aria-label="Toggle sound">
+        <svg class="sound-on" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <svg class="sound-off" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+    <div class="sanaica-banner-paul-slider-container">
+      <div class="sanaica-banner-paul-slide active"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+      <div class="sanaica-banner-paul-slide"><img src="" alt="" class="sanaica-banner-paul-image" style="display:none;" loading="lazy"></div>
+    </div>
+    <div class="sanaica-banner-paul-indicators dots">
+      <span class="sanaica-banner-paul-indicator active" data-slide="0"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="1"></span>
+      <span class="sanaica-banner-paul-indicator" data-slide="2"></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEART BANNER ══════════════ -->
+  <div class="bbw-heart-banner">
+    <div class="bbw-heart-banner__inner">
+      <span class="bbw-heart-banner__icon"><i class="fas fa-crown"></i></span>
+      <span class="bbw-heart-banner__text">JacquardPower Suit — a BBW4LIFE Original. Jewel-tone floral brocade built for the plus size queen who walks into every room and makes the whole room remember her name.</span>
+      <span class="bbw-heart-banner__icon"><i class="fas fa-crown"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT SECTION ══════════════ -->
+  <section class="product-section" data-product-id="Pdg-Francenel-product75">
+    <div class="container product-layout">
+
+      <!-- ══════════ MEDIA ══════════ -->
+      <div class="product-media thumbs-desktop-vertical-left thumbs-mobile-vertical-left">
+        <div class="thumbnails" id="product-thumbnails"></div>
+        <div class="main-image-slider" id="main-image-slider">
+          <div class="slider-arrow prev"><i class="fi fi-rr-angle-left"></i></div>
+          <div class="slider-arrow next"><i class="fi fi-rr-angle-right"></i></div>
+          <span class="product-badge" style="display:none;"></span>
+          <div class="slider-shimmer-bar"></div>
+        </div>
+      </div>
+
+      <!-- ══════════ CONTENT ══════════ -->
+      <div class="product-content" data-scroll-reveal>
+
+        <!-- TITLE -->
+        <div class="paul-title-block paul-title-block1" data-scroll-reveal>
+          <div class="paul-main-title"></div>
+          <div class="paul-title-underline"></div>
+        </div>
+
+        <!-- STARS -->
+        <div class="unique-star-rating-container star-rating-border-block1" data-scroll-reveal>
+          <div class="unique-stars" data-rating="4.9" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})">
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+            <span class="unique-star full"></span>
+          </div>
+          <span class="unique-rating-text" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <span class="unique-reviews" onclick="document.getElementById('reviews-section').scrollIntoView({behavior:'smooth'})"></span>
+          <div class="unique-truck-wrapper">
+            <div class="unique-truck">
+              <svg viewBox="0 0 24 24" fill="var(--truck-color)">
+                <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17v-2.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+              </svg>
+            </div>
+            <span class="unique-truck-tooltip">Free worldwide shipping</span>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SOUL MESSAGE -->
+        <div class="bbw-soul-message" data-scroll-reveal>
+          <div class="bbw-soul-message__icon"><i class="fas fa-crown"></i></div>
+          <p class="bbw-soul-message__text">There is a difference between a woman who dresses for an occasion and a woman who <strong>transforms the occasion by what she is wearing.</strong> The JacquardPower Suit is for the second queen. Jewel-tone floral jacquard brocade that commands attention from every corner of the room. A long-sleeve wrap blazer with a self-tie sash that defines the waist with authority. Matching wide-leg trousers that create a head-to-toe silhouette of pure power. <em>This is not fashion. This is a statement about who you are and what you refuse to apologise for.</em></p>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ORIGINAL PROMISE — lp-block -->
+        <div class="lp-block" data-scroll-reveal>
+          <div class="lp-block__inner">
+            <div class="lp-block__eyebrow">
+              <span class="lp-block__eyebrow-dot"></span>
+              BBW4LIFE Original — Every Detail Built for Your Power
+              <span class="lp-block__eyebrow-dot"></span>
+            </div>
+            <p class="lp-block__quote">
+              "A woman in the right suit<br>
+              does not walk into the room.<br>
+              <span>She arrives.</span>"
+            </p>
+            <div class="lp-block__items">
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Jewel-tone floral jacquard brocade</strong> — a fabric that carries history, luxury and boldness in every thread</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Long-sleeve wrap blazer</strong> — structured, commanding, wraps across the body with authority</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Self-tie sash waist</strong> — defines the silhouette with a bold focal point at the waist that creates deliberate shape</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Matching wide-leg trousers</strong> — from waist to floor in a sweeping silhouette that elongates and elevates</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Multicolor jewel-tone print</strong> — rich, vibrant and universally striking on every skin tone</span>
+              </div>
+              <div class="lp-block__item">
+                <i class="fas fa-check-circle"></i>
+                <span><strong>Sizes 1XL to 5XL</strong> — designed from the curve up, for real plus size bodies built to be celebrated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- 4 OCCASIONS -->
+        <div class="bbw-boot-style-guide" data-scroll-reveal>
+          <div class="bbw-boot-style-guide__header">
+            <i class="fas fa-star"></i>
+            <span>4 Perfect Occasions for the JacquardPower Suit</span>
+          </div>
+          <div class="bbw-boot-style-guide__grid">
+            <div class="bbw-boot-style-guide__card">
+              <div class="bbw-boot-style-guide__card-icon"><i class="fas fa-briefcase"></i></div>
+              <strong>Corporate Power Moment</strong>
+              <span>JacquardPower Suit + pointed heeled pumps + one gold chain. The blazer and wide-leg trousers create a two-piece silhouette that reads as leadership before a single word is spoken. Boardrooms, presentations, negotiations — this is the suit that wins rooms.</span>
+            </div>
+            <div class="bbw-boot-style-guide__card">
+              <div class="bbw-boot-style-guide__card-icon"><i class="fas fa-glass-cheers"></i></div>
+              <strong>Gala or Formal Evening</strong>
+              <span>JacquardPower Suit + strappy gold heels + statement earrings. The jewel-tone brocade reads as evening luxury under formal lighting. A plus size queen in this suit at a gala is not attending the event — she is becoming its most memorable moment.</span>
+            </div>
+            <div class="bbw-boot-style-guide__card">
+              <div class="bbw-boot-style-guide__card-icon"><i class="fas fa-camera"></i></div>
+              <strong>Portrait or Editorial Session</strong>
+              <span>JacquardPower Suit alone — the brocade needs no competition. The multicolor jewel-tone pattern photographs with extraordinary richness and dimension. Every frame looks intentional. Every image looks editorial. The suit does the work — you simply own it.</span>
+            </div>
+            <div class="bbw-boot-style-guide__card">
+              <div class="bbw-boot-style-guide__card-icon"><i class="fas fa-users"></i></div>
+              <strong>Celebration or Special Occasion</strong>
+              <span>JacquardPower Suit + block heels + minimal jewellery. Weddings, birthdays, ceremonies, dinners that matter — wherever plus size queens deserve to be seen fully and celebrated completely. This suit is the answer to every occasion where ordinary is not enough.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE VIEWERS -->
+        <div class="live-viewers" data-scroll-reveal>
+          <p>
+            <span class="eye-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </span>
+            <span class="live-text">LIVE: <span id="live-count-example"></span> queens are viewing the JacquardPower Suit right now.</span>
+          </p>
+        </div>
+
+        <!-- OPTIONS -->
+        <div class="product-options" data-scroll-reveal>
+          <label for="size-select">Select Your Size:</label>
+          <div class="size-wrapper">
+            <select id="size-select"></select>
+            <span class="wishlist-icon-product" title="Add to Wishlist">
+              <svg class="wishlist-icon-empty" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              <svg class="wishlist-icon-filled" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </span>
+          </div>
+          <label>Color:</label>
+          <div class="color-swatches"></div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ADD TO CART -->
+        <div class="quantity-add-wrapper" data-scroll-reveal>
+          <div class="quantity-add">
+            <div class="quantity">
+              <button class="qty-minus">-</button>
+              <input type="number" value="1" min="1">
+              <button class="qty-plus">+</button>
+            </div>
+            <button class="add-to-cart cta button-3d"><i class="fi fi-rr-shopping-cart"></i></button>
+            <button class="buy-now cta button-3d"><i class="fi fi-rr-bolt"></i></button>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- SIZE CHART -->
+        <div id="size-chart-paul-guide-wrapper-1" class="size-chart-paul-guide-wrapper size-chart-paul-guide-border-1" data-scroll-reveal>
+          <div class="size-chart-paul-guide-toggle">
+            <span class="size-chart-paul-guide-text">Size Chart — Which size fits me best?</span>
+            <span class="size-chart-paul-guide-icon">
+              <svg viewBox="0 0 122.88 122.88" xmlns="http://www.w3.org/2000/svg"><path d="M91.87.85,122,31a2.94,2.94,0,0,1,.35.44,2.82,2.82,0,0,1,.49,1.6,2.85,2.85,0,0,1-.84,2l-87,87a3,3,0,0,1-.54.41,2.77,2.77,0,0,1-1.49.43,2.9,2.9,0,0,1-2-.84L.84,91.88a2.89,2.89,0,0,1,0-4.07l87-87a2.88,2.88,0,0,1,2-.84,2.82,2.82,0,0,1,2,.85Z"/></svg>
+            </span>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-modal-1" class="size-chart-paul-guide-modal">
+          <div class="modal-paul-guide-content animated-border">
+            <span class="modal-paul-guide-close">×</span>
+            <h2 class="modal-paul-guide-title">JacquardPower Suit — <strong>Plus Size Size Guide</strong></h2>
+            <div class="modal-paul-guide-row">
+              <div class="modal-paul-guide-image">
+                <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_1.png?v=1778800275" alt="JacquardPower Suit Size Chart" loading="lazy"/>
+              </div>
+              <div class="modal-paul-guide-side-text">
+                This is a two-piece suit — <strong>blazer and wide-leg trousers sold together.</strong> The wrap blazer closes with a self-tie sash at the waist — measure both bust and waist carefully. The trousers are high-waisted wide-leg. If between sizes, choose the larger for the best drape and freedom of movement in both pieces.
+              </div>
+            </div>
+            <h3 class="modal-paul-guide-bold-title"><i class="fi fi-rr-ruler"></i> How to Measure</h3>
+            <div class="modal-paul-guide-detailed-text">
+              <ul>
+                <li><strong>Bust:</strong> Measure around the fullest part of your chest for the blazer fit.</li>
+                <li><strong>Waist:</strong> Measure your natural waist — where the self-tie sash will sit.</li>
+                <li><strong>Hips:</strong> Measure around the fullest part of your hips for the trousers.</li>
+                <li>Between sizes? Always choose the <strong>larger size</strong> — the sash adjusts the blazer waist perfectly.</li>
+              </ul>
+              <h3><i class="fi fi-rr-ruler-triangle"></i> JacquardPower Suit Plus Size Chart</h3>
+              <table>
+                <thead>
+                  <tr><th>Label</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hips (cm)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>1XL</strong></td><td>104–110</td><td>86–92</td><td>112–118</td></tr>
+                  <tr><td><strong>2XL</strong></td><td>112–118</td><td>94–100</td><td>120–126</td></tr>
+                  <tr><td><strong>3XL</strong></td><td>120–126</td><td>102–108</td><td>128–134</td></tr>
+                  <tr><td><strong>4XL</strong></td><td>128–134</td><td>110–116</td><td>136–142</td></tr>
+                  <tr><td><strong>5XL</strong></td><td>136–142</td><td>118–124</td><td>144–150</td></tr>
+                </tbody>
+              </table>
+              <h3><i class="fi fi-rr-info"></i> Suit Details</h3>
+              <table>
+                <thead><tr><th>Feature</th><th>Detail</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Pieces</strong></td><td>Two-piece set — blazer + wide-leg trousers</td></tr>
+                  <tr><td><strong>Blazer</strong></td><td>Long-sleeve wrap style — self-tie sash at waist</td></tr>
+                  <tr><td><strong>Trousers</strong></td><td>High-waisted wide-leg — floor-grazing silhouette</td></tr>
+                  <tr><td><strong>Fabric</strong></td><td>Floral jacquard brocade — jewel-tone multicolor</td></tr>
+                  <tr><td><strong>Print</strong></td><td>Multicolor jewel-tone floral brocade</td></tr>
+                  <tr><td><strong>Available Sizes</strong></td><td>1XL to 5XL</td></tr>
+                  <tr><td><strong>Best For</strong></td><td>Corporate events, galas, ceremonies, portraits, celebrations</td></tr>
+                  <tr><td><strong>Care</strong></td><td>Dry clean recommended — or hand wash cold, hang to dry</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="size-chart-paul-guide-overlay-1" class="size-chart-paul-guide-overlay"></div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- ACCORDION -->
+        <div class="paul-details-accordion paul-accordion-block1" data-scroll-reveal>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">Does a bold print like floral brocade work on a plus size body?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>Yes — and this is one of the most persistent misconceptions about plus size fashion that BBW4LIFE was built to dismantle. <strong>Bold prints on plus size bodies do not make the body look larger. They make the woman look more powerful.</strong> The JacquardPower Suit was designed with this understanding from the beginning. The wrap blazer creates structure and shape through the self-tie sash — so the bold brocade print has a defined silhouette to inhabit. The wide-leg trousers create a sweeping vertical line that elongates. Together, the bold print and the structural silhouette work together to create something genuinely commanding. A plus size queen in this suit does not fill the room. She commands it.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></span>
+                <span class="accordion-title-text">What shoes and accessories work best with a multicolor jewel-tone brocade?</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p>The brocade is already the statement — your accessories should frame it, not compete with it. <strong>Neutral shoes are the strongest choice: nude, ivory, champagne or black pointed-toe heels</strong> let the suit do its work while extending the leg line beautifully through the wide-leg trousers. For jewellery, pick one colour from the brocade print and match it — gold or rose gold earrings work with virtually every jewel-tone combination. <strong>Keep accessories minimal.</strong> One pair of earrings and a single delicate chain or bangle is all this suit needs. The print, the sash, the silhouette — they carry the room. You just wear it with complete confidence.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"/></svg></span>
+                <span class="accordion-title-text">Shipping &amp; Returns</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <p><i class="fi fi-rr-truck-side"></i> <strong>Free worldwide shipping</strong> on all orders. Standard delivery: <strong id="accordion-delivery-days"></strong>.</p>
+              <p><i class="fi fi-rr-box"></i> Arrives in discreet, professional packaging — your suit protected and ready for your occasion.</p>
+              <p><i class="fi fi-rr-undo"></i> <strong>30-day hassle-free returns</strong> — your satisfaction is always the priority.</p>
+            </div>
+          </details>
+          <details class="accordion-item">
+            <summary class="accordion-summary">
+              <div class="summary-content">
+                <span class="custom-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/></svg></span>
+                <span class="accordion-title-text">Product Specs &amp; Materials</span>
+              </div>
+              <span class="toggle-icon">+</span>
+            </summary>
+            <div class="accordion-panel rte">
+              <ul>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Pieces:</strong> Two-piece set — blazer and wide-leg trousers</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Blazer:</strong> Long-sleeve wrap style — self-tie sash at waist</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Trousers:</strong> High-waisted wide-leg — floor-grazing silhouette</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Fabric:</strong> Floral jacquard brocade</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Print:</strong> Multicolor jewel-tone floral brocade</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Sizes:</strong> 1XL through 5XL</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Best For:</strong> Corporate events, galas, ceremonies, portraits, celebrations</li>
+                <li><i class="fi fi-rr-check-circle"></i> <strong>Care:</strong> Dry clean recommended — or hand wash cold, hang to dry, do not bleach</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- IMAGE SLIDER -->
+        <div class="paul-images-block" data-scroll-reveal>
+          <div class="images-slider-wrapper">
+            <div class="images-slider-track">
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_2.png?v=1778800274" alt="JacquardPower Suit wrap blazer detail" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-crown"></i> The Wrap Blazer — Structure With Authority</div>
+                <div class="slide-text">The long-sleeve wrap blazer crosses the body with deliberate elegance. It creates structure across the chest and shoulders while the self-tie sash defines the waist — producing a silhouette that communicates leadership before a single word is spoken.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_3.png?v=1778800275" alt="JacquardPower Suit self-tie sash waist" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-star"></i> The Self-Tie Sash — The Detail That Commands</div>
+                <div class="slide-text">The self-tie sash is the architectural signature of this suit. Tied at the natural waist, it creates a defined focal point that gives the entire look structure, intention and drama. It is the detail that makes this suit unlike anything else in the room.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_5.png?v=1778800274" alt="JacquardPower Suit wide-leg trousers silhouette" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-heart"></i> Wide-Leg Trousers — Power From Waist to Floor</div>
+                <div class="slide-text">High-waisted and floor-grazing, the wide-leg trousers create a sweeping vertical line that elongates the body dramatically. Every step produces movement and presence — a silhouette that commands attention from across every room you enter.</div>
+              </div>
+              <div class="slide-item">
+                <div class="image-wrapper">
+                  <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_6.png?v=1778800275" alt="JacquardPower Suit full brocade look" loading="lazy" class="slide-image">
+                </div>
+                <div class="slide-title"><i class="fi fi-rr-palette"></i> Jewel-Tone Brocade — The Fabric of Power</div>
+                <div class="slide-text">Jacquard brocade carries centuries of luxury. The multicolor jewel-tone floral print photographs with extraordinary richness on every skin tone — vibrant, warm and completely unforgettable. This is not a fabric that blends in. It was never meant to.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WAVE -->
+        <div class="pp-wave-separator">
+          <svg viewBox="0 0 520 22" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-gold" d="M0 11 Q65 0 130 11 Q195 22 260 11 Q325 0 390 11 Q455 22 520 11 L520 22 L0 22 Z"/>
+            <path class="wave-path-rose" d="M0 11 Q65 22 130 11 Q195 0 260 11 Q325 22 390 11 Q455 0 520 11 L520 0 L0 0 Z"/>
+          </svg>
+        </div>
+
+        <!-- FAQ -->
+        <div class="paul-faq-block" data-scroll-reveal>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Is a two-piece suit appropriate for a plus size body — does it work as a set?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>A well-constructed two-piece suit is one of the most powerful silhouettes available to plus size women — and this one was built with that specific body in mind. <strong>The wrap blazer creates structure through the shoulders and chest while the sash defines the waist with authority.</strong> The high-waisted wide-leg trousers extend that waist definition downward in a continuous vertical line to the floor. Worn together, the two pieces create a unified, commanding silhouette that reads as intentional, powerful and completely put-together. This is not a suit that was made larger. It was designed for a plus size body from the first sketch.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Can I wear the blazer and trousers separately?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Yes — both pieces work independently. <strong>The wrap blazer pairs beautifully with solid dark trousers or a pencil skirt</strong> for a more restrained formal look where the brocade is the focal point against a simpler bottom. The wide-leg trousers work with a solid-colour blouse or turtleneck in a colour pulled from the brocade print — creating a sophisticated look without the full pattern effect. However, when worn together as a complete suit, the impact is significantly more powerful. The full look is the statement. The separate pieces are a very good look. The complete suit is unforgettable.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">Does this suit work for darker skin tones and what colours in the print photograph best?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p><strong>Jewel-tone prints are universally striking on dark skin.</strong> The warm reds, deep greens, rich golds and vibrant purples typical of jewel-tone brocade create combinations with deeper complexions that are visually extraordinary — rich, warm and genuinely editorial in photographs. On lighter skin tones, the cooler jewel tones like teal and purple provide a beautiful contrast. The multicolor nature of this specific print means that every skin tone finds at least one colour in the pattern that creates a stunning combination. Queens across West Africa, the Caribbean, Latin America and beyond who have worn jewel-tone brocade in portraits consistently describe it as the most striking thing they have ever worn in front of a camera.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">
+              <div class="question-text">How long does shipping take?</div>
+              <span class="chevron">›</span>
+            </summary>
+            <div class="faq-answer rte">
+              <p>Your JacquardPower Suit will arrive in <strong>12–20 business days</strong> with standard free worldwide shipping. Express options are available at checkout. If you have a specific occasion date, allow sufficient time and consider express shipping. Order today — the suit that changes every room you walk into is already on its way to you.</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RECENTLY VIEWED ══════════════ -->
+  <section id="rv-section" class="rv-section" style="display:none;">
+    <div class="rv-header">
+      <div class="rv-header-left">
+        <span class="rv-eyebrow">Your Journey</span>
+        <h2 class="rv-title">Recently Viewed</h2>
+      </div>
+      <div class="rv-header-right">
+        <button class="rv-nav-btn" id="rv-prev" aria-label="Previous"><i class="fi fi-rr-angle-left"></i></button>
+        <button class="rv-nav-btn" id="rv-next" aria-label="Next"><i class="fi fi-rr-angle-right"></i></button>
+        <button class="rv-clear-btn" id="rv-clear-btn" title="Clear history"><i class="fi fi-rr-trash"></i></button>
+      </div>
+    </div>
+    <div class="rv-slider-wrap">
+      <div class="rv-track" id="rv-track"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="col-marquee-section">
+    <div class="col-marquee-track">
+      <div class="col-marquee-inner">
+        <span class="col-marquee-item"><i class="fas fa-crown"></i> She did not walk into the room — she arrived in the JacquardPower Suit</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> BBW4LIFE Original — Jewel-Tone Floral Brocade Power Suit</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> Wrap blazer. Self-tie sash. Wide-leg trousers. One unforgettable silhouette.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-fire"></i> Sizes 1XL to 5XL — designed from the curve up</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> Bold print. Powerful silhouette. Every occasion that matters.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-crown"></i> She did not walk into the room — she arrived in the JacquardPower Suit</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-star"></i> BBW4LIFE Original — Jewel-Tone Floral Brocade Power Suit</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-heart"></i> Wrap blazer. Self-tie sash. Wide-leg trousers. One unforgettable silhouette.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-fire"></i> Sizes 1XL to 5XL — designed from the curve up</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-gem"></i> Bold print. Powerful silhouette. Every occasion that matters.</span>
+        <span class="col-marquee-sep">✦</span>
+        <span class="col-marquee-item"><i class="fas fa-bolt"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+        <span class="col-marquee-sep">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PRODUCT REQUEST BUTTONS ══════════════ -->
+  <section class="bbw-request-section" data-scroll-reveal>
+    <div class="container">
+      <div class="bbw-request-label">
+        <i class="fas fa-clock"></i>
+        <span>Want to reserve one of our upcoming BBW4LIFE exclusive designs?</span>
+      </div>
+      <div id="plan-request-trigger-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CUSTOM BANNER ══════════════ -->
+  <section class="bbw-custom-banner">
+    <div class="bbw-cb-images">
+      <div class="bbw-cb-img bbw-cb-img--left">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_4.png?v=1778800275" alt="" loading="lazy">
+      </div>
+      <div class="bbw-cb-img bbw-cb-img--right">
+        <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_7.png?v=1778800275" alt="" loading="lazy">
+      </div>
+    </div>
+    <div class="bbw-cb-overlay"></div>
+    <div class="bbw-cb-shimmer-top"></div>
+    <div class="bbw-cb-content">
+      <span class="bbw-cb-eyebrow">
+        <span class="bbw-cb-eyebrow-dot"></span>
+        BBW4LIFE Original — The Suit That Owns Every Room You Walk Into.
+        <span class="bbw-cb-eyebrow-dot"></span>
+      </span>
+      <blockquote class="bbw-cb-quote">
+        "She did not need a crown.<br>
+        The brocade told the room<br>
+        everything it needed to know."
+      </blockquote>
+      <p class="bbw-cb-sub">
+        JacquardPower Suit — Floral Brocade Wrap Blazer &amp; Wide-Leg Trousers.<br class="bbw-cb-br">Sizes 1XL to 5XL. Free worldwide shipping.
+      </p>
+      <div class="bbw-cb-line">
+        <span></span>
+        <i class="bbw-cb-diamond">◆</i>
+        <span></span>
+      </div>
+    </div>
+    <div class="bbw-cb-shimmer-bottom"></div>
+  </section>
+
+  <!-- ══════════════ MINI PRODUCT SLIDER ══════════════ -->
+  <section id="mini-product-slider" class="mini-product-slider" data-scroll-reveal>
+    <h2 class="section-title">Queens Also Love These</h2>
+    <div class="slider-container">
+      <div class="product-slider"></div>
+    </div>
+  </section>
+
+  <section class="bbw-wave-divider">
+    <svg width="100%" viewBox="0 0 680 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" fill="#f9f0e8" opacity="0.80">
+        <animate attributeName="d" values="M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z;M0,6 C80,18 160,2 240,14 C320,22 400,4 480,16 C560,22 620,6 680,14 L680,36 L0,36 Z;M0,12 C80,2 160,22 240,10 C320,0 400,18 480,8 C560,0 620,14 680,6 L680,36 L0,36 Z" dur="9s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" fill="#fce8ef" opacity="0.55">
+        <animate attributeName="d" values="M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z;M0,14 C100,24 200,8 300,22 C400,28 500,10 600,24 C640,28 660,14 680,20 L680,36 L0,36 Z;M0,20 C100,8 200,28 300,16 C400,6 500,24 600,14 C640,10 660,18 680,12 L680,36 L0,36 Z" dur="7s" repeatCount="indefinite"/>
+      </path>
+      <path d="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" fill="#fffaf7" opacity="0.90">
+        <animate attributeName="d" values="M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z;M0,22 C120,30 240,16 360,28 C480,34 580,20 680,28 L680,36 L0,36 Z;M0,28 C120,18 240,32 360,24 C480,16 580,30 680,22 L680,36 L0,36 Z" dur="5s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+  </section>
+
+  <!-- ══════════════ REVIEWS ══════════════ -->
+  <section id="reviews-section">
+    <div class="reviews-header">
+      <div class="reviews-header-left">
+        <h2>What Queens Say</h2>
+        <div class="average-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews-header-count">(<span id="total-reviews">33</span> Reviews)</span>
+          <button class="reviews-collapse-btn" id="reviews-collapse-btn">
+            <i class="fi fi-rr-angle-up"></i>
+          </button>
+        </div>
+      </div>
+      <button id="write-review"><span>Write a Review</span></button>
+    </div>
+
+    <div class="ratings-summary" id="ratings-summary">
+      <div class="ratings-summary-left">
+        <div class="rating-bar"><span>5 ★</span><div class="bar-container"><div class="bar" id="bar-5" style="width:79%;"></div></div><span id="count-5">26</span></div>
+        <div class="rating-bar"><span>4 ★</span><div class="bar-container"><div class="bar" id="bar-4" style="width:15%;"></div></div><span id="count-4">5</span></div>
+        <div class="rating-bar"><span>3 ★</span><div class="bar-container"><div class="bar" id="bar-3" style="width:6%;"></div></div><span id="count-3">2</span></div>
+        <div class="rating-bar"><span>2 ★</span><div class="bar-container"><div class="bar" id="bar-2" style="width:0%;"></div></div><span id="count-2">0</span></div>
+        <div class="rating-bar"><span>1 ★</span><div class="bar-container"><div class="bar" id="bar-1" style="width:0%;"></div></div><span id="count-1">0</span></div>
+      </div>
+      <div class="ratings-summary-right">
+        <div class="review-photos-grid" id="review-photos-grid">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_1.png?v=1778800275" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_2.png?v=1778800274" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_3.png?v=1778800275" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_4.png?v=1778800275" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_5.png?v=1778800274" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_6.png?v=1778800275" alt="Review photo">
+          <img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_7.png?v=1778800275" alt="Review photo">
+          <div class="review-photos-more">2+</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reviews-list">
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">A</div><span class="date">2026-May-22</span></div>
+          <div class="rv-card-right"><h4>Aminata D.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Depuis Dakar — ce tailleur a change la maniere dont je me regarde dans un miroir avant une reunion importante.</h5>
+        <p>Taille 3XL depuis Dakar. Je travaille dans la direction d'une entreprise et je cherchais depuis longtemps un tailleur grande taille qui soit aussi percutant qu'un tailleur standard. Le JacquardPower Suit est cela. Le brocart jacquard multicolore avec les couleurs joaillerie est saisissant sur ma peau. Le blazer wrap et la ceinture sash creent une silhouette que je ne savais pas que j'avais dans un vetement de bureau. Le pantalon large qui coule jusqu'au sol dans le meme tissu complete quelque chose de vraiment fort. BBW4LIFE a cree un tailleur pour femmes rondes avec autant de soin que pour les autres. Cela se voit.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_1.png?v=1778800275" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">J</div><span class="date">2026-May-14</span></div>
+          <div class="rv-card-right"><h4>Jasmine W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>I wore this to a corporate awards gala and three different people asked who designed my suit. BBW4LIFE. That is the answer.</h5>
+        <p>Size 4XL from Houston. The jewel-tone brocade under gala lighting is something I can only describe as extraordinary. The colours in the jacquard print — the deep reds, golds and greens — against my dark skin created a combination that multiple guests photographed specifically. The wrap blazer and self-tie sash gave me a structured silhouette I have never had in a formal plus size suit before. The wide-leg trousers completed the look in a sweeping floor-length silhouette. BBW4LIFE builds formal wear for plus size queens that belongs in every important room we will ever enter. I am grateful this brand exists.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_3.png?v=1778800275" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-twitter"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">F</div><span class="date">2026-May-06</span></div>
+          <div class="rv-card-right"><h4>Fatoumata K.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Depuis Abidjan — le brocart jacquard multicolore est la matiere des reines africaines qui ne s'excusent plus d'exister.</h5>
+        <p>Taille 4XL depuis Abidjan. Je portais le JacquardPower Suit a une ceremonie d'entreprise et je suis entree dans cette salle avec une conscience de moi-meme que je n'avais jamais ressentie dans un vetement. Le blazer wrap structure mes epaules et mon buste avec autorite. La ceinture sash donne une taille que je pensais ne pas avoir. Le pantalon large qui coule jusqu'au sol cree quelque chose de royal en mouvement. Le brocart multicolore avec les couleurs joaillerie sur ma carnation africaine est une combinaison que je ne peux pas decrire autrement qu'avec le mot parfaite. BBW4LIFE pour toujours.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">M</div><span class="date">2026-Apr-27</span></div>
+          <div class="rv-card-right"><h4>Maria C.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Desde Bogota — este traje me hizo entrar a cada sala como si ya supiera que le pertenecia.</h5>
+        <p>Talla 3XL desde Bogota. Llevo el JacquardPower Suit a una presentacion corporativa importante y entre a esa sala de conferencias con una seguridad que jamas habia sentido en ropa de trabajo. El brocado jacquard con los colores joya sobre mi piel latina es literalmente impresionante — rico, vibrante, completamente inigualable. El blazer wrap y el sash de autoajuste crearon una silueta que nadie mas en esa sala tenia. El pantalon de pierna ancha completo el conjunto con un movimiento elegante. BBW4LIFE no solo viste a las mujeres plus size — las celebra. Esa diferencia se siente en cada costura.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_4.png?v=1778800275" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">N</div><span class="date">2026-Apr-16</span></div>
+          <div class="rv-card-right"><h4>Nathalie P.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Depuis Paris — un tailleur grande taille qui n'a pas de compromis. C'est possible. BBW4LIFE l'a prouve.</h5>
+        <p>Taille 2XL depuis Paris. Je cherchais depuis deux ans un tailleur grande taille qui soit aussi elegant et percutant qu'un tailleur standard — sans compromis sur la coupe, le tissu ou la silhouette. Le JacquardPower Suit est exactement cela. Le brocart jacquard est luxueux. La ceinture sash cree une taille definie que d'autres tailleurs grande taille n'arrivent jamais a creer. Le pantalon large en tissu assorti complete la silhouette de la tete aux pieds avec une coherence impressionnante. BBW4LIFE n'a pas cree ce tailleur malgre notre corpulence. Il l'a cree pour elle. La difference est totale.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">C</div><span class="date">2026-Apr-05</span></div>
+          <div class="rv-card-right"><h4>Claudette M.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Mèsi BBW4LIFE — kostim sa a ban mwen yon pouvwa mwen pa t janm konnen mwen te genyen nan reyinyon travay.</h5>
+        <p>Taille 4XL depi Pòtoprens. Mwen te pote JacquardPower Suit nan yon gwo reyinyon pwofesyonèl e premye fwa mwen te gade tèt mwen nan mirwa, mwen te konnen mwen te prèt. Blazer wrap la ba mwen estriktir. Sash la defini kèn mwen ak pouvwa. Pantalon laj la koule depi kèn mwen rive atè ak yon gras ki reyèl. Brocart multikolò a sou po mwen se konbinezon ki pi bèl mwen te janm wè. Mèsi Paul Francenel. Ou wè nou. Ou bilding pou nou. Sa pa konn kòmanse fasil. Nou konnen sa.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_5.png?v=1778800274" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-facebook-f"></i></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">S</div><span class="date">2026-Mar-25</span></div>
+          <div class="rv-card-right"><h4>Sophie T.</h4><div class="stars">★★★★</div></div>
+        </div>
+        <h5>Stunning suit — one note on the sash: take time to tie it deliberately for the best silhouette.</h5>
+        <p>Size 3XL from London. The suit is genuinely beautiful and the quality of the brocade is excellent — it has weight and structure that reads as expensive. One note for new wearers: the self-tie sash is worth spending two minutes on before you leave the house. Tie it deliberately at your natural waist and adjust until the blazer falls symmetrically on both sides. When tied correctly, the silhouette is spectacular. The wide-leg trousers are elegantly cut and the floor-length drape is beautiful. BBW4LIFE creates formal wear for plus size queens with real intention. Delivery from Nigeria in 18 days — excellent.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">K</div><span class="date">2026-Mar-14</span></div>
+          <div class="rv-card-right"><h4>Khadija B.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Ce n'est pas un tailleur. C'est la reponse a toutes les fois ou on m'a dit que ce n'etait pas pour moi.</h5>
+        <p>Taille 5XL depuis Bruxelles. Toute ma vie en vetements grande taille, j'ai ete dirigee vers des coupes simples et des couleurs neutres — comme si la mode audacieuse n'etait pas faite pour mon corps. Le JacquardPower Suit est la reponse directe a tout cela. Le brocart jacquard multicolore avec les couleurs joaillerie est audacieux, riche et entierement pour nous. La silhouette que le blazer wrap et le sash creent est puissante et deliberee. Le pantalon large complete l'ensemble avec la meme energie. BBW4LIFE a cree un tailleur grande taille sans excuses. Sans compromis. Sans dire que nous devrions etre reconnaissantes d'avoir acces a quelque chose. Juste un beau tailleur, fait pour nous. Merci Paul Francenel.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_6.png?v=1778800275" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+
+    </div>
+
+    <div class="rv-marquee-wrap">
+      <div class="rv-marquee-row rv-marquee-row--left">
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">T</div><div class="rv-mq-meta"><p class="rv-mq-name">Therese A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Corporate gala approved</p><p class="rv-mq-quote">Size 3XL. Walked into the gala and the whole table turned. The brocade under formal lighting is something extraordinary. BBW4LIFE creates power suits for queens.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">D</div><div class="rv-mq-meta"><p class="rv-mq-name">Djeneba K.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Depuis Conakry</p><p class="rv-mq-quote">Taille 4XL depuis Conakry. 20 jours. Le brocart jacquard sur peau foncee est incroyable. Le sash cree une taille que je n'avais jamais vue dans un tailleur grande taille. BBW4LIFE.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">P</div><div class="rv-mq-meta"><p class="rv-mq-name">Patricia N.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Boardroom presence</p><p class="rv-mq-quote">Size 2XL. The wrap blazer and sash gave me a silhouette that commanded the room before I said a word. That is BBW4LIFE design. Non-negotiable.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">I</div><div class="rv-mq-meta"><p class="rv-mq-name">Ines V.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Desde Mexico</p><p class="rv-mq-quote">Talla 3XL. El brocado jacquard multicolor es literalmente impresionante. El sash definio mi cintura con autoridad. BBW4LIFE entiende a las reinas plus size de verdad.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">H</div><div class="rv-mq-meta"><p class="rv-mq-name">Helene C.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Seance photo parfaite</p><p class="rv-mq-quote">Taille 3XL. Seance photo professionnelle dans ce tailleur. Chaque image est editoriale. Le brocart jacquard en mouvement est quelque chose que je ne pouvais pas imaginer avant de le voir sur moi.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">R</div><div class="rv-mq-meta"><p class="rv-mq-name">Rachel A.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">From Nairobi</p><p class="rv-mq-quote">Size 5XL from Nairobi. Jewel-tone brocade on my skin was extraordinary. The wrap blazer and sash — a silhouette built for my body from the beginning. BBW4LIFE.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">V</div><div class="rv-mq-meta"><p class="rv-mq-name">Valerie M.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">Bold print bold queen</p><p class="rv-mq-quote">Size 4XL. I was told my whole life that bold prints were not for me. The JacquardPower Suit proved every one of those voices wrong. BBW4LIFE creates without apology.</p><span class="rv-mq-badge">Verified</span></div>
+        <div class="rv-mq-card"><div class="rv-mq-top"><div class="rv-mq-avatar">B</div><div class="rv-mq-meta"><p class="rv-mq-name">Bintou S.</p><div class="rv-mq-stars">★★★★★</div></div></div><p class="rv-mq-title">De Bamako</p><p class="rv-mq-quote">Taille 4XL depuis Bamako. Le brocart jacquard est la matiere des reines qui savent qui elles sont. BBW4LIFE l'a cree pour nous. Merci Paul Francenel. Pour toujours.</p><span class="rv-mq-badge">Verified</span></div>
+      </div>
+    </div>
+
+    <div class="reviews-list">
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">G</div><span class="date">2026-Mar-03</span></div>
+          <div class="rv-card-right"><h4>Grace W.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>The JacquardPower Suit is the first formal two-piece I have ever worn that was built for my body and celebrated it at the same time.</h5>
+        <p>Size 5XL from London. I have worn plus size formal clothing for twenty years. I know what it looks like when something was made for someone else and altered to accommodate me. The JacquardPower Suit does not feel like that. The wrap blazer structure, the self-tie sash, the high-waisted wide-leg trousers — every element of this suit was considered for a plus size body. The jewel-tone brocade on my skin photographed as though I had been dressed by a professional stylist. At the event, I was asked six separate times about my outfit. BBW4LIFE. That is the brand. That is the answer I will keep giving for as long as this brand continues to build for us the way it does.</p>
+        <div class="review-images"></div>
+        <div class="social-icon"></div>
+      </div>
+
+      <div class="review-card hidden">
+        <div class="rv-card-header">
+          <div class="rv-card-left"><div class="avatar">L</div><span class="date">2026-Feb-20</span></div>
+          <div class="rv-card-right"><h4>Laure T.</h4><div class="stars">★★★★★</div></div>
+        </div>
+        <h5>Paul Francenel cree des vetements pour les femmes rondes avec un amour que l'on peut voir et sentir dans chaque couture.</h5>
+        <p>Taille 3XL depuis Paris. J'ai lu l'histoire de BBW4LIFE — la femme qu'il aimait, les critiques qu'elle subissait, la decision qu'il a prise de creer quelque chose pour nous. Et quand j'ai mis le JacquardPower Suit pour la premiere fois, j'ai compris que cette histoire est reelle parce qu'elle se sent dans le vetement. Ce tailleur n'est pas concu pour etre vendu. Il est concu pour dire a une femme ronde qu'elle est belle, qu'elle est puissante, qu'elle a sa place dans la plus grande salle de la plus importante reunion de sa vie. Merci, Paul. Vous changez des vies avec des vetements. Et cette vie-ci a change quand j'ai mis ce tailleur.</p>
+        <div class="review-images"><img src="https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_7.png?v=1778800275" alt="review"></div>
+        <div class="social-icon"><i class="fab fa-instagram"></i></div>
+      </div>
+    </div>
+
+    <button id="read-more">Read more reviews</button>
+    <button class="write-review-bottom"><span>Write a Review</span></button>
+
+    <div id="review-modal-overlay">
+      <div id="review-modal">
+        <button id="modal-close" aria-label="Close">x</button>
+        <div id="modal-form-wrap">
+          <h3>Share Your Queen Moment <i class="fas fa-crown"></i></h3>
+          <form id="modal-review-form">
+            <input type="text" id="review-name" placeholder="Your Name" required>
+            <input type="email" id="review-email" placeholder="Your Email" required>
+            <select id="review-rating" required>
+              <option value="">Select Your Rating</option>
+              <option value="5">5 — Absolutely Amazing</option>
+              <option value="4">4 — Really Good</option>
+              <option value="3">3 — Pretty Good</option>
+              <option value="2">2 — Could Be Better</option>
+              <option value="1">1 — Disappointed</option>
+            </select>
+            <input type="text" id="review-title" placeholder="Review Title (e.g. The suit that owned every room!)" required>
+            <textarea id="review-text" placeholder="Tell your story — where did you wear it? How did the silhouette feel? How did the room respond? Your words inspire other queens who deserve this moment." rows="4" required></textarea>
+            <label for="review-images" style="font-size:13px;color:#9e8e96;">Add Photos (optional, max 3)</label>
+            <input type="file" id="review-images" accept="image/*" multiple>
+            <div id="review-images-preview"></div>
+            <button type="submit" id="modal-submit">
+              <span class="btn-label">Submit My Review</span>
+              <span class="btn-spinner"></span>
+            </button>
+          </form>
+        </div>
+        <div id="modal-success">
+          <div class="checkmark">V</div>
+          <h4>Thank you, Queen!</h4>
+          <p>Your review is live and already inspiring other queens who deserve their most powerful moment.</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ZOOM MODAL -->
+  <div id="media-zoom-modal" class="media-zoom-modal">
+    <span class="modal-close">&times;</span>
+    <div class="modal-zoom-container">
+      <img id="modal-zoom-image" src="" alt="Zoomed Image" loading="lazy">
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div id="newsletter-container"></div>
+
+</main>
+
+<div id="footer-container"></div>
+
+<script src="/widgets-loader.js"></script>
+<script src="/pdg-francenel.js"></script>
+<script src="/script.js"></script>
+<script src="/products/products.js"></script>
+
+<script>
+  fetch('/src/components/header.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('header-container').innerHTML = html;
+      const s = document.createElement('script');
+      s.src = '/src/components/header.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Header load error:', err));
+
+  fetch('/src/components/breadcrumb.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('breadcrumb-container').innerHTML = html;
+    })
+    .catch(err => console.error('Breadcrumb load error:', err));
+
+  fetch('/src/components/footer.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('footer-container').innerHTML = html;
+      document.dispatchEvent(new Event('footer:loaded'));
+      const s = document.createElement('script');
+      s.src = '/src/components/footer.js';
+      document.body.appendChild(s);
+    })
+    .catch(err => console.error('Footer load error:', err));
+
+  fetch('/src/components/newsletter.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('newsletter-container').innerHTML = html;
+    })
+    .catch(err => console.error('Newsletter load error:', err));
+</script>
+
+<!-- STICKY ATC -->
+<div id="sticky-atc" class="sticky-atc" aria-hidden="true">
+  <div class="sticky-atc__inner">
+    <div class="sticky-atc__product">
+      <img id="satc-img" src="" alt="" class="sticky-atc__img">
+      <div class="sticky-atc__info">
+        <span id="satc-title" class="sticky-atc__title"></span>
+        <span id="satc-price" class="sticky-atc__price"></span>
+      </div>
+    </div>
+    <div class="sticky-atc__selectors">
+      <div class="satc-field" id="satc-color-field">
+        <label class="satc-label">Color</label>
+        <div class="satc-color-wrap">
+          <div class="satc-swatches" id="satc-swatches"></div>
+          <span class="satc-color-name" id="satc-color-name">—</span>
+        </div>
+      </div>
+      <div class="satc-field" id="satc-size-field">
+        <label class="satc-label">Size</label>
+        <select id="satc-size" class="satc-select"></select>
+      </div>
+      <div class="satc-field">
+        <label class="satc-label">Qty</label>
+        <div class="satc-qty">
+          <button class="satc-qty-btn" id="satc-minus">-</button>
+          <span id="satc-qty-val">1</span>
+          <button class="satc-qty-btn" id="satc-plus">+</button>
+        </div>
+      </div>
+    </div>
+    <button class="sticky-atc__btn" id="satc-add-btn">
+      <i class="fi fi-rr-shopping-cart"></i>
+      <span>Add to Cart</span>
+    </button>
+  </div>
+</div>
+
+</body>
+</html>

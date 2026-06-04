@@ -915,6 +915,54 @@ const SEO_MAP = {
         canonical: 'https://www.bbw4life.com/products/product69.html'
     },
 
+    '/products/product70.html': {
+        title: 'PowerSuit — Ivory Structured Skirt Suit | BBW4LIFE Original',
+        description: 'Command every room in this ivory cream power suit. Tailored single-breasted blazer with notched lapels and matching pencil skirt — professional elegance redefined for plus size queens. Sizes 1XL to 4XL. Free worldwide shipping.',
+        keywords: 'plus size power suit, BBW4LIFE original, ivory suit plus size, curvy women blazer skirt set, plus size skirt suit, structured blazer curvy, ivory pencil skirt suit, BBW4LIFE featured, plus size professional outfit, formal suit plus size queen, curvy blazer set, tailored plus size suit',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_70_1.png?v=1778794583',
+        canonical: 'https://www.bbw4life.com/products/product70.html'
+    },
+
+    '/products/product71.html': {
+        title: 'BohoFloral Maxi — Wrap Floral Bishop Sleeve Dress | BBW4LIFE',
+        description: 'Free-spirited elegance in a flowing cream floral maxi wrap dress. Long bishop sleeves, self-tie waist sash, dreamy peach floral print — pure boho magic for curvy queens. Sizes 1XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size boho maxi dress, curvy wrap dress, floral maxi dress plus size, BBW4LIFE original dress, bishop sleeve plus size, boho dress curvy women, plus size floral wrap dress, BBW maxi dress, cream floral dress curvy, plus size boho fashion, wrap dress 1XL 5XL, BBW4LIFE featured dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_71_1.png?v=1778795520',
+        canonical: 'https://www.bbw4life.com/products/product71.html'
+    },
+
+    '/products/product72.html': {
+        title: 'CozyLounge Set — Cream Tank & Beige Wide-Leg | BBW4LIFE',
+        description: 'The ultimate plus size comfort two-piece: soft cream knit tank top paired with relaxed beige wide-leg lounge pants. Effortless at-home style for curvy queens. Sizes 1XL to 4XL. A BBW4LIFE Original — free worldwide shipping.',
+        keywords: 'plus size lounge set, BBW lounge set, curvy women comfort set, cream knit tank plus size, wide leg lounge pants curvy, BBW4LIFE original, plus size two piece set, cozy lounge set plus size, 1XL 2XL 3XL 4XL lounge, plus size home outfit, curvy comfort wear, wide leg pants plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_72_1.png?v=1778796815',
+        canonical: 'https://www.bbw4life.com/products/product72.html'
+    },
+
+    '/products/product73.html': {
+        title: 'BlushLace Gown — Lace Cap Sleeve Empire Maxi | BBW4LIFE',
+        description: 'Romantic and timeless blush pink lace cap sleeve gown. Stunning V-neckline, flowing empire chiffon skirt — a BBW4LIFE Original made for queens plus size. Sizes 1XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size lace gown, BBW formal dress, curvy women wedding dress, blush pink plus size gown, lace cap sleeve dress curvy, empire waist plus size, BBW4LIFE original gown, chiffon maxi plus size, formal dress curvy queen, 1XL 2XL 3XL 4XL 5XL gown, plus size evening gown, BBW bridal inspired dress, curvy lace dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_73_1.png?v=1778797721',
+        canonical: 'https://www.bbw4life.com/products/product73.html'
+    },
+
+    '/products/product74.html': {
+        title: 'TealEmpire Gown — Sleeveless V-Neck Formal Maxi | BBW4LIFE',
+        description: 'Make a statement in this deep teal sleeveless empire maxi gown. Wrap-style V-neckline, ruched waist knot detail and a dramatic flowing skirt. Plus size formal gown sizes 1XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size formal gown, teal maxi dress plus size, BBW4LIFE original dress, curvy women formal gown, plus size empire gown, teal evening dress plus size, sleeveless plus size maxi, BBW4LIFE gown, formal plus size dress curvy, deep teal plus size dress, plus size gala gown, curvy formal maxi dress',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_74_1.png?v=1778798608',
+        canonical: 'https://www.bbw4life.com/products/product74.html'
+    },
+
+    '/products/product75.html': {
+        title: 'JacquardPower Suit — Multicolor Floral Brocade Power Suit | BBW4LIFE',
+        description: 'Unleash your boldest self in this jewel-tone floral jacquard power suit. Long-sleeve wrap blazer with self-tie sash and matching wide-leg trousers — runway energy, every day. BBW4LIFE Original. Sizes 1XL to 5XL. Free worldwide shipping.',
+        keywords: 'plus size power suit, BBW jacquard suit, floral brocade suit plus size, curvy women blazer, plus size wrap blazer, wide leg trousers plus size, BBW4LIFE original, sizes 1XL to 5XL suit, plus size formal suit, plus size two piece suit, jewel tone suit curvy, brocade blazer plus size',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Pdg-Francenel-Product_75_1.png?v=1778800275',
+        canonical: 'https://www.bbw4life.com/products/product75.html'
+    }
+
 };
 
 /* ─── Schema.org BlogPosting pour les articles ─── */
