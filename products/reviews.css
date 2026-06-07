@@ -1099,3 +1099,13 @@
         font-size: 12px !important;
     }
 }
+
+.review-photos-inner {
+  background: rgba(2, 2, 2, 0.856); /* ou une couleur de ton choix */
+  border-radius: 16px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 10px;
+  width: fit-content;
+}

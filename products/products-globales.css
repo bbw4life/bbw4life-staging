@@ -3769,14 +3769,14 @@
 .bbw-beauty-promise {
     display: flex;
     align-items: stretch;
-    background: #000000;
-    border: 1px solid rgba(201,150,62,0.40);
+    background: linear-gradient(135deg, #fffdf9 0%, #fdf6e9 50%, #fffdf9 100%);
+    border: 1px solid rgba(201,150,62,0.35);
     border-radius: 16px;
     overflow: hidden;
     position: relative;
     box-shadow:
-        0 4px 18px rgba(0,0,0,0.20),
-        0 0 0 1px rgba(201,150,62,0.10) inset;
+        0 4px 18px rgba(201,150,62,0.10),
+        0 0 0 1px rgba(201,150,62,0.08) inset;
 }
 .bbw-beauty-promise::before {
     content: '';
@@ -3819,7 +3819,7 @@
     color: #c9963e;
     flex-shrink: 0;
     animation: bbw-bp-pulse 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 6px rgba(201,150,62,0.40));
+    filter: drop-shadow(0 0 6px rgba(201,150,62,0.35));
 }
 .bbw-bp-item:nth-child(2) i { animation-delay: 0.8s; }
 .bbw-bp-item:nth-child(3) i { animation-delay: 1.6s; }
@@ -3827,14 +3827,14 @@
 .bbw-bp-item strong {
     font-size: 12px;
     font-weight: 800;
-    color: #c9963e;
+    color: #a87428;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     line-height: 1.2;
 }
 .bbw-bp-item span {
     font-size: 11px;
-    color: rgba(253,249,244,0.55);
+    color: rgba(80,55,20,0.65);
     line-height: 1.45;
     font-weight: 400;
     max-width: 90px;
