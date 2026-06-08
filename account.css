@@ -2672,4 +2672,6 @@ a.stat-wishlist-link:visited {
 
 
 
-
+a.stat-wishlist-link.stat-item {
+  cursor: pointer !important;
+}
