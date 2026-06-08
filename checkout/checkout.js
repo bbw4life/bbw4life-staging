@@ -317,6 +317,19 @@ document.addEventListener('DOMContentLoaded', () => {
         payButton.disabled = true;
         payButton.textContent = "Processing...";
 
+        // ── Marquer le code affilié comme utilisé côté serveur ──
+        const pendingAffEmail = sessionStorage.getItem('pendingAffPromo');
+        if (pendingAffEmail && appliedPromo && appliedPromo.isAffiliate) {
+            try {
+                await fetch('/.netlify/functions/save-account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'aff-mark-promo-used', email: pendingAffEmail })
+                });
+            } catch(e) { console.warn('Could not mark promo as used:', e.message); }
+            sessionStorage.removeItem('pendingAffPromo');
+        }
+
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
         try {
@@ -874,27 +887,114 @@ function renderUpsellDiscountLine() {
         navigator.clipboard.writeText(code).then(() => showErrorPopup('Code copied: ' + code));
     });
 
-    document.getElementById('apply-promo')?.addEventListener('click', () => {
+    document.getElementById('apply-promo')?.addEventListener('click', async () => {
         const input = document.getElementById('promo-input').value.trim().toUpperCase();
         const promoMessage = document.getElementById('promo-message');
         const hasBundle = cart.some(item => item.fromBundle);
         const settings = productsData.find(i => i.type === 'settings');
         const cd = settings?.cart_drawer || {};
+        const affCfg = settings?.affiliation || {};
         const countFreeForPromo = (cd.promo_count_free_items || 'No').toLowerCase() === 'yes';
         const totalQuantity = countFreeForPromo
             ? cart.reduce((sum, item) => sum + item.quantity, 0)
             : cart.filter(i => !i.isFreePromo).reduce((sum, item) => sum + item.quantity, 0);
         const hasFreePromo = cart.some(item => item.isFreePromo);
-        if (hasBundle) { promoMessage.textContent = "Promo codes cannot be used with bundles."; promoMessage.style.color = 'red'; return; }
-        // Bloquer promo code si items upsell dans le cart
         const hasUpsell = cart.some(i => i.fromUpsell);
-        if (hasUpsell) {
-            promoMessage.textContent = "Promo codes cannot be combined with Kit discounts.";
-            promoMessage.style.color = 'red';
-            return;
-        }
+
+        // ── Blocages communs ──
+        if (hasBundle) { promoMessage.textContent = "Promo codes cannot be used with bundles."; promoMessage.style.color = 'red'; return; }
+        if (hasUpsell) { promoMessage.textContent = "Promo codes cannot be combined with Kit discounts."; promoMessage.style.color = 'red'; return; }
         if (hasFreePromo) { promoMessage.textContent = "Promo codes cannot be used with free promotional items."; promoMessage.style.color = 'red'; return; }
         if (!input) { promoMessage.textContent = "Please enter a code."; promoMessage.style.color = 'red'; return; }
+
+        // ── Vérifier si c'est un code promo affilié ──
+        const affPrefix = (affCfg.promo_code_prefix || '').toUpperCase();
+        const affDiscountPct = parseFloat(affCfg.promo_code_discount_percent) || 0;
+        const affUnlockPct = parseFloat(affCfg.promo_code_unlock_percent) || 0;
+        const affCommPct = parseFloat(affCfg.commission_percent) || 0;
+
+        if (affPrefix && input === affPrefix) {
+            // ── Vérifier que l'utilisateur est connecté ──
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail') || '';
+            if (!isLoggedIn || !userEmail) {
+                promoMessage.textContent = "You must be logged in to use this affiliate promo code.";
+                promoMessage.style.color = 'red';
+                return;
+            }
+
+            promoMessage.textContent = "Checking eligibility...";
+            promoMessage.style.color = '#888';
+
+            try {
+                // ── Récupérer les stats du compte pour vérifier l'éligibilité ──
+                const res = await fetch('/.netlify/functions/save-account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
+                });
+                const data = await res.json();
+
+                if (!data.success || !data.affiliates || !data.affiliates.length) {
+                    promoMessage.textContent = "You are not eligible for this affiliate promo code.";
+                    promoMessage.style.color = 'red';
+                    return;
+                }
+
+                const aff = data.affiliates[0];
+                const totalOrders = parseInt(aff.totalOrders || 0);
+                const earnedPct = totalOrders * affCommPct;
+
+                // ── Vérifier que le seuil unlock est atteint ──
+                if (earnedPct < affUnlockPct) {
+                    promoMessage.textContent = `You need to reach ${affUnlockPct}% commission earned to unlock this code. Current: ${earnedPct.toFixed(0)}%.`;
+                    promoMessage.style.color = 'red';
+                    return;
+                }
+
+                // ── Vérifier usage unique côté serveur ──
+                const checkUsedRes = await fetch('/.netlify/functions/save-account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'aff-check-promo-used', email: userEmail })
+                });
+                const checkUsedData = await checkUsedRes.json();
+                if (checkUsedData.used) {
+                    promoMessage.textContent = "This affiliate promo code has already been used on your account.";
+                    promoMessage.style.color = 'red';
+                    return;
+                }
+
+                // ── Bloquer si free shipping threshold serait atteint ──
+                const freeShipThresh = parseFloat(cd.free_shipping_threshold) || 0;
+                const subtotal = getSubtotal();
+                if (freeShipThresh > 0 && subtotal >= freeShipThresh) {
+                    promoMessage.textContent = "This code cannot be combined with free shipping.";
+                    promoMessage.style.color = 'red';
+                    return;
+                }
+
+                // ── Appliquer le code affilié ──
+                appliedPromo = { code: affPrefix, percent: affDiscountPct, isAffiliate: true };
+                discountAmount = subtotal * (affDiscountPct / 100);
+                promoMessage.textContent = `Affiliate code applied: ${affDiscountPct}% off!`;
+                promoMessage.style.color = 'green';
+
+                // ── Marquer comme utilisé en localStorage (côté client) ──
+                // La confirmation définitive se fait au moment du paiement
+                sessionStorage.setItem('pendingAffPromo', userEmail);
+
+                updateTotals();
+                return;
+
+            } catch (err) {
+                promoMessage.textContent = "Error verifying affiliate code. Please try again.";
+                promoMessage.style.color = 'red';
+                return;
+            }
+        }
+
+        // ── Codes promo standards ──
         const promo = promos.find(p => p.code.toUpperCase() === input);
         if (promo && promo.items === totalQuantity) {
             appliedPromo = promo;

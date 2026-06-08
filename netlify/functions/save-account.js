@@ -365,11 +365,26 @@ if (action === 'aff-approve-withdraw') {
 }
 
 
+if (action === 'aff-mark-promo-used') {
+  if (!email) throw new Error("Email required");
+  if (rowIndex === -1) throw new Error("User not found");
+  // Colonne AB (index 27) — PromoCodeUsed
+  await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `bbw4life-accounts!AB${rowNum}`,
+    valueInputOption: 'RAW',
+    resource: { values: [['yes']] }
+  });
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+}
 
-
-
-
-
+if (action === 'aff-check-promo-used') {
+  if (!email) throw new Error("Email required");
+  if (rowIndex === -1) return { statusCode: 200, body: JSON.stringify({ success: true, used: false }) };
+  const currentRow = rows[rowIndex] || [];
+  const usedVal = (currentRow[27] || '').toLowerCase().trim();
+  return { statusCode: 200, body: JSON.stringify({ success: true, used: usedVal === 'yes' }) };
+}
 
     throw new Error("Action inconnue");
   } catch (error) {

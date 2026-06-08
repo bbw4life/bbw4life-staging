@@ -7179,7 +7179,7 @@ const cartWrapper = document.querySelector('.icon-wrapper:has(.cart-icon)');
   if (announcementItems.length > 0) setInterval(() => showAnnouncementItem((announcementCurrent + 1) % announcementItems.length), 4000);
 
   // ====================== AUTO OPEN CART ======================
-  if (window.location.pathname.toLowerCase().includes('shop.html') && localStorage.getItem('autoOpenCart') === 'true') {
+  if ((window.location.pathname.toLowerCase().includes('bbw4life-all-product.html') || window.location.pathname.toLowerCase().includes('bbw4life-all-product.html')) && localStorage.getItem('autoOpenCart') === 'true') {
     localStorage.removeItem('autoOpenCart');
     setTimeout(() => { if (typeof openCartDrawer === 'function') openCartDrawer(); }, 1200);
   }
@@ -7486,7 +7486,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     localStorage.setItem('autoOpenCart', 'true');
-    window.location.href = 'shop.html';
+    window.location.href = '/collections/bbw4life-all-product.html';
   };
 
   async function loadAccountStats() {

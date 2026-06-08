@@ -1101,11 +1101,18 @@
 }
 
 .review-photos-inner {
-  background: rgba(2, 2, 2, 0.856); /* ou une couleur de ton choix */
+  background: rgba(2, 2, 2, 0.856);
   border-radius: 16px;
   padding: 16px;
   display: grid;
-  grid-template-columns: repeat(4, auto);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  width: fit-content;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .review-photos-grid {
+    display: none !important;
+  }
 }
