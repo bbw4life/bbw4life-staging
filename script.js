@@ -3121,6 +3121,24 @@ initAnnouncementBar();
 
 
 
+// ══ DRAWER BG IMAGE ══
+(function() {
+  const cfg = (settings.drawer_bg_image) || {};
+  if ((cfg.show || 'no').toLowerCase() !== 'yes' || !cfg.url) return;
+
+  const img = document.getElementById('bbwDrawerBgImg');
+  if (!img) return;
+
+  img.src = cfg.url;
+  ['bbwDrawerBg','bbwDrawerBgOverlay','bbwDrawerShimmerTop','bbwDrawerShimmerBottom']
+    .forEach(function(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('bbw-drawer-bg--hidden');
+    });
+})();
+
+
+
 (function initStickyMediaMobile() {
   const stickyOn = (settings.sticky_media_mobile || 'no').toLowerCase().trim() === 'yes';
   if (!stickyOn) return;
@@ -8120,12 +8138,11 @@ function loadProfilePhoto() {
         statusBadge.textContent = approved ? '✅ Approved' : '⏳ Pending';
         statusBadge.className   = 'aff-status-badge' + (approved ? ' approved' : '');
       }
-      if (statusMsg) {
+     if (statusMsg) {
         statusMsg.textContent = approved
-          ? 'Your withdrawal has been approved! You will receive your payment shortly.'
+          ? 'Withdrawal approved — payment sent to your PayPal. If you haven\'t received it within 24h, please verify your email address or contact our support team.'
           : 'Your withdrawal request is being processed by our team.';
       }
-
       // Cacher promo et divider puisque withdraw est choisi
       if (rewardPromo) rewardPromo.style.display = 'none';
       if (dividerOr)   dividerOr.style.display   = 'none';

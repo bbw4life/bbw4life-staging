@@ -4459,7 +4459,7 @@
       "element_count": 30
     },
     "auth_popup": {
-      "offer_title": "20% OFF TODAY ONLY!",
+      "offer_title": "Join Our Affiliate & Earn %",
       "offer_subtitle": "Log in or sign up now",
       "login_title": "Login",
       "login_btn": "Log In",
@@ -4471,7 +4471,7 @@
       "signup_switch_link": "Login",
       "signup_newsletter_label": "I want to subscribe to the newsletter",
       "signup_remember_label": "Remember me",
-      "tooltip_text": "Earn 20% if you login/signup",
+      "tooltip_text": "Become an affiliate, earn % — Login/Sign up",
       "forgot_title": "Reset Password",
       "forgot_email_placeholder": "Enter your account email",
       "forgot_new_password_placeholder": "New password",
@@ -4502,27 +4502,27 @@
       "promo_code": "PAUL81",
       "copied_text": "Copied succefull!"
     },
-    "cart_reviews": [
+   "cart_reviews": [
       {
-        "name": "Jane Doe",
-        "avatar": "https://cdn.shopify.com/s/files/1/0643/8263/2041/files/cuv_5.jpg?v=1771453843",
+        "name": "Marlène Dupont",
+        "avatar": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/customers_1_bbw.png?v=1780961893",
         "stars": 5,
-        "text": "Spins for 20 minutes paul straight — absolutely love it!",
-        "date": "5 days ago"
+        "text": "Package arrived in perfect condition, faster than expected. Quality is amazing, exactly as shown!",
+        "date": "3 days ago"
       },
       {
-        "name": "Emily Smith",
-        "avatar": "https://cdn.shopify.com/s/files/1/0643/8263/2041/files/cuv_2.jpg?v=1771453353",
+        "name": "Ashley Carter",
+        "avatar": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/customers_2_bbw.png?v=1780961894",
         "stars": 5,
-        "text": "Lost 5 cm off waist in just one month!",
+        "text": "Ordered for the first time and I'm already a loyal customer. Delivery was quick and everything was perfectly packed.",
         "date": "1 week ago"
       },
       {
-        "name": "Sara Johnson",
-        "avatar": "https://cdn.shopify.com/s/files/1/0643/8263/2041/files/big_style.webp?v=1771457385",
+        "name": "Natasha Pierre",
+        "avatar": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/customers_3_bbw.png?v=1780961894",
         "stars": 5,
-        "text": "Fits my 47\" waist perfectly — game changer!",
-        "date": "9 days ago"
+        "text": "BBW4LIFE never disappoints! My order arrived sealed and in perfect shape. The fit is absolutely perfect.",
+        "date": "5 days ago"
       }
     ],
     "site_stats": {
@@ -4722,6 +4722,10 @@
         "Pdg-Francenel-product68",
         "Pdg-Francenel-product57"
       ]
+    },
+    "drawer_bg_image": {
+      "show": "yes",
+      "url": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/banner_news.png?v=1780796549"
     },
     "footer_new_gems": {
       "collection_ids": [
@@ -5568,9 +5572,9 @@
 },
 "product_grid_section": {
     "section_id": "bbw-product-grid-featured",
-    "eyebrow": "Curated For You",
-    "title": "Our Featured Picks",
-    "subtitle": "Discover our most-loved styles, designed for every curve.",
+    "eyebrow": "For Every Body",
+    "title": "Dress Bold. Live Free.",
+    "subtitle": "Celebrate your curves with styles made for real people, real sizes.",
     "view_product_btn_text": "View Product",
     "items_per_row_desktop": 4,
     "items_per_row_mobile": 2,
