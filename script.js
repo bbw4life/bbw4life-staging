@@ -6083,6 +6083,8 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (promoMsg)    promoMsg.style.display     = 'none';
       if (banner)      banner.style.display       = 'none';
       if (promoCodes)  promoCodes.style.display   = 'none';
+      const drawerExtra = document.getElementById('drawer-extra-section');
+      if (drawerExtra) drawerExtra.style.display = 'none';
     } else {
       if (emptyCart)           emptyCart.style.display           = 'none';
       if (reviewsCarouselCart) reviewsCarouselCart.style.display = 'block';
@@ -6094,6 +6096,8 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (promoMsg)    promoMsg.style.display     = 'block';
       if (banner)      banner.style.display       = 'block';
       if (promoCodes)  promoCodes.style.display   = 'block';
+      const drawerExtra2 = document.getElementById('drawer-extra-section');
+      if (drawerExtra2) drawerExtra2.style.display = '';
 
      const BBW_FEATURED_IDS = [
         'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
