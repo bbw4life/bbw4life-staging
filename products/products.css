@@ -5112,19 +5112,9 @@ body:has(.product-section) .bbw-footer {
 
 
 @media (max-width: 640px) {
-    .satc-color-wrap {
-        overflow: visible !important;
-        max-width: none !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        flex-wrap: nowrap !important;
-    }
 
     .satc-swatches {
         flex-shrink: 0 !important;
-        overflow: visible !important;
-        max-width: none !important;
     }
 
     .satc-color-name {
