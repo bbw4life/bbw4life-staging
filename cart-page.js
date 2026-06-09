@@ -595,7 +595,7 @@
     if (cpUpsell) cpUpsell.style.display = '';
 
     if (badgeEl && discountPct > 0) badgeEl.textContent = 'Save ' + discountPct + '%';
-
+    container.innerHTML = '';
     const upsellProducts = itemsCfg
       .map(function (cfg) { return allProducts.find(function (p) { return p.id === cfg.product_id; }); })
       .filter(Boolean);

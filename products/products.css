@@ -4184,7 +4184,7 @@ details[open] .chevron {
 .sticky-atc__selectors {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 10px;
     flex: 1;
     flex-wrap: wrap;
 }
@@ -4207,7 +4207,7 @@ details[open] .chevron {
 .satc-color-wrap {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 4px;
 }
 
 .satc-swatches {
@@ -4244,7 +4244,11 @@ details[open] .chevron {
     font-size: 12px;
     font-weight: 500;
     color: rgba(45, 26, 14, 0.65);
-    min-width: 50px;
+    min-width: 0;
+    max-width: 55px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .satc-select {
@@ -4371,14 +4375,19 @@ details[open] .chevron {
     }
 
     .satc-swatches {
-        overflow-x: auto;
+        overflow-x: visible;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
         -ms-overflow-style: none;
-        max-width: calc(3 * 22px + 2 * 5px);
+        max-width: none;
         flex-shrink: 0;
         scroll-snap-type: x mandatory;
         padding: 4px 0;
+    }
+
+    .satc-swatches.overflow-active {
+        overflow-x: auto;
+        max-width: calc(3 * 22px + 2 * 5px);
     }
 
     .satc-swatches::-webkit-scrollbar {
@@ -5099,3 +5108,30 @@ body:has(.product-section) .bbw-footer {
     .my-product-btn__icon { width: 36px; height: 36px; }
 }
 
+
+
+
+@media (max-width: 640px) {
+    .satc-color-wrap {
+        overflow: visible !important;
+        max-width: none !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .satc-swatches {
+        flex-shrink: 0 !important;
+        overflow: visible !important;
+        max-width: none !important;
+    }
+
+    .satc-color-name {
+        flex-shrink: 0 !important;
+        max-width: none !important;
+        overflow: visible !important;
+        white-space: nowrap !important;
+        font-size: 11px !important;
+    }
+}

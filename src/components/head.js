@@ -15,7 +15,6 @@ const SEO_MAP = {
         og_image: 'https://bbw4life.com/public/og-home.jpg',
         canonical: 'https://bbw4life.com/'
     },
-
     // ─────────────────────────────────────────────────────
     // COLLECTIONS
     // ─────────────────────────────────────────────────────

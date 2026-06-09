@@ -4505,20 +4505,26 @@ if (window.innerWidth <= 768) {
     nav.style.display = 'block';
   }
 
-  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
   if (window.__seoTitle) {
-    build(window.__seoTitle);
-  } else {
-    // ✅ On attend l'event seo:ready
-    document.addEventListener('seo:ready', function(e) {
-      build(e.detail.title);
-    }, { once: true });
+      build(window.__seoTitle);
+    } else {
+      document.addEventListener('seo:ready', function(e) {
+        build(e.detail.title);
+      }, { once: true });
 
-    // ✅ Fallback plus long pour laisser le temps à head.js
-    setTimeout(() => {
-      if (!window.__seoTitle) build(document.title);
-    }, 2000);
-  }
+      // Fallback robuste : attend que document.title soit injecté par head.js
+      let attempts = 0;
+      const waitTitle = setInterval(function() {
+        attempts++;
+        if (window.__seoTitle) {
+          clearInterval(waitTitle);
+          build(window.__seoTitle);
+        } else if (attempts > 40) {
+          clearInterval(waitTitle);
+          build(document.title);
+        }
+      }, 50);
+    }
 
 })();
 
@@ -5139,6 +5145,9 @@ if (rcCheckoutBtn) {
             // Sélectionner la 1ère couleur par défaut
             satcSelectedColor = product.colors[0].name;
             satcColorName.textContent = product.colors[0].name;
+            if (product.colors.length > 3) {
+                satcSwatches.classList.add('overflow-active');
+            }
         } else {
             satcColorField.style.display = 'none';
         }
