@@ -2572,7 +2572,7 @@ details[open] .chevron {
     --wave-ivory-opacity: 0.55;
 }
 .pp-wave-separator svg {
-    display: block; width: 100%; height: 22px;
+    display: block; width: 100%; height: 12px;
 }
 .pp-wave-separator .wave-path-gold {
     fill: var(--wave-gold);
@@ -5109,17 +5109,13 @@ body:has(.product-section) .bbw-footer {
 }
 
 
-
-
 @media (max-width: 640px) {
 
     .satc-swatches {
         flex-shrink: 0 !important;
     }
-
     .satc-color-name {
         flex-shrink: 0 !important;
-        max-width: none !important;
         overflow: visible !important;
         white-space: nowrap !important;
         font-size: 11px !important;

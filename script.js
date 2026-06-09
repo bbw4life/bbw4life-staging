@@ -4505,25 +4505,19 @@ if (window.innerWidth <= 768) {
     nav.style.display = 'block';
   }
 
-  if (window.__seoTitle) {
+  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
+    if (window.__seoTitle) {
       build(window.__seoTitle);
     } else {
+      // ✅ On attend l'event seo:ready
       document.addEventListener('seo:ready', function(e) {
         build(e.detail.title);
       }, { once: true });
 
-      // Fallback robuste : attend que document.title soit injecté par head.js
-      let attempts = 0;
-      const waitTitle = setInterval(function() {
-        attempts++;
-        if (window.__seoTitle) {
-          clearInterval(waitTitle);
-          build(window.__seoTitle);
-        } else if (attempts > 40) {
-          clearInterval(waitTitle);
-          build(document.title);
-        }
-      }, 50);
+      // ✅ Fallback plus long pour laisser le temps à head.js
+      setTimeout(() => {
+        if (!window.__seoTitle) build(document.title);
+      }, 2000);
     }
 
 })();
