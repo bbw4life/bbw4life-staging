@@ -6093,7 +6093,7 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (cartFooter)          cartFooter.style.display          = 'block';
       if (countdown)   countdown.style.display   = 'flex';
       if (progressBar) progressBar.style.display = 'block';
-      if (promoMsg)    promoMsg.style.display     = 'block';
+      if (promoMsg)    promoMsg.style.display     = 'block'; 
       if (banner)      banner.style.display       = 'block';
       if (promoCodes)  promoCodes.style.display   = 'block';
       const drawerExtra2 = document.getElementById('drawer-extra-section');
