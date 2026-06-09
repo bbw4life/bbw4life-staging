@@ -3313,12 +3313,194 @@ body {
   .wishlist-bar-fill { width: 100%; }
 }
 
+/* ================================================================
+   BBW4LIFE — WISHLIST MINI ICONS (Cart, Drawer Extra, Product Grid)
+================================================================ */
 
+/* ── Icône wishlist générique ── */
+.bbw-mini-wish {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid #e4b722;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.bbw-mini-wish:hover {
+  border-color: #c9963e;
+  background: #fff;
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(192,56,94,0.22);
+}
+
+.bbw-mini-wish svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: all 0.22s ease;
+}
+
+.bbw-mini-wish .bbw-mw-empty {
+  display: block;
+}
+.bbw-mini-wish .bbw-mw-filled {
+  display: none;
+}
+
+.bbw-mini-wish.bbw-mw-active {
+  background: #fff0f3;
+  border-color: #e4b722;
+  box-shadow: 0 2px 12px rgba(192,56,94,0.25);
+}
+.bbw-mini-wish.bbw-mw-active .bbw-mw-empty  { display: none; }
+.bbw-mini-wish.bbw-mw-active .bbw-mw-filled { display: block; }
+
+/* ── 1. Cart items (drawer + cart page) — sous l'image ── */
+.cart-item-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cart-item-img-wrap .bbw-mini-wish {
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 26px;
+}
+.cart-item-img-wrap .bbw-mini-wish:hover {
+  transform: translateX(-50%) scale(1.14);
+}
+.cart-item-img-wrap .bbw-mini-wish.bbw-mw-active {
+  transform: translateX(-50%) scale(1.0);
+}
+.cart-item-img-wrap .bbw-mini-wish svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── 2. Drawer extra section + Cart page extra — coin inférieur droit de l'image ── */
+.drawer-extra-card__img-wrap,
+.cp-extra-card__img-wrap {
+  position: relative;
+}
+
+.drawer-extra-card__img-wrap .bbw-mini-wish,
+.cp-extra-card__img-wrap .bbw-mini-wish {
+  bottom: 6px;
+  left: 6px;
+  top: auto;
+  right: auto;
+  width: 28px;
+  height: 28px;
+}
+.drawer-extra-card__img-wrap .bbw-mini-wish svg,
+.cp-extra-card__img-wrap .bbw-mini-wish svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── 3. BBW Product Grid Featured — coin inférieur droit de l'image ── */
+.bbwpg-card__img-wrap {
+  position: relative;
+}
+
+.bbwpg-card__img-wrap .bbw-mini-wish {
+  bottom: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+}
+.bbwpg-card__img-wrap .bbw-mini-wish svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ── 4. Featured Spotlight — coin supérieur droit de l'image principale ── */
+.fs-img-frame {
+  position: relative;
+}
+
+.fs-img-frame .bbw-mini-wish {
+  top: 10px;
+  right: 10px;
+  bottom: auto;
+  left: auto;
+  width: 34px;
+  height: 34px;
+}
+.fs-img-frame .bbw-mini-wish svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ── 5. Recently Viewed — coin inférieur droit de l'image ── */
+.rv-card__img-wrap {
+  position: relative;
+}
+
+.rv-card__img-wrap .bbw-mini-wish {
+  bottom: 6px;
+  right: 6px;
+  top: auto;
+  left: auto;
+  width: 28px;
+  height: 28px;
+}
+.rv-card__img-wrap .bbw-mini-wish svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── 6. Col Recently Viewed — coin supérieur gauche de la card ── */
+.col-rv-card {
+  position: relative;
+}
+
+.col-rv-card > .bbw-mini-wish {
+  top: 8px;
+  left: 8px;
+  bottom: auto;
+  right: auto;
+  width: 28px;
+  height: 28px;
+}
+.col-rv-card > .bbw-mini-wish svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── 7. Col FBT — coin supérieur gauche de la card ── */
+.col-fbt-card {
+  position: relative;
+}
+
+.col-fbt-card > .bbw-mini-wish {
+  top: 8px;
+  left: 8px;
+  bottom: auto;
+  right: auto;
+  width: 28px;
+  height: 28px;
+}
+.col-fbt-card > .bbw-mini-wish svg {
+  width: 13px;
+  height: 13px;
+}
 
 
 /* ================================================================
    PAUL INDICATOR & POPUP — Ultra Premium BBW4LIFE Edition
-   Variables : --bbw-black #0d0d0d | --bbw-gold #c9963e | --bbw-rose #c0385e
 ================================================================ */
 
 /* ── Keyframes ── */
@@ -12121,3 +12303,5 @@ a:active {
   background-color: transparent;
   -webkit-tap-highlight-color: transparent;
 }
+
+

@@ -1116,3 +1116,6 @@
     display: none !important;
   }
 }
+.pp-urgency-bar { 
+    display: none; 
+}

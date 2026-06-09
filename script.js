@@ -11945,3 +11945,284 @@ startAutoSlide();
   console.log('[BBW Shield] ✅ Tous les niveaux de protection activés.');
 
 })();
+
+
+/* ================================================================
+   BBW4LIFE — MINI WISHLIST ICONS INJECTOR
+================================================================ */
+(function initMiniWishlistIcons() {
+  'use strict';
+
+  var HEART_EMPTY  = '<svg class="bbw-mw-empty"  viewBox="0 0 24 24" fill="none" stroke="#e4b722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var HEART_FILLED = '<svg class="bbw-mw-filled" viewBox="0 0 24 24" fill="#e4b722" stroke="#e4b722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+
+  /* ── Helpers wishlist ── */
+  function getWishlist() {
+    if (typeof window.__getWishlist === 'function') return window.__getWishlist();
+    try { return JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch(e) { return []; }
+  }
+
+  function setWishlist(wl) {
+    if (typeof window.__setWishlist === 'function') window.__setWishlist(wl);
+    localStorage.setItem('wishlist', JSON.stringify(wl));
+  }
+
+  function isWishlisted(id) {
+    return getWishlist().indexOf(id) !== -1;
+  }
+
+  function toggleItem(id) {
+    var wl  = getWishlist();
+    var idx = wl.indexOf(id);
+    if (idx === -1) wl.push(id);
+    else wl.splice(idx, 1);
+    setWishlist(wl);
+    if (typeof window.updateBadges              === 'function') window.updateBadges();
+    if (typeof window.updateWishlistIcons       === 'function') window.updateWishlistIcons();
+    if (typeof window.renderWishlist            === 'function') window.renderWishlist();
+    document.dispatchEvent(new Event('wishlist:change'));
+  }
+
+  /* ── Crée un bouton mini wishlist ── */
+  function makeBtn(productId) {
+    var btn = document.createElement('button');
+    btn.className          = 'bbw-mini-wish' + (isWishlisted(productId) ? ' bbw-mw-active' : '');
+    btn.setAttribute('aria-label', 'Toggle wishlist');
+    btn.dataset.wishId     = productId;
+    btn.innerHTML          = HEART_EMPTY + HEART_FILLED;
+
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleItem(productId);
+      btn.classList.toggle('bbw-mw-active', isWishlisted(productId));
+    });
+
+    return btn;
+  }
+
+  /* ── Sync tous les boutons mini wishlist ── */
+  function syncAll() {
+    document.querySelectorAll('.bbw-mini-wish[data-wish-id]').forEach(function(btn) {
+      btn.classList.toggle('bbw-mw-active', isWishlisted(btn.dataset.wishId));
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────
+     1a. CART DRAWER — .cart-item .cart-item-img-wrap
+  ────────────────────────────────────────────────────────── */
+  function injectCartDrawerItems() {
+    document.querySelectorAll('.cart-item').forEach(function(item) {
+      var wrap = item.querySelector('.cart-item-img-wrap');
+      if (!wrap || wrap.querySelector('.bbw-mini-wish')) return;
+      var productId = item.dataset.id;
+      if (!productId) return;
+      wrap.appendChild(makeBtn(productId));
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────
+     1b. CART PAGE — .cp-cart-item .cp-item-img-wrap
+     L'icone s'affiche en dessous de l'image
+  ────────────────────────────────────────────────────────── */
+  function injectCartPageItems() {
+    document.querySelectorAll('.cp-cart-item').forEach(function(item) {
+      var wrap = item.querySelector('.cp-item-img-wrap');
+      if (!wrap || wrap.querySelector('.bbw-mini-wish')) return;
+      var productId = item.dataset.id;
+      if (!productId) return;
+      wrap.appendChild(makeBtn(productId));
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────
+     2. DRAWER EXTRA SECTION — coin inférieur gauche de l'image
+  ────────────────────────────────────────────────────────── */
+  function injectDrawerExtra() {
+    ['drawer-extra-track', 'cp-extra-track'].forEach(function(trackId) {
+      var track = document.getElementById(trackId);
+      if (!track) return;
+
+      track.querySelectorAll('.drawer-extra-card, .cp-extra-card').forEach(function(card) {
+        var imgWrap = card.querySelector('.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap');
+        if (!imgWrap || imgWrap.querySelector('.bbw-mini-wish')) return;
+        var productId = card.dataset.id;
+        if (!productId) return;
+        imgWrap.appendChild(makeBtn(productId));
+      });
+    });
+  }
+
+  /* ────────────────────────────────────────────────────────
+     3. BBW PRODUCT GRID FEATURED — coin inférieur droit de l'image
+  ────────────────────────────────────────────────────────── */
+  function injectProductGrid() {
+  var track = document.getElementById('bbwpg-track');
+  if (!track) return;
+
+  track.querySelectorAll('.bbwpg-card').forEach(function(card) {
+    var imgWrap = card.querySelector('.bbwpg-card__img-wrap');
+    if (!imgWrap || imgWrap.querySelector('.bbw-mini-wish')) return;
+
+    var productId = null;
+
+    /* Extraire l'ID depuis le href du lien image */
+    var link = card.querySelector('.bbwpg-card__img-link');
+    if (link && link.href) {
+      var match = link.href.match(/product(\d+)\.html/);
+      if (match && window.__allProducts) {
+        var idx = parseInt(match[1]) - 1;
+        var realProds = window.__allProducts.filter(function(p) { return !p.type; });
+        if (realProds[idx]) productId = realProds[idx].id;
+      }
+    }
+
+    if (!productId) return;
+    imgWrap.appendChild(makeBtn(productId));
+  });
+}
+
+/* ────────────────────────────────────────────────────────
+   4. FEATURED SPOTLIGHT — coin supérieur droit de l'image
+────────────────────────────────────────────────────────── */
+function injectFeaturedSpotlight() {
+  var section = document.getElementById('featured-spotlight');
+  if (!section) return;
+
+  var imgFrame = section.querySelector('.fs-img-frame');
+  if (!imgFrame || imgFrame.querySelector('.bbw-mini-wish')) return;
+
+  var productId = null;
+
+  /* Récupérer l'ID depuis le lien du bouton "View Product" */
+  var viewBtn = section.querySelector('.fs-btn-primary');
+  if (viewBtn && viewBtn.href) {
+    var match = viewBtn.href.match(/product(\d+)\.html/);
+    if (match && window.__allProducts) {
+      var idx = parseInt(match[1]) - 1;
+      var realProds = window.__allProducts.filter(function(p) { return !p.type; });
+      if (realProds[idx]) productId = realProds[idx].id;
+    }
+  }
+
+  if (!productId) return;
+  imgFrame.appendChild(makeBtn(productId));
+}
+
+/* ────────────────────────────────────────────────────────
+   5. RECENTLY VIEWED — coin inférieur droit de l'image
+────────────────────────────────────────────────────────── */
+function injectRecentlyViewed() {
+  var track = document.getElementById('rv-track');
+  if (!track) return;
+
+  track.querySelectorAll('.rv-card').forEach(function(card) {
+    var imgWrap = card.querySelector('.rv-card__img-wrap');
+    if (!imgWrap || imgWrap.querySelector('.bbw-mini-wish')) return;
+
+    var url = card.href || '';
+    var match = url.match(/product(\d+)\.html/);
+    if (!match || !window.__allProducts) return;
+
+    var idx = parseInt(match[1]) - 1;
+    var realProds = window.__allProducts.filter(function(p) { return !p.type; });
+    if (!realProds[idx]) return;
+
+    imgWrap.appendChild(makeBtn(realProds[idx].id));
+  });
+}
+
+/* ────────────────────────────────────────────────────────
+   6. COL RECENTLY VIEWED — coin inférieur droit de l'image
+────────────────────────────────────────────────────────── */
+function injectColRecentlyViewed() {
+  var grid = document.getElementById('colRvGrid');
+  if (!grid) return;
+
+  grid.querySelectorAll('.col-rv-card').forEach(function(card) {
+    var img = card.querySelector('.col-rv-card__img');
+    if (!img || card.querySelector('.bbw-mini-wish')) return;
+
+    var productId = null;
+    var allProds = window.__allProducts || [];
+    var realProds = allProds.filter(function(p) { return !p.type; });
+
+    // Retrouver le produit par correspondance d'image ou titre
+    var titleEl = card.querySelector('.col-rv-card__title');
+    var title = titleEl ? titleEl.textContent.trim() : '';
+    var found = realProds.find(function(p) { return p.title === title; });
+    if (found) productId = found.id;
+
+    if (!productId) return;
+
+    // Wrapper relatif
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:relative;display:contents';
+    img.style.display = 'block';
+
+    card.style.position = 'relative';
+    card.appendChild(makeBtn(productId));
+  });
+}
+
+/* ────────────────────────────────────────────────────────
+   7. COL FBT — coin inférieur droit de l'image
+────────────────────────────────────────────────────────── */
+function injectColFbt() {
+  var inner = document.getElementById('colFbtInner');
+  if (!inner) return;
+
+  inner.querySelectorAll('.col-fbt-card').forEach(function(card) {
+    if (card.querySelector('.bbw-mini-wish')) return;
+
+    var productId = null;
+    var allProds = window.__allProducts || [];
+    var realProds = allProds.filter(function(p) { return !p.type; });
+
+    var titleEl = card.querySelector('.col-fbt-card__title');
+    var title = titleEl ? titleEl.textContent.trim() : '';
+    var found = realProds.find(function(p) { return p.title === title; });
+    if (found) productId = found.id;
+
+    if (!productId) return;
+
+    card.style.position = 'relative';
+    card.appendChild(makeBtn(productId));
+  });
+}
+
+  /* ────────────────────────────────────────────────────────
+     RUN ALL
+  ────────────────────────────────────────────────────────── */
+  function runAll() {
+    injectCartDrawerItems();
+    injectCartPageItems();
+    injectDrawerExtra();
+    injectProductGrid();
+    injectFeaturedSpotlight();
+    injectRecentlyViewed();
+    injectColRecentlyViewed();
+    injectColFbt();
+    syncAll();
+  }
+
+  /* Lancer après chargement */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runAll);
+  } else {
+    setTimeout(runAll, 400);
+  }
+
+  /* Observer les mutations DOM */
+  var observer = new MutationObserver(function(mutations) {
+    var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+    if (relevant) runAll();
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  /* Events système */
+  document.addEventListener('cart:update',     runAll);
+  document.addEventListener('wishlist:change', syncAll);
+
+})();
