@@ -450,17 +450,122 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const PAGE_ORDER = [
       '/index.html',
-      '/method.html',
-      '/programs.html',
-      '/nutrition.html',
-      '/shop.html',
-      '/success.html',
-      '/community.html',
-      '/about.html',
-      '/contact.html',
+      '/collections/bbw4life-all-product.html',
+      '/collections/bbw4life-all-collections.html',
+      '/collections/bbw-features-products.html',
+      '/collections/most-popular.html',
+      '/collections/curvy-dresses.html',
+      '/collections/curvy-woman.html',
+      '/collections/curvy-beauty.html',
+      '/collections/men-plus-size.html',
+      '/collections/shoes-sandals.html',
+      '/collections/bbw4life-pants-skirts.html',
+      '/products/product1.html',
+      '/products/product2.html',
+      '/products/product3.html',
+      '/products/product4.html',
+      '/products/product5.html',
+      '/products/product6.html',
+      '/products/product7.html',
+      '/products/product8.html',
+      '/products/product9.html',
+      '/products/product10.html',
+      '/products/product11.html',
+      '/products/product12.html',
+      '/products/product13.html',
+      '/products/product14.html',
+      '/products/product15.html',
+      '/products/product16.html',
+      '/products/product17.html',
+      '/products/product18.html',
+      '/products/product19.html',
+      '/products/product20.html',
+      '/products/product21.html',
+      '/products/product22.html',
+      '/products/product23.html',
+      '/products/product24.html',
+      '/products/product25.html',
+      '/products/product26.html',
+      '/products/product27.html',
+      '/products/product28.html',
+      '/products/product29.html',
+      '/products/product30.html',
+      '/products/product31.html',
+      '/products/product32.html',
+      '/products/product33.html',
+      '/products/product34.html',
+      '/products/product35.html',
+      '/products/product36.html',
+      '/products/product37.html',
+      '/products/product38.html',
+      '/products/product39.html',
+      '/products/product40.html',
+      '/products/product41.html',
+      '/products/product42.html',
+      '/products/product43.html',
+      '/products/product44.html',
+      '/products/product45.html',
+      '/products/product46.html',
+      '/products/product47.html',
+      '/products/product48.html',
+      '/products/product49.html',
+      '/products/product50.html',
+      '/products/product51.html',
+      '/products/product52.html',
+      '/products/product53.html',
+      '/products/product54.html',
+      '/products/product55.html',
+      '/products/product56.html',
+      '/products/product57.html',
+      '/products/product58.html',
+      '/products/product59.html',
+      '/products/product60.html',
+      '/products/product61.html',
+      '/products/product62.html',
+      '/products/product63.html',
+      '/products/product64.html',
+      '/products/product65.html',
+      '/products/product66.html',
+      '/products/product67.html',
+      '/products/product68.html',
+      '/products/product69.html',
+      '/products/product70.html',
+      '/products/product71.html',
+      '/products/product72.html',
+      '/products/product73.html',
+      '/products/product74.html',
+      '/products/product75.html',
       '/blog/blog.html',
-      '/faq.html',
-      '/account.html'
+      '/blog/article-featured.html',
+      '/blog/article1.html',
+      '/blog/article2.html',
+      '/blog/article3.html',
+      '/blog/article4.html',
+      '/blog/article5.html',
+      '/blog/article6.html',
+      '/blog/article7.html',
+      '/blog/article8.html',
+      '/blog/article9.html',
+      '/blog/article10.html',
+      '/blog/article11.html',
+      '/blog/article12.html',
+      '/blog/article13.html',
+      '/blog/article14.html',
+      '/blog/article15.html',
+      '/page/our-story.html',
+      '/page/about.html',
+      '/page/contact.html',
+      '/page/faq.html',
+      '/page/order-tracking.html',
+      '/page/product-care.html',
+      '/page/disclaimer.html',
+      '/policies/privacy.html',
+      '/policies/refund.html',
+      '/policies/shipping.html',
+      '/policies/termsl.html',
+      '/account.html',
+      '/checkout/checkout.html',
+      '/cart.html'
     ];
 
     document.getElementById('fnav-next').addEventListener('click', () => {
@@ -5380,7 +5485,7 @@ if (rcCheckoutBtn) {
 
     const url      = typeof window.getProductUrl === 'function'
                      ? window.getProductUrl(id)
-                     : 'shop.html';
+                     : '/collections/bbw4life-all-product.html';
     const img      = upgradeShopifyImageUrl(prod.image, 400);
     const imgHover = prod.image_hover
                      ? upgradeShopifyImageUrl(prod.image_hover, 400)
@@ -6929,7 +7034,7 @@ const cartWrapper = document.querySelector('.icon-wrapper:has(.cart-icon)');
             if (!p) return null;
             const productUrl = typeof window.getProductUrl === 'function'
                 ? window.location.origin + '/' + window.getProductUrl(id)
-                : window.location.origin + '/shop.html';
+                : window.location.origin + '/collections/bbw4life-all-product.html';
             return { title: p.title, price: p.price, url: productUrl };
         }).filter(Boolean);
 
@@ -8367,9 +8472,9 @@ window.addEventListener('load', () => {
 
   window.handleOrderItemClick = function(id) {
     if (!id) return;
-    const url = window.getProductUrl ? window.getProductUrl(id) : 'shop.html';
+    const url = window.getProductUrl ? window.getProductUrl(id) : '/collections/bbw4life-all-product.html';
     console.log(`🖱️ Order History click → ID=${id} | URL=${url}`);
-    if (!url || url === 'shop.html') {
+    if (!url || url === '/collections/bbw4life-all-product.html') {
       console.error(`❌ Product ID=${id} not found`);
       return;
     }
@@ -12174,293 +12279,5 @@ function injectColFbt() {
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
-
-})();
-
-
-/* ================================================================
-   BBW4LIFE — IMAGE LOADER SPINNER (texte en cercle)
-================================================================ */
-(function initImageLoader() {
-  'use strict';
-
-  function injectSvgDefs() {
-    if (document.getElementById('bbwLoaderSvgDefs')) return;
-    const ns  = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
-    svg.id    = 'bbwLoaderSvgDefs';
-    svg.setAttribute('width',  '0');
-    svg.setAttribute('height', '0');
-    svg.style.cssText = 'position:absolute;overflow:hidden;width:0;height:0;';
-
-    const defs = document.createElementNS(ns, 'defs');
-    const grad = document.createElementNS(ns, 'linearGradient');
-    grad.id = 'bbwLoaderGrad';
-    grad.setAttribute('x1', '0%');
-    grad.setAttribute('y1', '0%');
-    grad.setAttribute('x2', '100%');
-    grad.setAttribute('y2', '0%');
-
-    const stop1 = document.createElementNS(ns, 'stop');
-    stop1.setAttribute('offset', '0%');
-    stop1.setAttribute('stop-color', '#e4b722');
-
-    const stop2 = document.createElementNS(ns, 'stop');
-    stop2.setAttribute('offset', '50%');
-    stop2.setAttribute('stop-color', '#ffffff');
-
-    const stop3 = document.createElementNS(ns, 'stop');
-    stop3.setAttribute('offset', '100%');
-    stop3.setAttribute('stop-color', '#c9963e');
-
-    grad.appendChild(stop1);
-    grad.appendChild(stop2);
-    grad.appendChild(stop3);
-    defs.appendChild(grad);
-    svg.appendChild(defs);
-    document.body.appendChild(svg);
-  }
-
-  function buildLoader(text) {
-    var safeText = text || 'BBW4LIFE • TRÈS BELLE •';
-    var repeated = (safeText + ' ').repeat(3);
-    var uid = 'bbwPath_' + Math.random().toString(36).slice(2, 8);
-
-    var loader = document.createElement('div');
-    loader.className = 'bbw-img-loader';
-
-    loader.innerHTML =
-      '<div class="bbw-img-loader__circle">' +
-        '<div class="bbw-img-loader__ring"></div>' +
-        '<div class="bbw-img-loader__ring bbw-img-loader__ring--outer"></div>' +
-        '<svg class="bbw-img-loader__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-          '<defs>' +
-            '<path id="' + uid + '" d="M 50,50 m -32,0 a 32,32 0 1,1 64,0 a 32,32 0 1,1 -64,0"/>' +
-          '</defs>' +
-          '<text>' +
-            '<textPath href="#' + uid + '" startOffset="0%">' + repeated + '</textPath>' +
-          '</text>' +
-        '</svg>' +
-        '<div class="bbw-img-loader__dot"></div>' +
-      '</div>';
-
-    return loader;
-  }
-
-  function watchImage(img, loaderEl) {
-    function hide() {
-      loaderEl.classList.add('bbw-img-loader--hidden');
-      setTimeout(function() {
-        if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
-      }, 450);
-    }
-
-    function isLoaded() {
-      return img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
-    }
-
-    /* Vérification immédiate */
-    if (isLoaded()) {
-      hide();
-      return;
-    }
-
-    /* src vide → observer src */
-    if (!img.src || img.src === window.location.href || img.src === '') {
-      var attrObs = new MutationObserver(function(muts, obs) {
-        if (img.src && img.src !== window.location.href) {
-          obs.disconnect();
-          if (isLoaded()) {
-            hide();
-          } else {
-            img.addEventListener('load',  hide, { once: true });
-            img.addEventListener('error', hide, { once: true });
-          }
-        }
-      });
-      attrObs.observe(img, { attributes: true, attributeFilter: ['src'] });
-      return;
-    }
-
-    /* Image en cours de chargement */
-    img.addEventListener('load',  hide, { once: true });
-    img.addEventListener('error', hide, { once: true });
-
-    /* Poll toutes les 100ms — pour mobile où les events ne se déclenchent pas */
-    var pollCount = 0;
-    var poll = setInterval(function() {
-      pollCount++;
-      if (isLoaded()) {
-        clearInterval(poll);
-        hide();
-        return;
-      }
-      /* Fallback 5s max */
-      if (pollCount >= 50) {
-        clearInterval(poll);
-        hide();
-      }
-    }, 100);
-  }
-
-  function injectOnWrap(wrap, text) {
-    if (!wrap) return;
-    if (wrap.querySelector('.bbw-img-loader')) return;
-
-    var pos = getComputedStyle(wrap).position;
-    if (pos === 'static') wrap.style.position = 'relative';
-
-    var loader = buildLoader(text);
-    wrap.appendChild(loader);
-
-    var img = wrap.querySelector('img');
-    if (img) {
-      watchImage(img, loader);
-    } else {
-      var mo = new MutationObserver(function(muts, obs) {
-        var found = wrap.querySelector('img');
-        if (found) {
-          obs.disconnect();
-          watchImage(found, loader);
-        }
-      });
-      mo.observe(wrap, { childList: true, subtree: true });
-    }
-  }
-
-  function injectOnImg(img, text) {
-    if (!img) return;
-    var wrap = img.parentElement;
-    if (!wrap) return;
-    injectOnWrap(wrap, text);
-  }
-
-  function runAll(text) {
-    /* 1. Page produit */
-    document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 2. Collection grid */
-    document.querySelectorAll('.col-card__media').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 3. BBW Product Grid Featured */
-    document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 4. Collection Slider */
-    document.querySelectorAll('.cs-media').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 5. Recently Viewed */
-    document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 5b. Col Recently Viewed */
-    document.querySelectorAll('.col-rv-card__img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
-
-    /* 6. Featured Spotlight */
-    var fsFrame = document.querySelector('.fs-img-frame');
-    if (fsFrame) injectOnWrap(fsFrame, text);
-
-    /* 7. Mini media slider */
-    document.querySelectorAll('.mini-media-slider').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 8. Cart drawer + cart page */
-    document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 9. Cart extra + Drawer extra */
-    document.querySelectorAll(
-      '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
-    ).forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 10. Wishlist modal */
-    document.querySelectorAll('.wishlist-item img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
-
-    /* 11. Highlight cards */
-    document.querySelectorAll('.highlight-product-card').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-
-    /* 12. Product cards génériques */
-    document.querySelectorAll('.product-card').forEach(function(card) {
-      var img = card.querySelector('img');
-      if (img) injectOnImg(img, text);
-    });
-
-    /* 13. Col FBT */
-    document.querySelectorAll('.col-fbt-card__img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
-
-    /* 14. Bundle Deal */
-    document.querySelectorAll('.bd-product-item').forEach(function(item) {
-      var img = item.querySelector('img');
-      if (!img) return;
-      var wrap = img.parentElement;
-      if (!wrap) return;
-      if (wrap.querySelector('.bbw-img-loader')) return;
-      var pos = getComputedStyle(wrap).position;
-      if (pos === 'static') wrap.style.position = 'relative';
-      var loader = buildLoader(text);
-      wrap.appendChild(loader);
-      watchImage(img, loader);
-    });
-  }
-
-  function init() {
-    var allProducts = window.__allProducts || [];
-    var settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
-    var cfg         = settings.image_loader || {};
-
-    if ((cfg.show || 'yes').toLowerCase().trim() !== 'yes') return;
-
-    var text = cfg.text || 'BBW4LIFE • TRÈS BELLE •';
-
-    injectSvgDefs();
-    runAll(text);
-
-    var observer = new MutationObserver(function(mutations) {
-      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-      if (!relevant) return;
-      runAll(text);
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    document.addEventListener('cart:update',     function() { runAll(text); });
-    document.addEventListener('wishlist:change', function() { runAll(text); });
-  }
-
-  if (window.__allProducts && window.__allProducts.length) {
-    injectSvgDefs();
-    init();
-  } else {
-    var tries = 0;
-    var wait = setInterval(function() {
-      tries++;
-      if (window.__allProducts && window.__allProducts.length) {
-        clearInterval(wait);
-        init();
-      } else if (tries > 80) {
-        clearInterval(wait);
-      }
-    }, 100);
-  }
 
 })();
