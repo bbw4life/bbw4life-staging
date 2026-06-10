@@ -450,122 +450,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const PAGE_ORDER = [
       '/index.html',
-      '/collections/bbw4life-all-product.html',
-      '/collections/bbw4life-all-collections.html',
-      '/collections/bbw-features-products.html',
-      '/collections/most-popular.html',
-      '/collections/curvy-dresses.html',
-      '/collections/curvy-woman.html',
-      '/collections/curvy-beauty.html',
-      '/collections/men-plus-size.html',
-      '/collections/shoes-sandals.html',
-      '/collections/bbw4life-pants-skirts.html',
-      '/products/product1.html',
-      '/products/product2.html',
-      '/products/product3.html',
-      '/products/product4.html',
-      '/products/product5.html',
-      '/products/product6.html',
-      '/products/product7.html',
-      '/products/product8.html',
-      '/products/product9.html',
-      '/products/product10.html',
-      '/products/product11.html',
-      '/products/product12.html',
-      '/products/product13.html',
-      '/products/product14.html',
-      '/products/product15.html',
-      '/products/product16.html',
-      '/products/product17.html',
-      '/products/product18.html',
-      '/products/product19.html',
-      '/products/product20.html',
-      '/products/product21.html',
-      '/products/product22.html',
-      '/products/product23.html',
-      '/products/product24.html',
-      '/products/product25.html',
-      '/products/product26.html',
-      '/products/product27.html',
-      '/products/product28.html',
-      '/products/product29.html',
-      '/products/product30.html',
-      '/products/product31.html',
-      '/products/product32.html',
-      '/products/product33.html',
-      '/products/product34.html',
-      '/products/product35.html',
-      '/products/product36.html',
-      '/products/product37.html',
-      '/products/product38.html',
-      '/products/product39.html',
-      '/products/product40.html',
-      '/products/product41.html',
-      '/products/product42.html',
-      '/products/product43.html',
-      '/products/product44.html',
-      '/products/product45.html',
-      '/products/product46.html',
-      '/products/product47.html',
-      '/products/product48.html',
-      '/products/product49.html',
-      '/products/product50.html',
-      '/products/product51.html',
-      '/products/product52.html',
-      '/products/product53.html',
-      '/products/product54.html',
-      '/products/product55.html',
-      '/products/product56.html',
-      '/products/product57.html',
-      '/products/product58.html',
-      '/products/product59.html',
-      '/products/product60.html',
-      '/products/product61.html',
-      '/products/product62.html',
-      '/products/product63.html',
-      '/products/product64.html',
-      '/products/product65.html',
-      '/products/product66.html',
-      '/products/product67.html',
-      '/products/product68.html',
-      '/products/product69.html',
-      '/products/product70.html',
-      '/products/product71.html',
-      '/products/product72.html',
-      '/products/product73.html',
-      '/products/product74.html',
-      '/products/product75.html',
+      '/method.html',
+      '/programs.html',
+      '/nutrition.html',
+      '/shop.html',
+      '/success.html',
+      '/community.html',
+      '/about.html',
+      '/contact.html',
       '/blog/blog.html',
-      '/blog/article-featured.html',
-      '/blog/article1.html',
-      '/blog/article2.html',
-      '/blog/article3.html',
-      '/blog/article4.html',
-      '/blog/article5.html',
-      '/blog/article6.html',
-      '/blog/article7.html',
-      '/blog/article8.html',
-      '/blog/article9.html',
-      '/blog/article10.html',
-      '/blog/article11.html',
-      '/blog/article12.html',
-      '/blog/article13.html',
-      '/blog/article14.html',
-      '/blog/article15.html',
-      '/page/our-story.html',
-      '/page/about.html',
-      '/page/contact.html',
-      '/page/faq.html',
-      '/page/order-tracking.html',
-      '/page/product-care.html',
-      '/page/disclaimer.html',
-      '/policies/privacy.html',
-      '/policies/refund.html',
-      '/policies/shipping.html',
-      '/policies/termsl.html',
-      '/account.html',
-      '/checkout/checkout.html',
-      '/cart.html'
+      '/faq.html',
+      '/account.html'
     ];
 
     document.getElementById('fnav-next').addEventListener('click', () => {
@@ -5485,7 +5380,7 @@ if (rcCheckoutBtn) {
 
     const url      = typeof window.getProductUrl === 'function'
                      ? window.getProductUrl(id)
-                     : '/collections/bbw4life-all-product.html';
+                     : 'shop.html';
     const img      = upgradeShopifyImageUrl(prod.image, 400);
     const imgHover = prod.image_hover
                      ? upgradeShopifyImageUrl(prod.image_hover, 400)
@@ -7034,7 +6929,7 @@ const cartWrapper = document.querySelector('.icon-wrapper:has(.cart-icon)');
             if (!p) return null;
             const productUrl = typeof window.getProductUrl === 'function'
                 ? window.location.origin + '/' + window.getProductUrl(id)
-                : window.location.origin + '/collections/bbw4life-all-product.html';
+                : window.location.origin + '/shop.html';
             return { title: p.title, price: p.price, url: productUrl };
         }).filter(Boolean);
 
@@ -8472,9 +8367,9 @@ window.addEventListener('load', () => {
 
   window.handleOrderItemClick = function(id) {
     if (!id) return;
-    const url = window.getProductUrl ? window.getProductUrl(id) : '/collections/bbw4life-all-product.html';
+    const url = window.getProductUrl ? window.getProductUrl(id) : 'shop.html';
     console.log(`🖱️ Order History click → ID=${id} | URL=${url}`);
-    if (!url || url === '/collections/bbw4life-all-product.html') {
+    if (!url || url === 'shop.html') {
       console.error(`❌ Product ID=${id} not found`);
       return;
     }
@@ -12354,26 +12249,24 @@ function injectColFbt() {
 
   function watchImage(img, loaderEl) {
     function hide() {
-      loaderEl.style.opacity    = '0';
-      loaderEl.style.visibility = 'hidden';
-      loaderEl.style.transition = 'opacity 0.35s ease';
+      loaderEl.classList.add('bbw-img-loader--hidden');
       setTimeout(function() {
         if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
-      }, 380);
+      }, 450);
     }
 
     function isLoaded() {
       return img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
     }
 
-    /* Déjà chargée */
+    /* Vérification immédiate */
     if (isLoaded()) {
       hide();
       return;
     }
 
     /* src vide → observer src */
-    if (!img.src || img.src === window.location.href) {
+    if (!img.src || img.src === window.location.href || img.src === '') {
       var attrObs = new MutationObserver(function(muts, obs) {
         if (img.src && img.src !== window.location.href) {
           obs.disconnect();
@@ -12382,7 +12275,6 @@ function injectColFbt() {
           } else {
             img.addEventListener('load',  hide, { once: true });
             img.addEventListener('error', hide, { once: true });
-            startPoll();
           }
         }
       });
@@ -12390,25 +12282,25 @@ function injectColFbt() {
       return;
     }
 
+    /* Image en cours de chargement */
     img.addEventListener('load',  hide, { once: true });
     img.addEventListener('error', hide, { once: true });
-    startPoll();
 
-    function startPoll() {
-      var count = 0;
-      var poll = setInterval(function() {
-        count++;
-        if (isLoaded()) {
-          clearInterval(poll);
-          hide();
-          return;
-        }
-        if (count >= 50) {
-          clearInterval(poll);
-          hide();
-        }
-      }, 100);
-    }
+    /* Poll toutes les 100ms — pour mobile où les events ne se déclenchent pas */
+    var pollCount = 0;
+    var poll = setInterval(function() {
+      pollCount++;
+      if (isLoaded()) {
+        clearInterval(poll);
+        hide();
+        return;
+      }
+      /* Fallback 5s max */
+      if (pollCount >= 50) {
+        clearInterval(poll);
+        hide();
+      }
+    }, 100);
   }
 
   function injectOnWrap(wrap, text) {
@@ -12444,50 +12336,79 @@ function injectColFbt() {
   }
 
   function runAll(text) {
+    /* 1. Page produit */
     document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 2. Collection grid */
     document.querySelectorAll('.col-card__media').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 3. BBW Product Grid Featured */
     document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 4. Collection Slider */
     document.querySelectorAll('.cs-media').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 5. Recently Viewed */
     document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 5b. Col Recently Viewed */
     document.querySelectorAll('.col-rv-card__img').forEach(function(img) {
       injectOnImg(img, text);
     });
+
+    /* 6. Featured Spotlight */
     var fsFrame = document.querySelector('.fs-img-frame');
     if (fsFrame) injectOnWrap(fsFrame, text);
+
+    /* 7. Mini media slider */
     document.querySelectorAll('.mini-media-slider').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 8. Cart drawer + cart page */
     document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 9. Cart extra + Drawer extra */
     document.querySelectorAll(
       '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
     ).forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 10. Wishlist modal */
     document.querySelectorAll('.wishlist-item img').forEach(function(img) {
       injectOnImg(img, text);
     });
+
+    /* 11. Highlight cards */
     document.querySelectorAll('.highlight-product-card').forEach(function(w) {
       injectOnWrap(w, text);
     });
+
+    /* 12. Product cards génériques */
     document.querySelectorAll('.product-card').forEach(function(card) {
       var img = card.querySelector('img');
       if (img) injectOnImg(img, text);
     });
+
+    /* 13. Col FBT */
     document.querySelectorAll('.col-fbt-card__img').forEach(function(img) {
       injectOnImg(img, text);
     });
+
+    /* 14. Bundle Deal */
     document.querySelectorAll('.bd-product-item').forEach(function(item) {
       var img = item.querySelector('img');
       if (!img) return;
