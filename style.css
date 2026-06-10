@@ -3588,6 +3588,211 @@ body {
     bottom: 40%;
   }
 }
+ 
+
+
+
+
+/* ================================================================
+   BBW4LIFE — IMAGE LOADER SPINNER (texte en cercle)
+================================================================ */
+.bbw-img-loader {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 8;
+  pointer-events: none;
+  background: linear-gradient(135deg,
+    rgba(10,8,6,0.96) 0%,
+    rgba(18,12,8,0.97) 50%,
+    rgba(8,6,12,0.96) 100%);
+  border-radius: inherit;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+.bbw-img-loader--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.bbw-img-loader__circle {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+/* ── Orb de fond — noir doré ── */
+.bbw-img-loader__circle::before {
+  content: '';
+  position: absolute;
+  inset: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%,
+    rgba(228,183,34,0.22) 0%,
+    rgba(30,20,10,0.85)   50%,
+    rgba(10,8,6,0.95)     100%);
+  box-shadow:
+    0 0 32px rgba(228,183,34,0.28),
+    0 0 10px rgba(228,183,34,0.14),
+    inset 0 0 18px rgba(0,0,0,0.6);
+}
+
+/* ── Anneaux — or ── */
+.bbw-img-loader__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(228,183,34,0.90);
+  border-right-color: rgba(255,215,80,0.50);
+  animation: bbwLoaderRing 1.6s linear infinite;
+}
+
+.bbw-img-loader__ring--outer {
+  inset: -6px;
+  border-width: 1.5px;
+  border-top-color: rgba(255,255,255,0.25);
+  border-left-color: rgba(228,183,34,0.30);
+  animation: bbwLoaderRing 2.4s linear infinite reverse;
+}
+
+/* ── Texte SVG ── */
+.bbw-img-loader__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: bbwLoaderText 8s linear infinite;
+}
+
+.bbw-img-loader__svg textPath {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  fill: url(#bbwLoaderGrad);
+}
+
+/* ── Point central — or blanc ── */
+.bbw-img-loader__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    #ffffff 0%,
+    #e4b722 45%,
+    #c9963e 100%);
+  box-shadow:
+    0 0 14px rgba(228,183,34,0.85),
+    0 0 4px  rgba(255,255,255,0.6);
+  animation: bbwLoaderDot 1.6s ease-in-out infinite;
+}
+
+/* ── Animations ── */
+@keyframes bbwLoaderRing {
+  to { transform: rotate(360deg); }
+}
+@keyframes bbwLoaderText {
+  to { transform: rotate(360deg); }
+}
+@keyframes bbwLoaderDot {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+  50%       { transform: translate(-50%, -50%) scale(1.5); opacity: 0.75; }
+}
+
+/* ── Tailles contextuelles ── */
+#main-image-slider .main-image .bbw-img-loader .bbw-img-loader__circle {
+  width: 180px;
+  height: 180px;
+}
+#main-image-slider .main-image .bbw-img-loader .bbw-img-loader__svg textPath {
+  font-size: 13px;
+}
+
+.cart-item-img-wrap .bbw-img-loader .bbw-img-loader__circle,
+.cp-item-img-wrap   .bbw-img-loader .bbw-img-loader__circle {
+  width: 80px;
+  height: 80px;
+}
+.cart-item-img-wrap .bbw-img-loader .bbw-img-loader__svg textPath,
+.cp-item-img-wrap   .bbw-img-loader .bbw-img-loader__svg textPath {
+  font-size: 8.5px;
+  letter-spacing: 1px;
+}
+
+.drawer-extra-card__img-wrap .bbw-img-loader .bbw-img-loader__circle,
+.cp-extra-card__img-wrap     .bbw-img-loader .bbw-img-loader__circle {
+  width: 90px;
+  height: 90px;
+}
+
+.bbwpg-card__img-wrap .bbw-img-loader .bbw-img-loader__circle,
+.rv-card__img-wrap    .bbw-img-loader .bbw-img-loader__circle,
+.fs-img-frame         .bbw-img-loader .bbw-img-loader__circle {
+  width: 120px;
+  height: 120px;
+}
+
+.cs-media .bbw-img-loader .bbw-img-loader__circle {
+  width: 110px;
+  height: 110px;
+}
+
+.mini-media-slider .bbw-img-loader .bbw-img-loader__circle {
+  width: 100px;
+  height: 100px;
+}
+
+.col-rv-card .bbw-img-loader .bbw-img-loader__circle,
+.col-fbt-card .bbw-img-loader .bbw-img-loader__circle {
+  width: 90px;
+  height: 90px;
+}
+
+.highlight-product-card .bbw-img-loader .bbw-img-loader__circle {
+  width: 110px;
+  height: 110px;
+}
+
+.product-card .bbw-img-loader .bbw-img-loader__circle {
+  width: 120px;
+  height: 120px;
+}
+
+@media (max-width: 768px) {
+  .bbw-img-loader__circle {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .bbw-img-loader__svg textPath {
+    font-size: 9.5px !important;
+  }
+  #main-image-slider .main-image .bbw-img-loader .bbw-img-loader__circle {
+    width: 130px !important;
+    height: 130px !important;
+  }
+}
+
+/* Bundle Deal */
+.bd-product-item {
+  position: relative;
+}
+
+.bd-product-item .bbw-img-loader .bbw-img-loader__circle {
+  width: 110px;
+  height: 110px;
+}
+
+.bd-product-item .bbw-img-loader .bbw-img-loader__svg textPath {
+  font-size: 10px;
+}
 
 
 /* ================================================================
