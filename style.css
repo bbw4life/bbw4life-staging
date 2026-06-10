@@ -3510,6 +3510,86 @@ body {
 }
 
 
+
+
+/* ════════════════════════════════════════
+   BBW4LIFE — WATERMARK IMAGE OVERLAY
+════════════════════════════════════════ */
+.bbw-watermark {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display, 'Cormorant Garamond', serif);
+  font-size: clamp(20px, 5.5vw, 40px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: rgba(80, 60, 60, 0.32);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+  line-height: 1;
+}
+
+/* ── Taille adaptée par contexte ── */
+.col-card__media .bbw-watermark,
+.cs-media .bbw-watermark,
+.rv-card__img-wrap .bbw-watermark,
+.bbwpg-card__img-wrap .bbw-watermark {
+  font-size: clamp(15px, 4vw, 25px);
+}
+
+.cart-item-img-wrap .bbw-watermark,
+.drawer-extra-card__img-wrap .bbw-watermark,
+.cp-extra-card__img-wrap .bbw-watermark {
+  font-size: 13px;
+  bottom: 8%;
+}
+
+/* ── Page produit — media slider ── */
+.main-image .bbw-watermark {
+  font-size: clamp(24px, 4.5vw, 46px);
+  bottom: 10%;
+}
+
+/* ── Recently Viewed (collections page) ── */
+.col-rv-card {
+  overflow: hidden;
+  position: relative;
+}
+
+.col-rv-card .bbw-watermark {
+  font-size: clamp(11px, 3vw, 18px);
+  bottom: 30%;
+}
+
+/* ── FBT — Complete the Look (collections page) ── */
+.col-fbt-card {
+  overflow: hidden;
+  position: relative;
+}
+
+.col-fbt-card .bbw-watermark {
+  font-size: clamp(11px, 3vw, 18px);
+  bottom: 30%;
+}
+
+@media (max-width: 768px) {
+  .bbw-watermark {
+    font-size: clamp(14px, 4.5vw, 22px);
+  }
+  .main-image .bbw-watermark {
+    font-size: clamp(18px, 5.5vw, 30px);
+  }
+  .col-rv-card .bbw-watermark,
+  .col-fbt-card .bbw-watermark {
+    font-size: clamp(12px, 3.5vw, 16px);
+    bottom: 40%;
+  }
+}
+
+
 /* ================================================================
    PAUL INDICATOR & POPUP — Ultra Premium BBW4LIFE Edition
 ================================================================ */

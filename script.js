@@ -12022,3 +12022,158 @@ function injectColFbt() {
   document.addEventListener('wishlist:change', syncAll);
 
 })();
+
+
+
+
+/* ================================================================
+   BBW4LIFE — IMAGE WATERMARK INJECTOR
+   Injecte "bbw4life.com" en pâle sur toutes les images produit
+================================================================ */
+(function initImageWatermark() {
+  'use strict';
+
+  function run() {
+    const allProducts = window.__allProducts || [];
+    const settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
+    const wm          = settings.watermark || {};
+
+    if ((wm.show || 'no').toLowerCase().trim() !== 'yes') return;
+
+    const TEXT = wm.text || 'bbw4life.com';
+
+    function makeWatermark() {
+      const el = document.createElement('span');
+      el.className    = 'bbw-watermark';
+      el.textContent  = TEXT;
+      el.setAttribute('aria-hidden', 'true');
+      return el;
+    }
+
+    function inject(wrap) {
+      if (!wrap || wrap.querySelector('.bbw-watermark')) return;
+      const pos = getComputedStyle(wrap).position;
+      if (pos === 'static') wrap.style.position = 'relative';
+      wrap.appendChild(makeWatermark());
+    }
+
+    function injectOnImg(img) {
+      if (!img) return;
+      const wrap = img.parentElement;
+      if (wrap) inject(wrap);
+    }
+
+    /* ── 1. Page produit — chaque .main-image ── */
+    document.querySelectorAll('#main-image-slider .main-image').forEach(inject);
+
+    /* ── 2. Collection grid cards ── */
+    document.querySelectorAll('.col-card__media').forEach(inject);
+
+    /* ── 3. BBW Product Grid Featured ── */
+    document.querySelectorAll('.bbwpg-card__img-wrap').forEach(inject);
+
+    /* ── 4. Collection Slider ── */
+    document.querySelectorAll('.cs-media').forEach(inject);
+
+    /* ── 5. Recently Viewed ── */
+    document.querySelectorAll('.rv-card__img-wrap').forEach(inject);
+
+    /* ── 5b. Recently Viewed — col-rv-card (collections page) ── */
+    document.querySelectorAll('.col-rv-card__img').forEach(injectOnImg);
+
+    /* ── 6. Featured Spotlight ── */
+    const fsFrame = document.querySelector('.fs-img-frame');
+    if (fsFrame) inject(fsFrame);
+
+    /* ── 7. Mini product slider ── */
+    document.querySelectorAll('.mini-media-slider').forEach(inject);
+
+    /* ── 8. Cart items (drawer + page) ── */
+    document.querySelectorAll('.cart-item-img-wrap').forEach(inject);
+
+    /* ── 9. Cart extra + Drawer extra ── */
+    document.querySelectorAll(
+      '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
+    ).forEach(inject);
+
+    /* ── 10. Wishlist modal ── */
+    document.querySelectorAll('.wishlist-item img').forEach(function(img) {
+      const wrap = img.parentElement;
+      if (wrap) inject(wrap);
+    });
+
+    /* ── 11. Shop Highlight cards ── */
+    document.querySelectorAll('.highlight-product-card').forEach(inject);
+
+    /* ── 12. Product cards génériques ── */
+    document.querySelectorAll('.product-card').forEach(function(card) {
+      const img = card.querySelector('img');
+      if (img) inject(img.parentElement || card);
+    });
+
+    /* ── 13. FBT cards (collections page) ── */
+    document.querySelectorAll('.col-fbt-card__img').forEach(injectOnImg);
+  }
+
+  /* ── Lancer quand products est prêt ── */
+  if (window.__allProducts && window.__allProducts.length) {
+    run();
+  } else {
+    let tries = 0;
+    const wait = setInterval(function() {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(wait);
+        run();
+      } else if (tries > 80) {
+        clearInterval(wait);
+      }
+    }, 100);
+  }
+
+  /* ── Observer les mutations DOM (cards chargées dynamiquement) ── */
+  const observer = new MutationObserver(function(mutations) {
+    const relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+    if (!relevant) return;
+
+    const allProducts = window.__allProducts || [];
+    const settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
+    const wm          = settings.watermark || {};
+    if ((wm.show || 'no').toLowerCase().trim() !== 'yes') return;
+
+    const TEXT = wm.text || 'bbw4life.com';
+
+    function makeWatermark() {
+      const el = document.createElement('span');
+      el.className   = 'bbw-watermark';
+      el.textContent = TEXT;
+      el.setAttribute('aria-hidden', 'true');
+      return el;
+    }
+
+    function inject(wrap) {
+      if (!wrap || wrap.querySelector('.bbw-watermark')) return;
+      const pos = getComputedStyle(wrap).position;
+      if (pos === 'static') wrap.style.position = 'relative';
+      wrap.appendChild(makeWatermark());
+    }
+
+    function injectOnImg(img) {
+      if (!img) return;
+      const wrap = img.parentElement;
+      if (wrap) inject(wrap);
+    }
+
+    document.querySelectorAll(
+      '#main-image-slider .main-image, .col-card__media, .bbwpg-card__img-wrap, ' +
+      '.cs-media, .rv-card__img-wrap, .fs-img-frame, .mini-media-slider, ' +
+      '.cart-item-img-wrap, .drawer-extra-card__img-wrap, .cp-extra-card__img-wrap, ' +
+      '.highlight-product-card'
+    ).forEach(inject);
+
+    document.querySelectorAll('.col-rv-card__img, .col-fbt-card__img').forEach(injectOnImg);
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+})();

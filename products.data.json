@@ -4298,7 +4298,7 @@
     "thumbnails_mobile_vertical_left": "yes",
     "sticky_media_mobile": "no",
     "swatch_scroll_mobile": "yes",
-    "sticky_atc_mobile_threshold": 8.0,
+    "sticky_atc_mobile_threshold": 5.0,
     "sticky_atc_desktop_threshold": 4.5,
     "theme_color": "#000000",
     "allowed_languages": ["en", "fr", "es", "ar", "zh", "ht", "hi", "pt", "ru", "de", "ja"],
@@ -5632,6 +5632,10 @@
     "Pdg-Francenel-product55",
     "Pdg-Francenel-product59"
    ]
-  }
- }
+  },
+  "watermark": {
+  "show": "yes",
+  "text": "bbw4life.com"
+}
+}
 ]

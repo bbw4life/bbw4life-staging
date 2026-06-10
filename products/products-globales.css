@@ -4107,3 +4107,35 @@
     .bbw-brow-shade-card__name { font-size: 13px; }
     .bbw-brow-shade-card__desc { font-size: 11px; }
 }
+
+
+
+/* ════════════════════════════════════════════════════════════
+   BBW BROW SHADES — __body wrapper fix
+════════════════════════════════════════════════════════════ */
+.bbw-brow-shade-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 480px) {
+    .bbw-brow-shades__grid { grid-template-columns: 1fr 1fr; }
+    .bbw-brow-shade-card {
+        padding: 13px 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 7px;
+    }
+    .bbw-brow-shade-card__swatch {
+        width: 34px;
+        height: 34px;
+        margin-bottom: 0;
+    }
+    .bbw-brow-shade-card__name { font-size: 12px; }
+    .bbw-brow-shade-card__desc { font-size: 11px; }
+    .bbw-brow-shade-card__tag { font-size: 10px; }
+    .bbw-brow-shade-card__best { font-size: 10px; }
+}
