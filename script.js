@@ -4506,16 +4506,31 @@ if (window.innerWidth <= 768) {
     nav.style.display = 'block';
   }
 
-  if (window.__seoTitle) {
-    build(window.__seoTitle);
-  } else {
+  function tryBuild() {
+    const title = window.__seoTitle || document.title;
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+      build(title);
+      return true;
+    }
+    return false;
+  }
+
+  if (!tryBuild()) {
     document.addEventListener('seo:ready', function(e) {
       build(e.detail.title);
     }, { once: true });
 
-    setTimeout(() => {
-      if (!window.__seoTitle) build(document.title);
-    }, 2000);
+    let attempts = 0;
+    const poll = setInterval(function() {
+      attempts++;
+      if (window.__seoTitle) {
+        clearInterval(poll);
+        build(window.__seoTitle);
+      } else if (attempts > 50) {
+        clearInterval(poll);
+        build(document.title);
+      }
+    }, 100);
   }
 
 })();
