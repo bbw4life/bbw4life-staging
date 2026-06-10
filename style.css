@@ -3498,6 +3498,17 @@ body {
   height: 13px;
 }
 
+@media (max-width: 768px) {
+  .bbw-mini-wish {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .bbw-mini-wish svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+}
+
 
 /* ================================================================
    PAUL INDICATOR & POPUP — Ultra Premium BBW4LIFE Edition

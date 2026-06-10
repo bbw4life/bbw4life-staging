@@ -686,32 +686,20 @@
     const gateLockMsg  = document.getElementById('gate-lock-msg');
     const dashboard    = document.getElementById('dashboard');
 
-    let correctPassword = null;
     let passwordLoaded  = false;
 
-    /* ── Load password from products.data.json ── */
-    fetch('/products.data.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var arr      = Array.isArray(data) ? data : [];
-        var settings = arr.find(function (p) { return p.type === 'settings'; }) || {};
-        correctPassword = settings.eprolo_viewer_password || null;
-        passwordLoaded  = true;
-
-        /* If no password configured → block everything, show nothing */
-        if (!correctPassword) {
-          gateInput.disabled  = true;
-          gateSubmit.disabled = true;
-          gateAttempts.textContent = 'Access not configured.';
-          return;
-        }
-
-        /* Check if already authenticated this session */
+    /* ── Ping server to verify function is available ── */
+    fetch('/.netlify/functions/get-private-settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: '__ping__' })
+    })
+      .then(function () {
+        passwordLoaded = true;
         if (sessionStorage.getItem(SESSION_KEY) === 'yes') {
           unlockDashboard(false);
           return;
         }
-
         checkLockState();
         gateInput.addEventListener('keydown', function (e) {
           if (e.key === 'Enter') tryUnlock();
@@ -739,38 +727,57 @@
     }
 
     /* ── Try to unlock ── */
-    function tryUnlock() {
-      if (!passwordLoaded || !correctPassword) return;
+      function tryUnlock() {
+        if (!passwordLoaded) return;
 
-      var lockUntil = parseInt(localStorage.getItem(LOCK_KEY) || '0');
-      if (lockUntil > Date.now()) return;
+        var lockUntil = parseInt(localStorage.getItem(LOCK_KEY) || '0');
+        if (lockUntil > Date.now()) return;
 
-      var val      = gateInput.value;
-      var attempts = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0');
+        var val      = gateInput.value;
+        var attempts = parseInt(localStorage.getItem(ATTEMPT_KEY) || '0');
 
-      if (val === correctPassword) {
-        localStorage.removeItem(ATTEMPT_KEY);
-        localStorage.removeItem(LOCK_KEY);
-        sessionStorage.setItem(SESSION_KEY, 'yes');
-        unlockDashboard(true);
-      } else {
-        attempts++;
-        localStorage.setItem(ATTEMPT_KEY, attempts);
-        gateInput.value = '';
-        gateInput.classList.add('shake');
-        setTimeout(function () { gateInput.classList.remove('shake'); }, 400);
+        gateSubmit.disabled    = true;
+        gateSubmit.textContent = 'Checking...';
 
-        var remaining = MAX_ATTEMPTS - attempts;
-        if (remaining <= 0) {
-          var lockUntilNew = Date.now() + LOCK_DURATION;
-          localStorage.setItem(LOCK_KEY, lockUntilNew);
-          localStorage.removeItem(ATTEMPT_KEY);
-          applyLock(LOCK_DURATION);
-        } else {
-          gateAttempts.textContent = remaining + ' attempt' + (remaining > 1 ? 's' : '') + ' remaining';
-        }
+        fetch('/.netlify/functions/get-private-settings', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ password: val })
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          gateSubmit.disabled    = false;
+          gateSubmit.textContent = 'Unlock →';
+
+          if (data.ok) {
+            localStorage.removeItem(ATTEMPT_KEY);
+            localStorage.removeItem(LOCK_KEY);
+            sessionStorage.setItem(SESSION_KEY, 'yes');
+            unlockDashboard(true);
+          } else {
+            attempts++;
+            localStorage.setItem(ATTEMPT_KEY, attempts);
+            gateInput.value = '';
+            gateInput.classList.add('shake');
+            setTimeout(function () { gateInput.classList.remove('shake'); }, 400);
+
+            var remaining = MAX_ATTEMPTS - attempts;
+            if (remaining <= 0) {
+              var lockUntilNew = Date.now() + LOCK_DURATION;
+              localStorage.setItem(LOCK_KEY, lockUntilNew);
+              localStorage.removeItem(ATTEMPT_KEY);
+              applyLock(LOCK_DURATION);
+            } else {
+              gateAttempts.textContent = remaining + ' attempt' + (remaining > 1 ? 's' : '') + ' remaining';
+            }
+          }
+        })
+        .catch(function () {
+          gateSubmit.disabled    = false;
+          gateSubmit.textContent = 'Unlock →';
+          gateAttempts.textContent = 'Connection error. Try again.';
+        });
       }
-    }
 
     /* ── Apply lock UI ── */
     function applyLock(msRemaining) {

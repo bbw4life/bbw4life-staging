@@ -4441,7 +4441,6 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  // ── Séparateur
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -4462,8 +4461,9 @@ if (window.innerWidth <= 768) {
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
   function build(title) {
-    const currentPath  = window.location.pathname;
-    const currentTitle = title.split('|')[0].trim() || title;
+    const currentPath    = window.location.pathname;
+    const currentTitle   = title.split('|')[0].trim() || title;
+    const currentNoExt   = currentPath.replace(/\.html$/, '');
 
     const BC_KEY = 'bc_visited';
     const BC_MAX = 6;
@@ -4471,7 +4471,8 @@ if (window.innerWidth <= 768) {
     let visited = [];
     try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-    visited = visited.filter(p => p.url !== currentPath);
+    // Filtre avec ou sans .html
+    visited = visited.filter(p => p.url.replace(/\.html$/, '') !== currentNoExt);
 
     if (currentPath !== '/' && currentPath !== '/index.html') {
       visited.unshift({ url: currentPath, title: currentTitle });
@@ -4495,7 +4496,7 @@ if (window.innerWidth <= 768) {
       </li>`;
 
     visited.forEach(page => {
-      const isActive = page.url === currentPath;
+      const isActive = page.url.replace(/\.html$/, '') === currentNoExt;
       const li = document.createElement('li');
       li.className = 'bc-item' + (isActive ? ' bc-active' : '');
       li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
@@ -4505,20 +4506,17 @@ if (window.innerWidth <= 768) {
     nav.style.display = 'block';
   }
 
-  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
-    if (window.__seoTitle) {
-      build(window.__seoTitle);
-    } else {
-      // ✅ On attend l'event seo:ready
-      document.addEventListener('seo:ready', function(e) {
-        build(e.detail.title);
-      }, { once: true });
+  if (window.__seoTitle) {
+    build(window.__seoTitle);
+  } else {
+    document.addEventListener('seo:ready', function(e) {
+      build(e.detail.title);
+    }, { once: true });
 
-      // ✅ Fallback plus long pour laisser le temps à head.js
-      setTimeout(() => {
-        if (!window.__seoTitle) build(document.title);
-      }, 2000);
-    }
+    setTimeout(() => {
+      if (!window.__seoTitle) build(document.title);
+    }, 2000);
+  }
 
 })();
 
@@ -11728,223 +11726,6 @@ startAutoSlide();
 
 })();
 
-
-/* ════════════════════════════════════════════════════════
-   BBW4LIFE — SECURITY SHIELD
-════════════════════════════════════════════════════════ */
-(function initSecurityShield() {
-  'use strict';
-
-  (function detectHeadless() {
-    const checks = [
-      navigator.webdriver === true,
-      !window.chrome && navigator.userAgent.includes('Chrome'),
-      navigator.languages === undefined || navigator.languages.length === 0,
-      !navigator.plugins || navigator.plugins.length === 0,
-      window.outerWidth === 0 && window.outerHeight === 0
-    ];
-
-    const score = checks.filter(Boolean).length;
-
-    if (score >= 2) {
-      document.documentElement.innerHTML = '<h1 style="display:none">Access Denied</h1>';
-      window.location.href = '/404';
-    }
-  })();
-
-  (function injectHoneypot() {
-    const trap = document.createElement('div');
-    trap.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
-    trap.innerHTML = `
-      <a href="/admin-panel" class="bot-trap-link" tabindex="-1" aria-hidden="true">Admin</a>
-      <a href="/wp-admin" class="bot-trap-link" tabindex="-1" aria-hidden="true">WordPress</a>
-      <a href="/config.json" class="bot-trap-link" tabindex="-1" aria-hidden="true">Config</a>
-    `;
-    document.body.appendChild(trap);
-
-    trap.querySelectorAll('.bot-trap-link').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.documentElement.innerHTML = '';
-        sessionStorage.setItem('bbw_blocked', '1');
-      });
-    });
-  })();
-
-  (function initRateLimit() {
-    const KEY      = 'bbw_req_log';
-    const MAX_REQS = 60;
-    const WINDOW   = 30000;
-
-    const now = Date.now();
-    let   log = [];
-
-    try { log = JSON.parse(sessionStorage.getItem(KEY) || '[]'); } catch(e) {}
-
-    log = log.filter(function(ts) { return now - ts < WINDOW; });
-    log.push(now);
-
-    if (log.length > MAX_REQS) {
-      console.warn('[BBW Shield] Rate limit atteint.');
-      document.documentElement.innerHTML = '<p style="font-family:sans-serif;padding:40px;">Too many requests. Please wait.</p>';
-      return;
-    }
-
-    try { sessionStorage.setItem(KEY, JSON.stringify(log)); } catch(e) {}
-  })();
-
-  document.addEventListener('keydown', function(e) {
-    const blocked =
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && ['I','J','C','i','j','c'].includes(e.key)) ||
-      (e.ctrlKey && ['u','U','s','S'].includes(e.key));
-
-    if (blocked) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-  });
-
-  (function detectDevTools() {
-    let devtoolsOpen = false;
-    const threshold  = 160;
-
-    function check() {
-      const widthDiff  = window.outerWidth  - window.innerWidth;
-      const heightDiff = window.outerHeight - window.innerHeight;
-
-      if (widthDiff > threshold || heightDiff > threshold) {
-        if (!devtoolsOpen) {
-          devtoolsOpen = true;
-          onDevToolsOpen();
-        }
-      } else {
-        devtoolsOpen = false;
-      }
-    }
-
-    function onDevToolsOpen() {
-      console.clear();
-      console.log('%c⛔ BBW4LIFE — ZONE PROTÉGÉE', 'color:#c0385e;font-size:24px;font-weight:bold;');
-      console.log('%cCe site est protégé. Toute tentative de copie ou de scraping est interdite et tracée.', 'color:#333;font-size:14px;');
-    }
-
-    setInterval(check, 1000);
-  })();
-
-  (function consoleTrap() {
-    setTimeout(function() {
-      console.log('%c🛡️ BBW4LIFE Security Shield Actif', 'color:#c0385e;font-size:20px;font-weight:bold;background:#fff0f3;padding:8px 16px;border-radius:8px;');
-      console.log('%c⚠️  Attention : Ce site est surveillé. Toute tentative de reverse engineering sera signalée.', 'color:#7b3f6e;font-size:13px;');
-    }, 500);
-
-    setInterval(function() {
-      (function antiDebug() {
-        debugger;
-      })();
-    }, 3000);
-  })();
-
-  (function initSessionToken() {
-    const TOKEN_KEY = 'bbw_session_token';
-    const existing  = sessionStorage.getItem(TOKEN_KEY);
-
-    if (!existing) {
-      const token = btoa(
-        Date.now().toString(36) +
-        Math.random().toString(36).slice(2) +
-        navigator.userAgent.length.toString(36)
-      );
-      sessionStorage.setItem(TOKEN_KEY, token);
-    }
-
-    window.__bbwToken = sessionStorage.getItem(TOKEN_KEY);
-  })();
-
-  (function protectJSON() {
-    const _fetch = window.fetch.bind(window);
-
-    window.fetch = function(url, opts) {
-      const urlStr = typeof url === 'string' ? url : (url.url || '');
-
-      if (urlStr.includes('products.data.json')) {
-        const token = sessionStorage.getItem('bbw_session_token');
-
-        if (!token) {
-          console.warn('[BBW Shield] Requête bloquée — token manquant.');
-          return Promise.reject(new Error('Unauthorized'));
-        }
-
-        opts         = opts || {};
-        opts.headers = opts.headers || {};
-        opts.headers['X-BBW-Token']  = token;
-        opts.headers['X-BBW-Secret'] = window.__bbwToken || '';
-      }
-
-      return _fetch(url, opts);
-    };
-  })();
-
-  (function obfuscatePrices() {
-    function encodePrices() {
-      document.querySelectorAll('.current-price, .compare-price, .cs-price').forEach(function(el) {
-        const text = el.textContent.trim();
-        if (text.startsWith('$') && !el.dataset.encoded) {
-          el.dataset.encoded = '1';
-          el.dataset.val     = btoa(text);
-        }
-      });
-    }
-
-    setTimeout(encodePrices, 2000);
-    document.addEventListener('cart:update', encodePrices);
-  })();
-
-  (function selfDefend() {
-    const INTEGRITY_KEY = 'bbw_integrity';
-
-    const fingerprint = [
-      typeof window.__allProducts,
-      typeof window.__bbwToken,
-      typeof window.__getCart,
-      typeof window.__setCart
-    ].join('|');
-
-    const saved = sessionStorage.getItem(INTEGRITY_KEY);
-
-    if (!saved) {
-      sessionStorage.setItem(INTEGRITY_KEY, btoa(fingerprint));
-    } else {
-      try {
-        const decoded = atob(saved);
-        if (decoded !== fingerprint) {
-          console.warn('[BBW Shield] Intégrité compromise.');
-        }
-      } catch(e) {}
-    }
-  })();
-
-  document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
-      e.preventDefault();
-      return false;
-    }
-  });
-
-  (function blockConsoleAccess() {
-    const _warn = console.warn.bind(console);
-    console.warn = function() {
-      const args = Array.from(arguments);
-      if (args[0] && typeof args[0] === 'string' && args[0].includes('[BBW')) {
-        _warn.apply(console, args);
-      }
-    };
-  })();
-
-  console.log('[BBW Shield] ✅ Tous les niveaux de protection activés.');
-
-})();
 
 
 /* ================================================================
