@@ -1021,25 +1021,19 @@ function injectGlobalHead() {
 /* ─── Injection SEO selon page ─── */
 function injectPageSEO() {
     const path = window.location.pathname;
+    const pathWithHtml = path.endsWith('.html') ? path : path + '.html';
 
-    let seo = SEO_MAP[path];
+    let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml];
 
    
-    if (!seo && /\/products\/product\d+\.html/.test(path)) { 
+    if (!seo && /\/products\/product\d+\.html/.test(path)) {
         seo = {
             title: 'Product | BBW4LIFE — Plus Size Fashion',
             description: 'Discover this stunning plus size piece at BBW4LIFE. Bold, beautiful and made for your curves. Sizes XL to 6XL. Free shipping. 30-day returns.',
             keywords: 'plus size product, curvy fashion, BBW4LIFE, plus size clothing, curvy woman outfit, body positive fashion',
             og_image: 'https://bbw4life.com/public/og-home.jpg',
             canonical: 'https://bbw4life.com' + path
-        }; 
-
-        canonical.href = seo.canonical;
-
-    /* ── AJOUTER CES 2 LIGNES ── */
-    window.__seoTitle = seo.title;
-    document.title    = seo.title;
-
+        };
     }
 
     /* Fallback global si page inconnue */
@@ -1053,7 +1047,11 @@ function injectPageSEO() {
         };
     }
 
-
+ 
+    /* Title */
+    document.title = seo.title;
+    window.__seoTitle = seo.title;
+    document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
 
     /* Helper : crée ou met à jour une meta */
     function setMeta(selector, attr, value) {
