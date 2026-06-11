@@ -4613,7 +4613,7 @@ if (window.innerWidth <= 768) {
 
   function tryBuild() {
     const title = window.__seoTitle || document.title;
-    if (title && title.trim() !== '' && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
       build(title);
       return true;
     }
