@@ -1021,8 +1021,10 @@ function injectGlobalHead() {
 /* ─── Injection SEO selon page ─── */
 function injectPageSEO() {
     const path = window.location.pathname;
+    const pathWithHtml    = path.endsWith('.html') ? path : path + '.html';
+    const pathWithoutHtml = path.endsWith('.html') ? path.slice(0, -5) : path;
 
-    let seo = SEO_MAP[path];
+    let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml] || SEO_MAP[pathWithoutHtml];
 
    
     if (!seo && /\/products\/product\d+\.html/.test(path)) {
@@ -1045,15 +1047,6 @@ function injectPageSEO() {
             canonical: 'https://bbw4life.com' + path
         };
     }
-
-
-
-    /* Meta de base */
-// AJOUTER CETTE LIGNE ICI
-window.__seoTitle = seo.title;
-document.title    = seo.title;
-
-setMeta('meta[name="description"]', 'content', seo.description);
 
 
 
