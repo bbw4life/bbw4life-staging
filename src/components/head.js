@@ -1021,10 +1021,8 @@ function injectGlobalHead() {
 /* ─── Injection SEO selon page ─── */
 function injectPageSEO() {
     const path = window.location.pathname;
-    const pathWithHtml    = path.endsWith('.html') ? path : path + '.html';
-    const pathWithoutHtml = path.endsWith('.html') ? path.slice(0, -5) : path;
 
-    let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml] || SEO_MAP[pathWithoutHtml];
+    let seo = SEO_MAP[path];
 
    
     if (!seo && /\/products\/product\d+\.html/.test(path)) { 
@@ -1035,6 +1033,13 @@ function injectPageSEO() {
             og_image: 'https://bbw4life.com/public/og-home.jpg',
             canonical: 'https://bbw4life.com' + path
         }; 
+
+        canonical.href = seo.canonical;
+
+    /* ── AJOUTER CES 2 LIGNES ── */
+    window.__seoTitle = seo.title;
+    document.title    = seo.title;
+
     }
 
     /* Fallback global si page inconnue */
