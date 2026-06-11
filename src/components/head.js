@@ -1034,7 +1034,7 @@ function injectPageSEO() {
             keywords: 'plus size product, curvy fashion, BBW4LIFE, plus size clothing, curvy woman outfit, body positive fashion',
             og_image: 'https://bbw4life.com/public/og-home.jpg',
             canonical: 'https://bbw4life.com' + path
-        };
+        }; 
     }
 
     /* Fallback global si page inconnue */
