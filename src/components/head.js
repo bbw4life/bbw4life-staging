@@ -1052,7 +1052,7 @@ function injectPageSEO() {
     document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
 
     /* Helper : crée ou met à jour une meta */
-    function setMeta(selector, attr, value) {
+    function setMeta(selector, attr, value) { 
         let el = document.querySelector(selector);
         if (!el) {
             el = document.createElement('meta');
