@@ -1046,11 +1046,16 @@ function injectPageSEO() {
         };
     }
 
- 
-    /* Title */
-    document.title = seo.title;
-    window.__seoTitle = seo.title;
-    document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+
+
+    /* Meta de base */
+// AJOUTER CETTE LIGNE ICI
+window.__seoTitle = seo.title;
+document.title    = seo.title;
+
+setMeta('meta[name="description"]', 'content', seo.description);
+
+
 
     /* Helper : crée ou met à jour une meta */
     function setMeta(selector, attr, value) {
