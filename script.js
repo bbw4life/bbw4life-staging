@@ -4576,7 +4576,8 @@ if (window.innerWidth <= 768) {
     let visited = [];
     try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-    
+    // Filtre avec ou sans .html
+    visited = visited.filter(p => p.url.replace(/\.html$/, '') !== currentNoExt);
 
     if (currentPath !== '/' && currentPath !== '/index.html') {
       visited.unshift({ url: currentPath, title: currentTitle });
