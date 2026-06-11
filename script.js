@@ -27,140 +27,7 @@
   };
 })();
 
-function bbwShowPromoWarningPopup(code, discountPct) {
-  // Éviter le doublon
-  if (document.getElementById('bbw-promo-popup-overlay')) {
-    document.getElementById('bbw-promo-popup-overlay').classList.add('bbw-promo-popup--visible');
-    return;
-  }
- 
-  const overlay = document.createElement('div');
-  overlay.id = 'bbw-promo-popup-overlay';
- 
-  overlay.innerHTML = `
-    <div class="bbw-promo-popup-modal" role="dialog" aria-modal="true" aria-label="Promo code notice">
- 
-      <button class="bbw-promo-popup-close" id="bbwPromoCls" aria-label="Close">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
- 
-      <div class="bbw-promo-popup-icon">🎟️</div>
- 
-      <h2 class="bbw-promo-popup-title">
-        Cher <span>Client Privilégié</span>
-      </h2>
-      <p class="bbw-promo-popup-sub">Affiliate Reward — Code Exclusif</p>
- 
-      <div class="bbw-promo-popup-code-wrap">
-        <span class="bbw-promo-popup-code-val">${code}</span>
-        <span class="bbw-promo-popup-code-badge">-${discountPct}%</span>
-      </div>
- 
-      <div class="bbw-promo-popup-warning">
-        <p>
-          <strong>⚠️ NB — Utilisation Unique :</strong>
-          Ce code promo ne peut être appliqué qu'<strong>une seule fois</strong> lors de votre achat en checkout.
-        </p>
-        <p>
-          Si vous appliquez ce code et que vous ne finalisez pas votre commande, le code sera <strong>considéré comme utilisé</strong>.
-        </p>
-        <p>
-          Dans ce cas, veuillez contacter notre service client pour obtenir un nouveau code.
-        </p>
-      </div>
- 
-      <p class="bbw-promo-popup-contact">
-        Besoin d'aide ? Contactez-nous via
-        <a href="/page/contact.html">notre page contact</a>
-        ou sur
-        <a href="https://wa.me/18292677434" target="_blank" rel="noopener">WhatsApp</a>.
-      </p>
- 
-      <button class="bbw-promo-popup-cta" id="bbwPromoCtaCheckout">
-        <i class="fi fi-rr-shopping-cart"></i> &nbsp;Aller au Checkout maintenant
-      </button>
- 
-      <div class="bbw-promo-popup-divider">ou</div>
- 
-      <button class="bbw-promo-popup-checkout-link" id="bbwPromoCtaClose">
-        J'ai compris — je l'utiliserai plus tard
-      </button>
- 
-    </div>`;
- 
-  document.body.appendChild(overlay);
- 
-  // Animate in
-  requestAnimationFrame(function () {
-    requestAnimationFrame(function () {
-      overlay.classList.add('bbw-promo-popup--visible');
-    });
-  });
- 
-  function closePopup() {
-    overlay.classList.remove('bbw-promo-popup--visible');
-    setTimeout(function () {
-      if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-    }, 380);
-  }
- 
-  document.getElementById('bbwPromoCls').addEventListener('click', closePopup);
-  document.getElementById('bbwPromoCtaClose').addEventListener('click', closePopup);
- 
-  document.getElementById('bbwPromoCtaCheckout').addEventListener('click', function () {
-    // Stocker le code en localStorage pour que checkout.js le récupère
-    localStorage.setItem('bbw_aff_promo_code', code);
-    localStorage.setItem('bbw_aff_promo_discount', discountPct);
-    closePopup();
-    window.location.href = '/checkout/checkout.html';
-  });
- 
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closePopup();
-  });
- 
-  document.addEventListener('keydown', function onEsc(e) {
-    if (e.key === 'Escape') { closePopup(); document.removeEventListener('keydown', onEsc); }
-  });
-}
 
-
-window.bbwValidateAffPromoCode = async function (code) {
-  if (!code) return null;
-  try {
-    const res  = await fetch('/.netlify/functions/validate-promo-code', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ action: 'validate', code: code, consume: false })
-    });
-    const data = await res.json();
-    if (data.success && data.valid) {
-      return { valid: true, discountPct: data.discountPct };
-    }
-    return { valid: false, reason: data.reason || 'INVALID' };
-  } catch (e) {
-    console.warn('[PromoCode] Validation error:', e.message);
-    return null;
-  }
-};
- 
-window.bbwConsumeAffPromoCode = async function (code) {
-  if (!code) return;
-  try {
-    await fetch('/.netlify/functions/validate-promo-code', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ action: 'validate', code: code, consume: true })
-    });
-    // Clear localStorage after consumption
-    localStorage.removeItem('bbw_aff_promo_code');
-    localStorage.removeItem('bbw_aff_promo_discount');
-  } catch (e) {
-    console.warn('[PromoCode] Consumption error:', e.message);
-  }
-};
 
 document.addEventListener('DOMContentLoaded', () => {
   (function () {
@@ -8349,8 +8216,7 @@ function loadProfilePhoto() {
       if (promoReached && chosenOption !== 'withdraw') {
         rewardPromo.style.display = '';
 
-        const uniqueCode = promoPrefix + '-' + (aff.username || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
-        if (promoCodeVal) promoCodeVal.textContent = uniqueCode;
+        if (promoCodeVal) promoCodeVal.textContent = promoPrefix;
 
         const promoNote = rewardPromo.querySelector('.aff-promo-note');
         if (promoNote) {
@@ -8360,61 +8226,27 @@ function loadProfilePhoto() {
         // ── Bind copie → lock sur promo, cacher withdraw ──
         if (copyPromoBtn && !copyPromoBtn.dataset.boundChoice) {
           copyPromoBtn.dataset.boundChoice = '1';
-          copyPromoBtn.addEventListener('click', async function () {
-            const code = promoCodeVal ? promoCodeVal.textContent.trim() : '';
-            if (!code) return;
-        
-            // Copier dans le presse-papiers
-            try {
-              await navigator.clipboard.writeText(code);
-            } catch (e) {
-              const range = document.createRange();
-              if (promoCodeVal) {
-                range.selectNode(promoCodeVal);
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
+          copyPromoBtn.addEventListener('click', function() {
+            const code = promoCodeVal ? promoCodeVal.textContent : '';
+            navigator.clipboard.writeText(code).then(function() {
+              // Feedback visuel du bouton
+              const orig = copyPromoBtn.innerHTML;
+              copyPromoBtn.innerHTML = '<i class="fi fi-rr-check"></i> Copied!';
+              setTimeout(function() { copyPromoBtn.innerHTML = orig; }, 2000);
+
+              // Enregistrer le choix seulement si pas encore fait
+              if (!localStorage.getItem(storageKey)) {
+                localStorage.setItem(storageKey, 'promo');
+
+                // Masquer withdraw et divider
+                const withdrawWrap = document.getElementById('aff-withdraw-wrap');
+                if (withdrawWrap)  withdrawWrap.style.display  = 'none';
+                if (dividerOr)     dividerOr.style.display     = 'none';
+                if (exclusiveMsg)  exclusiveMsg.style.display  = 'none';
+
+                showToastAff('✅ Promo code chosen — PayPal withdrawal option hidden.', '#22a06b');
               }
-            }
-        
-            // Feedback bouton
-            const orig = copyPromoBtn.innerHTML;
-            copyPromoBtn.innerHTML = '<i class="fi fi-rr-check"></i> Copied!';
-            setTimeout(function () { copyPromoBtn.innerHTML = orig; }, 2000);
-        
-            // Enregistrer dans Google Sheets (une seule fois)
-            if (!localStorage.getItem('bbw_promo_registered_' + code)) {
-              try {
-                await fetch('/.netlify/functions/validate-promo-code', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    action:           'register',
-                    code:             code,
-                    username:         aff.username || '',
-                    discount_percent: cfg.promoDisc || 50
-                  })
-                });
-                localStorage.setItem('bbw_promo_registered_' + code, '1');
-              } catch (e) {
-                console.warn('[PromoCode] Registration failed:', e.message);
-              }
-            }
-        
-            // Afficher le popup premium single-use
-            bbwShowPromoWarningPopup(code, cfg.promoDisc || 50);
-        
-            // Enregistrer le choix seulement si pas encore fait
-            if (!localStorage.getItem(storageKey)) {
-              localStorage.setItem(storageKey, 'promo');
-        
-              // Masquer withdraw et divider
-              const withdrawWrap = document.getElementById('aff-withdraw-wrap');
-              if (withdrawWrap)  withdrawWrap.style.display  = 'none';
-              if (dividerOr)     dividerOr.style.display     = 'none';
-              if (exclusiveMsg)  exclusiveMsg.style.display  = 'none';
-        
-              showToastAff('✅ Promo code chosen — PayPal withdrawal option hidden.', '#22a06b');
-            }
+            });
           });
         }
 
