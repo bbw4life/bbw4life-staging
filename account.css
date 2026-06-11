@@ -2670,8 +2670,303 @@ a.stat-wishlist-link:visited {
   }
 }
 
-
-
 a.stat-wishlist-link.stat-item {
   cursor: pointer !important;
+}
+
+
+
+
+
+/* ================================================================
+   BBW4LIFE — PROMO CODE SINGLE-USE WARNING POPUP
+   Ajouter dans style.css — à la fin du fichier
+================================================================ */
+
+/* ── Overlay ── */
+#bbw-promo-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 999998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#bbw-promo-popup-overlay.bbw-promo-popup--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Modal ── */
+.bbw-promo-popup-modal {
+  position: relative;
+  background: linear-gradient(145deg, #1a0a12 0%, #2a0e1c 40%, #1c0f1e 100%);
+  border: 1px solid rgba(201, 150, 62, 0.35);
+  border-radius: 20px;
+  padding: 40px 36px 32px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow:
+    0 0 0 1px rgba(201, 150, 62, 0.12),
+    0 24px 80px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.38s cubic-bezier(0.34, 1.4, 0.64, 1);
+  overflow: hidden;
+}
+
+#bbw-promo-popup-overlay.bbw-promo-popup--visible .bbw-promo-popup-modal {
+  transform: translateY(0) scale(1);
+}
+
+/* Shimmer top bar */
+.bbw-promo-popup-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #c0385e, #c9963e, #c0385e);
+  background-size: 200% 100%;
+  animation: bbwPromoShimmer 2.5s linear infinite;
+}
+
+@keyframes bbwPromoShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Corner orbs */
+.bbw-promo-popup-modal::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(192, 56, 94, 0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ── Close button ── */
+.bbw-promo-popup-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.2s, color 0.2s;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+}
+
+.bbw-promo-popup-close:hover {
+  background: rgba(192, 56, 94, 0.25);
+  color: #fff;
+}
+
+/* ── Icon crown ── */
+.bbw-promo-popup-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  background: linear-gradient(135deg, rgba(192, 56, 94, 0.25), rgba(201, 150, 62, 0.20));
+  border: 1px solid rgba(201, 150, 62, 0.30);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 0 24px rgba(201, 150, 62, 0.18);
+}
+
+/* ── Title ── */
+.bbw-promo-popup-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.bbw-promo-popup-title span {
+  background: linear-gradient(90deg, #c0385e, #c9963e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Subtitle ── */
+.bbw-promo-popup-sub {
+  text-align: center;
+  font-size: 0.80rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 22px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Code display ── */
+.bbw-promo-popup-code-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(201, 150, 62, 0.40);
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin: 0 0 20px;
+}
+
+.bbw-promo-popup-code-val {
+  font-family: 'Courier New', monospace;
+  font-size: 1.10rem;
+  font-weight: 700;
+  color: #e4b722;
+  letter-spacing: 0.12em;
+}
+
+.bbw-promo-popup-code-badge {
+  font-size: 0.72rem;
+  background: linear-gradient(135deg, #c0385e, #7b3f6e);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* ── Warning box ── */
+.bbw-promo-popup-warning {
+  background: rgba(201, 150, 62, 0.08);
+  border-left: 3px solid #c9963e;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 0 0 18px;
+}
+
+.bbw-promo-popup-warning p {
+  font-size: 0.84rem;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 8px;
+  line-height: 1.55;
+}
+
+.bbw-promo-popup-warning p:last-child {
+  margin: 0;
+}
+
+.bbw-promo-popup-warning strong {
+  color: #e4b722;
+}
+
+/* ── Contact line ── */
+.bbw-promo-popup-contact {
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.40);
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+
+.bbw-promo-popup-contact a {
+  color: #c9963e;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 150, 62, 0.30);
+  transition: color 0.2s;
+}
+
+.bbw-promo-popup-contact a:hover {
+  color: #e4b722;
+}
+
+/* ── CTA button ── */
+.bbw-promo-popup-cta {
+  display: block;
+  width: 100%;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, #c0385e, #7b3f6e);
+  color: #fff;
+  font-size: 0.90rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 18px rgba(192, 56, 94, 0.38);
+}
+
+.bbw-promo-popup-cta:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* ── Divider ── */
+.bbw-promo-popup-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  color: rgba(255, 255, 255, 0.20);
+  font-size: 0.72rem;
+}
+
+.bbw-promo-popup-divider::before,
+.bbw-promo-popup-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.10);
+}
+
+/* ── Checkout link ── */
+.bbw-promo-popup-checkout-link {
+  display: block;
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.50);
+  cursor: pointer;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 0;
+}
+
+.bbw-promo-popup-checkout-link:hover {
+  color: #e4b722;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .bbw-promo-popup-modal {
+    padding: 32px 22px 26px;
+    border-radius: 16px;
+  }
+  .bbw-promo-popup-title {
+    font-size: 1.10rem;
+  }
 }

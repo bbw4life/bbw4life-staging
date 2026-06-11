@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let _promoFreeApplying = false;
     let upsellDiscountAmount = 0;
     let upsellDiscountApplied = false;
+    let affPromoCode     = localStorage.getItem('bbw_aff_promo_code')     || null;
+    let affPromoDiscount = parseFloat(localStorage.getItem('bbw_aff_promo_discount')) || 0;
+    let affPromoApplied  = false;
 
 
     // ====================== POPUP ======================
@@ -333,6 +336,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
         try {
+            if (affPromoApplied && affPromoCode) {
+                if (typeof window.bbwValidateAffPromoCode === 'function') {
+                    const check = await window.bbwValidateAffPromoCode(affPromoCode);
+                    if (!check || !check.valid) {
+                        showErrorPopup('⚠️ Ce code promo a déjà été utilisé ou est invalide. Contactez le service client.');
+                        affPromoApplied  = false;
+                        affPromoCode     = null;
+                        affPromoDiscount = 0;
+                        localStorage.removeItem('bbw_aff_promo_code');
+                        localStorage.removeItem('bbw_aff_promo_discount');
+                        payButton.disabled = false;
+                        payButton.textContent = "Pay Now";
+                        return;
+                    }
+                }
+                if (typeof window.bbwConsumeAffPromoCode === 'function') {
+                    await window.bbwConsumeAffPromoCode(affPromoCode);
+                }
+            }
             const shippingData = await getShippingData();
             
             shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
@@ -356,7 +378,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cart: discountedCart,
                         shipping: shippingData,
                         shipping_cost: effectiveShippingPay.toFixed(2),
-                        tax: taxes.toFixed(2)
+                        tax: taxes.toFixed(2),
+                        aff_promo_discount: (affPromoApplied && affPromoDiscount > 0) ? affPromoDiscount : 0
                     })
                 });
                 const data = await response.json();
@@ -372,7 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cart: discountedCart,
                         shipping: shippingData,
                         shipping_cost: effectiveShippingPay.toFixed(2),
-                        tax: taxes.toFixed(2)
+                        tax: taxes.toFixed(2),
+                        aff_promo_discount: (affPromoApplied && affPromoDiscount > 0) ? affPromoDiscount : 0
                     })
                 });
                 const data = await response.json();
@@ -721,7 +745,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
         const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
         const effectiveTax = (isFreeByThreshold || isFreeMethod) ? 0 : subtotal * TAX_RATE;
-        const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount;
+        let affPromoDiscountAmount = 0;
+        if (affPromoApplied && affPromoDiscount > 0) {
+            affPromoDiscountAmount = subtotal * (affPromoDiscount / 100);
+            const discountLine = document.getElementById('promo-line');
+            const discountEl   = document.getElementById('discount-amount');
+            if (discountLine) discountLine.style.display = 'block';
+            if (discountEl)   discountEl.textContent = `-$${(discountAmount + affPromoDiscountAmount).toFixed(2)} (-${affPromoDiscount}%)`;
+        }
+        const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount - affPromoDiscountAmount;
         document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
         document.getElementById('taxes').textContent = `$${effectiveTax.toFixed(2)}`;
         const taxLabel = document.getElementById('tax-rate-label');
@@ -730,14 +762,15 @@ document.addEventListener('DOMContentLoaded', () => {
             : (TAX_RATE * 100).toFixed(TAX_RATE * 100 % 1 === 0 ? 0 : 1);
         document.getElementById('shipping').textContent = effectiveShipping === 0 ? 'FREE' : `$${effectiveShipping.toFixed(2)}`;
         document.getElementById('total').textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
-        const promoLine = document.getElementById('promo-line');
-        const discountEl = document.getElementById('discount-amount');
-        if (discountAmount > 0) {
-            if (promoLine) promoLine.style.display = 'block';
-            if (discountEl) discountEl.textContent = `-$${discountAmount.toFixed(2)}`;
-        } else {
-            if (promoLine) promoLine.style.display = 'none';
-        }
+        const promoLine  = document.getElementById('promo-line');
+            const discountEl = document.getElementById('discount-amount');
+            const totalDiscount = discountAmount + affPromoDiscountAmount;
+            if (totalDiscount > 0) {
+                if (promoLine)  promoLine.style.display = 'block';
+                if (discountEl) discountEl.textContent  = `-$${totalDiscount.toFixed(2)}`;
+            } else {
+                if (promoLine) promoLine.style.display = 'none';
+            }
         // Mise à jour du preview dans le toggle collapsible
         const togglePreview = document.getElementById('toggle-total-preview');
         if (togglePreview) togglePreview.textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
@@ -1010,4 +1043,59 @@ function renderUpsellDiscountLine() {
             updateTotals();
         }
     });
+
+
+    // ── MOD 6a : Auto-apply affiliate promo code if stored ──
+if (affPromoCode) {
+    (async function autoApplyAffPromo() {
+        if (typeof window.bbwValidateAffPromoCode === 'function') {
+            const result = await window.bbwValidateAffPromoCode(affPromoCode);
+            if (!result || !result.valid) {
+                localStorage.removeItem('bbw_aff_promo_code');
+                localStorage.removeItem('bbw_aff_promo_discount');
+                affPromoCode     = null;
+                affPromoDiscount = 0;
+                const promoMsg = document.getElementById('promo-message');
+                if (promoMsg) {
+                    promoMsg.textContent = '❌ Ce code promo a déjà été utilisé ou est invalide.';
+                    promoMsg.style.color = '#e74c3c';
+                }
+                return;
+            }
+            affPromoDiscount = result.discountPct || affPromoDiscount;
+        }
+        affPromoApplied = true;
+        const promoInput = document.getElementById('promo-input');
+        if (promoInput) promoInput.value = affPromoCode;
+        const promoMsg = document.getElementById('promo-message');
+        if (promoMsg) {
+            promoMsg.textContent = `✅ Code affilié appliqué : -${affPromoDiscount}% (usage unique)`;
+            promoMsg.style.color = '#22a06b';
+        }
+        updateTotals();
+    })();
+}
+
+// ── MOD 6b : Si PayPal sélectionné → retirer le code affilié ──
+paymentOptions.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+        if (!affPromoApplied) return;
+        if (this.value === 'paypal') {
+            affPromoApplied  = false;
+            affPromoCode     = null;
+            affPromoDiscount = 0;
+            localStorage.removeItem('bbw_aff_promo_code');
+            localStorage.removeItem('bbw_aff_promo_discount');
+            const promoMsg = document.getElementById('promo-message');
+            if (promoMsg) {
+                promoMsg.textContent = '⚠️ Code promo retiré — incompatible avec PayPal.';
+                promoMsg.style.color = '#f59e0b';
+            }
+            const promoInput = document.getElementById('promo-input');
+            if (promoInput) promoInput.value = '';
+            updateTotals();
+        }
+    });
+});
+
 });
