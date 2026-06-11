@@ -1089,8 +1089,11 @@ function injectPageSEO() {
 }
 
 
-/* ─── Lancer tout ─── */
 injectGlobalHead().then(() => {
     injectPageSEO();
     injectBlogSchema();
+    /* Double-fire après 100ms au cas où head.html écrase le title */
+    setTimeout(function() {
+        injectPageSEO();
+    }, 100);
 });

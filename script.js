@@ -4613,7 +4613,7 @@ if (window.innerWidth <= 768) {
 
   function tryBuild() {
     const title = window.__seoTitle || document.title;
-    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+    if (title && title.trim() !== '' && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
       build(title);
       return true;
     }
@@ -12279,5 +12279,266 @@ function injectColFbt() {
   });
 
   observer.observe(document.body, { childList: true, subtree: true });
+
+})();
+
+/* ================================================================
+   BBW4LIFE — IMAGE LOADER SPINNER (texte en cercle)
+================================================================ */
+(function initImageLoader() {
+  'use strict';
+
+  function injectSvgDefs() {
+    if (document.getElementById('bbwLoaderSvgDefs')) return;
+    const ns  = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.id    = 'bbwLoaderSvgDefs';
+    svg.setAttribute('width',  '0');
+    svg.setAttribute('height', '0');
+    svg.style.cssText = 'position:absolute;overflow:hidden;width:0;height:0;';
+
+    const defs = document.createElementNS(ns, 'defs');
+    const grad = document.createElementNS(ns, 'linearGradient');
+    grad.id = 'bbwLoaderGrad';
+    grad.setAttribute('x1', '0%');
+    grad.setAttribute('y1', '0%');
+    grad.setAttribute('x2', '100%');
+    grad.setAttribute('y2', '0%');
+
+    const stop1 = document.createElementNS(ns, 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', '#e4b722');
+
+    const stop2 = document.createElementNS(ns, 'stop');
+    stop2.setAttribute('offset', '50%');
+    stop2.setAttribute('stop-color', '#ffffff');
+
+    const stop3 = document.createElementNS(ns, 'stop');
+    stop3.setAttribute('offset', '100%');
+    stop3.setAttribute('stop-color', '#c9963e');
+
+    grad.appendChild(stop1);
+    grad.appendChild(stop2);
+    grad.appendChild(stop3);
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    document.body.appendChild(svg);
+  }
+
+  function buildLoader(text) {
+    var safeText = text || 'BBW4LIFE • TRÈS BELLE •';
+    var repeated = (safeText + ' ').repeat(3);
+    var uid = 'bbwPath_' + Math.random().toString(36).slice(2, 8);
+
+    var loader = document.createElement('div');
+    loader.className = 'bbw-img-loader';
+
+    loader.innerHTML =
+      '<div class="bbw-img-loader__circle">' +
+        '<div class="bbw-img-loader__ring"></div>' +
+        '<div class="bbw-img-loader__ring bbw-img-loader__ring--outer"></div>' +
+        '<svg class="bbw-img-loader__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+          '<defs>' +
+            '<path id="' + uid + '" d="M 50,50 m -32,0 a 32,32 0 1,1 64,0 a 32,32 0 1,1 -64,0"/>' +
+          '</defs>' +
+          '<text>' +
+            '<textPath href="#' + uid + '" startOffset="0%">' + repeated + '</textPath>' +
+          '</text>' +
+        '</svg>' +
+        '<div class="bbw-img-loader__dot"></div>' +
+      '</div>';
+
+    return loader;
+  }
+
+  function watchImage(img, loaderEl) {
+    function hide() {
+      loaderEl.style.opacity    = '0';
+      loaderEl.style.visibility = 'hidden';
+      loaderEl.style.transition = 'opacity 0.35s ease';
+      setTimeout(function() {
+        if (loaderEl.parentNode) loaderEl.parentNode.removeChild(loaderEl);
+      }, 380);
+    }
+
+    function isLoaded() {
+      return img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
+    }
+
+    /* Déjà chargée */
+    if (isLoaded()) {
+      hide();
+      return;
+    }
+
+    /* src vide → observer src */
+    if (!img.src || img.src === window.location.href) {
+      var attrObs = new MutationObserver(function(muts, obs) {
+        if (img.src && img.src !== window.location.href) {
+          obs.disconnect();
+          if (isLoaded()) {
+            hide();
+          } else {
+            img.addEventListener('load',  hide, { once: true });
+            img.addEventListener('error', hide, { once: true });
+            startPoll();
+          }
+        }
+      });
+      attrObs.observe(img, { attributes: true, attributeFilter: ['src'] });
+      return;
+    }
+
+    img.addEventListener('load',  hide, { once: true });
+    img.addEventListener('error', hide, { once: true });
+    startPoll();
+
+    function startPoll() {
+      var count = 0;
+      var poll = setInterval(function() {
+        count++;
+        if (isLoaded()) {
+          clearInterval(poll);
+          hide();
+          return;
+        }
+        if (count >= 50) {
+          clearInterval(poll);
+          hide();
+        }
+      }, 100);
+    }
+  }
+
+  function injectOnWrap(wrap, text) {
+    if (!wrap) return;
+    if (wrap.querySelector('.bbw-img-loader')) return;
+
+    var pos = getComputedStyle(wrap).position;
+    if (pos === 'static') wrap.style.position = 'relative';
+
+    var loader = buildLoader(text);
+    wrap.appendChild(loader);
+
+    var img = wrap.querySelector('img');
+    if (img) {
+      watchImage(img, loader);
+    } else {
+      var mo = new MutationObserver(function(muts, obs) {
+        var found = wrap.querySelector('img');
+        if (found) {
+          obs.disconnect();
+          watchImage(found, loader);
+        }
+      });
+      mo.observe(wrap, { childList: true, subtree: true });
+    }
+  }
+
+  function injectOnImg(img, text) {
+    if (!img) return;
+    var wrap = img.parentElement;
+    if (!wrap) return;
+    injectOnWrap(wrap, text);
+  }
+
+  function runAll(text) {
+    document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.col-card__media').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.cs-media').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.col-rv-card__img').forEach(function(img) {
+      injectOnImg(img, text);
+    });
+    var fsFrame = document.querySelector('.fs-img-frame');
+    if (fsFrame) injectOnWrap(fsFrame, text);
+    document.querySelectorAll('.mini-media-slider').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll(
+      '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
+    ).forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.wishlist-item img').forEach(function(img) {
+      injectOnImg(img, text);
+    });
+    document.querySelectorAll('.highlight-product-card').forEach(function(w) {
+      injectOnWrap(w, text);
+    });
+    document.querySelectorAll('.product-card').forEach(function(card) {
+      var img = card.querySelector('img');
+      if (img) injectOnImg(img, text);
+    });
+    document.querySelectorAll('.col-fbt-card__img').forEach(function(img) {
+      injectOnImg(img, text);
+    });
+    document.querySelectorAll('.bd-product-item').forEach(function(item) {
+      var img = item.querySelector('img');
+      if (!img) return;
+      var wrap = img.parentElement;
+      if (!wrap) return;
+      if (wrap.querySelector('.bbw-img-loader')) return;
+      var pos = getComputedStyle(wrap).position;
+      if (pos === 'static') wrap.style.position = 'relative';
+      var loader = buildLoader(text);
+      wrap.appendChild(loader);
+      watchImage(img, loader);
+    });
+  }
+
+  function init() {
+    var allProducts = window.__allProducts || [];
+    var settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
+    var cfg         = settings.image_loader || {};
+
+    if ((cfg.show || 'yes').toLowerCase().trim() !== 'yes') return;
+
+    var text = cfg.text || 'BBW4LIFE • TRÈS BELLE •';
+
+    injectSvgDefs();
+    runAll(text);
+
+    var observer = new MutationObserver(function(mutations) {
+      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+      if (!relevant) return;
+      runAll(text);
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    document.addEventListener('cart:update',     function() { runAll(text); });
+    document.addEventListener('wishlist:change', function() { runAll(text); });
+  }
+
+  if (window.__allProducts && window.__allProducts.length) {
+    injectSvgDefs();
+    init();
+  } else {
+    var tries = 0;
+    var wait = setInterval(function() {
+      tries++;
+      if (window.__allProducts && window.__allProducts.length) {
+        clearInterval(wait);
+        init();
+      } else if (tries > 80) {
+        clearInterval(wait);
+      }
+    }, 100);
+  }
 
 })();
