@@ -4546,7 +4546,6 @@ if (window.innerWidth <= 768) {
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  // ── Séparateur
   const separatorMap = {
     'separator_arrow':        '">"',
     'separator_slash':        '"/"',
@@ -4567,8 +4566,9 @@ if (window.innerWidth <= 768) {
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
   function build(title) {
-    const currentPath  = window.location.pathname;
-    const currentTitle = title.split('|')[0].trim() || title;
+    const currentPath    = window.location.pathname;
+    const currentTitle   = title.split('|')[0].trim() || title;
+    const currentNoExt   = currentPath.replace(/\.html$/, '');
 
     const BC_KEY = 'bc_visited';
     const BC_MAX = 6;
@@ -4576,7 +4576,7 @@ if (window.innerWidth <= 768) {
     let visited = [];
     try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-    visited = visited.filter(p => p.url !== currentPath);
+    
 
     if (currentPath !== '/' && currentPath !== '/index.html') {
       visited.unshift({ url: currentPath, title: currentTitle });
@@ -4600,7 +4600,7 @@ if (window.innerWidth <= 768) {
       </li>`;
 
     visited.forEach(page => {
-      const isActive = page.url === currentPath;
+      const isActive = page.url.replace(/\.html$/, '') === currentNoExt;
       const li = document.createElement('li');
       li.className = 'bc-item' + (isActive ? ' bc-active' : '');
       li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
@@ -4610,19 +4610,31 @@ if (window.innerWidth <= 768) {
     nav.style.display = 'block';
   }
 
-  // ✅ Si head.js a déjà dispatché avant qu'on arrive ici
-  if (window.__seoTitle) {
-    build(window.__seoTitle);
-  } else {
-    // ✅ On attend l'event seo:ready
+  function tryBuild() {
+    const title = window.__seoTitle || document.title;
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+      build(title);
+      return true;
+    }
+    return false;
+  }
+
+  if (!tryBuild()) {
     document.addEventListener('seo:ready', function(e) {
       build(e.detail.title);
     }, { once: true });
 
-    // ✅ Fallback plus long pour laisser le temps à head.js
-    setTimeout(() => {
-      if (!window.__seoTitle) build(document.title);
-    }, 2000);
+    let attempts = 0;
+    const poll = setInterval(function() {
+      attempts++;
+      if (window.__seoTitle) {
+        clearInterval(poll);
+        build(window.__seoTitle);
+      } else if (attempts > 50) {
+        clearInterval(poll);
+        build(document.title);
+      }
+    }, 100);
   }
 
 })();
