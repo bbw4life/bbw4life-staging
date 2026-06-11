@@ -1051,7 +1051,10 @@ function injectPageSEO() {
     document.title = seo.title;
     window.__seoTitle = seo.title;
     document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
-
+    setTimeout(function() {
+        document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+    }, 300);
+    
     /* Helper : crée ou met à jour une meta */
     function setMeta(selector, attr, value) {
         let el = document.querySelector(selector);

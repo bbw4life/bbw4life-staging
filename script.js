@@ -4613,7 +4613,7 @@ if (window.innerWidth <= 768) {
 
   function tryBuild() {
     const title = window.__seoTitle || document.title;
-    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion for Curvy Women' && title !== 'BBW4LIFE — Beauty Has No Size') {
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
       build(title);
       return true;
     }
@@ -4625,19 +4625,17 @@ if (window.innerWidth <= 768) {
       build(e.detail.title);
     }, { once: true });
 
-   // APRÈS
-let attempts = 0;
-const poll = setInterval(function() {
-    attempts++;
-    const t = window.__seoTitle;
-    if (t && t !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion for Curvy Women' && t !== 'BBW4LIFE — Beauty Has No Size') {
+    let attempts = 0;
+    const poll = setInterval(function() {
+      attempts++;
+      if (window.__seoTitle) {
         clearInterval(poll);
-        build(t);
-    } else if (attempts > 120) {
+        build(window.__seoTitle);
+      } else if (attempts > 50) {
         clearInterval(poll);
         build(document.title);
-    }
-}, 150);
+      }
+    }, 100);
   }
 
 })();
