@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const popup = document.getElementById('error-popup');
         const popupText = document.getElementById('popup-message');
         const closeBtn = document.getElementById('popup-close');
-        if (!popup || !popupText || !closeBtn) { console.error("Popup HTML manquant !"); return; }
+        if (!popup || !popupText || !closeBtn) { console.error("Popup HTML missing!"); return; }
         popupText.textContent = message;
         popup.classList.add('show');
         closeBtn.onclick = () => popup.classList.remove('show');
@@ -63,48 +63,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
 
-
           // ══ INJECT DELAYS INTO SHIPPING MODAL ══
-            const modalDelayMap = {
-                'modal-delay-standard': settings.shipping_standard_delay || '—',
-                'modal-delay-dhl':      settings.shipping_dhl_delay      || '—',
-                'modal-delay-priority': settings.shipping_priority_delay || '—',
-                'modal-delay-economy':  settings.shipping_economy_delay  || '—',
-            };
-            Object.entries(modalDelayMap).forEach(([id, value]) => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = value;
-            });
-
-
+          const modalDelayMap = {
+              'modal-delay-standard': settings.shipping_standard_delay || '—',
+              'modal-delay-dhl':      settings.shipping_dhl_delay      || '—',
+              'modal-delay-priority': settings.shipping_priority_delay || '—',
+              'modal-delay-economy':  settings.shipping_economy_delay  || '—',
+          };
+          Object.entries(modalDelayMap).forEach(([id, value]) => {
+              const el = document.getElementById(id);
+              if (el) el.textContent = value;
+          });
 
           // ══ INJECT CONTACT EMAILS FROM SETTINGS ══
-      (function injectContactEmails() {
-        const emails = settings.contact_emails || {};
-        if (!Object.keys(emails).length) return;
+          (function injectContactEmails() {
+            const emails = settings.contact_emails || {};
+            if (!Object.keys(emails).length) return;
 
-        document.querySelectorAll('[data-email-key]').forEach(el => {
-          const key   = el.dataset.emailKey;
-          const email = emails[key];
-          if (!email) return;
+            document.querySelectorAll('[data-email-key]').forEach(el => {
+              const key   = el.dataset.emailKey;
+              const email = emails[key];
+              if (!email) return;
 
-          // Bouton CTA spécial — on met juste le href, on garde le texte du bouton
-          if (el.dataset.emailCta) {
-            el.href = 'mailto:' + email;
-            return;
-          }
+              if (el.dataset.emailCta) {
+                el.href = 'mailto:' + email;
+                return;
+              }
 
-          if (el.tagName === 'A') {
-            el.href        = 'mailto:' + email;
-            el.textContent = email;
-          } else {
-            el.textContent = email;
-          }
-        });
-      })();
-
+              if (el.tagName === 'A') {
+                el.href        = 'mailto:' + email;
+                el.textContent = email;
+              } else {
+                el.textContent = email;
+              }
+            });
+          })();
         }
-        applyPromoFreeItems(); 
+        applyPromoFreeItems();
         // ══ COLLAPSIBLE ORDER SUMMARY ══
         (function initCollapsibleOrderSummary() {
         const setting = (settings?.collapsible_order_summary || 'No').trim().toLowerCase();
@@ -114,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const toggle  = document.getElementById('order-summary-toggle');
         if (!section || !toggle) return;
 
-        section.classList.add('collapsible'); // fermé par défaut
+        section.classList.add('collapsible');
 
         toggle.addEventListener('click', () => {
             const isOpen = section.classList.toggle('open');
@@ -124,11 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCart();
       })
       .catch(error => {
-        console.error('Erreur de chargement de /products.data.json:', error);
+        console.error('Error loading /products.data.json:', error);
         renderCart();
       });
 
-    // ====================== PRÉ-REMPLISSAGE COMPTE ======================
+    // ====================== ACCOUNT PRE-FILL ======================
     if (localStorage.getItem('isLoggedIn') === 'true') {
         const setField = (id, value) => {
             const el = document.getElementById(id);
@@ -172,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             img.alt = item.title || 'Product';
             img.loading = "lazy";
             const info = document.createElement('div');
-            
+
             const freeBadge = item.isFreePromo
                 ? `<span class="free-badge">🎁 Free 0.00$</span>`
                 : '';
@@ -207,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ====================== VALIDATION FORM ======================
+    // ====================== FORM VALIDATION ======================
     function validateForm() {
         const requiredIds = ['first-name', 'last-name', 'email', 'address', 'postal-code', 'phone'];
         let valid = true;
@@ -230,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const trigger = document.getElementById('country-trigger');
             if (trigger) trigger.style.borderColor = '#ccc';
         }
-        
+
         if (!valid) {
             showErrorPopup('Please fill all required fields before finalizing the payment');
             return false;
@@ -251,15 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (allCountries.length > 0) {
             const match = allCountries.find(c => c.name.common === countryName);
             if (match?.cca2) return match.cca2;
-        }
-        try {
-            const res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fields=cca2&fullText=true`);
-            if (res.ok) {
-                const d = await res.json();
-                return d[0]?.cca2 || 'US';
-            }
-        } catch(e) {
-            console.warn('getCountryCode fallback failed:', e);
         }
         return 'US';
     }
@@ -301,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return workingCart;
     }
 
-    // ====================== PAIEMENT ======================
+    // ====================== PAYMENT ======================
     payButton.addEventListener('click', async () => {
         if (!validateForm()) return;
         if (!cart.length) {
@@ -312,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
         payButton.disabled = true;
         payButton.textContent = "Processing...";
 
-        // ── Marquer le code affilié comme utilisé côté serveur ──
         const pendingAffEmail = sessionStorage.getItem('pendingAffPromo');
         if (pendingAffEmail && appliedPromo && appliedPromo.isAffiliate) {
             try {
@@ -332,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof window.bbwValidateAffPromoCode === 'function') {
                     const check = await window.bbwValidateAffPromoCode(affPromoCode);
                     if (!check || !check.valid) {
-                        showErrorPopup('⚠️ Ce code promo a déjà été utilisé ou est invalide. Contactez le service client.');
+                        showErrorPopup('This promo code has already been used or is invalid. Please contact customer support.');
                         affPromoApplied  = false;
                         affPromoCode     = null;
                         affPromoDiscount = 0;
@@ -348,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             const shippingData = await getShippingData();
-            
+
             shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
 
             const discountedCart = getDiscountedCart();
@@ -422,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === shippingModal) shippingModal.style.display = 'none';
     });
 
-    // ====================== PAYS & VILLES (CUSTOM SEARCHABLE SELECT) ======================
+    // ====================== COUNTRY & CITY (CUSTOM SEARCHABLE SELECT) ======================
 
     let allCountries = [];
     let allCities = [];
@@ -492,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return { wrapper, trigger, display, dropdown, search, list, hidden, placeholder, closeDropdown };
     }
 
-    // ── Initialisation Country ──
+    // ── Country init ──
     const countryCtrl = buildCustomSelect({
         wrapperId:  'country-wrapper',
         triggerId:  'country-trigger',
@@ -504,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
         placeholder: 'Select your country'
     });
 
-    // ── Initialisation City ──
+    // ── City init ──
     const cityCtrl = buildCustomSelect({
         wrapperId:  'city-wrapper',
         triggerId:  'city-trigger',
@@ -564,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hidden  = document.getElementById('city');
         if (!list) return;
 
-        list.innerHTML = '<li class="loading">Loading cities…</li>';
+        list.innerHTML = '<li class="loading">Loading cities...</li>';
         if (display) { display.textContent = 'Select your city'; display.classList.add('placeholder'); }
         if (hidden)  hidden.value = '';
         selectedCityName = '';
@@ -587,45 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ====================== LOAD COUNTRIES — rotation circulaire ======================
-    // Sources dans l'ordre. Si toutes échouent → fallback /countries.json local
-    const COUNTRY_SOURCES = [
-        {
-            url: 'https://restcountries.com/v3.1/all?fields=name,idd,cca2',
-            normalize: (data) => data  // format natif, rien à faire
-        },
-        {
-            url: 'https://restcountries.com/v3.0/all?fields=name,idd,cca2',
-            normalize: (data) => data
-        },
-        {
-            url: 'https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries.json',
-            normalize: (data) => data.map(c => ({
-                name: { common: c.name },
-                cca2: c.iso2,
-                idd:  { root: '+' + (c.phone_code || '').replace(/[^0-9]/g,'').slice(0,1),
-                        suffixes: [(c.phone_code || '').replace(/[^0-9]/g,'').slice(1) || ''] }
-            }))
-        },
-        {
-            url: 'https://api.first.org/data/v1/countries',
-            normalize: (data) => Object.entries(data.data || {}).map(([cca2, c]) => ({
-                name: { common: c.country },
-                cca2: cca2,
-                idd:  { root: '', suffixes: [''] }
-            }))
-        }
-    ];
-    let currentSourceIndex = 0;
-
-    async function tryLoadFromSource(index) {
-        const src = COUNTRY_SOURCES[index];
-        const res = await fetch(src.url);
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const raw = await res.json();
-        return src.normalize(raw);
-    }
-
+    // ====================== LOAD COUNTRIES FROM LOCAL FILE ONLY ======================
     async function loadCountries() {
         if (countriesLoaded) return;
         countriesLoaded = true;
@@ -636,36 +583,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneCodeInput = document.getElementById('phone-code');
         if (!list) return;
 
-        list.innerHTML = '<li class="loading">Loading countries…</li>';
+        list.innerHTML = '<li class="loading">Loading countries...</li>';
 
         let data = null;
 
-        // Essayer chaque source dans l'ordre, en commençant par currentSourceIndex
-        for (let i = 0; i < COUNTRY_SOURCES.length; i++) {
-            const idx = (currentSourceIndex + i) % COUNTRY_SOURCES.length;
-            try {
-                data = await tryLoadFromSource(idx);
-                currentSourceIndex = idx; // mémoriser la source qui a marché
-                break;
-            } catch (err) {
-                console.warn('Country source ' + idx + ' failed:', err.message);
-                // passer à la suivante
-            }
-        }
-
-        // Si toutes les APIs ont échoué → fallback fichier local
-        if (!data) {
-            try {
-                const res = await fetch('/countries.json');
-                if (!res.ok) throw new Error('local fallback HTTP ' + res.status);
-                data = await res.json();
-                console.log('Countries loaded from local fallback /countries.json');
-            } catch (err) {
-                countriesLoaded = false; // permettre retry
-                console.error('All country sources failed:', err);
-                list.innerHTML = '<li class="no-results">Failed to load countries — please refresh</li>';
-                return;
-            }
+        try {
+            const res = await fetch('/countries.json');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            data = await res.json();
+        } catch (err) {
+            countriesLoaded = false;
+            console.error('Failed to load countries.json:', err);
+            list.innerHTML = '<li class="no-results">Failed to load countries — please refresh</li>';
+            return;
         }
 
         allCountries = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
@@ -710,7 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
             list.appendChild(li);
         });
 
-        // Pré-sélectionne si utilisateur connecté
         const savedCountry = localStorage.getItem('isLoggedIn') === 'true' ? localStorage.getItem('userCountry') || '' : '';
         if (savedCountry) {
             const match = allCountries.find(c => c.name.common === savedCountry);
@@ -812,15 +741,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('shipping').textContent = effectiveShipping === 0 ? 'FREE' : `$${effectiveShipping.toFixed(2)}`;
         document.getElementById('total').textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
         const promoLine  = document.getElementById('promo-line');
-            const discountEl = document.getElementById('discount-amount');
-            const totalDiscount = discountAmount + affPromoDiscountAmount;
-            if (totalDiscount > 0) {
-                if (promoLine)  promoLine.style.display = 'block';
-                if (discountEl) discountEl.textContent  = `-$${totalDiscount.toFixed(2)}`;
-            } else {
-                if (promoLine) promoLine.style.display = 'none';
-            }
-        // Mise à jour du preview dans le toggle collapsible
+        const discountEl = document.getElementById('discount-amount');
+        const totalDiscount = discountAmount + affPromoDiscountAmount;
+        if (totalDiscount > 0) {
+            if (promoLine)  promoLine.style.display = 'block';
+            if (discountEl) discountEl.textContent  = `-$${totalDiscount.toFixed(2)}`;
+        } else {
+            if (promoLine) promoLine.style.display = 'none';
+        }
         const togglePreview = document.getElementById('toggle-total-preview');
         if (togglePreview) togglePreview.textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
     }
@@ -896,69 +824,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ====================== UPSELL DISCOUNT AUTO-APPLY ======================
-function applyUpsellDiscount() {
-    upsellDiscountAmount  = 0;
-    upsellDiscountApplied = false;
+    function applyUpsellDiscount() {
+        upsellDiscountAmount  = 0;
+        upsellDiscountApplied = false;
 
-    const settings  = productsData.find(i => i.type === 'settings');
-    const upsellCfg = (settings?.product_upsell) || {};
-    const autoApply = (upsellCfg.auto_apply_to_checkout || 'no').toLowerCase() === 'yes';
+        const settings  = productsData.find(i => i.type === 'settings');
+        const upsellCfg = (settings?.product_upsell) || {};
+        const autoApply = (upsellCfg.auto_apply_to_checkout || 'no').toLowerCase() === 'yes';
 
-    if (!autoApply) { renderUpsellDiscountLine(); return; }
+        if (!autoApply) { renderUpsellDiscountLine(); return; }
 
-    const hasFreePromo = cart.some(i => i.isFreePromo);
-    const hasPromoCode = appliedPromo !== null && discountAmount > 0;
+        const hasFreePromo = cart.some(i => i.isFreePromo);
+        const hasPromoCode = appliedPromo !== null && discountAmount > 0;
 
-    if (hasFreePromo || hasPromoCode) { renderUpsellDiscountLine(); return; }
+        if (hasFreePromo || hasPromoCode) { renderUpsellDiscountLine(); return; }
 
-    cart.forEach(function(item) {
-        if (!item.fromUpsell || !item.upsellDiscount) return;
+        cart.forEach(function(item) {
+            if (!item.fromUpsell || !item.upsellDiscount) return;
 
-        var discountPct = parseFloat(item.upsellDiscount) || 0;
-        if (discountPct <= 0) return;
+            var discountPct = parseFloat(item.upsellDiscount) || 0;
+            if (discountPct <= 0) return;
 
-        var currentPrice  = parseFloat(item.price) || 0;
-        var originalPrice = currentPrice / (1 - discountPct / 100);
+            var currentPrice  = parseFloat(item.price) || 0;
+            var originalPrice = currentPrice / (1 - discountPct / 100);
 
-        var saving = (originalPrice - currentPrice) * item.quantity;
-        upsellDiscountAmount += saving;
-        upsellDiscountApplied = true;
-    });
+            var saving = (originalPrice - currentPrice) * item.quantity;
+            upsellDiscountAmount += saving;
+            upsellDiscountApplied = true;
+        });
 
-    renderUpsellDiscountLine();
-}
-// ====================== END UPSELL DISCOUNT ======================
+        renderUpsellDiscountLine();
+    }
+    // ====================== END UPSELL DISCOUNT ======================
 
-function renderUpsellDiscountLine() {
-    let line = document.getElementById('upsell-discount-line');
+    function renderUpsellDiscountLine() {
+        let line = document.getElementById('upsell-discount-line');
 
-    if (upsellDiscountAmount > 0 && upsellDiscountApplied) {
-        if (!line) {
-            const promoLine   = document.getElementById('promo-line');
-            const totalRow    = document.getElementById('total')?.closest('.total-row, .order-row, p, div');
+        if (upsellDiscountAmount > 0 && upsellDiscountApplied) {
+            if (!line) {
+                const promoLine   = document.getElementById('promo-line');
+                const totalRow    = document.getElementById('total')?.closest('.total-row, .order-row, p, div');
 
-            line = document.createElement('div');
-            line.id = 'upsell-discount-line';
-            line.style.cssText = 'display:flex;justify-content:space-between;color:#22a06b;font-size:0.88rem;margin:4px 0;font-weight:600;';
-            line.innerHTML = `
-                <span>🎁 Kit Discount Applied</span>
-                <span id="upsell-discount-amount">-$${upsellDiscountAmount.toFixed(2)}</span>`;
+                line = document.createElement('div');
+                line.id = 'upsell-discount-line';
+                line.style.cssText = 'display:flex;justify-content:space-between;color:#22a06b;font-size:0.88rem;margin:4px 0;font-weight:600;';
+                line.innerHTML = `
+                    <span>🎁 Kit Discount Applied</span>
+                    <span id="upsell-discount-amount">-$${upsellDiscountAmount.toFixed(2)}</span>`;
 
-            if (promoLine && promoLine.parentNode) {
-                promoLine.parentNode.insertBefore(line, promoLine.nextSibling);
-            } else if (totalRow && totalRow.parentNode) {
-                totalRow.parentNode.insertBefore(line, totalRow);
+                if (promoLine && promoLine.parentNode) {
+                    promoLine.parentNode.insertBefore(line, promoLine.nextSibling);
+                } else if (totalRow && totalRow.parentNode) {
+                    totalRow.parentNode.insertBefore(line, totalRow);
+                }
+            } else {
+                line.style.display = 'flex';
+                const amountEl = document.getElementById('upsell-discount-amount');
+                if (amountEl) amountEl.textContent = `-$${upsellDiscountAmount.toFixed(2)}`;
             }
         } else {
-            line.style.display = 'flex';
-            const amountEl = document.getElementById('upsell-discount-amount');
-            if (amountEl) amountEl.textContent = `-$${upsellDiscountAmount.toFixed(2)}`;
+            if (line) line.style.display = 'none';
         }
-    } else {
-        if (line) line.style.display = 'none';
     }
-}
-// ====================== END UPSELL DISCOUNT ======================
+    // ====================== END UPSELL DISCOUNT ======================
 
     document.getElementById('copy-suggested')?.addEventListener('click', () => {
         const code = document.getElementById('suggested-code').textContent;
@@ -979,13 +907,11 @@ function renderUpsellDiscountLine() {
         const hasFreePromo = cart.some(item => item.isFreePromo);
         const hasUpsell = cart.some(i => i.fromUpsell);
 
-        // ── Blocages communs ──
         if (hasBundle) { promoMessage.textContent = "Promo codes cannot be used with bundles."; promoMessage.style.color = 'red'; return; }
         if (hasUpsell) { promoMessage.textContent = "Promo codes cannot be combined with Kit discounts."; promoMessage.style.color = 'red'; return; }
         if (hasFreePromo) { promoMessage.textContent = "Promo codes cannot be used with free promotional items."; promoMessage.style.color = 'red'; return; }
         if (!input) { promoMessage.textContent = "Please enter a code."; promoMessage.style.color = 'red'; return; }
 
-        // ── Vérifier si c'est un code promo affilié ──
         const affPrefix = (affCfg.promo_code_prefix || '').toUpperCase();
         const affDiscountPct = parseFloat(affCfg.promo_code_discount_percent) || 0;
         const affUnlockPct = parseFloat(affCfg.promo_code_unlock_percent) || 0;
@@ -1062,7 +988,6 @@ function renderUpsellDiscountLine() {
             }
         }
 
-        // ── Codes promo standards ──
         const promo = promos.find(p => p.code.toUpperCase() === input);
         if (promo && promo.items === totalQuantity) {
             appliedPromo = promo;
@@ -1079,58 +1004,57 @@ function renderUpsellDiscountLine() {
         }
     });
 
-
-    // ── MOD 6a : Auto-apply affiliate promo code if stored ──
-if (affPromoCode) {
-    (async function autoApplyAffPromo() {
-        if (typeof window.bbwValidateAffPromoCode === 'function') {
-            const result = await window.bbwValidateAffPromoCode(affPromoCode);
-            if (!result || !result.valid) {
-                localStorage.removeItem('bbw_aff_promo_code');
-                localStorage.removeItem('bbw_aff_promo_discount');
-                affPromoCode     = null;
-                affPromoDiscount = 0;
-                const promoMsg = document.getElementById('promo-message');
-                if (promoMsg) {
-                    promoMsg.textContent = '❌ Ce code promo a déjà été utilisé ou est invalide.';
-                    promoMsg.style.color = '#e74c3c';
+    // ── Auto-apply affiliate promo code if stored ──
+    if (affPromoCode) {
+        (async function autoApplyAffPromo() {
+            if (typeof window.bbwValidateAffPromoCode === 'function') {
+                const result = await window.bbwValidateAffPromoCode(affPromoCode);
+                if (!result || !result.valid) {
+                    localStorage.removeItem('bbw_aff_promo_code');
+                    localStorage.removeItem('bbw_aff_promo_discount');
+                    affPromoCode     = null;
+                    affPromoDiscount = 0;
+                    const promoMsg = document.getElementById('promo-message');
+                    if (promoMsg) {
+                        promoMsg.textContent = 'This promo code has already been used or is invalid.';
+                        promoMsg.style.color = '#e74c3c';
+                    }
+                    return;
                 }
-                return;
+                affPromoDiscount = result.discountPct || affPromoDiscount;
             }
-            affPromoDiscount = result.discountPct || affPromoDiscount;
-        }
-        affPromoApplied = true;
-        const promoInput = document.getElementById('promo-input');
-        if (promoInput) promoInput.value = affPromoCode;
-        const promoMsg = document.getElementById('promo-message');
-        if (promoMsg) {
-            promoMsg.textContent = `✅ Code affilié appliqué : -${affPromoDiscount}% (usage unique)`;
-            promoMsg.style.color = '#22a06b';
-        }
-        updateTotals();
-    })();
-}
-
-// ── MOD 6b : Si PayPal sélectionné → retirer le code affilié ──
-paymentOptions.forEach(function (radio) {
-    radio.addEventListener('change', function () {
-        if (!affPromoApplied) return;
-        if (this.value === 'paypal') {
-            affPromoApplied  = false;
-            affPromoCode     = null;
-            affPromoDiscount = 0;
-            localStorage.removeItem('bbw_aff_promo_code');
-            localStorage.removeItem('bbw_aff_promo_discount');
+            affPromoApplied = true;
+            const promoInput = document.getElementById('promo-input');
+            if (promoInput) promoInput.value = affPromoCode;
             const promoMsg = document.getElementById('promo-message');
             if (promoMsg) {
-                promoMsg.textContent = '⚠️ Code promo retiré — incompatible avec PayPal.';
-                promoMsg.style.color = '#f59e0b';
+                promoMsg.textContent = `Affiliate code applied: -${affPromoDiscount}% (single use)`;
+                promoMsg.style.color = '#22a06b';
             }
-            const promoInput = document.getElementById('promo-input');
-            if (promoInput) promoInput.value = '';
             updateTotals();
-        }
+        })();
+    }
+
+    // ── Remove affiliate code if PayPal is selected ──
+    paymentOptions.forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            if (!affPromoApplied) return;
+            if (this.value === 'paypal') {
+                affPromoApplied  = false;
+                affPromoCode     = null;
+                affPromoDiscount = 0;
+                localStorage.removeItem('bbw_aff_promo_code');
+                localStorage.removeItem('bbw_aff_promo_discount');
+                const promoMsg = document.getElementById('promo-message');
+                if (promoMsg) {
+                    promoMsg.textContent = 'Promo code removed — not compatible with PayPal.';
+                    promoMsg.style.color = '#f59e0b';
+                }
+                const promoInput = document.getElementById('promo-input');
+                if (promoInput) promoInput.value = '';
+                updateTotals();
+            }
+        });
     });
-});
 
 });
