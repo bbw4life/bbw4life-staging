@@ -1027,7 +1027,7 @@ function injectPageSEO() {
     let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml] || SEO_MAP[pathWithoutHtml];
 
    
-    if (!seo && /\/products\/product\d+\.html/.test(path)) {
+    if (!seo && /\/products\/product\d+\.html/.test(path)) { 
         seo = {
             title: 'Product | BBW4LIFE — Plus Size Fashion',
             description: 'Discover this stunning plus size piece at BBW4LIFE. Bold, beautiful and made for your curves. Sizes XL to 6XL. Free shipping. 30-day returns.',
