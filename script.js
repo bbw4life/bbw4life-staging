@@ -4612,13 +4612,13 @@ if (window.innerWidth <= 768) {
   }
 
   function tryBuild() {
-  const title = window.__seoTitle || document.title;
-  if (title && title.trim().length > 0) {
-    build(title);
-    return true;
+    const title = window.__seoTitle || document.title;
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+      build(title);
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
   if (!tryBuild()) {
     document.addEventListener('seo:ready', function(e) {
@@ -4638,30 +4638,6 @@ if (window.innerWidth <= 768) {
     }, 100);
   }
 
-})();
-
-// ══ BREADCRUMB URL NORMALIZER PATCH ══
-(function patchBreadcrumbUrlNormalize() {
-  // Normalise toutes les URLs stockées en leur retirant .html pour la comparaison
-  const BC_KEY = 'bc_visited';
-  try {
-    let visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]');
-    // Rien à faire si vide
-    if (!visited.length) return;
-    // Ré-injecte le titre manquant depuis __seoTitle si disponible
-    const currentPath    = window.location.pathname;
-    const currentNoExt   = currentPath.replace(/\.html$/, '');
-    const seoTitle       = window.__seoTitle || document.title;
-    // Met à jour l'entrée courante si le titre est générique ou vide
-    visited = visited.map(p => {
-      const pNoExt = p.url.replace(/\.html$/, '');
-      if (pNoExt === currentNoExt && (!p.title || p.title === 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion')) {
-        return { ...p, title: seoTitle.split('|')[0].trim() };
-      }
-      return p;
-    });
-    localStorage.setItem(BC_KEY, JSON.stringify(visited));
-  } catch(e) {}
 })();
 
 
