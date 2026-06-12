@@ -2351,6 +2351,7 @@ document.addEventListener('click', function (e) {
             email:      email,
             firstName:  firstName,
             lastName:   lastName,
+            birthday:   birthday,
             newsletter: 'Yes'
           })
         });
@@ -2358,24 +2359,6 @@ document.addEventListener('click', function (e) {
 
         if (!data.success) {
           throw new Error(data.error || 'Subscription failed. Please try again.');
-        }
-
-        /* ── Optional: save birthday via signup-style call if fields present ── */
-        if (birthday && firstName && lastName) {
-          fetch('/.netlify/functions/save-account', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              action:     'newsletter-subscribe-full',
-              email:      email,
-              firstName:  firstName,
-              lastName:   lastName,
-              birthday:   birthday,
-              newsletter: 'Yes'
-            })
-          }).catch(function () {
-            /* Silently ignore — birthday saving is optional */
-          });
         }
 
         /* ── Show success ── */
