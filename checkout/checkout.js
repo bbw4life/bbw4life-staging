@@ -313,25 +313,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
         try {
-            if (affPromoApplied && affPromoCode) {
-                if (typeof window.bbwValidateAffPromoCode === 'function') {
-                    const check = await window.bbwValidateAffPromoCode(affPromoCode);
-                    if (!check || !check.valid) {
-                        showErrorPopup('This promo code has already been used or is invalid. Please contact customer support.');
-                        affPromoApplied  = false;
-                        affPromoCode     = null;
-                        affPromoDiscount = 0;
-                        localStorage.removeItem('bbw_aff_promo_code');
-                        localStorage.removeItem('bbw_aff_promo_discount');
-                        payButton.disabled = false;
-                        payButton.textContent = "Pay Now";
-                        return;
-                    }
-                }
-                if (typeof window.bbwConsumeAffPromoCode === 'function') {
-                    await window.bbwConsumeAffPromoCode(affPromoCode);
-                }
-            }
             const shippingData = await getShippingData();
 
             shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
@@ -960,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    
+
         }
 
         const promo = promos.find(p => p.code.toUpperCase() === input);
@@ -978,37 +959,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTotals();
         }
     });
-
-    // ── Auto-apply affiliate promo code if stored ──
-    if (affPromoCode) {
-        (async function autoApplyAffPromo() {
-            if (typeof window.bbwValidateAffPromoCode === 'function') {
-                const result = await window.bbwValidateAffPromoCode(affPromoCode);
-                if (!result || !result.valid) {
-                    localStorage.removeItem('bbw_aff_promo_code');
-                    localStorage.removeItem('bbw_aff_promo_discount');
-                    affPromoCode     = null;
-                    affPromoDiscount = 0;
-                    const promoMsg = document.getElementById('promo-message');
-                    if (promoMsg) {
-                        promoMsg.textContent = 'This promo code has already been used or is invalid.';
-                        promoMsg.style.color = '#e74c3c';
-                    }
-                    return;
-                }
-                affPromoDiscount = result.discountPct || affPromoDiscount;
-            }
-            affPromoApplied = true;
-            const promoInput = document.getElementById('promo-input');
-            if (promoInput) promoInput.value = affPromoCode;
-            const promoMsg = document.getElementById('promo-message');
-            if (promoMsg) {
-                promoMsg.textContent = `Affiliate code applied: -${affPromoDiscount}% (single use)`;
-                promoMsg.style.color = '#22a06b';
-            }
-            updateTotals();
-        })();
-    }
 
     // ── Remove affiliate code if PayPal is selected ──
     paymentOptions.forEach(function (radio) {

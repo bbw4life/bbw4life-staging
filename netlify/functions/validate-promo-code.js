@@ -5,7 +5,6 @@
 
 const { google } = require('googleapis');
 
-// ── Google Sheets auth ──────────────────────────────────────────────
 async function getSheets() {
   const auth = new google.auth.GoogleAuth({
     credentials: {
@@ -17,7 +16,6 @@ async function getSheets() {
   return google.sheets({ version: 'v4', auth });
 }
 
-// ── Find or create the "PromoCodes" sheet ──────────────────────────
 async function getOrCreatePromoSheet(sheets, spreadsheetId) {
   const meta = await sheets.spreadsheets.get({ spreadsheetId });
   const existing = meta.data.sheets.find(
@@ -35,7 +33,6 @@ async function getOrCreatePromoSheet(sheets, spreadsheetId) {
         }]
       }
     });
-    // Write headers
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: 'PromoCodes!A1:F1',
@@ -47,7 +44,6 @@ async function getOrCreatePromoSheet(sheets, spreadsheetId) {
   }
 }
 
-// ── Find a row by code ──────────────────────────────────────────────
 async function findCodeRow(sheets, spreadsheetId, code) {
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId,
@@ -56,19 +52,17 @@ async function findCodeRow(sheets, spreadsheetId, code) {
   const rows = res.data.values || [];
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] && rows[i][0].trim().toUpperCase() === code.trim().toUpperCase()) {
-      return { rowIndex: i + 1, row: rows[i] }; // 1-based for Sheets
+      return { rowIndex: i + 1, row: rows[i] };
     }
   }
   return null;
 }
 
-// ── Register a new promo code ───────────────────────────────────────
 async function registerCode(sheets, spreadsheetId, code, username, discountPct) {
   await getOrCreatePromoSheet(sheets, spreadsheetId);
 
-  // Check if already exists
   const existing = await findCodeRow(sheets, spreadsheetId, code);
-  if (existing) return; // already registered, skip
+  if (existing) return;
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
@@ -88,8 +82,8 @@ async function registerCode(sheets, spreadsheetId, code, username, discountPct) 
   });
 }
 
-// ── Validate & optionally consume a code ───────────────────────────
-async function validateCode(sheets, spreadsheetId, code, consume) {
+// ── Marquer used immédiatement dès le Apply ──
+async function validateCode(sheets, spreadsheetId, code) {
   await getOrCreatePromoSheet(sheets, spreadsheetId);
 
   const found = await findCodeRow(sheets, spreadsheetId, code);
@@ -110,22 +104,20 @@ async function validateCode(sheets, spreadsheetId, code, consume) {
     return { valid: false, reason: 'CODE_INACTIVE', discountPct, username };
   }
 
-  // If we're consuming (at payment time), mark as used immediately
-  if (consume) {
-    await sheets.spreadsheets.values.update({
-      spreadsheetId,
-      range: `PromoCodes!D${rowIndex}:F${rowIndex}`,
-      valueInputOption: 'RAW',
-      resource: {
-        values: [['used', row[4] || '', new Date().toISOString()]]
-      }
-    });
-  }
+  
+  // Marquer used immédiatement dès la validation
+await sheets.spreadsheets.values.update({
+    spreadsheetId,
+    range: `PromoCodes!D${rowIndex}:F${rowIndex}`,
+    valueInputOption: 'RAW',
+    resource: {
+      values: [['used', row[4] || '', new Date().toLocaleString('fr-FR', { timeZone: 'America/New_York' })]]
+    }
+});
 
   return { valid: true, discountPct, username };
 }
 
-// ── Main handler ───────────────────────────────────────────────────
 exports.handler = async (event) => {
   const headers = { 'Content-Type': 'application/json' };
 
@@ -134,11 +126,10 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'No body' }) };
     }
 
-    const { action, code, username, discount_percent, consume } = JSON.parse(event.body);
+    const { action, code, username, discount_percent } = JSON.parse(event.body);
     const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ACCOUNTS;
     const sheets = await getSheets();
 
-    // ── ACTION: register ──────────────────────────────────────────
     if (action === 'register') {
       if (!code || !username) {
         return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'Missing code or username' }) };
@@ -147,12 +138,11 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
     }
 
-    // ── ACTION: validate ──────────────────────────────────────────
     if (action === 'validate') {
       if (!code) {
         return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'Missing code' }) };
       }
-      const result = await validateCode(sheets, spreadsheetId, code, consume === true);
+      const result = await validateCode(sheets, spreadsheetId, code);
       return { statusCode: 200, headers, body: JSON.stringify({ success: true, ...result }) };
     }
 
