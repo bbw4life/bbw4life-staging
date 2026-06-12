@@ -135,7 +135,7 @@ exports.handler = async (event) => {
     }
 
     const { action, code, username, discount_percent, consume } = JSON.parse(event.body);
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
+    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ACCOUNTS;
     const sheets = await getSheets();
 
     // ── ACTION: register ──────────────────────────────────────────
