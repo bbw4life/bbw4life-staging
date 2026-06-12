@@ -1002,6 +1002,33 @@ document.addEventListener('DOMContentLoaded', () => {
             promoMessage.style.color = 'red';
             updateTotals();
         }
+
+        // ── Tentative validation via validate-promo-code (codes affiliés uniques) ──
+            if (typeof window.bbwValidateAffPromoCode === 'function') {
+                promoMessage.textContent = "Checking code...";
+                promoMessage.style.color = '#888';
+                try {
+                    const result = await window.bbwValidateAffPromoCode(input);
+                    if (result && result.valid) {
+                        appliedPromo = { code: input, percent: result.discountPct, isAffiliate: true };
+                        discountAmount = getSubtotal() * (result.discountPct / 100);
+                        promoMessage.textContent = `Affiliate code applied: ${result.discountPct}% off!`;
+                        promoMessage.style.color = 'green';
+                        sessionStorage.setItem('pendingAffPromo', input);
+                        updateTotals();
+                    } else {
+                        appliedPromo = null;
+                        discountAmount = 0;
+                        promoMessage.textContent = "Invalid or inapplicable promo code.";
+                        promoMessage.style.color = 'red';
+                        updateTotals();
+                    }
+                } catch(err) {
+                    promoMessage.textContent = "Error verifying code. Please try again.";
+                    promoMessage.style.color = 'red';
+                }
+                return;
+            }
     });
 
     // ── Auto-apply affiliate promo code if stored ──

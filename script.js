@@ -29,99 +29,96 @@
 
 
 function bbwShowPromoWarningPopup(code, discountPct) {
-  // Éviter le doublon
   if (document.getElementById('bbw-promo-popup-overlay')) {
     document.getElementById('bbw-promo-popup-overlay').classList.add('bbw-promo-popup--visible');
     return;
   }
- 
+
   const overlay = document.createElement('div');
   overlay.id = 'bbw-promo-popup-overlay';
- 
+
   overlay.innerHTML = `
     <div class="bbw-promo-popup-modal" role="dialog" aria-modal="true" aria-label="Promo code notice">
- 
+
       <button class="bbw-promo-popup-close" id="bbwPromoCls" aria-label="Close">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
       </button>
- 
+
       <div class="bbw-promo-popup-icon">🎟️</div>
- 
+
       <h2 class="bbw-promo-popup-title">
-        Cher <span>Client Privilégié</span>
+        Dear <span>Valued Customer</span>
       </h2>
-      <p class="bbw-promo-popup-sub">Affiliate Reward — Code Exclusif</p>
- 
+      <p class="bbw-promo-popup-sub">Affiliate Reward — Exclusive Code</p>
+
       <div class="bbw-promo-popup-code-wrap">
         <span class="bbw-promo-popup-code-val">${code}</span>
         <span class="bbw-promo-popup-code-badge">-${discountPct}%</span>
       </div>
- 
+
       <div class="bbw-promo-popup-warning">
         <p>
-          <strong>⚠️ NB — Utilisation Unique :</strong>
-          Ce code promo ne peut être appliqué qu'<strong>une seule fois</strong> lors de votre achat en checkout.
+          <strong>⚠️ Note — Single Use Only:</strong>
+          This promo code can only be applied <strong>once</strong> during checkout.
         </p>
         <p>
-          Si vous appliquez ce code et que vous ne finalisez pas votre commande, le code sera <strong>considéré comme utilisé</strong>.
+          If you apply this code and do not complete your order, the code will be <strong>marked as used</strong>.
         </p>
         <p>
-          Dans ce cas, veuillez contacter notre service client pour obtenir un nouveau code.
+          In that case, please contact our customer support to receive a new code.
         </p>
       </div>
- 
+
       <p class="bbw-promo-popup-contact">
-        Besoin d'aide ? Contactez-nous via
-        <a href="/page/contact.html">notre page contact</a>
-        ou sur
+        Need help? Contact us via
+        <a href="/page/contact.html">our contact page</a>
+        or on
         <a href="https://wa.me/18292677434" target="_blank" rel="noopener">WhatsApp</a>.
       </p>
- 
+
       <button class="bbw-promo-popup-cta" id="bbwPromoCtaCheckout">
-        <i class="fi fi-rr-shopping-cart"></i> &nbsp;Aller au Checkout maintenant
+        <i class="fi fi-rr-shopping-cart"></i> &nbsp;Go to Checkout now
       </button>
- 
-      <div class="bbw-promo-popup-divider">ou</div>
- 
+
+      <div class="bbw-promo-popup-divider">or</div>
+
       <button class="bbw-promo-popup-checkout-link" id="bbwPromoCtaClose">
-        J'ai compris — je l'utiliserai plus tard
+        Got it — I'll use it later
       </button>
- 
+
     </div>`;
- 
+
   document.body.appendChild(overlay);
- 
-  // Animate in
+
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
       overlay.classList.add('bbw-promo-popup--visible');
     });
   });
- 
+
   function closePopup() {
     overlay.classList.remove('bbw-promo-popup--visible');
     setTimeout(function () {
       if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
     }, 380);
   }
- 
+
   document.getElementById('bbwPromoCls').addEventListener('click', closePopup);
   document.getElementById('bbwPromoCtaClose').addEventListener('click', closePopup);
- 
+
   document.getElementById('bbwPromoCtaCheckout').addEventListener('click', function () {
-    // Stocker le code en localStorage pour que checkout.js le récupère
     localStorage.setItem('bbw_aff_promo_code', code);
     localStorage.setItem('bbw_aff_promo_discount', discountPct);
     closePopup();
     window.location.href = '/checkout/checkout.html';
   });
- 
+
   overlay.addEventListener('click', function (e) {
     if (e.target === overlay) closePopup();
   });
- 
+
   document.addEventListener('keydown', function onEsc(e) {
     if (e.key === 'Escape') { closePopup(); document.removeEventListener('keydown', onEsc); }
   });
