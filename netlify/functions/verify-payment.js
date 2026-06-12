@@ -37,7 +37,10 @@ exports.handler = async (event) => {
       const storedSizes       = JSON.parse(session.metadata.sizes          || "[]");
       const storedImgVariant  = JSON.parse(session.metadata.images_variant || "[]");
       cart = lineItems.data
-        .filter(li => li.description !== 'Shipping' && li.description !== 'Taxes')
+        .filter(li => {
+          const name = (li.description || '').toLowerCase();
+          return name !== 'shipping' && name !== 'taxes' && li.description !== null;
+        })
         .map((li, i) => {
           const eproloItem = storedEprolo[i] || {};
           return {
@@ -82,7 +85,7 @@ exports.handler = async (event) => {
           title: item.name,
           price: parseFloat(item.unit_amount.value),
           quantity: parseInt(item.quantity),
-          variantsid: item.sku || storedVariants[0] || null,
+          variantsid: item.sku || storedVariants[i] || null,
           image: descParts[1] || item.description || '',
           color: descParts[0] && descParts[0] !== 'N/A' ? descParts[0] : ''
         };
@@ -102,13 +105,12 @@ exports.handler = async (event) => {
       let countryCode = refParts[3] || ship.address?.country_code || "US";
       let countryName = "United States";
       try {
-        const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}?fields=name`);
-        if (countryRes.ok) {
-          const data = await countryRes.json();
-          countryName = data.name.common || countryName;
-        }
+        const countriesRes = await fetch(`${BASE_URL}/countries.json`);
+        const countriesData = await countriesRes.json();
+        const found = countriesData.find(c => c.cca2 === countryCode);
+        if (found) countryName = found.name.common;
       } catch (err) {
-        console.log("[PAYPAL] Country name fetch failed, using fallback");
+        console.log("[PAYPAL] Country lookup failed, using fallback");
       }
 
       let email = refParts[2] || payer.email_address || '';

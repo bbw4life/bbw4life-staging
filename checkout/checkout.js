@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0);
     }
 
-        function updateTotals() {
+    function updateTotals() {
         const subtotal = getSubtotal();
         const selectedMethod = document.querySelector('.shipping-option.selected')?.dataset.method || '';
         const freeShipThresh = (() => {
@@ -704,7 +704,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
         const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
         const effectiveTax = (isFreeByThreshold || isFreeMethod) ? 0 : subtotal * TAX_RATE;
-        const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount;
+        let affPromoDiscountAmount = 0;
+        if (affPromoApplied && affPromoDiscount > 0) {
+            affPromoDiscountAmount = subtotal * (affPromoDiscount / 100);
+            const discountLine = document.getElementById('promo-line');
+            const discountEl   = document.getElementById('discount-amount');
+            if (discountLine) discountLine.style.display = 'block';
+            if (discountEl)   discountEl.textContent = `-$${(discountAmount + affPromoDiscountAmount).toFixed(2)} (-${affPromoDiscount}%)`;
+        }
+        const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount - affPromoDiscountAmount;
         document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
         document.getElementById('taxes').textContent = `$${effectiveTax.toFixed(2)}`;
         const taxLabel = document.getElementById('tax-rate-label');
@@ -713,11 +721,12 @@ document.addEventListener('DOMContentLoaded', () => {
             : (TAX_RATE * 100).toFixed(TAX_RATE * 100 % 1 === 0 ? 0 : 1);
         document.getElementById('shipping').textContent = effectiveShipping === 0 ? 'FREE' : `$${effectiveShipping.toFixed(2)}`;
         document.getElementById('total').textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
-        const promoLine = document.getElementById('promo-line');
+        const promoLine  = document.getElementById('promo-line');
         const discountEl = document.getElementById('discount-amount');
-        if (discountAmount > 0) {
-            if (promoLine) promoLine.style.display = 'block';
-            if (discountEl) discountEl.textContent = `-$${discountAmount.toFixed(2)}`;
+        const totalDiscount = discountAmount + affPromoDiscountAmount;
+        if (totalDiscount > 0) {
+            if (promoLine)  promoLine.style.display = 'block';
+            if (discountEl) discountEl.textContent  = `-$${totalDiscount.toFixed(2)}`;
         } else {
             if (promoLine) promoLine.style.display = 'none';
         }

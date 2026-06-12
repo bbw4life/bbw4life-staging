@@ -135,25 +135,19 @@ exports.handler = async (event) => {
     }
     if (shipping.phone && shipping.countryCode) {
       try {
-        const match = shipping.countryCode;
-        // Lire depuis countries.json local
         const countriesRes = await fetch(`${process.env.BASE_URL}/countries.json`);
         const countriesData = await countriesRes.json();
-        const countryEntry = countriesData.find(c => c.cca2 === match);
-        const suffixes = countryEntry?.idd?.suffixes || [];
-        const callingCode = suffixes.length === 1
-          ? countryEntry.idd.root.replace('+', '') + suffixes[0]
-          : countryEntry?.idd?.root?.replace('+', '') || '';
-        let nationalNumber = shipping.phone.replace(/^\+/, '').replace(/\D/g, '');
-        if (callingCode && nationalNumber.startsWith(callingCode)) {
-          nationalNumber = nationalNumber.slice(callingCode.length);
-        }
-        if (callingCode && nationalNumber) {
+        const found = countriesData.find(c => c.cca2 === shipping.countryCode);
+        if (found) {
+          const suffixes = found.idd?.suffixes || [];
+          const callingCode = suffixes.length === 1
+            ? found.idd.root.replace('+', '') + suffixes[0]
+            : found.idd.root.replace('+', '');
+          let nationalNumber = shipping.phone.replace(/^\+/, '').replace(/\D/g, '');
+          if (nationalNumber.startsWith(callingCode)) nationalNumber = nationalNumber.slice(callingCode.length);
           payer.phone = { phone_type: "MOBILE", phone_number: { country_code: callingCode, national_number: nationalNumber } };
         }
-      } catch (err) {
-        console.warn('[PAYPAL] Phone code lookup failed:', err.message);
-      }
+      } catch (err) {}
     }
     orderBody.payer = payer;
 
