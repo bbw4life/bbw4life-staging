@@ -181,6 +181,16 @@ exports.handler = async (event) => {
           valueInputOption: "RAW",
           resource: { values: [["Yes"]] }
         });
+        // Ajouter firstName, lastName en colonnes A et B
+        if (firstName || lastName) {
+          await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `bbw4life-accounts!A${rowNum}:B${rowNum}`,
+            valueInputOption: "RAW",
+            resource: { values: [[normalize(lastName) || "", normalize(firstName) || ""]] }
+          });
+        }
+        // Birthday en colonne AB (index 27)
         if (birthday) {
           await sheets.spreadsheets.values.update({
             spreadsheetId,
@@ -191,7 +201,9 @@ exports.handler = async (event) => {
         }
       } else {
         const rowData = [
-          "", "", normalizedEmail, "", "", "Yes",
+          normalize(lastName) || "",
+          normalize(firstName) || "",
+          normalizedEmail, "", "", "Yes",
           0, 0, 0, "", "", "", "", "", 0,
           formatDate(), "[]", "", "", "", "", "", "", "", "", "", "", "", birthday || ""
         ];
