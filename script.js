@@ -3422,6 +3422,8 @@ initAnnouncementBar();
 
 
 
+
+
 (function initStickyMediaMobile() {
   const stickyOn = (settings.sticky_media_mobile || 'no').toLowerCase().trim() === 'yes';
   if (!stickyOn) return;
