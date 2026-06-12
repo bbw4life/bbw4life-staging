@@ -2256,10 +2256,6 @@ document.addEventListener('click', function (e) {
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     spawnParticles();
-    /* Focus email for a11y */
-    setTimeout(function () {
-      if (inputEmail) inputEmail.focus();
-    }, 420);
   }
 
   function closePopup() {

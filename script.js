@@ -6629,13 +6629,57 @@ document.dispatchEvent(new Event('wishlist:change'));
   function addAllToCart() {
     wishlist.forEach(id => {
       const product = products.find(p => p.id === id);
-      if (product) {
-        let cartItem = cart.find(i => i.id === id);
-        if (cartItem) cartItem.quantity++;
-        else cart.push({ id: product.id, title: product.title, price: product.price, image: product.image, quantity: 1 });
+      if (!product) return;
+
+      // ── Récupère la première variante valide ──
+      const firstVariant = (product.variants && product.variants.length > 0)
+        ? product.variants[0]
+        : null;
+
+      const color = firstVariant ? (firstVariant.color || null) : null;
+      const size  = firstVariant ? (firstVariant.size  || null) : null;
+      const price = firstVariant ? firstVariant.price  : product.price;
+      const cjVariantId = firstVariant ? firstVariant.vid : null;
+
+      // ── Image correspondant à la couleur si dispo ──
+      const colorObj = (color && product.colors)
+        ? product.colors.find(c => c.name === color)
+        : null;
+      const image = upgradeShopifyImageUrl(colorObj ? (colorObj.image || product.image) : product.image);
+
+      // ── Compare price proportionnelle au variant ──
+      const ratio = product.compare_price / product.price;
+      const comparePrice = price * ratio;
+
+      let cartItem = cart.find(i => i.id === id && i.color === color && i.size === size);
+      if (cartItem) {
+        cartItem.quantity++;
+      } else {
+        cart.push({
+          id:            product.id,
+          title:         product.title,
+          price:         price,
+          compare_price: comparePrice,
+          image:         image,
+          size:          size,
+          color:         color,
+          quantity:      1,
+          cj_product_id: product.cj_id,
+          cj_variant_id: cjVariantId
+        });
       }
     });
-    saveCart(); updateCartQuantityInSheet(); updateBadges(); closeWishlistModal(); openCartDrawer();
+
+    if (products && products.length > 0 && typeof applyPromoFreeItems === 'function') {
+      applyPromoFreeItems();
+    }
+
+    saveCart();
+    updateCartQuantityInSheet();
+    updateBadges();
+    renderCart();
+    closeWishlistModal();
+    openCartDrawer();
   }
 
   async function updateCartQuantityInSheet() {

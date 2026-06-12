@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const { action = 'signup', lastName, firstName, email, phone = "", password, newsletter = "No",
+    const { action = 'signup', lastName, firstName, email, phone = "", password, newsletter = "No", birthday = "",
             line1, line2, city, state, zip, newPassword,
             totalAmount = 0, totalQuantity = 0, orderItems = [],
             currentCartQuantity = null } = body;
@@ -181,11 +181,19 @@ exports.handler = async (event) => {
           valueInputOption: "RAW",
           resource: { values: [["Yes"]] }
         });
+        if (birthday) {
+          await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `bbw4life-accounts!AB${rowNum}`,
+            valueInputOption: "RAW",
+            resource: { values: [[birthday]] }
+          });
+        }
       } else {
         const rowData = [
           "", "", normalizedEmail, "", "", "Yes",
           0, 0, 0, "", "", "", "", "", 0,
-          formatDate(), "[]"
+          formatDate(), "[]", "", "", "", "", "", "", "", "", "", "", "", birthday || ""
         ];
 
         await sheets.spreadsheets.values.append({
@@ -200,13 +208,6 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
 
-
-
-
-
-
-
-    
 
 
   if (action === 'aff-create') {
