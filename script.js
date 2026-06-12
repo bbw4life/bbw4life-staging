@@ -34,6 +34,13 @@ function bbwShowPromoWarningPopup(code, discountPct) {
     return;
   }
 
+  // ── Récupérer le lien WhatsApp depuis les settings ──
+  const allProducts = window.__allProducts || [];
+  const settings = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
+  const whatsappUrl = (settings.contact && settings.contact.whatsapp_url)
+    ? settings.contact.whatsapp_url
+    : 'https://wa.me/18292677434'; // fallback
+
   const overlay = document.createElement('div');
   overlay.id = 'bbw-promo-popup-overlay';
 
@@ -75,7 +82,7 @@ function bbwShowPromoWarningPopup(code, discountPct) {
         Need help? Contact us via
         <a href="/page/contact.html">our contact page</a>
         or on
-        <a href="https://wa.me/18292677434" target="_blank" rel="noopener">WhatsApp</a>.
+        <a href="${whatsappUrl}" target="_blank" rel="noopener">WhatsApp</a>.
       </p>
 
       <button class="bbw-promo-popup-cta" id="bbwPromoCtaCheckout">
@@ -89,7 +96,7 @@ function bbwShowPromoWarningPopup(code, discountPct) {
       </button>
 
     </div>`;
-
+    
   document.body.appendChild(overlay);
 
   requestAnimationFrame(function () {

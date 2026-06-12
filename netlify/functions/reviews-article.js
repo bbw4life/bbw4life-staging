@@ -19,7 +19,7 @@ async function getSheets() {
 
 async function getAllRows(sheets) {
   const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_REVIEWS_ARTICLE,
+    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_CUSTOMERS_REVIEWS,
     range: `${SHEET_NAME}!A:I`
   });
   return res.data.values || [];
@@ -29,7 +29,7 @@ async function ensureHeader(sheets) {
   const rows = await getAllRows(sheets);
   if (rows.length === 0) {
     await sheets.spreadsheets.values.append({
-      spreadsheetId: process.env.SHEET_ID_BBW4LIFE_REVIEWS_ARTICLE,
+      spreadsheetId: process.env.SHEET_ID_BBW4LIFE_CUSTOMERS_REVIEWS,
       range: `${SHEET_NAME}!A1`,
       valueInputOption: 'RAW',
       resource: {
@@ -70,7 +70,7 @@ async function updateStatsOnAllRows(sheets, rows, articleId, likes, shares) {
     if (i > 0 && r[0] === articleId) {
       updates.push(
         sheets.spreadsheets.values.update({
-          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_REVIEWS_ARTICLE,
+          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_CUSTOMERS_REVIEWS,
           range: `${SHEET_NAME}!H${i + 1}:I${i + 1}`,
           valueInputOption: 'RAW',
           resource: { values: [[likes, shares]] }
@@ -83,7 +83,7 @@ async function updateStatsOnAllRows(sheets, rows, articleId, likes, shares) {
 
 async function appendStatsRow(sheets, articleId) {
   await sheets.spreadsheets.values.append({
-    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_REVIEWS_ARTICLE,
+    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_CUSTOMERS_REVIEWS,
     range: `${SHEET_NAME}!A:I`,
     valueInputOption: 'RAW',
     insertDataOption: 'INSERT_ROWS',
@@ -193,7 +193,7 @@ exports.handler = async (event) => {
         });
 
         await sheets.spreadsheets.values.append({
-          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_REVIEWS_ARTICLE,
+          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_CUSTOMERS_REVIEWS,
           range: `${SHEET_NAME}!A:I`,
           valueInputOption: 'RAW',
           insertDataOption: 'INSERT_ROWS',

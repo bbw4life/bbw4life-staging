@@ -76,7 +76,7 @@ async function fetchStories() {
   const sheets = google.sheets({ version: 'v4', auth });
 
   const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_STORIES,
+    spreadsheetId: process.env.SHEET_ID_BBW4LIFE_ACCOUNTS,
     range:         `${SHEET_NAME}!A:Q`
   });
 

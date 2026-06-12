@@ -7,7 +7,7 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_PRODUCT_PERSONALIZED;
+    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_PLAN_REQUEST;
     const SHEET_NAME = "bbw4life-product-personalized";
 
     function getAuth() {

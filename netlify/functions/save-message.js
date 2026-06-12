@@ -25,7 +25,7 @@ exports.handler = async (event) => {
         });
 
         const sheets = google.sheets({ version: "v4", auth });
-        const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_CONTACT_MESSAGES;
+        const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ACCOUNTS;
 
         function formatDate() {
             const d = new Date();
