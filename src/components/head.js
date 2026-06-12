@@ -1016,14 +1016,14 @@ function injectGlobalHead() {
             });
         })
         .catch(err => console.error('[Head] Failed to load head.html:', err));
-}
+        }
 
-/* ─── Injection SEO selon page ─── */
-function injectPageSEO() {
-    const path = window.location.pathname;
-    const pathWithHtml = path.endsWith('.html') ? path : path + '.html';
+        /* ─── Injection SEO selon page ─── */
+        function injectPageSEO() {
+            const path = window.location.pathname;
+            const pathWithHtml = path.endsWith('.html') ? path : path + '.html';
 
-    let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml];
+            let seo = SEO_MAP[path] || SEO_MAP[pathWithHtml];
 
    
     if (!seo && /\/products\/product\d+\.html/.test(path)) {

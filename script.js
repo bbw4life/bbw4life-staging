@@ -262,47 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
 ══════════════════════════════════════════ */
 (function () {
   'use strict';
-
-
-  /* ══════════════════════════════════════════════════════
-   BBW4LIFE — HIDE BROKEN IMAGE PLACEHOLDERS
-══════════════════════════════════════════════════════ */
-(function hideBrokenImagePlaceholders() {
-  const style = document.createElement('style');
-  style.id = 'bbw-broken-img-hide';
-  style.textContent = `
-    img:not([src]),
-    img[src=""],
-    img[src="undefined"],
-    img[src="null"] {
-      visibility: hidden !important;
-      opacity: 0 !important;
-    }
-    img {
-      transition: opacity 0.3s ease;
-    }
-    img.bbw-img-loaded {
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-  `;
-  document.head.appendChild(style);
-
-  document.addEventListener('load', function(e) {
-    if (e.target.tagName === 'IMG') {
-      e.target.classList.add('bbw-img-loaded');
-    }
-  }, true);
-
-  document.addEventListener('error', function(e) {
-    if (e.target.tagName === 'IMG') {
-      e.target.style.visibility = 'hidden';
-      e.target.style.opacity = '0';
-    }
-  }, true);
-})();
-
-
   var STYLE_MAP = {
     style_pulse_logo:   'style-pulse-logo',
     style_progress_bar: 'style-progress-bar',
@@ -484,6 +443,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const sep = url.includes('?') ? '&' : '?';
   return url + sep + `width=${w}&quality=100`;
 }
+
+
+/* ══════════════════════════════════════════════════════
+   BBW4LIFE — HIDE BROKEN IMAGE PLACEHOLDERS
+══════════════════════════════════════════════════════ */
+(function hideBrokenImagePlaceholders() {
+  const style = document.createElement('style');
+  style.id = 'bbw-broken-img-hide';
+  style.textContent = `
+    img:not([src]),
+    img[src=""],
+    img[src="undefined"],
+    img[src="null"] {
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.target.style.visibility = 'hidden';
+      e.target.style.opacity = '0';
+    }
+  }, true);
+})();
+
+
 
 
    if ('fonts' in document) {
@@ -3448,7 +3435,6 @@ initAnnouncementBar();
 (function initBBWProductGrid() {
   'use strict';
 
-  /* ── Attendre que products soit disponible ── */
   function waitAndRun(cb) {
     if (window.__allProducts && window.__allProducts.length) {
       cb(window.__allProducts);
@@ -3466,7 +3452,6 @@ initAnnouncementBar();
     }
   }
 
-  /* ── Améliorer les URLs images Shopify ── */
   function sharpImg(url, size) {
     if (!url || typeof url !== 'string') return url;
     if (!url.includes('cdn.shopify.com')) return url;
@@ -3475,51 +3460,44 @@ initAnnouncementBar();
     return url + sep + 'width=' + (size || 600) + '&quality=90';
   }
 
-  /* ── Récupérer l'URL d'un produit depuis son index ── */
   function getUrl(allProducts, id) {
     var idx = allProducts.findIndex(function (p) { return p.id === id; });
     if (idx === -1) return '#';
     return '/products/product' + (idx + 1) + '.html';
   }
 
-  /* ── Construire une card produit ── */
   function buildCard(prod, url, btnText) {
-    /* Calcul remise */
     var hasDiscount = prod.compare_price && prod.compare_price > prod.price;
     var discountPct = hasDiscount
       ? Math.round(((prod.compare_price - prod.price) / prod.compare_price) * 100)
       : 0;
 
-    /* Badge (depuis JSON) */
     var badgeHTML = '';
     if (prod.badge && prod.badge.text) {
       badgeHTML = '<span class="bbwpg-card__badge">' + prod.badge.text + '</span>';
     }
 
-    /* Remise */
     var discHTML = discountPct > 0
       ? '<span class="bbwpg-card__discount">-' + discountPct + '%</span>'
       : '';
 
-    /* Prix comparé */
     var compareHTML = hasDiscount
       ? '<span class="bbwpg-card__compare">$' + parseFloat(prod.compare_price).toFixed(2) + '</span>'
       : '';
 
-    /* Image */
     var imgSrc = sharpImg(prod.image, 600);
     var imgHoverSrc = prod.image_hover ? sharpImg(prod.image_hover, 600) : '';
 
     var card = document.createElement('div');
     card.className = 'bbwpg-card';
 
-    card.innerHTML =
-      '<a class="bbwpg-card__img-link" href="' + url + '" aria-label="' + prod.title + '">' +
-        '<div class="bbwpg-card__img-wrap">' +
-          '<img class="bbwpg-card__img bbwpg-card__img--main" src="' + (imgHoverSrc || imgSrc) + '" alt="' + prod.title + '" loading="lazy">' +
-          (imgHoverSrc
-            ? '<img class="bbwpg-card__img bbwpg-card__img--hover" src="' + imgSrc + '" alt="" loading="lazy" aria-hidden="true">'
-            : '') +
+   card.innerHTML =
+  '<a class="bbwpg-card__img-link" href="' + url + '" aria-label="' + prod.title + '">' +
+    '<div class="bbwpg-card__img-wrap">' +
+      '<img class="bbwpg-card__img bbwpg-card__img--main" src="' + (imgHoverSrc || imgSrc) + '" alt="' + prod.title + '" loading="lazy">' +
+      (imgHoverSrc
+        ? '<img class="bbwpg-card__img bbwpg-card__img--hover" src="' + imgSrc + '" alt="" loading="lazy" aria-hidden="true">'
+        : '') +
           badgeHTML +
           discHTML +
         '</div>' +
@@ -3539,7 +3517,6 @@ initAnnouncementBar();
     return card;
   }
 
-  /* ── Init principale ── */
   function run(allProducts) {
 
     var section  = document.getElementById('bbw-product-grid-featured');
@@ -3551,7 +3528,6 @@ initAnnouncementBar();
 
     if (!section || !track) return;
 
-    /* ── Lire le setting ── */
     var settings  = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
     var cfg       = settings.product_grid_section || {};
     var ids       = cfg.product_ids || [];
@@ -3559,7 +3535,6 @@ initAnnouncementBar();
 
     if (!ids.length) { section.style.display = 'none'; return; }
 
-    /* ── Injecter les textes d'en-tête ── */
     var eyebrowEl  = document.getElementById('bbwpg-eyebrow');
     var titleEl    = document.getElementById('bbwpg-title');
     var subtitleEl = document.getElementById('bbwpg-subtitle');
@@ -3567,14 +3542,12 @@ initAnnouncementBar();
     if (titleEl    && cfg.title)     titleEl.textContent     = cfg.title;
     if (subtitleEl && cfg.subtitle)  subtitleEl.textContent  = cfg.subtitle;
 
-    /* ── Filtrer les produits valides ── */
     var prods = ids
       .map(function (id) { return allProducts.find(function (p) { return p.id === id; }); })
       .filter(Boolean);
 
     if (!prods.length) { section.style.display = 'none'; return; }
 
-    /* ── Construire les cartes ── */
     prods.forEach(function (prod) {
       var url  = getUrl(allProducts, prod.id);
       var card = buildCard(prod, url, btnText);
@@ -3588,35 +3561,75 @@ initAnnouncementBar();
     var currentPage = 0;
     var isAnimating = false;
 
-    /* Calculer la largeur d'une card (gap inclus) */
+    /* ── DESKTOP — translateX ── */
     function getCardWidth() {
       var cards = track.querySelectorAll('.bbwpg-card');
       if (!cards.length) return 0;
-      var gap   = parseInt(getComputedStyle(track).gap) || 20;
+      var gap = parseInt(getComputedStyle(track).gap) || 20;
       return cards[0].offsetWidth + gap;
     }
 
-    /* Aller à une page */
-    function goTo(page) {
+    function goToDesktop(page) {
       if (isAnimating) return;
       var tp = totalPages();
-      if (page < 0)  page = tp - 1;
+      if (page < 0)   page = tp - 1;
       if (page >= tp) page = 0;
       currentPage = page;
-
-      var cardW   = getCardWidth();
-      var pp      = perPage();
-      var offset  = page * pp * cardW;
+      var offset = page * perPage() * getCardWidth();
       track.style.transform = 'translateX(-' + offset + 'px)';
-
       isAnimating = true;
       setTimeout(function () { isAnimating = false; }, 480);
-
       updateDots();
       updateArrows();
     }
 
-    /* Dots */
+    /* ── MOBILE — scroll natif + snap ── */
+    function initMobileScroll() {
+      track.style.overflowX = 'auto';
+      track.style.scrollSnapType = 'x mandatory';
+      track.style.webkitOverflowScrolling = 'touch';
+      track.style.scrollbarWidth = 'none';
+      track.querySelectorAll('.bbwpg-card').forEach(function (card) {
+        card.style.scrollSnapAlign = 'start';
+        card.style.flexShrink = '0';
+      });
+      var syncTimer = null;
+      track.addEventListener('scroll', function () {
+        clearTimeout(syncTimer);
+        syncTimer = setTimeout(function () {
+          var cards = track.querySelectorAll('.bbwpg-card');
+          if (!cards.length) return;
+          var gap   = parseInt(getComputedStyle(track).gap) || 12;
+          var cardW = cards[0].offsetWidth + gap;
+          var idx   = Math.round(track.scrollLeft / cardW);
+          var page  = Math.floor(idx / 2);
+          if (page !== currentPage) {
+            currentPage = page;
+            updateDots();
+          }
+        }, 60);
+      }, { passive: true });
+    }
+
+    function goToMobile(page) {
+      var cards = track.querySelectorAll('.bbwpg-card');
+      if (!cards.length) return;
+      var tp = totalPages();
+      if (page < 0)   page = tp - 1;
+      if (page >= tp) page = 0;
+      currentPage = page;
+      var gap   = parseInt(getComputedStyle(track).gap) || 12;
+      var cardW = cards[0].offsetWidth + gap;
+      track.scrollTo({ left: page * 2 * cardW, behavior: 'smooth' });
+      updateDots();
+      updateArrows();
+    }
+
+    function goTo(page) {
+      if (isMobile()) { goToMobile(page); } else { goToDesktop(page); }
+    }
+
+    /* ── Dots ── */
     function buildDots() {
       if (!dotsWrap) return;
       dotsWrap.innerHTML = '';
@@ -3646,39 +3659,29 @@ initAnnouncementBar();
       if (nextBtn) nextBtn.style.display = tp <= 1 ? 'none' : '';
     }
 
-    /* Boutons */
     if (prevBtn) prevBtn.addEventListener('click', function () { goTo(currentPage - 1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { goTo(currentPage + 1); });
 
-    /* Touch/swipe */
-    var touchStartX = 0;
-    if (viewport) {
-      viewport.addEventListener('touchstart', function (e) {
-        touchStartX = e.touches[0].clientX;
-      }, { passive: true });
-      viewport.addEventListener('touchend', function (e) {
-        var diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
-          diff > 0 ? goTo(currentPage + 1) : goTo(currentPage - 1);
-        }
-      }, { passive: true });
-    }
-
-    /* Resize */
+    /* ── Resize ── */
     var resizeTimer = null;
     window.addEventListener('resize', function () {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function () {
         currentPage = 0;
-        track.style.transition = 'none';
-        track.style.transform  = 'translateX(0)';
-        setTimeout(function () { track.style.transition = ''; }, 50);
+        if (isMobile()) {
+          track.scrollLeft = 0;
+        } else {
+          track.style.transition = 'none';
+          track.style.transform  = 'translateX(0)';
+          setTimeout(function () { track.style.transition = ''; }, 50);
+        }
         buildDots();
         updateArrows();
       }, 200);
     });
 
-    /* Init */
+    /* ── Init ── */
+    if (isMobile()) { initMobileScroll(); }
     buildDots();
     updateArrows();
   }
@@ -12761,7 +12764,7 @@ function injectColFbt() {
 
     if ((cfg.show || 'yes').toLowerCase().trim() !== 'yes') return;
 
-    var text = cfg.text || 'BBW4LIFE • TRÈS BELLE •';
+    var text = cfg.text || 'BBW4LIFE • WAIT TO LOAD •';
 
     injectSvgDefs();
     runAll(text);
@@ -12769,17 +12772,26 @@ function injectColFbt() {
     var observer = new MutationObserver(function(mutations) {
       var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
       if (!relevant) return;
+      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
+      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') return;
       runAll(text);
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    document.addEventListener('cart:update',     function() { runAll(text); });
-    document.addEventListener('wishlist:change', function() { runAll(text); });
+    document.addEventListener('cart:update',     function() {
+      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
+      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') return;
+      runAll(text);
+    });
+    document.addEventListener('wishlist:change', function() {
+      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
+      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') return;
+      runAll(text);
+    });
   }
 
   if (window.__allProducts && window.__allProducts.length) {
-    injectSvgDefs();
     init();
   } else {
     var tries = 0;

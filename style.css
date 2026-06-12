@@ -3803,6 +3803,12 @@ body {
   font-size: 10px;
 }
 
+/* ── Force hide when setting = no ── */
+.bbw-img-loader[data-disabled="true"],
+body[data-loader-off] .bbw-img-loader {
+  display: none !important;
+}
+
 
 /* ================================================================
    PAUL INDICATOR & POPUP — Ultra Premium BBW4LIFE Edition
