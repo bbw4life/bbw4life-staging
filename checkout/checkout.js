@@ -917,75 +917,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const affUnlockPct = parseFloat(affCfg.promo_code_unlock_percent) || 0;
         const affCommPct = parseFloat(affCfg.commission_percent) || 0;
 
-        if (affPrefix && input === affPrefix) {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const userEmail = localStorage.getItem('userEmail') || '';
-            if (!isLoggedIn || !userEmail) {
-                promoMessage.textContent = "You must be logged in to use this affiliate promo code.";
-                promoMessage.style.color = 'red';
-                return;
-            }
+        if (affPrefix && (input === affPrefix || input.startsWith(affPrefix + '-'))) {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userEmail = localStorage.getItem('userEmail') || '';
+    if (!isLoggedIn || !userEmail) {
+        promoMessage.textContent = "You must be logged in to use this affiliate promo code.";
+        promoMessage.style.color = 'red';
+        return;
+    }
 
-            promoMessage.textContent = "Checking eligibility...";
-            promoMessage.style.color = '#888';
+    promoMessage.textContent = "Checking eligibility...";
+    promoMessage.style.color = '#888';
 
-            try {
-                const res = await fetch('/.netlify/functions/save-account', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
-                });
-                const data = await res.json();
+    try {
+        const check = await window.bbwValidateAffPromoCode(input);
+        if (!check || !check.valid) {
+            promoMessage.textContent = "This promo code has already been used or is invalid.";
+            promoMessage.style.color = 'red';
+            return;
+        }
 
-                if (!data.success || !data.affiliates || !data.affiliates.length) {
-                    promoMessage.textContent = "You are not eligible for this affiliate promo code.";
-                    promoMessage.style.color = 'red';
-                    return;
-                }
+        const discountPct = check.discountPct || 0;
+        const freeShipThresh = parseFloat(cd.free_shipping_threshold) || 0;
+        const subtotal = getSubtotal();
+        if (freeShipThresh > 0 && subtotal >= freeShipThresh) {
+            promoMessage.textContent = "This code cannot be combined with free shipping.";
+            promoMessage.style.color = 'red';
+            return;
+        }
 
-                const aff = data.affiliates[0];
-                const totalOrders = parseInt(aff.totalOrders || 0);
-                const earnedPct = totalOrders * affCommPct;
+        appliedPromo = { code: input, percent: discountPct, isAffiliate: true };
+        discountAmount = subtotal * (discountPct / 100);
+        promoMessage.textContent = `Affiliate code applied: ${discountPct}% off!`;
+        promoMessage.style.color = 'green';
+        sessionStorage.setItem('pendingAffPromo', userEmail);
+        updateTotals();
+        return;
 
-                if (earnedPct < affUnlockPct) {
-                    promoMessage.textContent = `You need to reach ${affUnlockPct}% commission earned to unlock this code. Current: ${earnedPct.toFixed(0)}%.`;
-                    promoMessage.style.color = 'red';
-                    return;
-                }
+    } catch (err) {
+        promoMessage.textContent = "Error verifying affiliate code. Please try again.";
+        promoMessage.style.color = 'red';
+        return;
+    }
 
-                const checkUsedRes = await fetch('/.netlify/functions/save-account', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'aff-check-promo-used', email: userEmail })
-                });
-                const checkUsedData = await checkUsedRes.json();
-                if (checkUsedData.used) {
-                    promoMessage.textContent = "This affiliate promo code has already been used on your account.";
-                    promoMessage.style.color = 'red';
-                    return;
-                }
-
-                const freeShipThresh = parseFloat(cd.free_shipping_threshold) || 0;
-                const subtotal = getSubtotal();
-                if (freeShipThresh > 0 && subtotal >= freeShipThresh) {
-                    promoMessage.textContent = "This code cannot be combined with free shipping.";
-                    promoMessage.style.color = 'red';
-                    return;
-                }
-
-                appliedPromo = { code: affPrefix, percent: affDiscountPct, isAffiliate: true };
-                discountAmount = subtotal * (affDiscountPct / 100);
-                promoMessage.textContent = `Affiliate code applied: ${affDiscountPct}% off!`;
-                promoMessage.style.color = 'green';
-                sessionStorage.setItem('pendingAffPromo', userEmail);
-                updateTotals();
-                return;
-
-            } catch (err) {
-                promoMessage.textContent = "Error verifying affiliate code. Please try again.";
-                promoMessage.style.color = 'red';
-                return;
-            }
+    
         }
 
         const promo = promos.find(p => p.code.toUpperCase() === input);
@@ -1002,33 +977,6 @@ document.addEventListener('DOMContentLoaded', () => {
             promoMessage.style.color = 'red';
             updateTotals();
         }
-
-        // ── Tentative validation via validate-promo-code (codes affiliés uniques) ──
-            if (typeof window.bbwValidateAffPromoCode === 'function') {
-                promoMessage.textContent = "Checking code...";
-                promoMessage.style.color = '#888';
-                try {
-                    const result = await window.bbwValidateAffPromoCode(input);
-                    if (result && result.valid) {
-                        appliedPromo = { code: input, percent: result.discountPct, isAffiliate: true };
-                        discountAmount = getSubtotal() * (result.discountPct / 100);
-                        promoMessage.textContent = `Affiliate code applied: ${result.discountPct}% off!`;
-                        promoMessage.style.color = 'green';
-                        sessionStorage.setItem('pendingAffPromo', input);
-                        updateTotals();
-                    } else {
-                        appliedPromo = null;
-                        discountAmount = 0;
-                        promoMessage.textContent = "Invalid or inapplicable promo code.";
-                        promoMessage.style.color = 'red';
-                        updateTotals();
-                    }
-                } catch(err) {
-                    promoMessage.textContent = "Error verifying code. Please try again.";
-                    promoMessage.style.color = 'red';
-                }
-                return;
-            }
     });
 
     // ── Auto-apply affiliate promo code if stored ──
