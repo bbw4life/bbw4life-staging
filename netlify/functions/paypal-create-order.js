@@ -135,17 +135,25 @@ exports.handler = async (event) => {
     }
     if (shipping.phone && shipping.countryCode) {
       try {
-        const countryRes = await fetch(`https://restcountries.com/v3.1/alpha/${shipping.countryCode}?fields=idd`);
-        const countryData = await countryRes.json();
-        // FIX: suffixes multiples (USA, RD, Canada...) on ne prend pas le suffixe
-        const suffixes = countryData.idd?.suffixes || [];
+        const match = shipping.countryCode;
+        // Lire depuis countries.json local
+        const countriesRes = await fetch(`${process.env.BASE_URL}/countries.json`);
+        const countriesData = await countriesRes.json();
+        const countryEntry = countriesData.find(c => c.cca2 === match);
+        const suffixes = countryEntry?.idd?.suffixes || [];
         const callingCode = suffixes.length === 1
-          ? countryData.idd.root.replace('+', '') + suffixes[0]
-          : countryData.idd.root.replace('+', '');
+          ? countryEntry.idd.root.replace('+', '') + suffixes[0]
+          : countryEntry?.idd?.root?.replace('+', '') || '';
         let nationalNumber = shipping.phone.replace(/^\+/, '').replace(/\D/g, '');
-        if (nationalNumber.startsWith(callingCode)) nationalNumber = nationalNumber.slice(callingCode.length);
-        payer.phone = { phone_type: "MOBILE", phone_number: { country_code: callingCode, national_number: nationalNumber } };
-      } catch (err) {}
+        if (callingCode && nationalNumber.startsWith(callingCode)) {
+          nationalNumber = nationalNumber.slice(callingCode.length);
+        }
+        if (callingCode && nationalNumber) {
+          payer.phone = { phone_type: "MOBILE", phone_number: { country_code: callingCode, national_number: nationalNumber } };
+        }
+      } catch (err) {
+        console.warn('[PAYPAL] Phone code lookup failed:', err.message);
+      }
     }
     orderBody.payer = payer;
 

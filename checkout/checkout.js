@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let _promoFreeApplying = false;
     let upsellDiscountAmount = 0;
     let upsellDiscountApplied = false;
+    let affPromoCode     = localStorage.getItem('bbw_aff_promo_code')     || null;
+    let affPromoDiscount = parseFloat(localStorage.getItem('bbw_aff_promo_discount')) || 0;
+    let affPromoApplied  = false;
 
 
     // ====================== POPUP ======================
@@ -350,7 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cart: discountedCart,
                         shipping: shippingData,
                         shipping_cost: effectiveShippingPay.toFixed(2),
-                        tax: taxes.toFixed(2)
+                        tax: taxes.toFixed(2),
+                        aff_promo_discount: (affPromoApplied && affPromoDiscount > 0) ? affPromoDiscount : 0
                     })
                 });
                 const data = await response.json();
@@ -689,37 +693,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return cart.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0);
     }
 
-    function updateTotals() {
-    const subtotal = getSubtotal();
-    const selectedMethod = document.querySelector('.shipping-option.selected')?.dataset.method || '';
-    const freeShipThresh = (() => {
-        const s = productsData.find(i => i.type === 'settings');
-        return s?.cart_drawer?.free_shipping_threshold || 0;
-    })();
-    const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
-    const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
-    const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
-    const effectiveTax = (isFreeByThreshold || isFreeMethod) ? 0 : subtotal * TAX_RATE;
-    const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount;
-    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('taxes').textContent = `$${effectiveTax.toFixed(2)}`;
-    const taxLabel = document.getElementById('tax-rate-label');
-    if (taxLabel) taxLabel.textContent = (isFreeByThreshold || isFreeMethod)
-        ? 0
-        : (TAX_RATE * 100).toFixed(TAX_RATE * 100 % 1 === 0 ? 0 : 1);
-    document.getElementById('shipping').textContent = effectiveShipping === 0 ? 'FREE' : `$${effectiveShipping.toFixed(2)}`;
-    document.getElementById('total').textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
-    const promoLine = document.getElementById('promo-line');
-    const discountEl = document.getElementById('discount-amount');
-    if (discountAmount > 0) {
-        if (promoLine) promoLine.style.display = 'block';
-        if (discountEl) discountEl.textContent = `-$${discountAmount.toFixed(2)}`;
-    } else {
-        if (promoLine) promoLine.style.display = 'none';
+        function updateTotals() {
+        const subtotal = getSubtotal();
+        const selectedMethod = document.querySelector('.shipping-option.selected')?.dataset.method || '';
+        const freeShipThresh = (() => {
+            const s = productsData.find(i => i.type === 'settings');
+            return s?.cart_drawer?.free_shipping_threshold || 0;
+        })();
+        const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
+        const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
+        const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
+        const effectiveTax = (isFreeByThreshold || isFreeMethod) ? 0 : subtotal * TAX_RATE;
+        const finalTotal = subtotal + effectiveTax + effectiveShipping - discountAmount;
+        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('taxes').textContent = `$${effectiveTax.toFixed(2)}`;
+        const taxLabel = document.getElementById('tax-rate-label');
+        if (taxLabel) taxLabel.textContent = (isFreeByThreshold || isFreeMethod)
+            ? 0
+            : (TAX_RATE * 100).toFixed(TAX_RATE * 100 % 1 === 0 ? 0 : 1);
+        document.getElementById('shipping').textContent = effectiveShipping === 0 ? 'FREE' : `$${effectiveShipping.toFixed(2)}`;
+        document.getElementById('total').textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
+        const promoLine = document.getElementById('promo-line');
+        const discountEl = document.getElementById('discount-amount');
+        if (discountAmount > 0) {
+            if (promoLine) promoLine.style.display = 'block';
+            if (discountEl) discountEl.textContent = `-$${discountAmount.toFixed(2)}`;
+        } else {
+            if (promoLine) promoLine.style.display = 'none';
+        }
+        const togglePreview = document.getElementById('toggle-total-preview');
+        if (togglePreview) togglePreview.textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
     }
-    const togglePreview = document.getElementById('toggle-total-preview');
-    if (togglePreview) togglePreview.textContent = `$${Math.max(0, finalTotal).toFixed(2)}`;
-}
 
     function applyPromoFreeItems() {
         const settings = productsData.find(i => i.type === 'settings');
