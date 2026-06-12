@@ -263,6 +263,46 @@ document.addEventListener('DOMContentLoaded', () => {
 (function () {
   'use strict';
 
+
+  /* ══════════════════════════════════════════════════════
+   BBW4LIFE — HIDE BROKEN IMAGE PLACEHOLDERS
+══════════════════════════════════════════════════════ */
+(function hideBrokenImagePlaceholders() {
+  const style = document.createElement('style');
+  style.id = 'bbw-broken-img-hide';
+  style.textContent = `
+    img:not([src]),
+    img[src=""],
+    img[src="undefined"],
+    img[src="null"] {
+      visibility: hidden !important;
+      opacity: 0 !important;
+    }
+    img {
+      transition: opacity 0.3s ease;
+    }
+    img.bbw-img-loaded {
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  document.addEventListener('load', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.target.classList.add('bbw-img-loaded');
+    }
+  }, true);
+
+  document.addEventListener('error', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.target.style.visibility = 'hidden';
+      e.target.style.opacity = '0';
+    }
+  }, true);
+})();
+
+
   var STYLE_MAP = {
     style_pulse_logo:   'style-pulse-logo',
     style_progress_bar: 'style-progress-bar',
@@ -7818,7 +7858,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('user-address').textContent = localStorage.getItem('userAddress') || 'No default address set';
     // ── Charger la photo de profil
      loadProfilePhoto();
-    loadAccountStats();
+    setTimeout(loadAccountStats, 3000);
   }
 
   window.openSavedItems = () => {
@@ -8675,17 +8715,10 @@ function loadProfilePhoto() {
     } catch(e) { console.warn('[Affiliation] sync failed:', e.message); }
   }
 
-  syncFromSheet();
-  setInterval(syncFromSheet, 60000);
+setTimeout(syncFromSheet, 5000);
+setInterval(syncFromSheet, 60000);
 
 })();
-
-
-
-
-
-
-
 });
 
 window.addEventListener('load', () => {
