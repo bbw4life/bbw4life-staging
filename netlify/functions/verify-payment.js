@@ -79,7 +79,7 @@ exports.handler = async (event) => {
       const storedVariants = purchaseUnit.custom_id ? purchaseUnit.custom_id.split('|') : [];
       const itemsArray = purchaseUnit.items || [];
 
-      cart = itemsArray.map((item) => {
+      cart = itemsArray.map((item, i) => {
         const descParts = (item.description || '').split('|');
         return {
           title: item.name,
