@@ -6,10 +6,10 @@
         (pas de fetch = pas de problème de timing)
   ────────────────────────────────────────────────────────── */
   var WIDGETS_HTML = `
-<!-- OVERLAY -->
+
 <div class="overlay"></div>
 
-<!-- CART DRAWER -->
+
 <div class="cart-drawer">
   <div class="drawer-header">
     <h3>Your Cart</h3>
@@ -43,7 +43,7 @@
       <i class="fab fa-cc-stripe"></i>
     </div>
 
-    <!-- EXTRA PRODUCTS — CART DRAWER -->
+    
     <div class="drawer-extra-section" id="drawer-extra-section" style="display:none;">
       <div class="drawer-extra-header">
         <span>You May Also Like</span>
@@ -62,7 +62,7 @@
       <div class="drawer-extra-dots" id="drawer-extra-dots"></div>
     </div>
 
-  </div><!-- /cart-drawer__body -->
+  </div>
 
   <div class="cart-drawer__footer">
     <p class="subtotal">Subtotal: $0.00</p>
@@ -72,7 +72,7 @@
 </div>
 
 
-<!-- WISHLIST MODAL -->
+
 <div class="wishlist-modal">
   <div class="wishlist-modal-backdrop"></div>
   <div class="modal-content">
@@ -124,7 +124,7 @@
   </div>
 </div>
 
-<!-- ACCOUNT INDICATOR -->
+
 <div class="paul-indicator-wrapper">
   <a href="#" class="paul-indicator" id="paulTrigger">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -135,7 +135,7 @@
   </a>
 </div>
 
-<!-- ACCOUNT POPUP -->
+
 <div class="paul-popup-overlay" id="paulPopup">
   <div class="paul-popup">
     <span class="paul-close">×</span>
@@ -192,7 +192,7 @@
   </div>
 </div>
 
-<!-- ERROR POPUP -->
+
 <div id="error-popup" class="error-popup hidden">
   <div class="popup-content">
     <p id="popup-message" class="popup-text"></p>
@@ -200,7 +200,7 @@
   </div>
 </div>
 
-<!-- FLOATING NAV -->
+
 <div id="floating-nav">
   <button class="fnav-toggle" id="fnav-toggle">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -238,7 +238,7 @@
   </div>
 </div>
 
-<!-- AI CHATBOT -->
+
 <button id="cf-chat-toggle" aria-label="Open Curva Support Chat">
   <div class="cf-toggle-inner">
     <span class="cf-toggle-icon cf-icon-open">
@@ -297,7 +297,7 @@
   </div>
 </div>
 
-<!-- CART REMINDER POPUP -->
+
 <div id="rc-popup-container" style="display:none;" aria-live="polite">
   <div id="rc-popup">
     <button id="rc-close" aria-label="Close">
@@ -333,7 +333,7 @@
   </div>
 </div>
 
-<!-- SNOW EFFECT -->
+
 <div id="snow-container" aria-hidden="true"></div>
 
 
@@ -357,38 +357,38 @@
 
   document.addEventListener('click', function (e) {
 
-    /* ── Fermeture overlay ── */
+    
     if (e.target.classList.contains('overlay')) {
       closeCartDrawer();
       closeWishlistModal();
     }
 
-    /* ── Cart icon wrapper ── */
+    
     var cartWrapper = e.target.closest('.icon-wrapper');
     if (cartWrapper) {
       if (cartWrapper.querySelector('.cart-icon'))     { openCartDrawer();    return; }
       if (cartWrapper.querySelector('.wishlist-icon')) { openWishlistModal(); return; }
     }
 
-    /* ── Cart drawer : fermeture ── */
+    
     if (e.target.closest('.close-drawer')) {
       closeCartDrawer();
       return;
     }
 
-    /* ── Wishlist modal : fermeture ── */
+    
     if (e.target.closest('.close-modal') || e.target.classList.contains('wishlist-modal-backdrop')) {
       closeWishlistModal();
       return;
     }
 
-    /* ── Checkout ── */
+    
     if (e.target.closest('.cart-drawer__footer .checkout')) {
       if (typeof checkout === 'function') checkout();
       return;
     }
 
-    /* ── Account trigger (paulTrigger) ── */
+    
     if (e.target.closest('#paulTrigger')) {
       e.preventDefault();
       if (localStorage.getItem('isLoggedIn') === 'true') {
@@ -404,7 +404,7 @@
       return;
     }
 
-    /* ── Account popup : fermeture fond ── */
+    
     if (e.target.id === 'paulPopup') {
       var pp = document.getElementById('paulPopup');
       if (pp && !window.location.pathname.toLowerCase().includes('account')) {
@@ -413,7 +413,7 @@
       return;
     }
 
-    /* ── Account popup : bouton × ── */
+    
     if (e.target.closest('.paul-close')) {
       var pp2 = document.getElementById('paulPopup');
       if (pp2 && !window.location.pathname.toLowerCase().includes('account')) {
@@ -422,7 +422,7 @@
       return;
     }
 
-    /* ── Switch login ↔ signup ── */
+    
     if (e.target.id === 'goToSignup') {
       var lf = document.getElementById('loginForm');
       var sf = document.getElementById('signupForm');
@@ -452,14 +452,14 @@
       return;
     }
 
-    /* ── Error popup : fermeture ── */
+    
     if (e.target.id === 'popup-close') {
       var ep = document.getElementById('error-popup');
       if (ep) ep.classList.remove('show');
       return;
     }
 
-    /* ── Floating nav toggle ── */
+    
     if (e.target.closest('#fnav-toggle')) {
       var wheel  = document.getElementById('fnav-wheel');
       var toggle = document.getElementById('fnav-toggle');
@@ -468,7 +468,7 @@
       return;
     }
 
-    /* ── Floating nav : fermeture si clic dehors ── */
+    
     if (!e.target.closest('#floating-nav')) {
       var wheel2 = document.getElementById('fnav-wheel');
       var toggle2 = document.getElementById('fnav-toggle');
@@ -476,14 +476,14 @@
       if (toggle2) toggle2.classList.remove('open');
     }
 
-    /* ── RC popup : fermeture ── */
+    
     if (e.target.closest('#rc-close')) {
       var rc = document.getElementById('rc-popup-container');
       if (rc) rc.style.display = 'none';
       return;
     }
 
-    /* ── Wishlist share buttons ── */
+    
     var shareBtn = e.target.closest('[data-wishlist-share]');
     if (shareBtn) {
       e.preventDefault();
@@ -493,7 +493,7 @@
       return;
     }
 
-    /* ── Add all to cart ── */
+    
     if (e.target.closest('.add-all-to-cart')) {
       if (typeof addAllToCart === 'function') addAllToCart();
       return;
@@ -536,7 +536,7 @@
     if (overlay) overlay.classList.remove('active');
   }
 
-  /* Expose globalement — script.js appelle window.openCartDrawer() */
+  
   window.openCartDrawer    = openCartDrawer;
   window.closeCartDrawer   = closeCartDrawer;
   window.openWishlistModal = openWishlistModal;

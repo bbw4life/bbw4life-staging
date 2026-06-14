@@ -9,13 +9,13 @@
   <script src="/src/components/head.js" defer></script>
   <link rel="stylesheet" href="/src/components/footer.css">
 </head>
- <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+ 
   <div id="reading-progress-bar" aria-hidden="true"></div>
 
- <!-- HEADER -->
+ 
   <div id="header-container"></div>
 <body>
-   <!-- ACCOUNT INDICATOR -->
+   
   <div class="paul-indicator-wrapper">
     <a href="#" class="paul-indicator" id="paulTrigger">
       <i class="fi fi-rr-user"></i>
@@ -23,7 +23,7 @@
     </a>
   </div>
 
-  <!-- ACCOUNT POPUP -->
+  
   <div class="paul-popup-overlay" id="paulPopup">
     <div class="paul-popup">
       <span class="paul-close">×</span>
@@ -81,17 +81,17 @@
   </div>
 
 
-  <!-- ══ MAIN ══ -->
+  
   <main class="account-main">
 
     <div id="breadcrumb-container"></div>
 
 
-    <!-- ACCOUNT BACKGROUND / HEADER SECTION -->
+    
     <div class="account-background">
       <div class="customer account">
 
-        <!-- Profile section -->
+        
        <div class="profile-section">
         <div class="profile-photo-block">
             <div class="profile-photo-wrap" id="profile-photo-wrap">
@@ -121,17 +121,17 @@
         </a>
         </div>
 
-        <!-- Membership dashboard -->
+        
         <div class="membership-dashboard">
           <div class="membership-header">
 
-            <!-- Greeting -->
+            
             <div class="membership-greeting">
               <h3>Hello, <span id="user-name"></span> Welcome back</h3>
               <p id="member-since"></p>
             </div>
 
-            <!-- Badge -->
+            
             <div class="membership-badge" id="membership-badge">
               <?xml version="1.0" encoding="utf-8"?>
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 92.35 122.88" style="enable-background:new 0 0 92.35 122.88" xml:space="preserve">
@@ -149,13 +149,13 @@
 
       </div>
     </div>
-    <!-- end ACCOUNT BACKGROUND -->
+    
 
 
-    <!-- STATS GRID -->
+    
     <div class="membership-stats-grid">
 
-      <!-- Orders -->
+      
       <div class="stat-item">
         <div class="stat-icon orders">
           <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 505 511.62">
@@ -166,7 +166,7 @@
         <p class="stat-label">Orders</p>
       </div>
 
-      <!-- Total Spent -->
+      
       <div class="stat-item">
         <div class="stat-icon spend">
           <?xml version="1.0" encoding="utf-8"?>
@@ -181,7 +181,7 @@
         <p class="stat-label">Total Spent</p>
       </div>
 
-      <!-- Items in cart (wishlist) -->
+      
       <a href="#" onclick="openSavedItems()" class="stat-item stat-wishlist-link" style="text-decoration:none;color:inherit;">
         <div class="stat-icon wishlist">
           <?xml version="1.0" encoding="utf-8"?>
@@ -196,7 +196,7 @@
         <p class="stat-label">Items In cart</p>
       </a>
 
-      <!-- Reviews -->
+      
       <div class="stat-item">
         <div class="stat-icon reviews">
           <?xml version="1.0" encoding="utf-8"?>
@@ -211,10 +211,10 @@
       </div>
 
     </div>
-    <!-- end STATS GRID -->
+    
 
 
-    <!-- ACCOUNT DETAILS + ORDER HISTORY -->
+    
     <div class="main-grid">
 
       <div class="details-section">
@@ -232,15 +232,15 @@
       </div>
 
     </div>
-    <!-- end ACCOUNT DETAILS -->
+    
 
 
-    <!-- QUICK ACTIONS -->
+    
     <div class="quick-actions-section">
       <h2 class="quick-actions-title">Quick Actions</h2>
       <div class="quick-actions-grid">
 
-       <!-- Track Order -->
+       
       <div class="quick-card" onclick="window.location.href='/page/order-tracking.html'">
         <div class="quick-card-icon">
           <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
@@ -249,7 +249,7 @@
         <p>Check the status of your deliveries</p>
       </div>
 
-        <!-- Addresses -->
+        
         <div class="quick-card" onclick="openAccountPopup('address-popup')">
           <div class="quick-card-icon">
             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -258,7 +258,7 @@
           <p>Manage your delivery addresses</p>
         </div>
 
-        <!-- Payment Methods -->
+        
         <div class="quick-card" onclick="openAccountPopup('payment-popup')">
           <div class="quick-card-icon">
             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
@@ -267,7 +267,7 @@
           <p>Manage your cards and accounts</p>
         </div>
 
-        <!-- Security -->
+        
         <div class="quick-card" onclick="openAccountPopup('password-popup')">
           <div class="quick-card-icon">
             <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
@@ -276,7 +276,7 @@
           <p>Change your password</p>
         </div>
 
-        <!-- Contact Support -->
+        
         <div class="quick-card" onclick="window.location.href='contact.html'">
           <div class="quick-card-icon">
             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 107.38">
@@ -288,7 +288,7 @@
           <p>Reach out to our customer service</p>
         </div>
 
-        <!-- Reorder -->
+        
         <div class="quick-card" onclick="window.location.href='collections/bbw4life-all-product.html'">
           <div class="quick-card-icon">
             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 101.8">
@@ -302,12 +302,12 @@
 
       </div>
     </div>
-    <!-- end QUICK ACTIONS -->
+    
 
 
-    <!-- ── POPUPS ────────────────────────────────────────────── -->
+    
 
-    <!-- Address popup -->
+    
     <div id="address-popup" class="popup-overlay">
       <div class="popup">
         <button class="popup-close" onclick="closeAccountPopup('address-popup')">×</button>
@@ -326,7 +326,7 @@
       </div>
     </div>
 
-    <!-- Payment popup -->
+    
     <div id="payment-popup" class="popup-overlay">
       <div class="popup">
         <button class="popup-close" onclick="closeAccountPopup('payment-popup')">×</button>
@@ -379,7 +379,7 @@
       </div>
     </div>
 
-    <!-- Security / password popup -->
+    
     <div id="password-popup" class="popup-overlay">
       <div class="popup">
         <button class="popup-close" onclick="closeAccountPopup('password-popup')">×</button>
@@ -399,7 +399,7 @@
 
   <div class="affiliation-section" id="affiliation-section">
 
-  <!-- ── HERO BANNER ── -->
+  
   <div class="aff-hero">
     <div class="aff-hero__badge">
       <i class="fi fi-rr-star"></i>
@@ -447,7 +447,7 @@
     </div>
   </div>
 
-  <!-- ── CREATE LINK ── -->
+  
   <div class="aff-create-card">
     <div class="aff-create-card__left">
       <i class="fi fi-rr-link aff-create-card__icon"></i>
@@ -476,7 +476,7 @@
     </div>
   </div>
 
-  <!-- ── DASHBOARD TABLE ── -->
+  
   <div class="aff-table-card" id="aff-table-card" style="display:none;">
     <div class="aff-table-card__header">
       <div class="aff-table-card__title-wrap">
@@ -525,11 +525,11 @@
     </div>
   </div>
 
-  <!-- ── REWARD CARD ── -->
+  
   <div class="aff-reward-card" id="aff-reward-card" style="display:none;">
     <div class="aff-reward-inner">
 
-      <!-- Jackpot — visible uniquement si threshold atteint -->
+      
       <div class="aff-jackpot-block" id="aff-jackpot-block" style="display:none;">
         <div class="aff-jackpot-block__icon">🏆</div>
         <h3 class="aff-jackpot-block__title">Jackpot unlocked!</h3>
@@ -539,12 +539,12 @@
         </p>
       </div>
 
-      <!-- Divider entre jackpot et promo si les deux sont visibles -->
+      
       <div class="aff-reward-divider" id="aff-reward-or-divider" style="display:none;">
         <span>AND</span>
       </div>
 
-      <!-- Promo code — visible uniquement si unlock_percent atteint -->
+      
       <div class="aff-reward-promo" id="aff-reward-promo" style="display:none;">
         <div class="aff-reward-promo__header">
           <i class="fi fi-rr-ticket"></i>
@@ -564,7 +564,7 @@
         <span>OR</span>
       </div>
 
-      <!-- Withdraw -->
+      
       <div class="aff-withdraw-wrap" id="aff-withdraw-wrap">
         <p class="aff-withdraw-label">
           <i class="fi fi-rr-paper-plane"></i>
@@ -589,7 +589,7 @@
     </div>
   </div>
 
-  <!-- ── HISTORY ── -->
+  
   <div class="aff-history-card" id="aff-history-card" style="display:none;">
     <div class="aff-history-header">
       <div class="aff-history-header__left">
@@ -608,12 +608,12 @@
 
 
 
-  <!-- NEWSLETTER -->
+  
     <div id="newsletter-container"></div>
     
   </main>
 
-<!-- FOOTER -->
+
   <div id="footer-container"></div>
 
   <!-- ═══════════════════════════════════════════
@@ -623,7 +623,7 @@
   <script src="/pdg-francenel.js"></script>
    <script src="/script.js"></script>
 
-  <!-- Injection header / footer / newsletter / breadcrumb -->
+  
   <script>
     fetch('/src/components/header.html')
       .then(r => r.text())
@@ -662,7 +662,7 @@
   </script>
 
 
- <!-- Toast -->
+ 
   <div id="toast" class="toast"></div>
 
 

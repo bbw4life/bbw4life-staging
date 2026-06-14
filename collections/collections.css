@@ -5,7 +5,7 @@
 ================================================================ */
 
 :root {
-  /* ── Palette collection synchronisée BBW4LIFE ── */
+  
   --col-bg:          #fdf9f4;
   --col-surface:     #ffffff;
   --col-surface-2:   #f8f2ec;
@@ -13,12 +13,12 @@
   --col-text:        #1a0f0a;
   --col-text-2:      #6b5248;
   --col-text-3:      #a89285;
-  --col-accent:      #c0385e;          /* rose BBW */
-  --col-accent-2:    #d4506e;          /* rose clair */
-  --col-accent-soft: #fdf0f4;          /* rose très doux */
-  --col-dark:        #0d0d0d;          /* noir BBW */
-  --col-gold:        #c9963e;          /* or BBW */
-  --col-gold-light:  #e8bc6a;          /* or clair */
+  --col-accent:      #c0385e;          
+  --col-accent-2:    #d4506e;          
+  --col-accent-soft: #fdf0f4;          
+  --col-dark:        #0d0d0d;          
+  --col-gold:        #c9963e;          
+  --col-gold-light:  #e8bc6a;          
   --col-radius:      14px;
   --col-radius-sm:   8px;
   --col-radius-lg:   20px;
@@ -120,7 +120,7 @@
   pointer-events: none;
 }
 
-/* Shimmer top doré */
+
 .col-flash-deal::after {
   content: '';
   position: absolute;
@@ -605,7 +605,7 @@
 ================================================================ */
 .col-drawer {
   position: relative;
-  /* ↑ z-index global ici, le panel est en fixed donc c'est le panel qui compte */
+  
   z-index: 9999;
 }
 
@@ -631,7 +631,7 @@
   background: var(--col-surface);
   display: flex;
   flex-direction: column;
-  /* ↑ Supérieur au header quelle que soit sa valeur */
+  
   z-index: 9999;
   transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow:
@@ -654,7 +654,7 @@
   position: relative;
 }
 
-/* Ligne or animée en haut du drawer */
+
 .col-drawer__head::before {
   content: '';
   position: absolute;
@@ -855,7 +855,7 @@
 .col-check__label { font-size: 13px; color: var(--col-text-2); flex: 1; }
 .col-check__label em { font-style: normal; color: var(--col-text-3); margin-left: 4px; }
 
-/* Price range */
+
 .col-price-display {
   display: flex;
   align-items: center;
@@ -1046,7 +1046,7 @@
 
 .col-color-row.active .col-color-row__check { display: flex; }
 
-/* Rating opts */
+
 .col-rating-opts { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .col-rating-opt {
@@ -1071,7 +1071,7 @@
 .col-rating-opt.active { background: var(--col-gold); border-color: var(--col-gold); color: #000; }
 .col-rating-opt.active i { color: #000; }
 
-/* Size grid */
+
 .col-size-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .col-size-btn {
@@ -1167,7 +1167,7 @@
   will-change: transform, opacity, box-shadow;
 }
 
-/* Ligne or animée en haut de chaque card au hover */
+
 .col-product-card::before {
   content: '';
   position: absolute;
@@ -1206,7 +1206,7 @@
   animation-play-state: paused !important;
 }
 
-/* Select checkbox overlay */
+
 .col-card__select {
   position: absolute;
   top: 42px;
@@ -1249,7 +1249,7 @@
   opacity: 1;
 }
 
-/* Quick View button on hover */
+
 .col-card__quick-view {
   position: absolute;
   bottom: 0;
@@ -1515,7 +1515,7 @@
 
 .col-card__btn--view:hover { border-color: var(--col-gold); color: var(--col-gold); }
 
-/* List view */
+
 .col-grid.list-view .col-product-card { flex-direction: row; height: 150px; }
 .col-grid.list-view .col-card__media { width: 130px; flex-shrink: 0; aspect-ratio: unset; height: 100%; }
 .col-grid.list-view .col-card__info { padding: 12px 16px; flex: 1; }
@@ -2466,7 +2466,7 @@
   overflow: hidden;
 }
 
-/* Ligne or en haut du popup */
+
 .col-exit-popup::before {
   content: '';
   position: absolute;
@@ -2672,7 +2672,7 @@
   .col-result-label { display: none; }
   .col-pagination { padding: 14px 0 8px; }
 
-  /* Drawer pleine largeur en mobile */
+  
   .col-drawer__panel {
     width: 100%;
     max-width: 100%;
@@ -2752,7 +2752,7 @@
   }
 }
 
-/* LIST VIEW — DESKTOP UNIQUEMENT */
+
 @media (min-width: 769px) {
   .col-grid.list-view .col-product-card { flex-direction: row; height: 200px; }
   .col-grid.list-view .col-card__media { width: 200px; flex-shrink: 0; aspect-ratio: unset; height: 100%; }
@@ -2905,7 +2905,7 @@
   margin-top: 0;
 }
 
-/* Animated background gradient blob */
+
 .ac-hero__bg {
   position: absolute;
   inset: 0;
@@ -2928,7 +2928,7 @@
   100% { opacity: 1;   transform: scale(1.06) translate(1%, -1%); }
 }
 
-/* Floating particles */
+
 .ac-hero__particles { position: absolute; inset: 0; overflow: hidden; }
 
 .ac-hero__particle {
@@ -2945,7 +2945,7 @@
   100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
 }
 
-/* Shimmer lines */
+
 .ac-hero__line {
   position: absolute;
   left: 0; right: 0;
@@ -2972,7 +2972,7 @@
   100% { background-position: 200%  0; }
 }
 
-/* Hero content */
+
 .ac-hero__inner {
   position: relative;
   z-index: 1;
@@ -3152,7 +3152,7 @@
   gap: 24px;
 }
 
-/* ── SKELETON while loading ── */
+
 .ac-skeleton {
   border-radius: var(--col-radius-lg);
   overflow: hidden;
@@ -3173,7 +3173,7 @@
   100% { background-position: -100% 0; }
 }
 
-/* ── CARD — base ── */
+
 .ac-card {
   display: flex;
   flex-direction: column;
@@ -3186,13 +3186,13 @@
   color: inherit;
   cursor: pointer;
 
-  /* Entry animation */
+  
   opacity: 0;
   transform: translateY(30px) scale(0.97);
   animation: acCardIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
-  /* Continuous float loop — starts after entry */
-  /* (added via JS stagger so each card floats on its own cycle) */
+  
+  
   transition:
     box-shadow var(--col-transition),
     transform var(--col-transition),
@@ -3203,7 +3203,7 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Stagger delays (up to 6 cards) */
+
 .ac-card:nth-child(1) { animation-delay: 0.05s; }
 .ac-card:nth-child(2) { animation-delay: 0.12s; }
 .ac-card:nth-child(3) { animation-delay: 0.19s; }
@@ -3211,7 +3211,7 @@
 .ac-card:nth-child(5) { animation-delay: 0.33s; }
 .ac-card:nth-child(6) { animation-delay: 0.40s; }
 
-/* Loop float — applied after animation ends */
+
 .ac-card {
   animation:
     acCardIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards,
@@ -3230,7 +3230,7 @@
   50%       { transform: translateY(-8px); box-shadow: 0 18px 48px rgba(192,56,94,0.18); }
 }
 
-/* Pause float on hover, show premium hover state */
+
 .ac-card:hover {
   animation-play-state: paused;
   box-shadow:
@@ -3241,7 +3241,7 @@
   transform: translateY(-10px) scale(1.015);
 }
 
-/* Golden shimmer bar on top — appears on hover */
+
 .ac-card::before {
   content: '';
   position: absolute;
@@ -3271,7 +3271,7 @@
   100% { background-position: 200% 0; }
 }
 
-/* ── Card image wrapper ── */
+
 .ac-card__img-wrap {
   position: relative;
   aspect-ratio: 4 / 4;
@@ -3294,7 +3294,7 @@
   filter: brightness(0.88);
 }
 
-/* Dark gradient overlay on hover — reveals info */
+
 .ac-card__img-wrap::after {
   content: '';
   position: absolute;
@@ -3313,7 +3313,7 @@
 
 .ac-card:hover .ac-card__img-wrap::after { opacity: 1; }
 
-/* "Explore" chip that slides up on hover */
+
 .ac-card__img-wrap::before {
   content: 'Explore →';
   position: absolute;
@@ -3342,7 +3342,7 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* ── Card info block ── */
+
 .ac-card__info {
   padding: 18px 20px 22px;
   display: flex;
@@ -3355,7 +3355,7 @@
   overflow: hidden;
 }
 
-/* Subtle gold shimmer strip behind info on hover */
+
 .ac-card__info::after {
   content: '';
   position: absolute;
@@ -3423,13 +3423,13 @@
    RESPONSIVE
 ================================================================ */
 
-/* 2 cols on tablet */
+
 @media (max-width: 1024px) and (min-width: 601px) {
   .ac-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .ac-hero  { min-height: 320px; }
 }
 
-/* 1 col on mobile */
+
 @media (max-width: 600px) {
   .ac-grid { grid-template-columns: 1fr; gap: 16px; }
 
@@ -3448,7 +3448,7 @@
   .ac-card__info { padding: 14px 16px 18px; }
   .ac-card__title { font-size: 17px; }
 
-  /* Disable float loop on mobile for performance */
+  
   .ac-card {
     animation: acCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
   }
@@ -3502,7 +3502,7 @@
   overflow: hidden;
 }
 
-/* Particles sont générées via collections.js */
+
 
 .bbw-hero-orig__line {
   position: absolute;
@@ -4274,7 +4274,7 @@
   margin: 0;
 }
 
-/* Countdown */
+
 .bbw-cs__countdown {
   display: flex;
   align-items: center;
@@ -4323,7 +4323,7 @@
   margin-bottom: 18px;
 }
 
-/* Teaser items */
+
 .bbw-cs__teaser {
   display: flex;
   align-items: center;
@@ -4362,7 +4362,7 @@
   font-size: 14px;
 }
 
-/* Waitlist */
+
 .bbw-cs__waitlist { max-width: 520px; margin: 0 auto; }
 
 .bbw-cs__waitlist-label {
@@ -4570,7 +4570,7 @@
   border-color: rgba(192,56,94,0.22);
 }
 
-/* Featured card */
+
 .bbw-testi__card--featured {
   background: linear-gradient(160deg, #fff 0%, #fdf5f8 100%);
   border-color: rgba(192,56,94,0.25);

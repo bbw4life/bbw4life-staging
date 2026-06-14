@@ -5,7 +5,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-/* ── Keyframes ── */
+
 @keyframes crownFloat {
   0%, 100% { transform: translateY(0px) rotate(-1deg); }
   50%       { transform: translateY(-12px) rotate(1deg); }
@@ -56,7 +56,7 @@
   100% { left: 140%; }
 }
 
-/* ── Reset & Base ── */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -91,7 +91,7 @@ body {
   padding-top: calc(var(--ann-h) + var(--hdr-h));
 }
 
-/* ── Canvas ── */
+
 #particleCanvas {
   position: fixed;
   inset: 0;
@@ -102,7 +102,7 @@ body {
   z-index: 0;
 }
 
-/* ── Decorative orbs ── */
+
 .orb {
   position: fixed;
   border-radius: 50%;
@@ -135,7 +135,7 @@ body {
   animation: orbPulse 6s ease-in-out infinite;
 }
 
-/* ── Scanlines ── */
+
 .scanlines {
   position: fixed;
   inset: 0;
@@ -151,7 +151,7 @@ body {
   animation: scanMove 8s linear infinite;
 }
 
-/* ── Main layout ── */
+
 .page-404 {
   position: relative;
   z-index: 2;
@@ -164,7 +164,7 @@ body {
   text-align: center;
 }
 
-/* ── Crown ── */
+
 .crown-wrap {
   margin-bottom: 28px;
   animation: crownFloat 5s ease-in-out infinite, crownGlow 3s ease-in-out infinite;
@@ -179,7 +179,7 @@ body {
   margin: 0 auto;
 }
 
-/* ── 404 Number ── */
+
 .number-block {
   display: flex;
   align-items: center;
@@ -207,7 +207,7 @@ body {
 .n0       { animation: goldSweep 4s linear infinite, numReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.5s forwards; }
 .n4-right { animation: goldSweep 4s linear infinite, numReveal 0.9s cubic-bezier(0.22,1,0.36,1) 0.7s forwards; }
 
-/* ── Gold divider ── */
+
 .gold-divider {
   display: flex;
   align-items: center;
@@ -239,7 +239,7 @@ body {
   display: inline-block;
 }
 
-/* ── Headline ── */
+
 .headline {
   font-family: var(--font-display);
   font-size: clamp(28px, 5vw, 52px);
@@ -262,7 +262,7 @@ body {
   animation: goldSweep 5s linear infinite;
 }
 
-/* ── Message ── */
+
 .message {
   font-family: var(--font-body);
   font-size: clamp(14px, 2vw, 17px);
@@ -279,7 +279,7 @@ body {
   font-weight: 500;
 }
 
-/* ── Tagline ── */
+
 .tagline {
   font-family: var(--font-body);
   font-size: 11px;
@@ -309,7 +309,7 @@ body {
 .tagline-inner::before { right: calc(100% + 10px); }
 .tagline-inner::after  { left:  calc(100% + 10px); }
 
-/* ── CTA buttons ── */
+
 .cta-group {
   display: flex;
   gap: 12px;
@@ -390,7 +390,7 @@ body {
   transform: scale(0.97);
 }
 
-/* ── Quick links ── */
+
 .quick-links {
   display: flex;
   align-items: center;
@@ -422,7 +422,7 @@ body {
   font-size: 12px;
 }
 
-/* ── Brand signature ── */
+
 .brand-sig {
   opacity: 0;
   animation: fadeUp 0.7s ease 2.1s forwards;
@@ -439,7 +439,7 @@ body {
 .brand-link:hover { color: rgba(201,150,62,0.65); }
 .brand-4 { color: var(--gold); }
 
-/* ── Utility ── */
+
 .desktop-only { display: none; }
 @media (min-width: 640px) { .desktop-only { display: inline; } }
 
@@ -543,7 +543,7 @@ body {
   background: linear-gradient(90deg, transparent, rgba(201,150,62,0.50), transparent);
 }
 
-/* Left */
+
 .hdr404__left {
   flex: 1;
   display: flex;
@@ -573,7 +573,7 @@ body {
 .hdr404__back svg { flex-shrink: 0; width: 18px; height: 18px; }
 .hdr404__back span { display: inline; }
 
-/* Center logo */
+
 .hdr404__logo { flex-shrink: 0; }
 .hdr404__logo a {
   display: flex;
@@ -600,7 +600,7 @@ body {
 }
 .hdr404__logo-4 { color: #c9963e; }
 
-/* Right */
+
 .hdr404__right {
   flex: 1;
   display: flex;
@@ -676,14 +676,14 @@ body {
     padding: 6px 12px 6px 8px;
     font-size: 12px;
   }
-  /* "Back" texte toujours visible */
+  
   .hdr404__back span { display: inline !important; }
   .hdr404__nav-link {
     padding: 6px 8px;
     font-size: 12px;
     gap: 4px;
   }
-  /* Les 3 liens toujours visibles */
+  
   .hdr404__nav-link span { display: inline !important; }
 }
 
@@ -691,9 +691,9 @@ body {
   :root { --hdr-h: 60px; }
   .hdr404__back { font-size: 11px; padding: 5px 10px 5px 7px; }
   .hdr404__nav-link { font-size: 11px; padding: 5px 6px; }
-  /* Sur très petit : cacher SEULEMENT le texte Help, garder l'icône */
+  
   .hdr404__nav-link--hide-mobile span { display: none !important; }
-  /* Back et les 2 autres gardent leur texte */
+  
   .hdr404__back span { display: inline !important; }
 }
 
@@ -707,7 +707,7 @@ body {
   .tagline-inner::after { display: none; }
 }
 
-/* ── Reduced motion ── */
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

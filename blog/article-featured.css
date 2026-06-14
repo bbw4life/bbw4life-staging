@@ -2,7 +2,7 @@
    BBW4LIFE — article-featured.css
 ================================================================ */
 
-/* ── CSS Variables ── */
+
 :root {
   --art-rose:      #c9963e;
   --art-plum:      #1a1a1a;
@@ -23,7 +23,7 @@
   --art-black-soft:  #1a1a1a;
   --art-black-mist:  #2a2a2a;
 
-  /* Content width */
+  
   --art-content-max: 740px;
   --art-sidebar-w:   290px;
   --art-gap:         48px;
@@ -132,7 +132,7 @@ table,
   box-sizing: border-box;
 }
 
-/* Breadcrumb */
+
 .article-breadcrumb {
   display: flex;
   align-items: center;
@@ -160,7 +160,7 @@ table,
   font-weight: 600;
 }
 
-/* Badges */
+
 .article-hero__badges {
   display: flex;
   align-items: center;
@@ -189,7 +189,7 @@ table,
   color: rgba(255,255,255,0.90);
 }
 
-/* Title */
+
 .article-hero__title {
   font-size: clamp(2rem, 5vw, 3.4rem);
   font-weight: 900;
@@ -200,7 +200,7 @@ table,
   max-width: 780px;
 }
 
-/* Excerpt */
+
 .article-hero__excerpt {
   font-size: clamp(0.95rem, 1.5vw, 1.10rem);
   color: rgba(255,255,255,0.78);
@@ -209,7 +209,7 @@ table,
   margin: 0;
 }
 
-/* Author + meta row */
+
 .article-hero__meta {
   display: flex;
   align-items: center;
@@ -264,7 +264,7 @@ table,
   gap: 5px;
 }
 
-/* Share row */
+
 .article-hero__share {
   display: flex;
   align-items: center;
@@ -279,7 +279,7 @@ table,
   margin-right: 2px;
 }
 
-/* Scroll indicator */
+
 .article-hero__scroll {
   position: absolute;
   bottom: 20px;
@@ -326,7 +326,7 @@ table,
   filter: brightness(1.15);
 }
 
-/* Large share buttons */
+
 .art-share-btn--lg {
   width: auto;
   border-radius: 60px;
@@ -345,7 +345,7 @@ table,
   color: #fff;
 }
 
-/* Dark share buttons inside hero */
+
 .article-hero__share .art-share-btn--fb   { background: rgba(59,89,152,0.22);   color: #d0dbf7; }
 .article-hero__share .art-share-btn--pi   { background: rgba(230,0,35,0.20);    color: #ffb3b9; }
 .article-hero__share .art-share-btn--wa   { background: rgba(37,211,102,0.18);  color: #a0f0c4; }
@@ -429,7 +429,7 @@ table,
   font-weight: 600;
 }
 
-/* Sidebar CTA */
+
 .sidebar-cta-card {
   padding: 22px;
   background: linear-gradient(135deg, var(--art-black) 0%, var(--art-black-mist) 50%, #3a2e00 100%);
@@ -482,7 +482,7 @@ table,
   background: linear-gradient(135deg, var(--art-gold-light), var(--art-gold));
 }
 
-/* Sidebar sticky share */
+
 .sidebar-share-sticky {
   display: flex;
   flex-direction: column;
@@ -587,7 +587,7 @@ table,
 
 .article-content em { color: var(--art-gold); }
 
-/* ── KEY TAKEAWAYS ── */
+
 .article-takeaways {
   background: var(--art-rose-pale);
   border: 1.5px solid rgba(201,150,62,0.22);
@@ -639,7 +639,7 @@ table,
   margin-top: 1px;
 }
 
-/* ── CALLOUT CARDS ── */
+
 .article-callout {
   display: flex;
   gap: 16px;
@@ -709,7 +709,7 @@ table,
 .article-callout--warning .article-callout__title { color: #a32d2d; }
 .article-callout--warning p { color: #6b2020; }
 
-/* ── BLOCKQUOTE ── */
+
 .article-blockquote {
   position: relative;
   margin: 36px 0;
@@ -749,7 +749,7 @@ table,
   font-style: normal;
 }
 
-/* ── HABITS GRID ── */
+
 .article-habits-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -800,7 +800,7 @@ table,
   grid-column: 1 / -1;
 }
 
-/* ── IN-ARTICLE FIGURE ── */
+
 .article-figure {
   margin: 36px 0;
   border-radius: var(--art-radius);
@@ -828,7 +828,7 @@ table,
   line-height: 1.55;
 }
 
-/* ── MID-ARTICLE CTA ── */
+
 .article-mid-cta {
   margin: 52px 0;
   border-radius: 22px;
@@ -947,7 +947,7 @@ table,
   gap: 5px;
 }
 
-/* ── CHECKLIST ── */
+
 .article-checklist {
   list-style: none;
   padding: 0;
@@ -973,7 +973,7 @@ table,
   flex-shrink: 0;
 }
 
-/* ── TABLE ── */
+
 .article-table-wrap {
   overflow-x: auto;
   margin: 28px 0;
@@ -1020,7 +1020,7 @@ table,
   vertical-align: top;
 }
 
-/* ── ROADMAP ── */
+
 .article-roadmap {
   display: flex;
   flex-direction: column;
@@ -1102,7 +1102,7 @@ table,
   margin: 0 !important;
 }
 
-/* ── RESULTS SECTION ── */
+
 .article-results {
   background: linear-gradient(135deg, #f0faf3, #eafaf1);
   border: 1.5px solid rgba(34,160,107,0.18);
@@ -1171,7 +1171,7 @@ table,
   margin: 0 !important;
 }
 
-/* ── CONCLUSION ── */
+
 .article-conclusion {
   background: var(--art-rose-ultra);
   border: 1.5px solid var(--art-border);
@@ -1191,7 +1191,7 @@ table,
   line-height: 1.6 !important;
 }
 
-/* ── AUTHOR BIO ── */
+
 .article-author-bio {
   display: flex;
   gap: 22px;
@@ -1385,7 +1385,7 @@ table,
   pointer-events: none;
 }
 
-/* ── Avatar upload ── */
+
 .art-rv-avatar-wrap {
   display: flex;
   align-items: center;
@@ -1428,7 +1428,7 @@ table,
   line-height: 1.5;
 }
 
-/* ── Star rating ── */
+
 .art-rv-stars {
   display: flex;
   gap: 6px;
@@ -1448,7 +1448,7 @@ table,
 
 .art-rv-star:hover { transform: scale(1.15); }
 
-/* ── Error / Success ── */
+
 .art-rv-error {
   color: #c0392b;
   font-size: 0.84rem;
@@ -1472,7 +1472,7 @@ table,
   gap: 8px;
 }
 
-/* ── Submit button ── */
+
 .art-rv-submit-btn {
   display: inline-flex;
   align-items: center;
@@ -1504,7 +1504,7 @@ table,
   transform: none;
 }
 
-/* ══ REVIEWS LIST ══ */
+
 .art-reviews-list-wrap {
   margin-top: 28px;
   border-top: 1.5px solid var(--art-black-soft);
@@ -1640,7 +1640,7 @@ table,
   border-color: var(--art-gold);
 }
 
-/* ── REACTION BUTTONS ── */
+
 .article-reactions {
   background: var(--art-rose-ultra);
   border: 1.5px solid var(--art-black-soft);
@@ -1718,7 +1718,7 @@ table,
   background: rgba(255,255,255,0.14);
 }
 
-/* ── SOCIAL SHARE BOTTOM ── */
+
 .article-share-bottom {
   text-align: center;
   padding: 32px 0;
@@ -1742,7 +1742,7 @@ table,
   flex-wrap: wrap;
 }
 
-/* ── NEWSLETTER (article bottom) ── */
+
 .article-newsletter {
   background: linear-gradient(135deg, var(--art-black) 0%, var(--art-black-mist) 50%, #1e1800 100%);
   border-radius: 22px;
@@ -2315,7 +2315,7 @@ table,
 .article-hero__content > *:nth-child(5) { animation-delay: 0.50s; }
 .article-hero__content > *:nth-child(6) { animation-delay: 0.58s; }
 
-/* Copy link success state */
+
 .art-share-btn--copy.copied {
   background: #22a06b !important;
   color: #fff !important;

@@ -14,10 +14,10 @@
 
 <body>
 
-   <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+   
   <div id="reading-progress-bar" aria-hidden="true"></div>
 
-  <!-- ═══ HEADER ═══ -->
+  
   <div id="header-container"></div>
 
   <main id="main-content" class="ot-main">
@@ -36,7 +36,7 @@
 
       <div class="ot-hero__inner">
 
-        <!-- Icon badge -->
+        
         <div class="ot-hero__icon-wrap" data-ot-reveal="fade-up" data-delay="0">
           <div class="ot-hero__icon-ring"></div>
           <div class="ot-hero__icon-ring ot-hero__icon-ring--2"></div>
@@ -50,24 +50,24 @@
           </div>
         </div>
 
-        <!-- Eyebrow -->
+        
         <span class="ot-hero__eyebrow" data-ot-reveal="fade-up" data-delay="100">
           <span class="ot-eyebrow__dot"></span>
           Real-time delivery status
           <span class="ot-eyebrow__dot"></span>
         </span>
 
-        <!-- Title -->
+        
         <h1 class="ot-hero__title" data-ot-reveal="fade-up" data-delay="200">
           Track Your <em>Order</em>
         </h1>
 
-        <!-- Subtitle -->
+        
         <p class="ot-hero__subtitle" data-ot-reveal="fade-up" data-delay="300">
           Enter your tracking number below and see exactly where your parcel is — from our warehouse to your doorstep.
         </p>
 
-        <!-- ═══ TRACKING FORM ═══ -->
+        
         <div class="ot-form-wrap" data-ot-reveal="fade-up" data-delay="400">
           <div class="ot-form__card">
             <div class="ot-form__shimmer"></div>
@@ -103,13 +103,13 @@
               </button>
             </div>
 
-            <!-- Error -->
+            
             <p class="ot-form__error" id="otError" style="display:none;">
               <i class="fi fi-rr-triangle-warning"></i>
               Please enter a valid tracking number.
             </p>
 
-            <!-- Carriers -->
+            
             <div class="ot-carriers">
               <span class="ot-carriers__label">Supported carriers:</span>
               <div class="ot-carriers__list">
@@ -125,7 +125,7 @@
           </div>
         </div>
 
-        <!-- ═══ 17TRACK RESULT CONTAINER ═══ -->
+        
         <div class="ot-result-wrap" id="otResultWrap" style="display:none;" data-ot-reveal="fade-up">
           <div class="ot-result__header">
             <i class="fi fi-rr-map-marker-check"></i>
@@ -134,7 +134,7 @@
           <div id="YQContainer" class="ot-result__iframe"></div>
         </div>
 
-      </div><!-- /ot-hero__inner -->
+      </div>
     </section>
 
     <!-- ═══════════════════════════════
@@ -306,23 +306,23 @@
       </div>
     </section>
 
-    <!-- Newsletter -->
+    
     <div id="newsletter-container"></div>
 
   </main>
 
-  <!-- ═══ FOOTER ═══ -->
+  
   <div id="footer-container"></div>
 
 
-  <!-- SCRIPTS -->
+  
   <script src="/widgets-loader.js"></script>
   <script src="/pdg-francenel.js"></script>
   <script src="/script.js"></script>
   <script src="/page/pages.js"></script>
 
 
- <!-- Injection header/footer -->
+ 
    <script>
   fetch('/src/components/header.html')
     .then(r => r.text())
@@ -403,7 +403,7 @@
       }, 200);
     }
 
-    /* Appel SDK 17Track */
+    
     if (typeof YQV5 !== 'undefined') {
       YQV5.trackSingle({
         YQ_ContainerId : 'YQContainer',
@@ -413,7 +413,7 @@
         YQ_Num         : num
       });
     } else {
-      /* SDK pas encore prêt → on réessaie */
+      
       console.warn('[OT] 17Track SDK not ready, retrying…');
       setTimeout(otDoTrack, 1200);
     }
@@ -431,7 +431,7 @@
     var errorEl    = document.getElementById('otError');
     var resultWrap = document.getElementById('otResultWrap');
 
-    /* ── Bouton Clear ── */
+    
     if (clearBtn) {
       input.addEventListener('input', function () {
         clearBtn.style.display = this.value.length > 0 ? 'flex' : 'none';
@@ -445,7 +445,7 @@
       });
     }
 
-    /* ── Touche Entrée ── */
+    
     input.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') otDoTrack();
     });
@@ -460,17 +460,17 @@
     if (trackParam) {
       input.value = trackParam.trim();
       if (clearBtn) clearBtn.style.display = 'flex';
-      /* On attend 800 ms pour que le SDK 17Track soit chargé */
+      
       setTimeout(otDoTrack, 800);
     }
 
-    /* ── Particules ── */
+    
     otInitParticles();
 
-    /* ── Scroll reveal ── */
+    
     otInitReveal();
 
-    /* ── FAQ accordion ── */
+    
     otInitFaq();
 
   });
@@ -543,7 +543,7 @@
     });
   }
 
-  /* Exposer globalement pour le onclick inline du bouton */
+  
   window.otDoTrack = otDoTrack;
   </script>
 

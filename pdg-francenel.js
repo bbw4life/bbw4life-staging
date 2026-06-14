@@ -8,7 +8,7 @@
   ────────────────────────────────────────────────────────── */
   var WIDGETS_HTML = `
 
-<!-- BBW4LIFE PRODUCT REQUEST POPUP -->
+
 <div id="plan-popup-overlay" class="plan-popup-overlay" aria-hidden="true">
   <div class="plan-popup-modal" role="dialog" aria-modal="true" aria-labelledby="plan-popup-title">
 
@@ -16,7 +16,7 @@
       <i class="fi fi-rr-cross"></i>
     </button>
 
-    <!-- ══ STEP 1 : REQUEST FORM ══ -->
+    
     <div class="plan-popup-step" id="plan-step-form">
 
       <div class="plan-popup-urgency-bar">
@@ -37,7 +37,7 @@
 
       <div class="plan-popup-body">
 
-        <!-- Social proof -->
+        
         <div class="plan-popup-social-proof">
           <div class="plan-popup-avatars">
             <img src="https://cdn.shopify.com/s/files/1/0978/0353/4627/files/Customer_plan_1.png?v=1776041141" alt="">
@@ -49,7 +49,7 @@
           <span><strong>8 women</strong> submitted a request in the last 24h</span>
         </div>
 
-        <!-- Price block -->
+        
         <div class="plan-popup-price-block">
           <div class="plan-popup-price-inner">
             <div class="plan-popup-price-left">
@@ -64,7 +64,7 @@
           </div>
         </div>
 
-        <!-- Form -->
+        
         <div class="plan-form-row">
           <div class="plan-form-group">
             <label for="plan-firstname">First Name *</label>
@@ -83,28 +83,28 @@
             <input type="tel" id="plan-phone" placeholder="+1 000 000 0000" autocomplete="tel">
           </div>
 
-          <!-- NEW: Product selector from bbw-features-products collection -->
+          
           <div class="plan-form-group plan-form-group--full">
             <label for="plan-program">Desired Product *</label>
             <select id="plan-program">
               <option value="" disabled selected>Choose a product...</option>
-              <!-- Populated dynamically by JS from bbw-features-products collection -->
+              
             </select>
           </div>
 
-          <!-- NEW: Size selector -->
+          
          <div class="plan-form-group plan-form-group--half" id="plan-size-group">
           <label for="plan-size">Preferred Size *</label>
           <input type="text" id="plan-size" placeholder="e.g. 1XL, 2XL, 3XL…" autocomplete="off">
         </div>
 
-          <!-- NEW: Color selector -->
+          
           <div class="plan-form-group plan-form-group--half" id="plan-color-group">
           <label for="plan-color">Preferred Color *</label>
           <input type="text" id="plan-color" placeholder="e.g. Black, Blush Pink, Teal…" autocomplete="off">
         </div>
 
-          <!-- Color preview swatches -->
+          
           <div class="plan-form-group plan-form-group--full" id="plan-color-preview-wrap" style="display:none;">
             <div class="plan-color-swatches-preview" id="plan-color-swatches-preview"></div>
           </div>
@@ -133,7 +133,7 @@
       </div>
     </div>
 
-    <!-- ══ STEP 2 : PAYMENT METHOD ══ -->
+    
     <div class="plan-popup-step" id="plan-step-payment" style="display:none;">
 
       <div class="plan-popup-urgency-bar">
@@ -148,7 +148,7 @@
 
       <div class="plan-popup-body">
 
-        <!-- Summary strip -->
+        
         <div class="plan-popup-summary-strip">
           <i class="fi fi-rr-check-circle"></i>
           <div>
@@ -158,7 +158,7 @@
           </div>
         </div>
 
-        <!-- Payment options -->
+        
         <div class="plan-pay-options">
           <label class="plan-pay-option" id="plan-opt-stripe">
             <input type="radio" name="plan-payment" value="stripe" checked>
@@ -203,7 +203,7 @@
       </div>
     </div>
 
-    <!-- ══ STEP 3 : THANK YOU ══ -->
+    
     <div class="plan-popup-step" id="plan-step-thanks" style="display:none;">
       <div class="plan-thanks-wrap">
         <div class="plan-thanks-ring">
@@ -254,7 +254,7 @@
 
 
 
-<!-- QUICK VIEW MODAL -->
+
   <div id="colQvOverlay" class="col-qv-overlay" style="display:none">
     <div class="col-qv-modal">
       <button class="col-qv-close" id="colQvClose"><i class="fas fa-times"></i></button>
@@ -262,7 +262,7 @@
     </div>
   </div>
 
-  <!-- COMPARE MODAL -->
+  
   <div id="colCompareOverlay" class="col-compare-overlay" style="display:none">
     <div class="col-compare-modal">
       <div class="col-compare-modal__head">
@@ -273,7 +273,7 @@
     </div>
   </div>
 
-  <!-- STICKY MULTI-SELECT BAR -->
+  
   <div class="col-sticky-bar" id="colStickyBar" style="display:none">
     <div class="col-sticky-bar__inner">
       <span class="col-sticky-bar__label">
@@ -293,7 +293,7 @@
     </div>
   </div>
 
- <!-- EXIT INTENT POPUP -->
+ 
 <div id="colExitOverlay" class="col-exit-overlay" style="display:none">
   <div class="col-exit-popup">
     <button class="col-exit-close" id="colExitClose"><i class="fas fa-times"></i></button>
@@ -457,38 +457,38 @@
 
   document.addEventListener('click', function (e) {
 
-    /* ── Fermeture overlay ── */
+    
     if (e.target.classList.contains('overlay')) {
       closeCartDrawer();
       closeWishlistModal();
     }
 
-    /* ── Cart icon wrapper ── */
+    
     var cartWrapper = e.target.closest('.icon-wrapper');
     if (cartWrapper) {
       if (cartWrapper.querySelector('.cart-icon'))     { openCartDrawer();    return; }
       if (cartWrapper.querySelector('.wishlist-icon')) { openWishlistModal(); return; }
     }
 
-    /* ── Cart drawer : fermeture ── */
+    
     if (e.target.closest('.close-drawer')) {
       closeCartDrawer();
       return;
     }
 
-    /* ── Wishlist modal : fermeture ── */
+    
     if (e.target.closest('.close-modal') || e.target.classList.contains('wishlist-modal-backdrop')) {
       closeWishlistModal();
       return;
     }
 
-    /* ── Checkout ── */
+    
     if (e.target.closest('.cart-drawer__footer .checkout')) {
       if (typeof checkout === 'function') checkout();
       return;
     }
 
-    /* ── Account trigger (paulTrigger) ── */
+    
     if (e.target.closest('#paulTrigger')) {
       e.preventDefault();
       if (localStorage.getItem('isLoggedIn') === 'true') {
@@ -504,7 +504,7 @@
       return;
     }
 
-    /* ── Account popup : fermeture fond ── */
+    
     if (e.target.id === 'paulPopup') {
       var pp = document.getElementById('paulPopup');
       if (pp && !window.location.pathname.toLowerCase().includes('account')) {
@@ -513,7 +513,7 @@
       return;
     }
 
-    /* ── Account popup : bouton × ── */
+    
     if (e.target.closest('.paul-close')) {
       var pp2 = document.getElementById('paulPopup');
       if (pp2 && !window.location.pathname.toLowerCase().includes('account')) {
@@ -522,7 +522,7 @@
       return;
     }
 
-    /* ── Switch login ↔ signup ── */
+    
     if (e.target.id === 'goToSignup') {
       var lf = document.getElementById('loginForm');
       var sf = document.getElementById('signupForm');
@@ -552,14 +552,14 @@
       return;
     }
 
-    /* ── Error popup : fermeture ── */
+    
     if (e.target.id === 'popup-close') {
       var ep = document.getElementById('error-popup');
       if (ep) ep.classList.remove('show');
       return;
     }
 
-    /* ── Floating nav toggle ── */
+    
     if (e.target.closest('#fnav-toggle')) {
       var wheel  = document.getElementById('fnav-wheel');
       var toggle = document.getElementById('fnav-toggle');
@@ -568,7 +568,7 @@
       return;
     }
 
-    /* ── Floating nav : fermeture si clic dehors ── */
+    
     if (!e.target.closest('#floating-nav')) {
       var wheel2 = document.getElementById('fnav-wheel');
       var toggle2 = document.getElementById('fnav-toggle');
@@ -576,14 +576,14 @@
       if (toggle2) toggle2.classList.remove('open');
     }
 
-    /* ── RC popup : fermeture ── */
+    
     if (e.target.closest('#rc-close')) {
       var rc = document.getElementById('rc-popup-container');
       if (rc) rc.style.display = 'none';
       return;
     }
 
-    /* ── Wishlist share buttons ── */
+    
     var shareBtn = e.target.closest('[data-wishlist-share]');
     if (shareBtn) {
       e.preventDefault();
@@ -593,7 +593,7 @@
       return;
     }
 
-    /* ── Add all to cart ── */
+    
     if (e.target.closest('.add-all-to-cart')) {
       if (typeof addAllToCart === 'function') addAllToCart();
       return;
@@ -636,7 +636,7 @@
     if (overlay) overlay.classList.remove('active');
   }
 
-  /* Expose globalement — script.js appelle window.openCartDrawer() */
+  
   window.openCartDrawer    = openCartDrawer;
   window.closeCartDrawer   = closeCartDrawer;
   window.openWishlistModal = openWishlistModal;
@@ -685,16 +685,16 @@
   var autoTimer      = null;
   var hideTimer      = null;
 
-  /* ── Déjà abonné ou déjà fermé → ne rien faire ── */
+  
   if (
     localStorage.getItem(SUBSCRIBED_KEY) === 'yes' ||
     localStorage.getItem(DISMISSED_KEY)  === 'yes'
   ) return;
 
-  /* ── Déjà vu cette session → ne rien faire ── */
+  
   if (sessionStorage.getItem(SEEN_KEY) === 'yes') return;
 
-  /* ── Attendre que les settings soient chargés ── */
+  
   function waitAndRun() {
     var allProducts = window.__allProducts || [];
     var settings    = allProducts.find(function (p) { return p.type === 'settings'; }) || {};
@@ -706,14 +706,14 @@
 
     if (!show) return;
 
-    /* ── Marquer comme vu pour cette session ── */
+    
     sessionStorage.setItem(SEEN_KEY, 'yes');
 
-    /* ── Ouvrir après delay ── */
+    
     autoTimer = setTimeout(function () {
       if (typeof window.openNewsletterPopup !== 'function') return;
 
-      /* Vérifier une dernière fois au moment d'ouvrir */
+      
       if (
         localStorage.getItem(SUBSCRIBED_KEY) === 'yes' ||
         localStorage.getItem(DISMISSED_KEY)  === 'yes'
@@ -721,7 +721,7 @@
 
       window.openNewsletterPopup();
 
-      /* ── Fermer automatiquement après duration ── */
+      
       hideTimer = setTimeout(function () {
         if (typeof window.closeNewsletterPopup === 'function') {
           window.closeNewsletterPopup();
@@ -731,7 +731,7 @@
     }, delay * 1000);
   }
 
-  /* ── Marquer dismissed quand le client ferme manuellement ── */
+  
   document.addEventListener('click', function (e) {
     var el = e.target.closest('#bbwNlClose, #bbwNlSuccessClose');
     if (!el) return;
@@ -739,11 +739,11 @@
     if (hideTimer) clearTimeout(hideTimer);
   });
 
-  /* ── Marquer subscribed quand le formulaire réussit ── */
+  
   var _origOpen = window.openNewsletterPopup;
   document.addEventListener('submit', function (e) {
     if (e.target && e.target.id === 'bbwNlForm') {
-      /* On attend le succès via l'apparition de bbwNlSuccess */
+      
       var check = setInterval(function () {
         var success = document.getElementById('bbwNlSuccess');
         if (success && success.style.display !== 'none') {
@@ -757,7 +757,7 @@
     }
   });
 
-  /* ── Attendre __allProducts ── */
+  
   if (window.__allProducts && window.__allProducts.length) {
     waitAndRun();
   } else {

@@ -346,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var shownCount       = 0;
     var likeGranted      = false;
 
-    /* Load stats */
+    
     async function loadStats() {
       try {
         var res  = await fetch(API + '?articleId=' + encodeURIComponent(ARTICLE_ID));
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (el) el.textContent = value;
     }
 
-    /* Like */
+    
     var btnHelpful = document.getElementById('btn-helpful');
     if (btnHelpful) {
       btnHelpful.addEventListener('click', async function () {
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Share counter */
+    
     async function recordShare() {
       try {
         var res  = await fetch(API, {
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Avatar */
+    
     var avatarBase64 = '';
 
     function compressAvatar(file) {
@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Stars */
+    
     var stars         = document.querySelectorAll('.art-rv-star');
     var ratingInput   = document.getElementById('art-rv-rating');
     var selectedRating = 0;
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    /* Char counter */
+    
     var textarea = document.getElementById('art-rv-text');
     var charNum  = document.getElementById('art-rv-char-num');
     if (textarea && charNum) {
@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Submit review */
+    
     var reviewForm = document.getElementById('art-review-form');
     var submitBtn  = document.getElementById('art-rv-submit');
     var errorEl    = document.getElementById('art-rv-error');
@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
     }
 
-    /* Render reviews */
+    
     var listWrap    = document.getElementById('art-reviews-list-wrap');
     var listEl      = document.getElementById('art-reviews-list');
     var countLabel  = document.getElementById('art-rv-count-label');
@@ -622,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    /* Inspired btn — scroll to form */
+    
     var btnInspired = document.getElementById('btn-inspired');
     if (btnInspired) {
       btnInspired.addEventListener('click', function () {
@@ -1610,7 +1610,7 @@ document.addEventListener('DOMContentLoaded', function () {
 (function () {
   'use strict';
 
-  /* Run only on article3 page */
+  
   if (!document.getElementById('a3-affirmation-strip') && !document.getElementById('a3-affirmation-track')) return;
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -1634,7 +1634,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        /* ── Meta tags ───────────────────────────────────────── */
+        
         var pageTitle = document.getElementById('page-title');
         if (pageTitle) pageTitle.textContent = cardData.title + ' | CurvaFit Journal';
 
@@ -1669,7 +1669,7 @@ document.addEventListener('DOMContentLoaded', function () {
           });
         }
 
-        /* ── Hero image ──────────────────────────────────────── */
+        
         var heroImg = document.getElementById('hero-image');
         if (heroImg) {
           heroImg.src = cardData.image;
@@ -1677,7 +1677,7 @@ document.addEventListener('DOMContentLoaded', function () {
           heroImg.style.display = 'block';
         }
 
-        /* ── Hero text ───────────────────────────────────────── */
+        
         setText('hero-badge',           cardData.badge);
         setText('hero-readtime',        cardData.readTime);
         setText('hero-title',           cardData.title);
@@ -1687,7 +1687,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setText('hero-readtime-stat',   cardData.readTime);
         setText('breadcrumb-category',  cardData.badge);
 
-        /* ── Author chip ─────────────────────────────────────── */
+        
         var heroAuthorImg = document.getElementById('hero-author-img');
         if (heroAuthorImg) {
           heroAuthorImg.src = cardData.author.image;
@@ -1695,7 +1695,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         setText('hero-author-name', cardData.author.name);
 
-        /* ── Bio section ─────────────────────────────────────── */
+        
         var bioImg = document.getElementById('bio-author-img');
         if (bioImg) {
           bioImg.src = cardData.author.image;
@@ -1704,7 +1704,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setText('bio-author-name',       cardData.author.name);
         setText('conclusion-author-name', cardData.author.name);
 
-        /* ── Related articles ────────────────────────────────── */
+        
         injectRelated(data.cards, cardData.category, 'card-3');
 
       })
@@ -1827,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       document.querySelectorAll('.art-share-btn').forEach(function (btn) {
 
-        /* Copy link */
+        
         if (btn.classList.contains('art-share-btn--copy')) {
           btn.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1851,7 +1851,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        /* Social */
+        
         btn.addEventListener('click', function (e) {
           e.preventDefault();
           var shareUrl = '#';
@@ -1894,7 +1894,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var nextBtn = document.getElementById('a3-next-affirmation');
       if (!quoteEl || !nextBtn) return;
 
-      /* Pick today's default by date index */
+      
       var today   = new Date();
       var dayIdx  = (today.getFullYear() * 1000 + today.getMonth() * 31 + today.getDate()) % affirmations.length;
       var current = dayIdx;
@@ -2019,7 +2019,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      /* Avatar */
+      
       var avatarBase64 = '';
 
       function compressAvatar(file) {
@@ -2061,7 +2061,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      /* Stars */
+      
       var stars          = document.querySelectorAll('.art-rv-star');
       var ratingInput    = document.getElementById('art-rv-rating');
       var selectedRating = 0;
@@ -2084,14 +2084,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       });
 
-      /* Char counter */
+      
       var textarea = document.getElementById('art-rv-text');
       var charNum  = document.getElementById('art-rv-char-num');
       if (textarea && charNum) {
         textarea.addEventListener('input', function () { charNum.textContent = textarea.value.length; });
       }
 
-      /* Submit */
+      
       var reviewForm = document.getElementById('art-review-form');
       var submitBtn  = document.getElementById('art-rv-submit');
       var errorEl    = document.getElementById('art-rv-error');
@@ -2157,7 +2157,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
       }
 
-      /* Render reviews */
+      
       var listWrap    = document.getElementById('art-reviews-list-wrap');
       var listEl      = document.getElementById('art-reviews-list');
       var countLabel  = document.getElementById('art-rv-count-label');
@@ -2316,7 +2316,7 @@ document.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll('.a3-aff-list li').forEach(function (li) {
         li.addEventListener('click', function () {
           var wasSelected = li.classList.contains('a3-aff-selected');
-          /* Clear all */
+          
           document.querySelectorAll('.a3-aff-list li').forEach(function (l) {
             l.classList.remove('a3-aff-selected');
             l.style.background = '';
@@ -4817,7 +4817,7 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        /* ── Meta tags ─────────────────────────────────────── */
+        
         var pageTitle = document.getElementById('page-title');
         if (pageTitle) pageTitle.textContent = cardData.title + ' | CurvaFit Journal';
 
@@ -4833,7 +4833,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var metaOgImage = document.getElementById('meta-og-image');
         if (metaOgImage) metaOgImage.setAttribute('content', cardData.image);
 
-        /* ── JSON-LD ───────────────────────────────────────── */
+        
         var jsonLd = document.getElementById('json-ld');
         if (jsonLd) {
           jsonLd.textContent = JSON.stringify({
@@ -4853,7 +4853,7 @@ document.addEventListener('DOMContentLoaded', function () {
           });
         }
 
-        /* ── Hero fields ───────────────────────────────────── */
+        
         var heroImg = document.getElementById('a7-hero-img');
         if (heroImg) { heroImg.src = cardData.image; heroImg.alt = cardData.imageAlt || cardData.title; }
 
@@ -4873,23 +4873,23 @@ document.addEventListener('DOMContentLoaded', function () {
         var authorImg = document.getElementById('a7-hero-author-img');
         if (authorImg) { authorImg.src = cardData.author.image; authorImg.alt = cardData.author.name; }
 
-        /* ── Sidebar author ────────────────────────────────── */
+        
         a7setText('a7-sidebar-author', cardData.author.name);
 
-        /* ── Quote attribution ─────────────────────────────── */
+        
         a7setText('a7-quote-author-1', '— ' + cardData.author.name + ', Fitness Coach');
 
-        /* ── Conclusion ────────────────────────────────────── */
+        
         var conclusionImg = document.getElementById('a7-conclusion-author-img');
         if (conclusionImg) { conclusionImg.src = cardData.author.image; conclusionImg.alt = cardData.author.name; }
         a7setText('a7-conclusion-author-name', cardData.author.name);
 
-        /* ── Author bio ────────────────────────────────────── */
+        
         var bioImg = document.getElementById('a7-bio-img');
         if (bioImg) { bioImg.src = cardData.author.image; bioImg.alt = cardData.author.name; }
         a7setText('a7-bio-name', cardData.author.name);
 
-        /* ── Related articles ──────────────────────────────── */
+        
         a7InjectRelated(data.cards, cardData.category, 'card-7');
       })
       .catch(function (err) {

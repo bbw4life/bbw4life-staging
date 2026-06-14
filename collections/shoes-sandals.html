@@ -12,7 +12,7 @@
 </head>
 <body>
 
-  <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+  
   <div id="reading-progress-bar" aria-hidden="true"></div>
 
   <!-- ═══════════════════════════════════════
@@ -23,10 +23,10 @@
   <main>
     <div id="breadcrumb-container"></div>
 
-    <!-- COLLECTION PAGE IDENTIFIER — used by collections.js detectCollectionId() -->
+    
     <div id="collection-page" data-collection-id="shoes-sandals" style="display:none"></div>
 
-    <!-- SOCIAL PROOF BAR -->
+    
     <div class="col-social-proof-bar">
       <div class="col-social-proof-inner">
         <div class="col-sp-item">
@@ -56,10 +56,10 @@
       </div>
     </div>
 
-    <!-- COLLECTION MAIN -->
+    
     <div class="col-main">
 
-      <!-- FLASH DEAL COUNTDOWN -->
+      
       <div class="col-flash-deal" id="colFlashDeal">
         <div class="col-flash-deal__inner">
           <div class="col-flash-left">
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <!-- TRUST BADGES -->
+      
       <div class="col-trust-badges">
         <div class="col-trust-inner">
           <div class="col-trust-item"><i class="fi fi-rr-lock"></i><span>Secure Payment</span></div>
@@ -94,7 +94,7 @@
         </div>
       </div>
 
-      <!-- TOOLBAR -->
+      
       <div class="col-toolbar" id="colToolbar">
         <div class="col-toolbar__left">
           <button class="col-filter-btn" id="colFilterToggle">
@@ -110,7 +110,7 @@
             <button class="col-cat-tab active" data-cat="all"><i class="fas fa-th-large"></i> All</button>
             <button class="col-cat-tab" data-cat="bestsellers"><i class="fas fa-fire"></i> Best Sellers</button>
             <button class="col-cat-tab" data-cat="new"><i class="fas fa-star"></i> New Arrivals</button>
-            <!-- Dynamic subcategory tabs injected by collections.js -->
+            
           </div>
         </div>
         <div class="col-toolbar__right">
@@ -140,16 +140,16 @@
         </div>
       </div>
 
-      <!-- ACTIVE FILTERS PILLS -->
+      
       <div class="col-active-filters" id="colActiveFilters" style="display:none">
         <div class="col-active-filters__inner" id="colActivePills"></div>
         <button class="col-clear-all" id="colClearAll">Clear all</button>
       </div>
 
-      <!-- LAYOUT WRAPPER -->
+      
       <div class="col-layout">
 
-        <!-- FILTER DRAWER -->
+        
         <aside class="col-drawer" id="colDrawer">
           <div class="col-drawer__overlay" id="colDrawerOverlay"></div>
           <div class="col-drawer__panel">
@@ -159,7 +159,7 @@
             </div>
             <div class="col-drawer__body">
 
-              <!-- AVAILABILITY -->
+              
               <div class="col-filter-block" id="fb-availability">
                 <div class="col-filter-block__head">
                   <h3>Availability</h3>
@@ -179,7 +179,7 @@
                 </div>
               </div>
 
-              <!-- PRICE RANGE -->
+              
               <div class="col-filter-block" id="fb-price">
                 <div class="col-filter-block__head">
                   <h3>Price Range</h3>
@@ -211,7 +211,7 @@
                 </div>
               </div>
 
-              <!-- DISCOUNT -->
+              
               <div class="col-filter-block" id="fb-discount">
                 <div class="col-filter-block__head">
                   <h3>Discount</h3>
@@ -220,7 +220,7 @@
                 <div class="col-filter-block__body" id="colDiscountFilters"></div>
               </div>
 
-              <!-- COLORS -->
+              
               <div class="col-filter-block" id="fb-colors">
                 <div class="col-filter-block__head">
                   <h3>Color</h3>
@@ -231,7 +231,7 @@
                 </div>
               </div>
 
-              <!-- SIZES -->
+              
               <div class="col-filter-block" id="fb-sizes">
                 <div class="col-filter-block__head">
                   <h3>Size</h3>
@@ -242,7 +242,7 @@
                 </div>
               </div>
 
-              <!-- RATING -->
+              
               <div class="col-filter-block" id="fb-rating">
                 <div class="col-filter-block__head">
                   <h3>Minimum Rating</h3>
@@ -268,7 +268,7 @@
           </div>
         </aside>
 
-        <!-- PRODUCT GRID -->
+        
         <div class="col-products-wrap">
           <div class="col-empty" id="colEmpty" style="display:none">
             <div class="col-empty__icon"><i class="fas fa-search"></i></div>
@@ -280,9 +280,9 @@
           <div class="col-pagination" id="colPagination"></div>
         </div>
 
-      </div><!-- /col-layout -->
+      </div>
 
-      <!-- RECENTLY VIEWED -->
+      
       <section class="col-recently-viewed" id="colRecentlyViewed" style="display:none">
         <div class="col-rv-header">
           <h2 class="col-rv-title">Recently Viewed</h2>
@@ -291,7 +291,7 @@
         <div class="col-rv-grid" id="colRvGrid"></div>
       </section>
 
-      <!-- FREQUENTLY BOUGHT TOGETHER -->
+      
       <section class="col-fbt-section" id="colFbtSection" style="display:none">
         <div class="col-fbt-header">
           <h2 class="col-fbt-title"><i class="fas fa-magic"></i> Complete the Look</h2>
@@ -300,42 +300,41 @@
         <div class="col-fbt-inner" id="colFbtInner"></div>
       </section>
 
-      <!-- MARQUEE -->
+      
       <div class="col-marquee-section">
         <div class="col-marquee-track">
           <div class="col-marquee-inner">
-            <span class="col-marquee-item"><i class="fas fa-shoe-prints"></i> Sizes 3 to 12 — Every Foot Celebrated</span>
+            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $50+</span>
+            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-heart"></i> Walk Like the Queen You Are</span>
-            <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to 50% Off</span>
+            <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
             <span class="col-marquee-sep">✦</span>
             <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-shoe-prints"></i> Sizes 3 to 12 — Every Foot Celebrated</span>
+            <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $50+</span>
+            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-heart"></i> Walk Like the Queen You Are</span>
+            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
             <span class="col-marquee-sep">✦</span>
-            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to 50% Off</span>
+            <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
             <span class="col-marquee-sep">✦</span>
             <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
             <span class="col-marquee-sep">✦</span>
           </div>
         </div>
       </div>
+    </div>
 
-    </div><!-- /col-main -->
-
-    <!-- NEWSLETTER -->
+    
     <div id="newsletter-container"></div>
 
   </main>
 
-  <!-- COMPARE MODAL -->
+  
   <div class="col-compare-overlay" id="colCompareOverlay" style="display:none">
     <div class="col-compare-modal">
       <div class="col-compare-modal__head">
@@ -346,7 +345,7 @@
     </div>
   </div>
 
-  <!-- QUICK VIEW MODAL -->
+  
   <div class="col-qv-overlay" id="colQvOverlay" style="display:none">
     <div class="col-qv-modal">
       <button class="col-qv-close" id="colQvClose"><i class="fas fa-times"></i></button>
@@ -354,7 +353,7 @@
     </div>
   </div>
 
-  <!-- EXIT INTENT POPUP -->
+  
   <div class="col-exit-overlay" id="colExitOverlay" style="display:none">
     <div class="col-exit-popup">
       <button class="col-exit-close" id="colExitClose"><i class="fas fa-times"></i></button>
@@ -370,7 +369,7 @@
     </div>
   </div>
 
-  <!-- STICKY MULTI-SELECT BAR -->
+  
   <div class="col-sticky-bar" id="colStickyBar" style="display:none">
     <div class="col-sticky-bar__inner">
       <div class="col-sticky-bar__label">
@@ -390,7 +389,7 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
+  
   <div id="footer-container"></div>
 
   <!-- ═══════════════════════════════════════
@@ -402,7 +401,7 @@
   <script src="/collections/collections.js"></script>
   <script src="/cart-page.js"></script>
 
-  <!-- Header / Breadcrumb / Footer / Newsletter injection -->
+  
   <script>
     fetch('/src/components/header.html')
       .then(r => r.text())

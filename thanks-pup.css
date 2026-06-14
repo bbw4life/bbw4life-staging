@@ -124,7 +124,7 @@
 }
 
 
-/* ── OVERLAY ── */
+
 @property --angle {
   syntax: '<angle>';
   initial-value: 0deg;
@@ -556,7 +556,7 @@
    POPUP 2 — PLAN REQUEST
 ================================================================ */
 
-/* ── BOUTON TRIGGER ── */
+
 .plan-request-trigger-wrap {
   display: flex;
   justify-content: center;
@@ -629,7 +629,7 @@
   opacity: 0.6;
 }
 
-/* ── OVERLAY ── */
+
 .plan-popup-overlay {
   position: fixed;
   inset: 0;
@@ -653,7 +653,7 @@
   pointer-events: all;
 }
 
-/* ── MODAL ── */
+
 .plan-popup-modal {
   background: linear-gradient(160deg, #fffefb 0%, #fdf8f0 60%, #fdf0f4 100%);
   border-radius: 22px;
@@ -678,7 +678,7 @@
   transform: translateY(0) scale(1);
 }
 
-/* ── URGENCY BAR ── */
+
 .plan-popup-urgency-bar {
   height: 4px;
   background: rgba(26,15,10,0.08);
@@ -700,7 +700,7 @@
   100% { background-position: 200% 50%; }
 }
 
-/* ── CLOSE BUTTON ── */
+
 .plan-popup-close {
   position: absolute;
   top: 14px; right: 14px;
@@ -719,7 +719,7 @@
 .plan-popup-close i { color: #fdf0f4 !important; }
 .plan-popup-close:hover { background: rgba(253,240,244,0.35) !important; }
 
-/* ── HEADER ── */
+
 .plan-popup-header {
   background: linear-gradient(140deg, #1a0f0a 0%, #3d1f10 55%, #2a1508 100%);
   padding: 28px 26px 24px;
@@ -771,7 +771,7 @@
   50%      { box-shadow: 0 0 0 5px rgba(201,150,62,0); }
 }
 
-/* ── SPOTS ROW ── */
+
 .plan-popup-spots-row {
   display: flex;
   align-items: baseline;
@@ -811,13 +811,13 @@
   color: rgba(253,240,244,0.85);
 }
 
-/* ── BODY ── */
+
 .plan-popup-body {
   padding: 20px 24px 26px;
   background: linear-gradient(160deg, #fffefb 0%, #fdf8f0 60%, #fdf0f4 100%);
 }
 
-/* ── SOCIAL PROOF ── */
+
 .plan-popup-social-proof {
   display: flex;
   align-items: center;
@@ -845,7 +845,7 @@
 .plan-popup-avatars img:last-child { margin-right: 0; }
 .plan-popup-social-proof strong { color: #c9963e; }
 
-/* ── PRICE BLOCK ── */
+
 .plan-popup-price-block {
   background: linear-gradient(135deg, #fdf0f4, #fef8ee);
   border: 1px solid rgba(201,150,62,0.22);
@@ -906,7 +906,7 @@
 
 .plan-popup-price-badge i { font-size: 1.1rem; }
 
-/* ── FORM ── */
+
 .plan-form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -954,7 +954,7 @@
   box-shadow: 0 0 0 3px rgba(26,15,10,0.08);
 }
 
-/* ── CHECKBOX ── */
+
 .plan-checkbox-wrap {
   display: flex;
   align-items: flex-start;
@@ -990,7 +990,7 @@
   font-size: 13px;
 }
 
-/* ── ERROR ── */
+
 .plan-popup-error {
   background: #fef2f2;
   border: 1px solid #fecaca;
@@ -1001,7 +1001,7 @@
   margin-bottom: 14px;
 }
 
-/* ── SUBMIT ── */
+
 .plan-submit-btn {
   width: 100%;
   padding: 14px;
@@ -1029,7 +1029,7 @@
 
 .plan-submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
-/* ── BACK BUTTON ── */
+
 .plan-back-btn {
   width: 100%;
   margin-top: 10px;
@@ -1048,7 +1048,7 @@
 
 .plan-back-btn:hover { background: rgba(26,15,10,0.05); color: #1a0f0a; }
 
-/* ── PAYMENT SUMMARY STRIP ── */
+
 .plan-popup-summary-strip {
   display: flex;
   align-items: center;
@@ -1064,7 +1064,7 @@
 .plan-popup-summary-strip strong { display: block; font-size: 14px; color: #1a0f0a; }
 .plan-popup-summary-strip span  { font-size: 12px; color: rgba(26,15,10,0.55); }
 
-/* ── PAYMENT OPTIONS ── */
+
 .plan-pay-options {
   display: flex;
   flex-direction: column;
@@ -1128,7 +1128,7 @@
   background: #fdf0f4;
 }
 
-/* ── PRIVACY NOTE ── */
+
 .plan-privacy-note {
   text-align: center;
   font-size: 11px;
@@ -1188,7 +1188,7 @@ a.plan-close-thanks-btn {
   text-decoration: none;
 }
 
-/* ── THANK YOU STEP ── */
+
 .plan-thanks-wrap {
   padding: 36px 28px 32px;
   text-align: center;
@@ -1302,7 +1302,7 @@ a.plan-close-thanks-btn {
   transform: translateY(-1px);
 }
 
-/* ── SPINNER ── */
+
 .plan-spinner {
   width: 16px; height: 16px;
   border: 2px solid rgba(253,240,244,0.35);
@@ -1314,7 +1314,7 @@ a.plan-close-thanks-btn {
 
 @keyframes planSpin { to { transform: rotate(360deg); } }
 
-/* ── COLOR SWATCHES ── */
+
 .plan-color-swatches-preview {
   display: flex;
   flex-wrap: wrap;
@@ -1363,7 +1363,7 @@ a.plan-close-thanks-btn {
   margin-bottom: 2px;
 }
 
-/* ── MISC ── */
+
 .plan-request-trigger-wrap.bbw-hidden { display: none !important; }
 
 .bbw-featured-request-mode .quantity-selector,
@@ -1386,7 +1386,7 @@ a.plan-close-thanks-btn {
 
 .bbw-qv-hidden { display: none !important; }
 
-/* ── RESPONSIVE ── */
+
 @media (max-width: 680px) {
   .plan-request-trigger-wrap { padding: 0 10px; margin: 0px 0 8px; }
   .plan-popup-overlay { padding: 10px 2px; overflow: hidden; box-sizing: border-box; }
@@ -1424,7 +1424,7 @@ a.plan-close-thanks-btn {
    BBW4LIFE — PRODUCT GRID SECTION 
 ================================================================ */
 
-/* ── Variables locales ── */
+
 .bbwpg-section {
   --pg-cream:       #fdfaf6;
   --pg-cream-mid:   #f7f1e8;
@@ -1443,7 +1443,7 @@ a.plan-close-thanks-btn {
   --pg-spring:      all 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ── SECTION WRAPPER ── */
+
 .bbwpg-section {
   position: relative;
   padding: 10px 0 10px;
@@ -1451,7 +1451,7 @@ a.plan-close-thanks-btn {
   overflow: hidden;
 }
 
-/* Lignes top/bottom en or */
+
 .bbwpg-section::before,
 .bbwpg-section::after {
   content: '';
@@ -1471,7 +1471,7 @@ a.plan-close-thanks-btn {
 .bbwpg-section::before { top: 0; }
 .bbwpg-section::after  { bottom: 0; }
 
-/* ── ORBS DÉCORATIFS ── */
+
 .bbwpg-orb {
   position: absolute;
   border-radius: 50%;
@@ -1493,7 +1493,7 @@ a.plan-close-thanks-btn {
   background: radial-gradient(circle, rgba(192,56,94,0.28), transparent 70%);
 }
 
-/* ── INNER ── */
+
 .bbwpg-inner {
   position: relative;
   z-index: 1;
@@ -1503,7 +1503,7 @@ a.plan-close-thanks-btn {
   box-sizing: border-box;
 }
 
-/* ── HEADER ── */
+
 .bbwpg-header {
   text-align: center;
   margin-bottom: 10px;
@@ -1551,7 +1551,7 @@ a.plan-close-thanks-btn {
   line-height: 1.65;
 }
 
-/* ── SLIDER WRAPPER ── */
+
 .bbwpg-slider-wrap {
   position: relative;
   display: flex;
@@ -1559,14 +1559,14 @@ a.plan-close-thanks-btn {
   gap: 12px;
 }
 
-/* ── VIEWPORT ── */
+
 .bbwpg-viewport {
   flex: 1;
   overflow: hidden;
   border-radius: 6px;
 }
 
-/* ── TRACK ── */
+
 .bbwpg-track {
   display: flex;
   gap: var(--pg-gap);
@@ -1574,7 +1574,7 @@ a.plan-close-thanks-btn {
   will-change: transform;
 }
 
-/* ── CARD ── */
+
 .bbwpg-card {
   flex: 0 0 calc(25% - (var(--pg-gap) * 3 / 4));
   min-width: 0;
@@ -1598,7 +1598,7 @@ a.plan-close-thanks-btn {
   border-color: rgba(201,150,62,0.36);
 }
 
-/* ── IMAGE ── */
+
 .bbwpg-card__img-link {
   display: block;
   text-decoration: none;
@@ -1607,7 +1607,7 @@ a.plan-close-thanks-btn {
 .bbwpg-card__img-wrap {
   position: relative;
   width: 100%;
-  padding-top: 118%;  /* ratio portrait */
+  padding-top: 118%;  
   overflow: hidden;
   background: var(--pg-cream-mid);
 }
@@ -1637,7 +1637,7 @@ a.plan-close-thanks-btn {
   opacity: 0;
 }
 
-/* ── BADGE ── */
+
 .bbwpg-card__badge {
   position: absolute;
   top: 14px; left: 14px;
@@ -1653,7 +1653,7 @@ a.plan-close-thanks-btn {
   box-shadow: 0 3px 10px rgba(26,15,10,0.22);
 }
 
-/* ── DISCOUNT BADGE ── */
+
 .bbwpg-card__discount {
   position: absolute;
   top: 14px; right: 14px;
@@ -1668,7 +1668,7 @@ a.plan-close-thanks-btn {
   box-shadow: 0 3px 10px rgba(192,56,94,0.28);
 }
 
-/* ── BODY ── */
+
 .bbwpg-card__body {
   padding: 18px 18px 20px;
   display: flex;
@@ -1677,7 +1677,7 @@ a.plan-close-thanks-btn {
   flex: 1;
 }
 
-/* ── TITRE ── */
+
 .bbwpg-card__title {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1rem;
@@ -1696,7 +1696,7 @@ a.plan-close-thanks-btn {
   color: var(--pg-gold);
 }
 
-/* ── PRIX ── */
+
 .bbwpg-card__prices {
   display: flex;
   align-items: baseline;
@@ -1717,7 +1717,7 @@ a.plan-close-thanks-btn {
   font-weight: 400;
 }
 
-/* ── BOUTON VIEW PRODUCT ── */
+
 .bbwpg-card__btn {
   display: inline-flex;
   align-items: center;
@@ -1759,7 +1759,7 @@ a.plan-close-thanks-btn {
   color: #1a0f0a;
 }
 
-/* ── FLÈCHES ── */
+
 .bbwpg-arrow {
   flex-shrink: 0;
   width: 46px;
@@ -1785,7 +1785,7 @@ a.plan-close-thanks-btn {
   box-shadow: 0 6px 20px rgba(201,150,62,0.30);
 }
 
-/* ── DOTS ── */
+
 .bbwpg-dots {
   display: flex;
   justify-content: center;
@@ -1811,14 +1811,14 @@ a.plan-close-thanks-btn {
   box-shadow: 0 0 8px rgba(201,150,62,0.40);
 }
 
-/* ── RESPONSIVE — TABLET ≤ 900px → 3 par page ── */
+
 @media (max-width: 900px) {
   .bbwpg-card {
     flex-basis: calc(33.333% - (var(--pg-gap) * 2 / 3));
   }
 }
 
-/* ── RESPONSIVE — MOBILE ≤ 767px → 2 par page ── */
+
 @media (max-width: 767px) {
   .bbwpg-section { padding: 10px 0 10px; }
   .bbwpg-inner   { padding: 0 5px; }
@@ -1841,14 +1841,14 @@ a.plan-close-thanks-btn {
   .bbwpg-card__img-wrap { padding-top: 125%; }
 }
 
-/* ── TRÈS PETIT ≤ 400px ── */
+
 @media (max-width: 400px) {
   .bbwpg-arrow { display: none; }
   .bbwpg-card__badge,
   .bbwpg-card__discount { font-size: 9px; padding: 4px 8px; }
 }
 
-/* ── Reveal animation (si vous utilisez la classe reveal) ── */
+
 .bbwpg-header.reveal {
   opacity: 0;
   transform: translateY(18px);
@@ -1902,7 +1902,7 @@ a.plan-close-thanks-btn {
   50%       { box-shadow: 0 4px 28px rgba(201,150,62,0.30); }
 }
 
-/* ── Section wrapper ── */
+
 .img-marquee-section {
   position: relative;
   background: linear-gradient(160deg, #0d0d0d 0%, #130d10 50%, #0d0d0d 100%);
@@ -1911,7 +1911,7 @@ a.plan-close-thanks-btn {
   isolation: isolate;
 }
 
-/* ── Orbs ── */
+
 .imq-orb {
   position: absolute;
   border-radius: 50%;
@@ -1932,7 +1932,7 @@ a.plan-close-thanks-btn {
   animation: imq-orb-drift2 14s ease-in-out infinite alternate;
 }
 
-/* ── Grain overlay ── */
+
 .imq-grain {
   position: absolute;
   inset: 0;
@@ -1944,7 +1944,7 @@ a.plan-close-thanks-btn {
   mix-blend-mode: overlay;
 }
 
-/* ── Lines ── */
+
 .imq-topline,
 .imq-bottomline {
   position: absolute;
@@ -1965,7 +1965,7 @@ a.plan-close-thanks-btn {
   animation: imq-topline-shift 5s ease-in-out infinite reverse;
 }
 
-/* ── Header ── */
+
 .imq-header {
   position: relative;
   z-index: 4;
@@ -2026,7 +2026,7 @@ a.plan-close-thanks-btn {
   margin: 0;
 }
 
-/* ── Clip + fade mask ── */
+
 .imq-clip {
   overflow: hidden;
   position: relative;
@@ -2037,7 +2037,7 @@ a.plan-close-thanks-btn {
 .imq-clip--left  { margin-bottom: 14px; }
 .imq-clip--right { margin-bottom: 0; }
 
-/* ── Tracks ── */
+
 .imq-track {
   display: flex;
   gap: 14px;
@@ -2054,7 +2054,7 @@ a.plan-close-thanks-btn {
   animation-play-state: paused;
 }
 
-/* ── Card ── */
+
 .imq-card {
   flex-shrink: 0;
   width: 200px;
@@ -2080,7 +2080,7 @@ a.plan-close-thanks-btn {
     0 0 30px rgba(201,150,62,0.18);
 }
 
-/* ── Image ── */
+
 .imq-card-img {
   width: 100%;
   height: 100%;
@@ -2093,7 +2093,7 @@ a.plan-close-thanks-btn {
   transform: scale(1.10);
 }
 
-/* ── Hover image (cache l'image par défaut au hover) ── */
+
 .imq-card-img-hover {
   position: absolute;
   inset: 0;
@@ -2113,7 +2113,7 @@ a.plan-close-thanks-btn {
   opacity: 0;
 }
 
-/* ── Overlay gradient bas ── */
+
 .imq-card-overlay {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -2123,7 +2123,7 @@ a.plan-close-thanks-btn {
   z-index: 2;
 }
 
-/* Shimmer sweep au hover */
+
 .imq-card::after {
   content: '';
   position: absolute;
@@ -2139,7 +2139,7 @@ a.plan-close-thanks-btn {
   transition: left 0.65s ease;
 }
 
-/* ── Info label ── */
+
 .imq-card-info {
   position: absolute;
   bottom: 10px; left: 12px; right: 12px;
@@ -2166,7 +2166,7 @@ a.plan-close-thanks-btn {
   letter-spacing: 0.02em;
 }
 
-/* ── Top-line accent on card ── */
+
 .imq-card::before {
   content: '';
   position: absolute;
@@ -2180,7 +2180,7 @@ a.plan-close-thanks-btn {
 }
 .imq-card:hover::before { opacity: 1; }
 
-/* ── Badge produit ── */
+
 .imq-card-badge {
   position: absolute;
   top: 10px; left: 10px;
@@ -2198,7 +2198,7 @@ a.plan-close-thanks-btn {
   pointer-events: none;
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 768px) {
   .imq-card { width: 150px; height: 120px; }
   .imq-track { gap: 10px; }

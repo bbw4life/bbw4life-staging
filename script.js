@@ -468,6 +468,13 @@ document.addEventListener('DOMContentLoaded', () => {
       e.target.style.opacity = '0';
     }
   }, true);
+
+  document.addEventListener('load', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.target.style.visibility = '';
+      e.target.style.opacity = '';
+    }
+  }, true);
 })();
 
 
@@ -7802,6 +7809,7 @@ document.addEventListener('DOMContentLoaded', () => {
           loginBtn.textContent = "Your account Loading...";
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('userEmail', email);
+          localStorage.setItem('userAccountToken', data.token);
           localStorage.setItem('userFirstName', data.user.firstName);
           localStorage.setItem('userLastName',  data.user.lastName);
           localStorage.setItem('userAddressLine1', data.user.addressLine1 || '');
@@ -7861,12 +7869,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadAccountStats() {
     const email = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('userAccountToken');
     if (!email) return;
     try {
       const res = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'get-stats', email })
+        body: JSON.stringify({ action: 'get-stats', email, token })
       });
       const data = await res.json();
 
@@ -8052,6 +8061,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.saveAddress = async () => {
     const email = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('userAccountToken');
     const line1 = document.getElementById('addr-line1').value.trim();
     const line2 = document.getElementById('addr-line2').value.trim();
     const city = document.getElementById('addr-city').value.trim();
@@ -8080,6 +8090,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.updatePassword = async () => {
     const email = document.getElementById('security-email').value.trim();
+    const email = localStorage.getItem('userEmail');
     const newPassword = document.getElementById('new-password').value.trim();
     if (!email || !newPassword) return showToast("Email and new password are required");
     try {
@@ -8167,7 +8178,7 @@ function loadProfilePhoto() {
       await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update-profile-photo', email, photoBase64: base64 })
+        body: JSON.stringify({ action: 'update-profile-photo', email, photoBase64: base64, token: localStorage.getItem('userAccountToken') })
       });
       window.showToast && window.showToast('Profile photo updated!');
     } catch (e) {
@@ -8577,7 +8588,7 @@ function loadProfilePhoto() {
           await fetch('/.netlify/functions/save-account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
+            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet, token: localStorage.getItem('userAccountToken') })
           });
         } catch(e) { console.warn('[Affiliation] save failed:', e.message); }
       }
@@ -8619,7 +8630,7 @@ function loadProfilePhoto() {
         const res  = await fetch('/.netlify/functions/save-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
+          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail, token: localStorage.getItem('userAccountToken') })
         });
         const data = await res.json();
 
@@ -8666,11 +8677,12 @@ function loadProfilePhoto() {
   // ── Sync depuis le sheet au chargement ──
   async function syncFromSheet() {
     if (!userEmail) return;
+    const token = localStorage.getItem('userAccountToken');
     try {
       const res  = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
+        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail, token })
       });
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
@@ -9998,7 +10010,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div id="cf-cookie-overlay"></div>
       <div id="cf-cookie-modal">
 
-        <!-- ── Header ── -->
+        
         <div class="cfck-header">
           <div class="cfck-header-left">
             <div class="cfck-icon-wrap">
@@ -10022,14 +10034,14 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         </div>
 
-        <!-- ── Body ── -->
+        
         <div class="cfck-body">
           <p class="cfck-desc">
             BBW4LIFE uses cookies to improve your experience, analyze traffic, and — with your permission — personalize content. Your data is never sold. Read our
             <a href="/policies/privacy.html" class="cfck-link">Privacy Policy</a> for full details.
           </p>
 
-          <!-- ── Panels (default view) ── -->
+          
           <div class="cfck-panels" id="cfck-panels">
 
             <div class="cfck-panel cfck-panel--required">
@@ -10084,17 +10096,17 @@ document.addEventListener('DOMContentLoaded', function () {
               </label>
             </div>
 
-          </div><!-- /cfck-panels -->
-        </div><!-- /cfck-body -->
+          </div>
+        </div>
 
-        <!-- ── Footer buttons ── -->
+        
         <div class="cfck-footer">
           <button class="cfck-btn cfck-btn--ghost" id="cfck-reject">Reject all</button>
           <button class="cfck-btn cfck-btn--outline" id="cfck-save">Save preferences</button>
           <button class="cfck-btn cfck-btn--primary" id="cfck-accept">Accept all</button>
         </div>
 
-        <!-- ── Confirmation banner (shown after action) ── -->
+        
         <div class="cfck-confirm" id="cfck-confirm" aria-live="polite">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"/>
@@ -10102,7 +10114,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <span id="cfck-confirm-text">Preferences saved!</span>
         </div>
 
-      </div><!-- /cf-cookie-modal -->
+      </div>
     `;
     return el;
   }
@@ -12538,38 +12550,83 @@ function injectColFbt() {
 
 })();
 
+
+
 /* ================================================================
    BBW4LIFE — IMAGE LOADER SPINNER (texte en cercle)
 ================================================================ */
 (function initImageLoader() {
   'use strict';
 
+  var KILL_STYLE_ID = 'bbw-loader-kill';
+
+  function injectKillStyle() {
+    if (document.getElementById(KILL_STYLE_ID)) return;
+    var style = document.createElement('style');
+    style.id = KILL_STYLE_ID;
+    style.textContent = '.bbw-img-loader { display: none !important; pointer-events: none !important; }';
+    (document.head || document.documentElement).appendChild(style);
+  }
+
+  function removeKillStyle() {
+    var el = document.getElementById(KILL_STYLE_ID);
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  injectKillStyle();
+
+  function waitForProducts(cb) {
+    if (window.__allProducts && window.__allProducts.length) {
+      cb(window.__allProducts);
+    } else {
+      var tries = 0;
+      var poll = setInterval(function() {
+        tries++;
+        if (window.__allProducts && window.__allProducts.length) {
+          clearInterval(poll);
+          cb(window.__allProducts);
+        } else if (tries > 80) {
+          clearInterval(poll);
+        }
+      }, 50);
+    }
+  }
+
+  function isEnabled() {
+    var cfg = ((window.__allProducts || []).find(function(p) { return p.type === 'settings'; }) || {}).image_loader || {};
+    return (cfg.show || 'yes').toLowerCase().trim() === 'yes';
+  }
+
+  function removeAll() {
+    document.querySelectorAll('.bbw-img-loader').forEach(function(el) {
+      el.parentNode && el.parentNode.removeChild(el);
+    });
+  }
+
   function injectSvgDefs() {
     if (document.getElementById('bbwLoaderSvgDefs')) return;
-    const ns  = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
-    svg.id    = 'bbwLoaderSvgDefs';
+    var ns  = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.id  = 'bbwLoaderSvgDefs';
     svg.setAttribute('width',  '0');
     svg.setAttribute('height', '0');
     svg.style.cssText = 'position:absolute;overflow:hidden;width:0;height:0;';
 
-    const defs = document.createElementNS(ns, 'defs');
-    const grad = document.createElementNS(ns, 'linearGradient');
-    grad.id = 'bbwLoaderGrad';
-    grad.setAttribute('x1', '0%');
-    grad.setAttribute('y1', '0%');
-    grad.setAttribute('x2', '100%');
-    grad.setAttribute('y2', '0%');
+    var defs  = document.createElementNS(ns, 'defs');
+    var grad  = document.createElementNS(ns, 'linearGradient');
+    grad.id   = 'bbwLoaderGrad';
+    grad.setAttribute('x1', '0%'); grad.setAttribute('y1', '0%');
+    grad.setAttribute('x2', '100%'); grad.setAttribute('y2', '0%');
 
-    const stop1 = document.createElementNS(ns, 'stop');
+    var stop1 = document.createElementNS(ns, 'stop');
     stop1.setAttribute('offset', '0%');
     stop1.setAttribute('stop-color', '#e4b722');
 
-    const stop2 = document.createElementNS(ns, 'stop');
+    var stop2 = document.createElementNS(ns, 'stop');
     stop2.setAttribute('offset', '50%');
     stop2.setAttribute('stop-color', '#ffffff');
 
-    const stop3 = document.createElementNS(ns, 'stop');
+    var stop3 = document.createElementNS(ns, 'stop');
     stop3.setAttribute('offset', '100%');
     stop3.setAttribute('stop-color', '#c9963e');
 
@@ -12621,20 +12678,14 @@ function injectColFbt() {
       return img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
     }
 
-    /* Déjà chargée */
-    if (isLoaded()) {
-      hide();
-      return;
-    }
+    if (isLoaded()) { hide(); return; }
 
-    /* src vide → observer src */
     if (!img.src || img.src === window.location.href) {
       var attrObs = new MutationObserver(function(muts, obs) {
         if (img.src && img.src !== window.location.href) {
           obs.disconnect();
-          if (isLoaded()) {
-            hide();
-          } else {
+          if (isLoaded()) { hide(); }
+          else {
             img.addEventListener('load',  hide, { once: true });
             img.addEventListener('error', hide, { once: true });
             startPoll();
@@ -12653,15 +12704,8 @@ function injectColFbt() {
       var count = 0;
       var poll = setInterval(function() {
         count++;
-        if (isLoaded()) {
-          clearInterval(poll);
-          hide();
-          return;
-        }
-        if (count >= 50) {
-          clearInterval(poll);
-          hide();
-        }
+        if (isLoaded()) { clearInterval(poll); hide(); return; }
+        if (count >= 50) { clearInterval(poll); hide(); }
       }, 100);
     }
   }
@@ -12669,23 +12713,17 @@ function injectColFbt() {
   function injectOnWrap(wrap, text) {
     if (!wrap) return;
     if (wrap.querySelector('.bbw-img-loader')) return;
-
     var pos = getComputedStyle(wrap).position;
     if (pos === 'static') wrap.style.position = 'relative';
-
     var loader = buildLoader(text);
     wrap.appendChild(loader);
-
     var img = wrap.querySelector('img');
     if (img) {
       watchImage(img, loader);
     } else {
       var mo = new MutationObserver(function(muts, obs) {
         var found = wrap.querySelector('img');
-        if (found) {
-          obs.disconnect();
-          watchImage(found, loader);
-        }
+        if (found) { obs.disconnect(); watchImage(found, loader); }
       });
       mo.observe(wrap, { childList: true, subtree: true });
     }
@@ -12699,56 +12737,32 @@ function injectColFbt() {
   }
 
   function runAll(text) {
-    document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.col-card__media').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.cs-media').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.col-rv-card__img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
+    if (!isEnabled()) return;
+
+    document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.col-card__media').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.cs-media').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.col-rv-card__img').forEach(function(img) { injectOnImg(img, text); });
     var fsFrame = document.querySelector('.fs-img-frame');
     if (fsFrame) injectOnWrap(fsFrame, text);
-    document.querySelectorAll('.mini-media-slider').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll(
-      '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
-    ).forEach(function(w) {
-      injectOnWrap(w, text);
-    });
-    document.querySelectorAll('.wishlist-item img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
-    document.querySelectorAll('.highlight-product-card').forEach(function(w) {
-      injectOnWrap(w, text);
-    });
+    document.querySelectorAll('.mini-media-slider').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap').forEach(function(w) { injectOnWrap(w, text); });
+    document.querySelectorAll('.wishlist-item img').forEach(function(img) { injectOnImg(img, text); });
+    document.querySelectorAll('.highlight-product-card').forEach(function(w) { injectOnWrap(w, text); });
     document.querySelectorAll('.product-card').forEach(function(card) {
       var img = card.querySelector('img');
       if (img) injectOnImg(img, text);
     });
-    document.querySelectorAll('.col-fbt-card__img').forEach(function(img) {
-      injectOnImg(img, text);
-    });
+    document.querySelectorAll('.col-fbt-card__img').forEach(function(img) { injectOnImg(img, text); });
+    document.querySelectorAll('.story-circle-item .story-circle-ring').forEach(function(w) { injectOnWrap(w, text); });
     document.querySelectorAll('.bd-product-item').forEach(function(item) {
       var img = item.querySelector('img');
       if (!img) return;
       var wrap = img.parentElement;
-      if (!wrap) return;
-      if (wrap.querySelector('.bbw-img-loader')) return;
+      if (!wrap || wrap.querySelector('.bbw-img-loader')) return;
       var pos = getComputedStyle(wrap).position;
       if (pos === 'static') wrap.style.position = 'relative';
       var loader = buildLoader(text);
@@ -12757,12 +12771,17 @@ function injectColFbt() {
     });
   }
 
-  function init() {
+  waitForProducts(function() {
     var allProducts = window.__allProducts || [];
     var settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
     var cfg         = settings.image_loader || {};
 
-    if ((cfg.show || 'yes').toLowerCase().trim() !== 'yes') return;
+    if ((cfg.show || 'yes').toLowerCase().trim() !== 'yes') {
+      removeAll();
+      return;
+    }
+
+    removeKillStyle();
 
     var text = cfg.text || 'BBW4LIFE • WAIT TO LOAD •';
 
@@ -12770,55 +12789,28 @@ function injectColFbt() {
     runAll(text);
 
     var observer = new MutationObserver(function(mutations) {
-      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-      if (!relevant) return;
-      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
-      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') {
-        document.querySelectorAll('.bbw-img-loader').forEach(function(el) {
-          el.parentNode && el.parentNode.removeChild(el);
-        });
+      if (!isEnabled()) {
+        removeAll();
+        injectKillStyle();
+        observer.disconnect();
         return;
       }
+      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+      if (!relevant) return;
       runAll(text);
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    document.addEventListener('cart:update',     function() {
-      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
-      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') {
-        document.querySelectorAll('.bbw-img-loader').forEach(function(el) {
-          el.parentNode && el.parentNode.removeChild(el);
-        });
-        return;
-      }
+    document.addEventListener('cart:update', function() {
+      if (!isEnabled()) { removeAll(); return; }
       runAll(text);
     });
-    document.addEventListener('wishlist:change', function() {
-      var cfg2 = ((window.__allProducts || []).find(function(p){ return p.type === 'settings'; }) || {}).image_loader || {};
-      if ((cfg2.show || 'yes').toLowerCase().trim() !== 'yes') {
-        document.querySelectorAll('.bbw-img-loader').forEach(function(el) {
-          el.parentNode && el.parentNode.removeChild(el);
-        });
-        return;
-      }
-      runAll(text);
-    });
-  }
 
-  if (window.__allProducts && window.__allProducts.length) {
-    init();
-  } else {
-    var tries = 0;
-    var wait = setInterval(function() {
-      tries++;
-      if (window.__allProducts && window.__allProducts.length) {
-        clearInterval(wait);
-        init();
-      } else if (tries > 80) {
-        clearInterval(wait);
-      }
-    }, 100);
-  }
+    document.addEventListener('wishlist:change', function() {
+      if (!isEnabled()) { removeAll(); return; }
+      runAll(text);
+    });
+  });
 
 })();

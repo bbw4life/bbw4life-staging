@@ -3,7 +3,7 @@
    Palette : blanc / crème / doré — sans fond noir
 ================================================================ */
 
-/* ── CSS Variables ── */
+
 :root {
   --blog-rose:        #b8922a;
   --blog-rose-vivid:  #d4a93e;
@@ -120,7 +120,7 @@
   z-index: 1;
 }
 
-/* Orb déco hero */
+
 .blog-banner::after {
   content: '';
   position: absolute;
@@ -134,7 +134,7 @@
   filter: blur(60px);
 }
 
-/* ── Ticker ── */
+
 .blog-ticker {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -241,7 +241,7 @@
   pointer-events: none;
 }
 
-/* ── Hero Content ── */
+
 .blog-banner .hero-content {
   position: relative;
   z-index: 2;
@@ -287,7 +287,7 @@
   margin-bottom: 16px;
 }
 
-/* ── Search ── */
+
 .blog-search {
   max-width: 560px;
   margin: 0 auto 14px;
@@ -358,7 +358,7 @@
   box-shadow: 0 4px 18px rgba(184,146,42,0.42);
 }
 
-/* ── Category Filters ── */
+
 .category-filters {
   display: flex;
   flex-wrap: wrap;
@@ -390,7 +390,7 @@
   box-shadow: 0 4px 18px rgba(184,146,42,0.40);
 }
 
-/* ── Scroll indicator ── */
+
 .scroll-indicator {
   position: relative;
   z-index: 2;
@@ -746,7 +746,7 @@
   margin-top: 4px;
 }
 
-/* ══ BOUTON READ FULL ARTICLE ══ */
+
 .featured-cta-row .card-read-more,
 .featured-cta-row a[class*="read"],
 .featured-cta-row a {
@@ -801,7 +801,7 @@
   transform: translateX(4px);
 }
 
-/* ── Share Row ── */
+
 .share-row {
   display: flex;
   align-items: center;
@@ -1029,7 +1029,7 @@
   z-index: 1;
 }
 
-/* ── Blog Card ── */
+
 .blog-card {
   background: #fff;
   border-radius: var(--blog-radius-md);
@@ -1066,7 +1066,7 @@
   border-color: rgba(184,146,42,0.28);
 }
 
-/* Card Image */
+
 .blog-card-img-wrap {
   position: relative;
   overflow: hidden;
@@ -1164,7 +1164,7 @@
   border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Card body */
+
 .blog-card-body {
   padding: 16px 18px 14px;
   display: flex;
@@ -1194,7 +1194,7 @@
   flex: 1;
 }
 
-/* Card meta */
+
 .blog-card-meta {
   display: flex;
   align-items: center;
@@ -1247,7 +1247,7 @@
   color: var(--blog-mist) !important;
 }
 
-/* ── Read More ── */
+
 .card-read-more {
   display: inline-flex;
   align-items: center;
@@ -1269,7 +1269,7 @@
 .card-read-more:hover { color: var(--blog-plum); }
 .card-read-more:hover span { transform: translateX(4px); }
 
-/* No results */
+
 .blog-no-results {
   text-align: center;
   padding: 40px 20px;
@@ -2204,7 +2204,7 @@
   gap: 6px;
 }
 
-/* ── Card Share Row ── */
+
 .card-share-row {
   display: flex;
   align-items: center;
@@ -2442,7 +2442,7 @@
   .blog-ticker { height: 32px; }
   .ticker-label { padding: 0 10px; font-size: 9px; }
 
-  /* ── Search bar élargie sur mobile ── */
+  
   .blog-search {
     max-width: 96%;
     width: 96%;
@@ -2515,7 +2515,7 @@
    RESPONSIVE — Mobile petit (< 480px)
 ════════════════════════════════════════ */
 @media (max-width: 480px) {
-  /* Search encore plus large sur très petit écran */
+  
   .blog-search {
     max-width: 98%;
     width: 98%;

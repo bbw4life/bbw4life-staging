@@ -535,7 +535,7 @@
     50%       { box-shadow: 0 6px 24px rgba(201,150,62,0.20); }
 }
 
-/* ── Wrapper principal ── */
+
 .bbw-boot-style-guide {
     width: 100%;
     background: linear-gradient(135deg,
@@ -551,7 +551,7 @@
         0 1px 0 rgba(255,255,255,0.80) inset;
 }
 
-/* Fine ligne or animée en haut */
+
 .bbw-boot-style-guide::before {
     content: '';
     position: absolute;
@@ -570,7 +570,7 @@
     z-index: 2;
 }
 
-/* ── Header ── */
+
 .bbw-boot-style-guide__header {
     display: flex;
     align-items: center;
@@ -593,7 +593,7 @@
     animation: bbw-sg-icon-float 3s ease-in-out infinite;
 }
 
-/* ── Grille 2×2 ── */
+
 .bbw-boot-style-guide__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -603,7 +603,7 @@
     z-index: 1;
 }
 
-/* ── Carte individuelle ── */
+
 .bbw-boot-style-guide__card {
     display: flex;
     flex-direction: column;
@@ -623,12 +623,12 @@
     animation: bbw-sg-card-glow 4s ease-in-out infinite;
 }
 
-/* Décalage d'animation entre cartes */
+
 .bbw-boot-style-guide__card:nth-child(2) { animation-delay: 1s; }
 .bbw-boot-style-guide__card:nth-child(3) { animation-delay: 2s; }
 .bbw-boot-style-guide__card:nth-child(4) { animation-delay: 3s; }
 
-/* Orbe décoratif en bas à droite */
+
 .bbw-boot-style-guide__card::after {
     content: '';
     position: absolute;
@@ -647,7 +647,7 @@
     transform: translateY(-2px);
 }
 
-/* ── Icône ronde ── */
+
 .bbw-boot-style-guide__card-icon {
     width: 36px;
     height: 36px;
@@ -668,7 +668,7 @@
     transform: scale(1.10) rotate(-6deg);
 }
 
-/* ── Titre de carte ── */
+
 .bbw-boot-style-guide__card > strong {
     font-size: 13px;
     font-weight: 800;
@@ -677,7 +677,7 @@
     line-height: 1.25;
 }
 
-/* ── Texte de carte ── */
+
 .bbw-boot-style-guide__card > span {
     font-size: 12px;
     color: rgba(30,15,5,0.55);
@@ -685,7 +685,7 @@
     font-weight: 400;
 }
 
-/* ── Arrondi sur coins extérieurs de la grille ── */
+
 .bbw-boot-style-guide__card:first-child  { border-radius: 0; }
 .bbw-boot-style-guide__card:last-child   { border-radius: 0 0 0 0; }
 
@@ -714,7 +714,7 @@
    Remplacer l'ancienne règle .bbw-occasion-dot par .bbw-occasion-icon
 ════════════════════════════════════════════════════════════ */
 
-/* Supprimer l'ancienne règle .bbw-occasion-dot et ajouter celle-ci : */
+
 .bbw-occasion-icon {
     width: 28px;
     height: 28px;
@@ -1646,7 +1646,7 @@
     transform: translateX(4px);
 }
 
-/* Ligne gauche colorée selon la couleur */
+
 .ccm-card::before {
     content: '';
     position: absolute;
@@ -1853,7 +1853,7 @@
         0 0 0 1px rgba(201,150,62,0.10) inset;
 }
 
-/* Fine ligne or animée en haut */
+
 .bbw-lace-confidence-strip::before {
     content: '';
     position: absolute;

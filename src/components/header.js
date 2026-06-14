@@ -302,7 +302,7 @@
   }
 
 
-  /* Sync label lang du drawer depuis un code langue */
+  
   function _syncDrawerLang(code) {
     const langList = document.getElementById('bbwDrawerLangList');
     const langFlag = document.getElementById('bbwDrawerLangFlag');
@@ -318,7 +318,7 @@
     if (langLbl)  langLbl.textContent  = target.dataset.label || '';
   }
 
-  /* Bascule le chevron ▼ / ▲ d'un bouton */
+  
   function _setChevron(btn, isOpen) {
     if (!btn) return;
     const ch = btn.querySelector('.bbw-drawer__select-chevron');
@@ -381,7 +381,7 @@
         hdrLangDrop.appendChild(btn);
       });
 
-      /* Valeur par défaut */
+      
       const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
       if (defLang) {
         if (hdrLangFlag)  hdrLangFlag.textContent  = defLang.flag  || '';
@@ -389,7 +389,7 @@
       }
     }
 
-    /* Open / close desktop — clone pour éviter doublons */
+    
     if (hdrLangBtn && hdrLangWrap) {
       const freshBtn = hdrLangBtn.cloneNode(true);
       hdrLangBtn.parentNode.replaceChild(freshBtn, hdrLangBtn);
@@ -401,7 +401,7 @@
       });
     }
 
-    /* Fermer desktop si clic en dehors */
+    
     document.addEventListener('click', e => {
       if (hdrLangWrap && !hdrLangWrap.contains(e.target)) {
         hdrLangWrap.classList.remove('is-open');
@@ -441,7 +441,7 @@
             if (countryFlag) countryFlag.textContent = opt.flag  || '';
             if (countryLbl)  countryLbl.textContent  = opt.label || opt.name || '';
 
-            /* Fermer + reset chevron */
+            
             countryList.classList.remove('is-open');
             _setChevron(document.getElementById('bbwDrawerCountryBtn'), false);
 
@@ -452,7 +452,7 @@
           countryList.appendChild(btn);
         });
 
-        /* Valeur par défaut */
+        
         const defCountry = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
         if (defCountry) {
           if (countryFlag) countryFlag.textContent = defCountry.flag  || '';
@@ -490,7 +490,7 @@
             if (langFlag) langFlag.textContent = opt.flag || '';
             if (langLbl)  langLbl.textContent  = opt.name || '';
 
-            /* Fermer + reset chevron */
+            
             langList.classList.remove('is-open');
             _setChevron(document.getElementById('bbwDrawerLangBtn'), false);
 
@@ -500,7 +500,7 @@
           langList.appendChild(btn);
         });
 
-        /* Valeur par défaut */
+        
         const defLang = langOptions.find(o => o.code === defaultLang) || langOptions[0];
         if (defLang) {
           if (langFlag) langFlag.textContent = defLang.flag || '';
@@ -528,7 +528,7 @@
         const isOpen = drawerCountryList.classList.toggle('is-open');
         _setChevron(freshCB, isOpen);
 
-        /* Ferme lang si on ouvre country */
+        
         if (isOpen && drawerLangList) {
           drawerLangList.classList.remove('is-open');
           _setChevron(document.getElementById('bbwDrawerLangBtn'), false);
@@ -544,7 +544,7 @@
         const isOpen = drawerLangList.classList.toggle('is-open');
         _setChevron(freshLB, isOpen);
 
-        /* Ferme country si on ouvre lang */
+        
         if (isOpen && drawerCountryList) {
           drawerCountryList.classList.remove('is-open');
           _setChevron(document.getElementById('bbwDrawerCountryBtn'), false);

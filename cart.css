@@ -4,7 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
-/* ── Variables ── */
+
 :root {
   --cp-gold:        #c9963e;
   --cp-gold-light:  #e8bc6a;
@@ -201,7 +201,7 @@
   border-bottom: 1px solid var(--cp-border);
 }
 
-/* Message au-dessus de la barre */
+
 .cp-progress-wrap .cart-drawer__progress-message {
   display: block;
   font-size: 0.74rem;
@@ -214,7 +214,7 @@
 }
 .cp-progress-wrap .cart-drawer__progress-message strong { color: #1e1a1c; }
 
-/* Track de la barre — NOM DE CLASSE PROPRE pour éviter conflit drawer */
+
 .cp-progress-bar-track {
   width: 100%;
   height: 8px;
@@ -225,7 +225,7 @@
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
 }
 
-/* Fill de la barre */
+
 .cp-progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg,
@@ -241,7 +241,7 @@
     0 0 5px rgba(201,150,62,0.45);
 }
 
-/* Shimmer sur le fill */
+
 .cp-progress-bar-fill::before {
   content: '';
   position: absolute;
@@ -255,12 +255,12 @@
   border-radius: 20px;
 }
 
-/* Camion — position calculée en JS via cp-progress-truck ID */
+
 .cp-progress-truck {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 0; /* JS va mettre à jour via style.left */
+  left: 0; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -304,7 +304,7 @@
   border-radius: 0 2px 2px 0;
   box-shadow: 1px 0 10px rgba(201,150,62,0.35);
 }
-/* .promo-text .initial .progress .complete héritent du drawer */
+
 
 /* ================================================================
    LAYOUT GRID
@@ -328,7 +328,7 @@
   gap: 22px;
 }
 
-/* ── Items Wrap ── */
+
 .cp-items-wrap {
   background: #fffdf9;
   border: 1px solid var(--cp-border);
@@ -352,7 +352,7 @@
   border-bottom: 1px solid rgba(201,150,62,0.22);
 }
 
-/* ── Cart items propres à la page — classe cp-cart-item (PAS cart-item) ── */
+
 .cp-cart-items {
   padding: 8px 14px 14px;
 }
@@ -375,7 +375,7 @@
   border-bottom: none;
 }
 
-/* Image */
+
 .cp-item-img-wrap {
   position: relative;
   flex-shrink: 0;
@@ -394,7 +394,7 @@
   transform: scale(1.04);
 }
 
-/* Meta */
+
 .cp-item-meta {
   display: flex;
   flex-direction: column;
@@ -418,7 +418,7 @@
   margin: 0;
 }
 
-/* Prix colonne */
+
 .cp-item-price-col {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.05rem;
@@ -427,7 +427,7 @@
   text-align: center;
 }
 
-/* Qty */
+
 .cp-qty-row {
   display: flex;
   flex-direction: column;
@@ -484,7 +484,7 @@
   transform: scale(1.15);
 }
 
-/* Line total */
+
 .cp-item-line-total {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 1.10rem;
@@ -493,7 +493,7 @@
   text-align: right;
 }
 
-/* Free badge */
+
 .free-badge {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.68rem;
@@ -506,7 +506,7 @@
   margin-left: 6px;
 }
 
-/* Warning */
+
 .cart-item-warning-dot {
   position: absolute;
   top: -4px; right: -4px;
@@ -532,7 +532,7 @@
 }
 .cart-item-warning-dot:hover .cart-item-warning-tooltip { display: block; }
 
-/* Request btn */
+
 .cart-item-request-btn {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.70rem;
@@ -617,7 +617,7 @@
 }
 .cp-upsell-items { display: flex; flex-direction: column; gap: 10px; }
 
-/* Styles des items upsell — réutilise .p2-upsell-item de style.css */
+
 .cp-upsell-section .p2-upsell-item {
   display: flex;
   align-items: center;
@@ -715,30 +715,30 @@
     align-items: center;
     gap: 8px;
     padding: 10px;
-    box-sizing: border-box;  /* ← fix */
-    max-width: 100%;          /* ← fix */
-    overflow: hidden;         /* ← fix */
+    box-sizing: border-box;  
+    max-width: 100%;          
+    overflow: hidden;         
   }
 
-  /* Prix — empêcher débordement */
+  
   .cp-upsell-section .p2-upsell-price-col {
     grid-column: 4;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 2px;
-    min-width: 0;      /* ← fix */
-    flex-shrink: 1;    /* ← fix */
+    min-width: 0;      
+    flex-shrink: 1;    
   }
 
   .cp-upsell-section .p2-upsell-old {
     font-size: 0.65rem;
-    white-space: nowrap;  /* ← fix */
+    white-space: nowrap;  
   }
 
   .cp-upsell-section .p2-upsell-new {
     font-size: 0.88rem;
-    white-space: nowrap;  /* ← fix */
+    white-space: nowrap;  
   }
 }
 
@@ -752,7 +752,7 @@
   overflow: hidden;
   box-shadow: var(--cp-shadow);
 }
-/* Réutilise .cart-drawer__promo-slider et classes internes du drawer */
+
 
 /* ================================================================
    SOCIAL PROOF
@@ -778,7 +778,7 @@
   color: var(--cp-dark);
 }
 
-/* Reviews carousel — propre à la page (ID cp-reviews-carousel) */
+
 .cp-reviews-carousel {
   min-height: 130px;
   position: relative;
@@ -796,7 +796,7 @@
   opacity: 1;
   pointer-events: auto;
 }
-/* .review-item-inner, .review-top, etc. héritent du drawer */
+
 
 /* ================================================================
    SHARE SECTION
@@ -968,7 +968,7 @@
   color: var(--cp-dark);
 }
 
-/* Loyalty */
+
 .cp-loyalty {
   margin-bottom: 18px;
   background: linear-gradient(135deg, rgba(201,150,62,0.07), rgba(245,208,128,0.05));
@@ -990,7 +990,7 @@
   font-family: 'DM Sans', sans-serif; font-size: 0.72rem; color: var(--cp-muted);
 }
 
-/* Checkout btn override */
+
 .cp-checkout-btn {
   width: 100%;
   display: flex;
@@ -1003,7 +1003,7 @@
   letter-spacing: 0.10em;
 }
 
-/* Payment icons override page */
+
 .cp-payment-icons {
   display: flex !important;
   flex-wrap: wrap !important;
@@ -1021,7 +1021,7 @@
 }
 .cp-payment-icons i:hover { color: var(--cp-gold) !important; }
 
-/* Trust badges */
+
 .cp-trust-badges {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1152,7 +1152,7 @@
 /* ================================================================
    STICKY CHECKOUT BAR — mobile uniquement
 ================================================================ */
-/* APRÈS */
+
 .cp-sticky-bar {
   position: fixed;
   bottom: 0px; left: 0; right: 0;
@@ -1465,7 +1465,7 @@
   overflow: hidden;
 }
 
-/* top shimmer line */
+
 .cp-extra-section::before {
   content: '';
   position: absolute;
@@ -1562,7 +1562,7 @@
   transform: translateY(-2px);
 }
 
-/* Image wrapper with hover swap */
+
 .cp-extra-card__img-wrap {
   position: relative;
   width: 100%;
@@ -1584,7 +1584,7 @@
 .cp-extra-card:hover .cp-extra-card__img       { opacity: 0; }
 .cp-extra-card:hover .cp-extra-card__img-hover { opacity: 1; }
 
-/* badge */
+
 .cp-extra-card__badge {
   position: absolute;
   top: 8px; left: 8px;
@@ -1601,7 +1601,7 @@
   box-shadow: 0 2px 8px rgba(192,56,94,0.35);
 }
 
-/* discount badge */
+
 .cp-extra-card__discount {
   position: absolute;
   top: 8px; right: 8px;
@@ -1615,7 +1615,7 @@
   z-index: 2;
 }
 
-/* body */
+
 .cp-extra-card__body {
   padding: 9px 10px 11px;
   display: flex;
@@ -1808,7 +1808,7 @@
   font-size: 0.60rem;
 }
 
-/* Slider wrapper */
+
 .drawer-extra-slider-wrap {
   display: flex;
   align-items: center;
@@ -1831,7 +1831,7 @@
   will-change: transform;
 }
 
-/* ── Drawer card : toujours 2 par page ── */
+
 .drawer-extra-card {
   flex: 0 0 calc((100% - 10px) / 2);
   min-width: calc((100% - 10px) / 2);
@@ -1849,7 +1849,7 @@
   box-shadow: 0 4px 16px rgba(201,150,62,0.12);
 }
 
-/* image */
+
 .drawer-extra-card__img-wrap {
   position: relative;
   width: 100%;
@@ -1900,7 +1900,7 @@
   z-index: 2;
 }
 
-/* body */
+
 .drawer-extra-card__body {
   padding: 9px 10px 11px;
   display: flex;
@@ -1976,7 +1976,7 @@
   color: #22a06b;
 }
 
-/* arrows drawer */
+
 .drawer-extra-arrow {
   flex-shrink: 0;
   width: 28px;
@@ -2001,7 +2001,7 @@
   pointer-events: none;
 }
 
-/* dots drawer */
+
 .drawer-extra-dots {
   display: flex;
   align-items: center;

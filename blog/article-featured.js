@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      /* ── Meta / <head> tags ─────────────────────────────── */
+      
 
       var pageTitle = document.getElementById('page-title');
       if (pageTitle) pageTitle.textContent = f.title + ' | CurvaFit Journal';
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var metaOgImage = document.getElementById('meta-og-image');
       if (metaOgImage) metaOgImage.setAttribute('content', f.image);
 
-      /* ── JSON-LD ────────────────────────────────────────── */
+      
 
       var jsonLd = document.getElementById('json-ld');
       if (jsonLd) {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      /* ── Hero image ─────────────────────────────────────── */
+      
 
       var heroImage = document.getElementById('hero-image');
       if (heroImage) {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         heroImage.style.display = 'block';
       }
 
-      /* ── Hero text fields ───────────────────────────────── */
+      
 
       setText('hero-badge',        f.badge);
       setText('hero-readtime',     f.readTime);
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setText('hero-readtime-stat', f.readTime);
       setText('breadcrumb-category', f.badge);
 
-      /* ── Author chip (hero) ─────────────────────────────── */
+      
 
       var heroAuthorImg = document.getElementById('hero-author-img');
       if (heroAuthorImg) {
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setText('hero-author-name', f.author.name);
       setText('hero-author-role', f.author.role || '');
 
-      /* ── Author bio section ─────────────────────────────── */
+      
 
       var bioAuthorImg = document.getElementById('bio-author-img');
       if (bioAuthorImg) {
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setText('bio-author-role',       f.author.role || '');
       setText('conclusion-author-name', f.author.name);
 
-      /* ── Related articles ───────────────────────────────── */
+      
 
       injectRelated(data.cards, f.badge, null);
 
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var shownCount       = 0;
     var likeGranted      = false;
 
-    /* Load stats */
+    
     async function loadStats() {
       try {
         var res  = await fetch(API + '?articleId=' + encodeURIComponent(ARTICLE_ID));
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (el) el.textContent = value;
     }
 
-    /* Like */
+    
     var btnHelpful = document.getElementById('btn-helpful');
     if (btnHelpful) {
       btnHelpful.addEventListener('click', async function () {
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Share counter */
+    
     async function recordShare() {
       try {
         var res  = await fetch(API, {
@@ -408,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Avatar */
+    
     var avatarBase64 = '';
 
     function compressAvatar(file) {
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Stars */
+    
     var stars          = document.querySelectorAll('.art-rv-star');
     var ratingInput    = document.getElementById('art-rv-rating');
     var selectedRating = 0;
@@ -473,14 +473,14 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    /* Char counter */
+    
     var textarea = document.getElementById('art-rv-text');
     var charNum  = document.getElementById('art-rv-char-num');
     if (textarea && charNum) {
       textarea.addEventListener('input', function () { charNum.textContent = textarea.value.length; });
     }
 
-    /* Submit review */
+    
     var reviewForm = document.getElementById('art-review-form');
     var submitBtn  = document.getElementById('art-rv-submit');
     var errorEl    = document.getElementById('art-rv-error');
@@ -557,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (errorEl) { errorEl.textContent = msg; errorEl.style.display = 'block'; }
     }
 
-    /* Render reviews */
+    
     var listWrap    = document.getElementById('art-reviews-list-wrap');
     var listEl      = document.getElementById('art-reviews-list');
     var countLabel  = document.getElementById('art-rv-count-label');
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return card;
     }
 
-    /* Inspired btn */
+    
     var btnInspired = document.getElementById('btn-inspired');
     if (btnInspired) {
       btnInspired.addEventListener('click', function () {
@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Footer newsletter */
+    
     var footerForm  = document.getElementById('newsletter-form-footer');
     var footerEmail = document.getElementById('newsletter-email-footer');
 

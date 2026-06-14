@@ -1,4 +1,4 @@
-/* ── Reviews Section ── */
+
 #reviews-section {
     padding: 15px 10px 10px;
     background: linear-gradient(160deg, #fdf8f0 0%, #fef9f2 40%, #faf4ec 100%);
@@ -7,7 +7,7 @@
     overflow: hidden;
 }
 
-/* Ambient shimmer background orbs */
+
 #reviews-section::before,
 #reviews-section::after {
     content: '';
@@ -39,7 +39,7 @@
     50%      { transform: translateY(-25px) scale(1.05); }
 }
 
-/* ── Header ── */
+
 .reviews-header {
     display: flex;
     align-items: flex-start;
@@ -128,7 +128,7 @@
     border-color: var(--bbw-gold-light) !important;
 }
 
-/* ── Ratings Summary ── */
+
 .ratings-summary {
     display: flex;
     gap: 20px;
@@ -160,7 +160,7 @@
 .ratings-summary-left { flex: 1; min-width: 0; }
 .ratings-summary-right { flex-shrink: 0; width: 200px; }
 
-/* Score moyen affiché dans le summary */
+
 .ratings-summary-right .average-score,
 .ratings-summary .big-score,
 .average-rating .score-num {
@@ -223,7 +223,7 @@
     100% { left: 120%; }
 }
 
-/* ── Review Photos Grid ── */
+
 .review-photos-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -266,7 +266,7 @@
     box-shadow: 0 6px 20px rgba(0,0,0,0.30);
 }
 
-/* ── Reviews List Grid ── */
+
 .reviews-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -274,7 +274,7 @@
     margin-bottom: 24px;
 }
 
-/* ── Review Card ── */
+
 .review-card {
     background: rgba(255,255,255,0.93);
     backdrop-filter: blur(8px);
@@ -409,7 +409,7 @@
     color: #00b67a !important;
     fill: #00b67a !important;
 }
-/* Badge verified générique dans les cards */
+
 .verified-badge,
 .review-verified,
 .badge-verified {
@@ -427,7 +427,7 @@
     font-family: var(--font-body);
 }
 
-/* ── Read More Button ── */
+
 #read-more {
     display: block;
     margin: 16px auto 20px;
@@ -820,7 +820,7 @@
 }
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-/* ── Modal Success State ── */
+
 #modal-success {
     display: none;
     flex-direction: column;
@@ -867,7 +867,7 @@
     max-width: 240px;
 }
 
-/* ── Responsive ── */
+
 @media (max-width: 1024px) {
     .reviews-list {
         grid-template-columns: repeat(2, 1fr);
@@ -994,7 +994,7 @@
 
 
 
-/* ── Review Card Header Layout ── */
+
 .rv-card-header {
     display: flex;
     align-items: flex-start;
@@ -1018,7 +1018,7 @@
     min-width: 0;
 }
 
-/* ── Mobile overrides ── */
+
 @media (max-width: 768px) {
 
     .review-card {

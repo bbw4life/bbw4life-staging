@@ -7,7 +7,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* ── BBW4LIFE Brand Colors (inlined) ── */
+  
   --bbw-black:        #0d0d0d;
   --bbw-black-soft:   #1a1a1a;
   --bbw-gold:         #c9963e;
@@ -19,7 +19,7 @@
   --bbw-white-soft:   rgba(255,255,255,0.85);
   --bbw-mist:         rgba(255,255,255,0.45);
 
-  /* ── Global UI (inlined) ── */
+  
   --green:            #22a06b;
   --green-pale:       #e8f8f0;
   --charcoal:         #1a1a1a;
@@ -44,7 +44,7 @@
   --spring:           all 0.44s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ── Page background — warm champagne luxury ── */
+
 body {
   background: linear-gradient(155deg,
     #fffdf8 0%,
@@ -56,7 +56,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Floating light orbs */
+
 body::before,
 body::after {
   content: '';
@@ -163,7 +163,7 @@ body::after {
   to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
-/* Top gold shimmer bar */
+
 .container::before {
   content: '';
   position: absolute;
@@ -186,7 +186,7 @@ body::after {
   100% { background-position: 200% 50%; }
 }
 
-/* Soft gold orb behind content */
+
 .container::after {
   content: '';
   position: absolute;
@@ -206,7 +206,7 @@ body::after {
   50%      { transform: translate(-50%,-50%) scale(1.16); opacity:1; }
 }
 
-/* ── Main title ── */
+
 .container > h1 {
   font-family: var(--font-display) !important;
   font-size: 2.20rem !important;
@@ -229,7 +229,7 @@ body::after {
   to   { opacity:1; transform:scale(1); }
 }
 
-/* ── Success icon ── */
+
 .success-icon {
   width: 88px; height: 88px;
   background: linear-gradient(135deg, var(--green), #2ecc87);
@@ -267,7 +267,7 @@ body::after {
   to   { opacity:1; transform:scale(1) rotate(0deg); }
 }
 
-/* ── Spinner ── */
+
 .spinner {
   border: 3px solid rgba(201,150,62,0.15);
   border-top:   3px solid var(--bbw-gold);
@@ -284,7 +284,7 @@ body::after {
   100% { transform:rotate(360deg); }
 }
 
-/* ── Message box ── */
+
 #message {
   position: relative;
   padding: 24px 22px;
@@ -338,7 +338,7 @@ p.error {
   font-weight: 600;
 }
 
-/* ── Buttons ── */
+
 #buttons {
   display: flex;
   gap: 12px;
@@ -381,7 +381,7 @@ p.error {
 }
 .button:hover::before { left: 100%; }
 
-/* Primary button — gold luxury */
+
 .button:first-child {
   background: linear-gradient(135deg,
     var(--bbw-gold-vivid) 0%,
@@ -399,7 +399,7 @@ p.error {
     0 1px 0 rgba(255,255,255,0.30) inset;
 }
 
-/* Secondary button — rose pearl */
+
 .button:last-child {
   background: rgba(255,255,255,0.88);
   color: var(--bbw-rose);
@@ -417,7 +417,7 @@ p.error {
    EXTRA SECTIONS
 ================================================================ */
 
-/* ── What happens next ── */
+
 .next-steps {
   background: rgba(255,255,255,0.90);
   backdrop-filter: blur(20px);
@@ -521,7 +521,7 @@ p.error {
   margin: 0;
 }
 
-/* ── Order stats (mini badges) ── */
+
 .order-stats {
   display: flex;
   gap: 12px;
@@ -603,7 +603,7 @@ p.error {
   margin: 0 !important;
 }
 
-/* ── Gratitude message — champagne & gold, not dark ── */
+
 .gratitude-section {
   background: linear-gradient(145deg,
     #fffbf0 0%,
@@ -625,7 +625,7 @@ p.error {
   animation: cardReveal 0.60s cubic-bezier(0.4,0,0.2,1) 1.20s both;
 }
 
-/* Gold shimmer top bar */
+
 .gratitude-section::before {
   content: '';
   position: absolute;
@@ -640,7 +640,7 @@ p.error {
   animation: rainbowSlide 3s linear infinite;
 }
 
-/* Large decorative heart — gold tint */
+
 .gratitude-section::after {
   content: '♥';
   position: absolute;
@@ -700,7 +700,7 @@ p.error {
   z-index: 1;
 }
 
-/* ── Social share ── */
+
 .share-section {
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(20px);
@@ -788,7 +788,7 @@ p.error {
   box-shadow: 0 6px 20px rgba(201,150,62,0.38);
 }
 
-/* ── Support bar ── */
+
 .support-bar {
   background: linear-gradient(135deg,
     rgba(201,150,62,0.08),
@@ -844,7 +844,7 @@ p.error {
   box-shadow: 0 8px 22px rgba(37,211,102,0.44);
 }
 
-/* ── Animation helper ── */
+
 @keyframes cardReveal {
   from { opacity:0; transform:translateY(22px); }
   to   { opacity:1; transform:translateY(0); }
@@ -878,7 +878,7 @@ p.error {
    Icônes Font Awesome · Corrections fond · Bouton WhatsApp noir
 ================================================================ */
 
-/* ── Step icons dans les h4 ── */
+
 .step-text h4 .step-icon {
   font-size: 1rem;
   margin-right: 6px;
@@ -889,7 +889,7 @@ p.error {
   vertical-align: middle;
 }
 
-/* ── Gratitude emoji → icône cœur ── */
+
 .gratitude-emoji i {
   font-size: 3.2rem;
   background: linear-gradient(135deg, var(--bbw-rose), var(--bbw-gold), #FFD700);
@@ -898,7 +898,7 @@ p.error {
   background-clip: text;
 }
 
-/* ── Share title icon ── */
+
 .share-title-icon {
   font-size: 1rem;
   margin-left: 6px;
@@ -909,7 +909,7 @@ p.error {
   vertical-align: middle;
 }
 
-/* ── Banner crown icon ── */
+
 .bbw-crown-icon {
   font-size: 1rem;
   margin-left: 4px;
@@ -917,7 +917,7 @@ p.error {
   vertical-align: middle;
 }
 
-/* ── Bouton WhatsApp support bar → NOIR ── */
+
 .support-wa-btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -947,7 +947,7 @@ p.error {
   color: #25D366 !important;
 }
 
-/* ── Fix fond blanc section bbw-request-section ── */
+
 .bbw-request-section {
   background: linear-gradient(145deg,
     rgba(201,150,62,0.06) 0%,
@@ -974,7 +974,7 @@ p.error {
   animation: none !important;
 }
 
-/* Top bar dégradé sur les sections request */
+
 .bbw-request-section::before {
   content: '';
   position: absolute;
@@ -987,7 +987,7 @@ p.error {
   border-radius: 20px 20px 0 0;
 }
 
-/* ── Fix fond blanc my-product-section ── */
+
 .my-product-section {
   padding: 0 !important;
   margin: 0 !important;

@@ -55,7 +55,7 @@ async function loadProductsData() {
         console.log(`[Products] Loaded from disk: ${p}`);
         return JSON.parse(fs.readFileSync(p, 'utf8'));
       }
-    } catch (e) { /* continue */ }
+    } catch (e) {  }
   }
   // Fallback: fetch from live site
   const res = await fetch(`${SITE_URL}/products.data.json`);

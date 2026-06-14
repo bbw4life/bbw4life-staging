@@ -6,7 +6,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    /* ── Parse — new fields: productId, size, color added ── */
+    
     const {
       firstName,
       lastName,
@@ -39,19 +39,19 @@ exports.handler = async (event) => {
       return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear().toString().slice(-2)} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
     }
 
-    /* ── Row — 11 columns now (A:K) ── */
+    
     const values = [[
-      formatDate(),      /* A — Date */
-      firstName,         /* B — First Name */
-      lastName,          /* C — Last Name */
-      email,             /* D — Email */
-      phone || '',       /* E — Phone */
-      program,           /* F — Product Title */
-      productId || '',   /* G — Product ID */
-      size || '',        /* H — Size */
-      color || '',       /* I — Color */
-      consent || 'Yes',  /* J — Consent */
-      'Pending'          /* K — Status */
+      formatDate(),      
+      firstName,         
+      lastName,          
+      email,             
+      phone || '',       
+      program,           
+      productId || '',   
+      size || '',        
+      color || '',       
+      consent || 'Yes',  
+      'Pending'          
     ]];
 
     await sheets.spreadsheets.values.append({

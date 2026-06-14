@@ -15,19 +15,19 @@
   ══════════════════════════════════════════════════════════════ */
   (function injectHideStyle() {
     var css = [
-      /* ── Barre iframe en haut de page ── */
+      
       '.goog-te-banner-frame,',
       'iframe.goog-te-banner-frame,',
       '.skiptranslate > iframe,',
       '#\\:1\\.container,',
 
-      /* ── Balloon / tooltip flottant ── */
+      
       '.goog-te-balloon-frame,',
       '#goog-gt-tt,',
       '.goog-tooltip,',
       '.goog-tooltip:hover,',
 
-      /* ── Gadget complet + logo spinner + lien Google ── */
+      
       '.goog-te-gadget,',
       '.goog-te-gadget-icon,',
       '.goog-te-gadget-simple,',
@@ -36,12 +36,12 @@
       '.goog-te-menu-value:hover,',
       '.goog-te-menu-frame,',
 
-      /* ── Spinner / loader qui tourne ── */
+      
       '.goog-te-spinner,',
       '.goog-te-spinner-pos,',
       '#goog-gt-,',
 
-      /* ── Toutes les classes VIpgJd (logo Google Translate) ── */
+      
       '.VIpgJd-ZVi9od-aZ2wEe,',
       '.VIpgJd-ZVi9od-aZ2wEe-wib3jc,',
       '.VIpgJd-ZVi9od-aZ2wEe-OiiCO,',
@@ -51,10 +51,10 @@
       '[class^="VIpgJd"],',
       '[class*=" VIpgJd"],',
 
-      /* ── Tous les id commençant par goog-gt ── */
+      
       '[id^="goog-gt"],',
 
-      /* ── Conteneur racine injecté par Google ── */
+      
       '#google_translate_element,',
       '#google_translate_element2,',
       '.skiptranslate:not(font) {',
@@ -72,7 +72,7 @@
       '  left:            -9999px !important;',
       '}',
 
-      /* ── Empêche le body de se décaler vers le bas ── */
+      
       
       'body.translated-ltr,',
       'body { font-size: initial !important; }',
@@ -82,7 +82,7 @@
     var style = document.createElement('style');
     style.id  = 'bbw-hide-google-translate';
     style.textContent = css;
-    /* Injecter le plus tôt possible — avant <head> complet si besoin */
+    
     (document.head || document.documentElement).appendChild(style);
   })();
 
@@ -129,20 +129,20 @@
       SELECTORS_TO_HIDE.forEach(function (sel) {
         try {
           document.querySelectorAll(sel).forEach(forceHide);
-        } catch (e) { /* ignorer les sélecteurs invalides */ }
+        } catch (e) {  }
       });
-      /* Masquer aussi tout iframe dont src contient translate.google */
+      
       document.querySelectorAll('iframe').forEach(function (f) {
         var src = f.src || '';
         if (src.indexOf('translate.google') !== -1 || src.indexOf('translate.googleapis') !== -1) {
           forceHide(f);
         }
       });
-      /* Remettre body.top à 0 (Google force body à 40px) */
+      
       if (document.body) document.body.style.top = '0';
     }
 
-    /* Observer les mutations DOM pour attraper les éléments injectés tard */
+    
     if (window.MutationObserver) {
       var observer = new MutationObserver(function (mutations) {
         var needed = false;
@@ -153,11 +153,11 @@
       });
       var target = document.body || document.documentElement;
       observer.observe(target, { childList: true, subtree: true });
-      /* Arrêter après 30 s pour ne pas consommer de ressources indéfiniment */
+      
       setTimeout(function () { observer.disconnect(); }, 30000);
     }
 
-    /* Scans progressifs pour attraper le logo/spinner tardif */
+    
     scanAndHide();
     setTimeout(scanAndHide, 500);
     setTimeout(scanAndHide, 1000);
@@ -196,7 +196,7 @@
   ══════════════════════════════════════════════════════════════ */
   function saveLang(code) {
     try { localStorage.setItem(STORAGE_LANG, code); } catch (e) {}
-    /* Cookie googtrans nécessaire pour Google Translate */
+    
     if (code && code !== 'en') {
       setCookie('googtrans', '/en/' + code, 365);
       setCookie('googtrans', '/en/' + code, 365, '.' + location.hostname);
@@ -210,7 +210,7 @@
       var ls = localStorage.getItem(STORAGE_LANG);
       if (ls) return ls;
     } catch (e) {}
-    /* Fallback : lire le cookie googtrans */
+    
     var c = getCookie('googtrans');
     if (c) { var parts = c.split('/'); return parts[parts.length - 1] || 'en'; }
     return null;
@@ -236,7 +236,7 @@
   function injectGoogleTranslate() {
     if (document.getElementById('google_translate_element')) return;
 
-    /* Div caché requis par le script Google */
+    
     var hiddenDiv = document.createElement('div');
     hiddenDiv.id = 'google_translate_element';
     document.body.appendChild(hiddenDiv);
@@ -265,18 +265,18 @@
     if (!langCode) return;
     langCode = langCode.toLowerCase().trim();
 
-    /* Sauvegarder en premier — même avant le reload */
+    
     saveLang(langCode);
 
     if (langCode === 'en') {
-      /* Repasser en anglais : effacer cookie + reload */
+      
       eraseCookie('googtrans');
       try { localStorage.removeItem(STORAGE_LANG); } catch (e) {}
       location.reload();
       return;
     }
 
-    /* Essayer d'utiliser le combo déjà disponible */
+    
     var tries    = 0;
     var maxTries = 40;
     var interval = setInterval(function () {
@@ -293,7 +293,7 @@
     }, 100);
   }
 
-  /* Exposer globalement (utilisé par header.js et footer.js) */
+  
   window.translateTo = translateTo;
 
   /* ══════════════════════════════════════════════════════════════
@@ -315,7 +315,7 @@
                           || countryOptions.find(function (o) { return o.code === 'us'; }))
                        : null;
 
-    /* ── HEADER desktop lang ── */
+    
     if (foundLang) {
       var hFlag  = document.getElementById('bbwHdrLangFlag');
       var hLabel = document.getElementById('bbwHdrLangLabel');
@@ -327,7 +327,7 @@
       });
     }
 
-    /* ── DRAWER mobile — LANGUE ── */
+    
     if (foundLang) {
       var dLangFlag  = document.getElementById('bbwDrawerLangFlag');
       var dLangLabel = document.getElementById('bbwDrawerLangLabel');
@@ -339,7 +339,7 @@
       });
     }
 
-    /* ── DRAWER mobile — PAYS ── */
+    
     if (foundCountry) {
       var dCFlag  = document.getElementById('bbwDrawerCountryFlag');
       var dCLabel = document.getElementById('bbwDrawerCountryLabel');
@@ -351,7 +351,7 @@
       });
     }
 
-    /* ── FOOTER custom dropdown — LANGUE ── */
+    
     if (foundLang) {
       var fLangFlag  = document.getElementById('bbwLangFlag2');
       var fLangLabel = document.getElementById('bbwLangLabel2');
@@ -369,7 +369,7 @@
       if (fLangSel) fLangSel.value = langCode;
     }
 
-    /* ── FOOTER custom dropdown — PAYS ── */
+    
     if (foundCountry) {
       var fCFlag  = document.getElementById('bbwCountryFlag');
       var fCLabel = document.getElementById('bbwCountryLabel');
@@ -412,13 +412,13 @@
     var savedLang  = loadSavedLang();
     var langToUse  = savedLang || targetLang;
 
-    /* ══ Reset complet avant conversion ══ */
+    
     _observerStarted = false;
     _activeCountry   = null;
 
     syncAllSelectors(langToUse, found.code);
 
-    /* ══ Reset tous les prix USD avant de convertir ══ */
+    
     document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
       if (el.dataset.usd) {
         el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
@@ -426,7 +426,7 @@
       delete el.dataset.converted;
     });
 
-    /* ══ Reset les nœuds texte universels ══ */
+    
     document.querySelectorAll('[data-raw-text]').forEach(function(el) {
       var nodes = el.childNodes;
       for (var i = 0; i < nodes.length; i++) {
@@ -439,7 +439,7 @@
       delete el.dataset.rawCountry;
     });
 
-    /* ══ Laisser le DOM se stabiliser puis convertir ══ */
+    
     setTimeout(function() {
       convertPricesForCountry(found.code);
     }, 80);
@@ -466,7 +466,7 @@
   var RATES_EXP_KEY = 'bbw_fx_expires';
   var RATES_TTL     = 24 * 60 * 60 * 1000;
 
-  /* ── 3 APIs en rotation circulaire ── */
+  
   var RATE_APIS = [
     function() { return fetch('https://open.er-api.com/v6/latest/USD')
       .then(function(r){ return r.json(); })
@@ -480,7 +480,7 @@
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (!d || !d.usd) throw new Error('no rates');
-        /* normaliser les clés en MAJUSCULES */
+        
         var normalized = {};
         Object.keys(d.usd).forEach(function(k){ normalized[k.toUpperCase()] = d.usd[k]; });
         return normalized;
@@ -492,7 +492,7 @@
   function fetchRates(callback) {
     if (_ratesFetched) { callback(_ratesCache); return; }
 
-    /* Cache localStorage (24h) */
+    
     try {
       var exp   = parseInt(localStorage.getItem(RATES_EXP_KEY) || '0');
       var saved = localStorage.getItem(RATES_KEY);
@@ -505,11 +505,11 @@
     } catch(e) {}
 
     _ratesPending.push(callback);
-    if (_ratesPending.length > 1) return; /* une seule requête en vol */
+    if (_ratesPending.length > 1) return; 
 
     function tryAPI(idx, attempts) {
       if (attempts >= RATE_APIS.length) {
-        /* Toutes les APIs ont échoué → callback vide */
+        
         _ratesPending.forEach(function(cb){ cb({}); });
         _ratesPending = [];
         return;
@@ -527,7 +527,7 @@
           _ratesPending = [];
         })
         .catch(function() {
-          /* Essai suivant dans le cercle */
+          
           setTimeout(function(){ tryAPI(idx + 1, attempts + 1); }, 300);
         });
     }
@@ -535,7 +535,7 @@
     tryAPI(_apiIndex, 0);
   }
 
-  /* ── Extrait la valeur USD depuis data-usd ou le texte ── */
+  
   function extractUSD(el) {
     if (el.dataset.usd) return parseFloat(el.dataset.usd);
     var text  = el.textContent || '';
@@ -544,10 +544,10 @@
     return parseFloat(match[1].replace(/,/g, ''));
   }
 
-  /* ── Formate le prix converti ── */
+  
   function formatPrice(usd, rate, symbol) {
     var converted = (usd * rate);
-    /* Arrondir selon la grandeur */
+    
     var formatted;
     if (converted < 10)        formatted = converted.toFixed(2);
     else if (converted < 100)  formatted = converted.toFixed(2);
@@ -556,10 +556,10 @@
     return symbol + ' ' + formatted;
   }
 
-  /* ── Applique la conversion sur UN élément ── */
+  
   function convertElement(el, rate, symbol, currencyCode) {
     if (currencyCode === 'USD') {
-      /* Remettre le prix USD original */
+      
       if (el.dataset.usd) {
         el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
       }
@@ -567,7 +567,7 @@
     }
     var usd = extractUSD(el);
     if (usd === null || isNaN(usd) || usd <= 0) return;
-    /* Sauvegarder le prix USD original la première fois */
+    
     if (!el.dataset.usd) el.dataset.usd = String(usd);
     el.textContent = formatPrice(usd, rate, symbol);
   }
@@ -614,12 +614,12 @@
   ].join(', ');
 
   function convertAllPrices(rate, symbol, currencyCode) {
-    /* ── Sélecteurs ciblés ── */
+    
     document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
       convertElement(el, rate, symbol, currencyCode);
     });
 
-    /* ── SCAN UNIVERSEL : tout élément contenant $X.XX ── */
+    
     var walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -639,11 +639,11 @@
       var parent = textNode.parentElement;
       if (!parent) return;
 
-      /* Ignorer les scripts, styles, inputs */
+      
       var tag = parent.tagName;
       if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'INPUT' || tag === 'TEXTAREA') return;
 
-      /* Ignorer si déjà traité par convertElement */
+      
       if (parent.dataset && parent.dataset.rawCountry === currencyCode) return;
 
       var original = textNode.nodeValue;
@@ -651,7 +651,7 @@
         var usd = parseFloat(amount.replace(/,/g, ''));
         if (isNaN(usd) || usd <= 0) return match;
 
-        /* Sauvegarder l'original */
+        
         if (!parent.dataset.rawText) {
           parent.dataset.rawText    = original;
           parent.dataset.rawCountry = currencyCode;
@@ -674,7 +674,7 @@
     });
   }
 
-  /* ── Démarre l'observation du DOM pour les éléments injectés APRÈS le load ── */
+  
   function startPriceObserver(rate, symbol, currencyCode) {
     if (_observerStarted) return;
     _observerStarted = true;
@@ -689,7 +689,7 @@
       if (!hasNewNodes) return;
 
       setTimeout(function() {
-        /* Relire le pays actif au moment de la mutation */
+        
         var country = _activeCountry;
         if (!country) return;
 
@@ -703,12 +703,12 @@
         var code  = parts[parts.length - 1].toUpperCase();
         var sym   = parts.slice(0, -1).join(' ') || code;
 
-        if (code === 'USD') return; /* pas de conversion nécessaire */
+        if (code === 'USD') return; 
 
         fetchRates(function(rates) {
           var r = rates[code];
           if (!r) return;
-          /* Convertir seulement les éléments qui n'ont pas encore été traités */
+          
           document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
             if (!el.dataset.converted || el.dataset.converted !== country) {
               convertElement(el, r, sym, code);
@@ -736,7 +736,7 @@
     var code   = parts[parts.length - 1].toUpperCase();
     var symbol = parts.slice(0, -1).join(' ') || code;
 
-    /* ══ RESET UNIVERSEL — remet TOUS les prix à leur valeur USD d'origine ══ */
+    
     document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
       if (el.dataset.usd) {
         el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
@@ -744,7 +744,7 @@
       delete el.dataset.converted;
     });
 
-    /* ══ Reset les nœuds texte universels ══ */
+    
     document.querySelectorAll('[data-raw-text]').forEach(function(el) {
       var nodes = el.childNodes;
       for (var i = 0; i < nodes.length; i++) {
@@ -758,7 +758,7 @@
     });
 
     if (code === 'USD') {
-      /* Remettre le symbole $ partout */
+      
       document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
         if (el.dataset.usd) {
           el.textContent = '$' + parseFloat(el.dataset.usd).toFixed(2);
@@ -776,18 +776,18 @@
         return;
       }
 
-      /* 1. Convertir les éléments déjà dans le DOM */
+      
       convertAllPrices(rate, symbol, code);
       document.querySelectorAll(PRICE_SELECTORS).forEach(function(el) {
         el.dataset.converted = countryCode;
       });
 
-      /* 2. Observer le DOM pour les injections futures */
+      
       _observerStarted = false;
       startPriceObserver(rate, symbol, code);
     });
 
-    /* 3. Réessayer après délais pour attraper les prix injectés async */
+    
     [500, 1000, 2000, 3000, 5000, 8000, 12000].forEach(function(delay) {
       setTimeout(function() {
         if (_activeCountry !== countryCode) return;
@@ -813,11 +813,11 @@
   ══════════════════════════════════════════════════════════════ */
   function bindAllSelectors() {
 
-    /* ── Clic sur un bouton [data-lang] (header dropdown + drawer) ── */
+    
     document.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-lang]');
       if (!opt) return;
-      /* Ignorer les éléments qui ont aussi data-country (pour ne pas double-déclencher) */
+      
       if (opt.dataset.country) return;
       var lang = (opt.dataset.lang || '').toLowerCase().trim();
       if (!lang) return;
@@ -827,7 +827,7 @@
       translateTo(lang);
     });
 
-    /* ── Clic sur un bouton [data-country] (drawer) ── */
+    
     document.addEventListener('click', function (e) {
       var opt = e.target.closest('[data-country]');
       if (!opt) return;
@@ -837,7 +837,7 @@
 
       saveCountry(country);
 
-      /* ══ Reset immédiat avant applyCountry ══ */
+      
       _observerStarted = false;
       _activeCountry   = null;
 
@@ -848,11 +848,11 @@
         syncAllSelectors(loadSavedLang() || 'en', country);
       }
 
-      /* applyCountry gère le reset + conversion + traduction */
+      
       applyCountry(country, false);
     });
 
-    /* ── Select caché footer LANGUE ── */
+    
     document.addEventListener('change', function (e) {
       if (e.target.id === 'bbwFooterLangSelect') {
         var lang = e.target.value;
@@ -862,7 +862,7 @@
       }
     });
 
-    /* ── Select caché footer PAYS ── */
+    
     document.addEventListener('change', function (e) {
       if (e.target.id === 'bbwFooterCountrySelect') {
         var countryCode = e.target.value;
@@ -871,7 +871,7 @@
       }
     });
 
-    /* ── Liste custom footer LANGUE (li cliqués) ── */
+    
     var fLangList = document.getElementById('bbwLangList');
     if (fLangList) {
       fLangList.addEventListener('click', function (e) {
@@ -885,7 +885,7 @@
       });
     }
 
-    /* ── Liste custom footer PAYS (li cliqués) ── */
+    
     var fCountryList = document.getElementById('bbwCountryList');
     if (fCountryList) {
       fCountryList.addEventListener('click', function (e) {
@@ -910,7 +910,7 @@
      8. GÉOLOCALISATION — Multi-fallback (ipapi → ip-api → 'us')
   ══════════════════════════════════════════════════════════════ */
   function detectGeo() {
-    /* Si une sélection manuelle existe, on ne force plus la géo */
+    
     var savedCountry = loadSavedCountry();
     if (savedCountry) {
       applyCountry(savedCountry, false);
@@ -986,7 +986,7 @@
         }
         var savedCountry = loadSavedCountry();
         if (savedCountry) {
-          /* Tentatives progressives pour attraper tous les prix injectés */
+          
           [500, 1500, 3000, 5000, 8000].forEach(function(delay) {
             setTimeout(function() {
               convertPricesForCountry(savedCountry);

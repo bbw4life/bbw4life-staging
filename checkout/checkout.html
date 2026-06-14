@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout - CurvaFit</title>
-    <!-- SEO -->
+    
     <meta name="description" content="Secure checkout for CurvaFit products">
     <meta name="author" content="CurvaFit">
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#000000">
-    <!-- Security Policy -->
+    
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self' https:;
          script-src 'self' https://js.stripe.com https://www.paypal.com;
@@ -17,15 +17,15 @@
          img-src 'self' https: data:;
          connect-src 'self' https://restcountries.com https://countriesnow.space https:;
          frame-src https://js.stripe.com https://hooks.stripe.com https://www.paypal.com;">
-    <!-- Favicon -->
+    
     <link rel="icon" href="/public/bbw4life favicon.png" type="image/x-icon">
-    <!-- Google Fonts for Premium Typography -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Styles -->
+    
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.5.1/uicons-solid-rounded/css/uicons-solid-rounded.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -38,12 +38,12 @@
 
 <header class="checkout-header">
     <div class="header-content">
-        <!-- Logo -->
+        
         <div class="logo">
             <a href="/index.html"><img src="/public/vrlogo bbw4life.png" alt="CurvaFit Logo"></a>
             <h1>Secure Checkout</h1>
         </div>
-        <!-- Payment Icons — nouvelle classe ck-payment-icons -->
+        
         <div class="ck-payment-icons">
             <img src="https://cdn.shopify.com/s/files/1/0643/8263/2041/files/Visa.png?v=1771670819" alt="Visa">
             <img src="https://cdn.shopify.com/s/files/1/0643/8263/2041/files/mastercard.png?v=1771670819" alt="Mastercard">
@@ -55,7 +55,7 @@
     </div>
 </header>
 
-<!-- Wave Section — nouvelle id #ck-wave-section -->
+
 <section id="ck-wave-section">
     <svg width="0" height="0">
         <defs>
@@ -72,14 +72,14 @@
     </div>
 </section>
 
-<!-- Marquee Trust Bar — nouvelles classes ck-marquee-* -->
+
 <div class="ck-marquee-trust-bar">
     <div class="ck-marquee-glow-left"></div>
     <div class="ck-marquee-glow-right"></div>
     <div class="ck-marquee-track">
         <div class="ck-marquee-inner">
 
-            <!-- ░░ BLOCK A ░░ -->
+            
             <span class="ck-marquee-item"><i class="fas fa-lock"></i>100% Secure &amp; Encrypted Payments</span>
             <span class="ck-marquee-sep">✦</span>
             <span class="ck-marquee-item ck-marquee-item--warn"><i class="fas fa-map-marker-alt"></i>Double-check your address — errors may delay or lose your order</span>
@@ -95,7 +95,7 @@
             <span class="ck-marquee-item ck-marquee-item--gold"><i class="fas fa-star"></i>CurvaFit — Premium Quality Guaranteed</span>
             <span class="ck-marquee-sep">✦</span>
 
-            <!-- ░░ BLOCK B — exact copy of A ░░ -->
+            
             <span class="ck-marquee-item"><i class="fas fa-lock"></i>100% Secure &amp; Encrypted Payments</span>
             <span class="ck-marquee-sep">✦</span>
             <span class="ck-marquee-item ck-marquee-item--warn"><i class="fas fa-map-marker-alt"></i>Double-check your address — errors may delay or lose your order</span>
@@ -117,7 +117,7 @@
 
 <main class="checkout-main">
 
-    <!-- ORDER SUMMARY -->
+    
     <section class="order-summary">
         <h2>Order Summary</h2>
         <button class="order-summary-toggle" id="order-summary-toggle" type="button" aria-expanded="false">
@@ -157,7 +157,7 @@
         </div>
     </section>
 
-    <!-- SHIPPING INFORMATION -->
+    
     <section class="shipping-info">
         <h2>Shipping Information</h2>
         <form id="shipping-form" autocomplete="on">
@@ -167,13 +167,13 @@
             <input type="text" id="last-name" required>
             <label for="email">Email Address</label>
             <input type="email" id="email" required>
-            <!-- PHONE WITH COUNTRY CODE -->
+            
             <label for="phone">Phone Number</label>
             <div class="phone-input-group">
                 <input type="text" id="phone-code" readonly>
                 <input type="tel" id="phone" required>
             </div>
-            <!-- COUNTRY SELECT -->
+            
             <label for="country">Country</label>
             <div class="custom-select-wrapper" id="country-wrapper">
                 <div class="custom-select-trigger" id="country-trigger" tabindex="0">
@@ -186,7 +186,7 @@
                 </div>
                 <input type="hidden" id="country" required>
             </div>
-            <!-- CITY SELECT -->
+            
             <label for="city">City</label>
             <div class="custom-select-wrapper" id="city-wrapper">
                 <div class="custom-select-trigger" id="city-trigger" tabindex="0">
@@ -199,45 +199,45 @@
                 </div>
                 <input type="hidden" id="city" required>
             </div>
-            <!-- STATE MANUAL -->
+            
             <label for="state">State / Department</label>
             <input type="text" id="state" required>
-            <!-- POSTAL MANUAL -->
+            
             <label for="postal-code">Postal Code</label>
             <input type="text" id="postal-code" required>
-            <!-- ADDRESS -->
+            
             <label for="address">Full Address</label>
             <textarea id="address" required></textarea>
         </form>
     </section>
 
-    <!-- SHIPPING METHOD -->
+    
     <section class="shipping-method">
         <h2>Shipping Method</h2>
         <div class="shipping-options-grid">
 
-            <!-- 1. Standard -->
+            
             <div class="shipping-option selected" data-method="Standard Shipping">
                 <i class="fas fa-truck"></i>
                 <h4>Standard Shipping</h4>
                 <p></p>
             </div>
 
-            <!-- 2. Express DHL -->
+            
             <div class="shipping-option" data-method="Express DHL">
                 <i class="fas fa-plane"></i>
                 <h4>Express DHL</h4>
                 <p></p>
             </div>
 
-            <!-- 3. Priority FedEx -->
+            
             <div class="shipping-option" data-method="Priority FedEx">
                 <i class="fas fa-bolt"></i>
                 <h4>Priority FedEx</h4>
                 <p></p>
             </div>
 
-            <!-- 4. Economy -->
+            
             <div class="shipping-option" data-method="Economy Shipping">
                 <i class="fas fa-clock"></i>
                 <h4>Economy Shipping</h4>
@@ -247,7 +247,7 @@
         </div>
     </section>
 
-    <!-- TRUST SECTION -->
+    
     <section class="trust-section">
         <div class="trust-bg"></div>
         <h2>Why Shop With Us?</h2>
@@ -273,7 +273,7 @@
         </div>
     </section>
 
-    <!-- PAYMENT METHOD -->
+    
     <section class="payment-method">
         <h2>Payment Method</h2>
         <div class="payment-options">
@@ -293,7 +293,7 @@
 
 </main>
 
-<!-- Checkout Policies -->
+
 <div class="checkout-policies">
     <p>
         By completing your purchase, you agree to our
@@ -302,7 +302,7 @@
     </p>
 </div>
 
-<!-- Modals for Policies -->
+
 <div id="refund-modal" class="modal">
     <div class="modal-content">
         <div class="modal-shimmer-bar"></div>
@@ -359,7 +359,7 @@
     </div>
 </div>
 
-<!-- POPUP ERREUR -->
+
 <div id="error-popup" class="error-popup hidden">
     <div class="popup-content">
         <p id="popup-message" class="popup-text"></p>
@@ -369,19 +369,19 @@
 
 
 
-<!-- Stripe Public Key -->
+
 <script>
     window.STRIPE_PUBLIC_KEY = "pk_test_51PMDwoF9QAVBUyaUqwc7ekbAhyZdI9oA3ubZT8b7TtWGrykoPLvsql4mexEwEoS5pggyssqN6jpj2w5VQMHOSftf00q97Rbt1f";
 </script>
-<!-- Stripe -->
+
 <script src="https://js.stripe.com/v3/"></script>
-<!-- PayPal SDK -->
+
 <script src="https://www.paypal.com/sdk/js?client-id=AbHxiQOr022CZ5tf7LtOUlpW-NZxUMfCxankCaZnFJNcN6msJ_eNT3HAptmJhcaQDNltCahOOzi4CoPX&currency=USD&intent=capture"></script>
-<!-- JS -->
+
 <script src="/checkout/checkout.js"></script>
 <script src="/script.js"></script>
 
-<!-- ACCOUNT INDICATOR -->
+
 <div class="paul-indicator-wrapper">
     <a href="#" class="paul-indicator" id="paulTrigger">
         <i class="fi fi-rr-user"></i>
@@ -389,7 +389,7 @@
     </a>
 </div>
 
-<!-- ACCOUNT POPUP -->
+
 <div class="paul-popup-overlay" id="paulPopup">
     <div class="paul-popup">
         <span class="paul-close">×</span>
@@ -426,7 +426,7 @@
                 <p class="switch-link"><span id="paul-signup-switch"></span> <span id="goToLogin" style="cursor:pointer;"></span></p>
                 <p class="paul-policy-link"><a href="/policies/privacy.html" target="_blank"><i class="fi fi-rr-shield-check"></i> Privacy Policy</a></p>
             </div>
-            <!-- FORGOT PASSWORD FORM -->
+            
             <div id="forgotForm" class="auth-form" style="display:none;">
                 <h3 id="paul-forgot-title"></h3>
                 <input type="email" id="forgot-email" placeholder="" required>
@@ -449,7 +449,7 @@
     </div>
 </div>
 
-<!-- SNOW EFFECT -->
+
 <div id="snow-container" aria-hidden="true"></div>
 
 </body>

@@ -1,4 +1,5 @@
 const { google } = require("googleapis");
+const { generateAccountToken } = require("./utils/account-token");
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -63,7 +64,10 @@ exports.handler = async (event) => {
       zip:          userRow[13] || ""
     };
 
-    return { statusCode: 200, body: JSON.stringify({ success: true, user }) };
+    // ── Génère un token lié à cet email pour sécuriser les futures requêtes ──
+    const token = generateAccountToken(user.email);
+
+    return { statusCode: 200, body: JSON.stringify({ success: true, user, token }) };
 
   } catch (error) {
     console.error("VERIFY LOGIN ERROR:", error.message);

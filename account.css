@@ -121,7 +121,7 @@
   box-sizing: border-box;
 }
 
-/* Reset global */
+
 .customer.account h1,
 .customer.account h2,
 .customer.account p,
@@ -356,7 +356,7 @@
     0 -1px 0 rgba(0,0,0,0.14) inset !important;
 }
 
-/* FIX CRUCIAL : icône dans badge — PAS de couleur gardienne, blanc simple */
+
 #membership-badge svg,
 .membership-badge svg {
   width: 15px !important;
@@ -558,7 +558,7 @@
   animation: icon-pulse 3.5s ease-in-out 2.1s infinite;
 }
 
-/* FIX CRUCIAL : icônes dans les cercles — blanc, JAMAIS transparent */
+
 .stat-icon svg {
   width: 46%;
   height: 46%;
@@ -1004,7 +1004,7 @@ a.stat-wishlist-link:visited {
 .quick-card:nth-child(5) { animation-delay: 0.25s; }
 .quick-card:nth-child(6) { animation-delay: 0.30s; }
 
-/* Shimmer top on each card */
+
 .quick-card::before {
   content: '';
   position: absolute;
@@ -1027,7 +1027,7 @@ a.stat-wishlist-link:visited {
   opacity: 1;
 }
 
-/* Bottom gradient accent */
+
 .quick-card::after {
   content: '';
   position: absolute;
@@ -1068,7 +1068,7 @@ a.stat-wishlist-link:visited {
   flex-shrink: 0;
   position: relative;
 
-  /* Gradient guardian subtil */
+  
   background: linear-gradient(135deg, #b83058 0%, #7b3f6e 60%, #c9963e 100%) !important;
   box-shadow:
     0 4px 16px rgba(184, 48, 88, 0.28),
@@ -1076,7 +1076,7 @@ a.stat-wishlist-link:visited {
   transition: transform 0.26s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.26s ease !important;
 }
 
-/* Anneau au hover */
+
 .quick-card-icon::before {
   content: '';
   position: absolute;
@@ -1104,7 +1104,7 @@ a.stat-wishlist-link:visited {
   opacity: 1;
 }
 
-/* FIX CRUCIAL : icônes dans quick-card — BLANC, jamais transparent */
+
 .quick-card-icon svg {
   width: 44% !important;
   height: 44% !important;
@@ -1398,7 +1398,7 @@ a.stat-wishlist-link:visited {
 
 
 
-/* ══ PROFILE PHOTO ══ */
+
 .profile-photo-block {
   display: flex;
   align-items: center;
@@ -1506,7 +1506,7 @@ a.stat-wishlist-link:visited {
   box-sizing: border-box;
 }
 
-/* ── HERO BANNER ── */
+
 .aff-hero {
   position: relative;
   overflow: hidden;
@@ -1592,7 +1592,7 @@ a.stat-wishlist-link:visited {
   font-weight: 700 !important;
 }
 
-/* Stats row */
+
 .aff-hero__stats {
   display: flex;
   align-items: center;
@@ -1636,7 +1636,7 @@ a.stat-wishlist-link:visited {
   flex-shrink: 0;
 }
 
-/* ── STEPS — desktop ── */
+
 .aff-hero__steps {
   display: flex;
   align-items: center;
@@ -1692,7 +1692,7 @@ a.stat-wishlist-link:visited {
   flex-shrink: 0;
 }
 
-/* ── CARD BASE ── */
+
 .aff-create-card,
 .aff-table-card,
 .aff-reward-card,
@@ -1709,7 +1709,7 @@ a.stat-wishlist-link:visited {
   overflow: hidden;
 }
 
-/* ── CREATE CARD ── */
+
 .aff-create-card {
   display: flex;
   align-items: center;
@@ -1824,7 +1824,7 @@ a.stat-wishlist-link:visited {
   font-weight: 600;
 }
 
-/* ── DASHBOARD TABLE CARD ── */
+
 .aff-table-card {
   padding: 28px 28px 20px;
 }
@@ -1885,7 +1885,7 @@ a.stat-wishlist-link:visited {
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-/* KPI row */
+
 .aff-kpi-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1935,7 +1935,7 @@ a.stat-wishlist-link:visited {
   -webkit-text-fill-color: #b83058 !important;
 }
 
-/* Table */
+
 .aff-table-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -2042,7 +2042,7 @@ a.stat-wishlist-link:visited {
   font-size: 0.82rem !important;
 }
 
-/* Progress bar inline */
+
 .aff-progress-wrap {
   display: flex;
   align-items: center;
@@ -2073,7 +2073,7 @@ a.stat-wishlist-link:visited {
   white-space: nowrap;
 }
 
-/* ── REWARD CARD ── */
+
 .aff-reward-card {
   padding: 36px 32px;
 }
@@ -2084,7 +2084,7 @@ a.stat-wishlist-link:visited {
   text-align: center;
 }
 
-/* Jackpot block */
+
 .aff-jackpot-block {
   background: linear-gradient(135deg, #fffbf0, #fff8e1);
   border: 1.5px solid rgba(201,150,62,0.35);
@@ -2129,7 +2129,7 @@ a.stat-wishlist-link:visited {
   -webkit-text-fill-color: #b45309 !important;
 }
 
-/* Promo block */
+
 .aff-reward-promo {
   background: linear-gradient(135deg, rgba(184,48,88,0.05), rgba(123,63,110,0.05));
   border: 1.5px dashed rgba(184,48,88,0.30);
@@ -2238,7 +2238,7 @@ a.stat-wishlist-link:visited {
   background: rgba(201,150,62,0.18);
 }
 
-/* Withdraw */
+
 .aff-withdraw-label {
   font-family: 'DM Sans', sans-serif !important;
   font-size: 0.92rem !important;
@@ -2343,7 +2343,7 @@ a.stat-wishlist-link:visited {
   margin: 0 !important;
 }
 
-/* ── HISTORY CARD ── */
+
 .aff-history-card {
   padding: 24px 28px;
 }
@@ -2495,7 +2495,7 @@ a.stat-wishlist-link:visited {
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── Hero : hauteur auto sur mobile pour ne pas couper les steps ── */
+  
   .aff-hero {
     height: auto;
     min-height: 0;
@@ -2518,7 +2518,7 @@ a.stat-wishlist-link:visited {
     margin-bottom: 10px !important;
   }
 
-  /* Stats : reste horizontal, taille réduite */
+  
   .aff-hero__stats {
     flex-wrap: nowrap;
     margin-bottom: 12px;
@@ -2540,7 +2540,7 @@ a.stat-wishlist-link:visited {
     height: 22px;
   }
 
-  /* ── Steps : visibles sur mobile, format compact ── */
+  
   .aff-hero__steps {
     display: flex;
     max-width: 100%;
@@ -2577,7 +2577,7 @@ a.stat-wishlist-link:visited {
     margin-top: -10px;
   }
 
-  /* ── Create card : layout mobile corrigé ── */
+  
   .aff-create-card {
     flex-direction: column;
     align-items: stretch;
@@ -2596,7 +2596,7 @@ a.stat-wishlist-link:visited {
     width: 100%;
   }
 
-  /* Input row : horizontal, sans débordement */
+  
   .aff-input-row {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -2636,19 +2636,19 @@ a.stat-wishlist-link:visited {
     gap: 4px;
   }
 
-  /* ── Table card ── */
+  
   .aff-table-card,
   .aff-reward-card,
   .aff-history-card {
     padding: 18px 14px;
   }
 
-  /* ── Withdraw fields : une colonne sur mobile ── */
+  
   .aff-withdraw-fields {
     grid-template-columns: 1fr;
   }
 
-  /* ── History items : restent horizontaux ── */
+  
   .aff-history-item {
     flex-wrap: nowrap;
     gap: 8px;
@@ -2683,7 +2683,7 @@ a.stat-wishlist-link.stat-item {
    Ajouter dans style.css — à la fin du fichier
 ================================================================ */
 
-/* ── Overlay ── */
+
 #bbw-promo-popup-overlay {
   position: fixed;
   inset: 0;
@@ -2705,7 +2705,7 @@ a.stat-wishlist-link.stat-item {
   visibility: visible;
 }
 
-/* ── Modal ── */
+
 .bbw-promo-popup-modal {
   position: relative;
   background: linear-gradient(145deg, #1a0a12 0%, #2a0e1c 40%, #1c0f1e 100%);
@@ -2727,7 +2727,7 @@ a.stat-wishlist-link.stat-item {
   transform: translateY(0) scale(1);
 }
 
-/* Shimmer top bar */
+
 .bbw-promo-popup-modal::before {
   content: '';
   position: absolute;
@@ -2745,7 +2745,7 @@ a.stat-wishlist-link.stat-item {
   100% { background-position: -200% 0; }
 }
 
-/* Corner orbs */
+
 .bbw-promo-popup-modal::after {
   content: '';
   position: absolute;
@@ -2758,7 +2758,7 @@ a.stat-wishlist-link.stat-item {
   pointer-events: none;
 }
 
-/* ── Close button ── */
+
 .bbw-promo-popup-close {
   position: absolute;
   top: 14px;
@@ -2784,7 +2784,7 @@ a.stat-wishlist-link.stat-item {
   color: #fff;
 }
 
-/* ── Icon crown ── */
+
 .bbw-promo-popup-icon {
   width: 58px;
   height: 58px;
@@ -2799,7 +2799,7 @@ a.stat-wishlist-link.stat-item {
   box-shadow: 0 0 24px rgba(201, 150, 62, 0.18);
 }
 
-/* ── Title ── */
+
 .bbw-promo-popup-title {
   text-align: center;
   font-size: 1.25rem;
@@ -2816,7 +2816,7 @@ a.stat-wishlist-link.stat-item {
   background-clip: text;
 }
 
-/* ── Subtitle ── */
+
 .bbw-promo-popup-sub {
   text-align: center;
   font-size: 0.80rem;
@@ -2826,7 +2826,7 @@ a.stat-wishlist-link.stat-item {
   text-transform: uppercase;
 }
 
-/* ── Code display ── */
+
 .bbw-promo-popup-code-wrap {
   display: flex;
   align-items: center;
@@ -2857,7 +2857,7 @@ a.stat-wishlist-link.stat-item {
   letter-spacing: 0.03em;
 }
 
-/* ── Warning box ── */
+
 .bbw-promo-popup-warning {
   background: rgba(201, 150, 62, 0.08);
   border-left: 3px solid #c9963e;
@@ -2881,7 +2881,7 @@ a.stat-wishlist-link.stat-item {
   color: #e4b722;
 }
 
-/* ── Contact line ── */
+
 .bbw-promo-popup-contact {
   text-align: center;
   font-size: 0.78rem;
@@ -2901,7 +2901,7 @@ a.stat-wishlist-link.stat-item {
   color: #e4b722;
 }
 
-/* ── CTA button ── */
+
 .bbw-promo-popup-cta {
   display: block;
   width: 100%;
@@ -2924,7 +2924,7 @@ a.stat-wishlist-link.stat-item {
   transform: translateY(-1px);
 }
 
-/* ── Divider ── */
+
 .bbw-promo-popup-divider {
   display: flex;
   align-items: center;
@@ -2942,7 +2942,7 @@ a.stat-wishlist-link.stat-item {
   background: rgba(255, 255, 255, 0.10);
 }
 
-/* ── Checkout link ── */
+
 .bbw-promo-popup-checkout-link {
   display: block;
   text-align: center;
@@ -2960,7 +2960,7 @@ a.stat-wishlist-link.stat-item {
   color: #e4b722;
 }
 
-/* ── Mobile ── */
+
 @media (max-width: 480px) {
   .bbw-promo-popup-modal {
     padding: 32px 22px 26px;

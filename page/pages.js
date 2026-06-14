@@ -432,7 +432,7 @@ function initAuCounters() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── 1. Floating Hearts Background ── */
+  
   const bg = document.getElementById('discHeartsBg');
   if (bg) {
     const hearts = ['♥', '❤', '♡'];
@@ -456,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ── 2. Scroll Reveal for Cards ── */
+  
   const cards = document.querySelectorAll('.disc-card');
   if (cards.length) {
     const observer = new IntersectionObserver((entries) => {
@@ -474,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cards.forEach(card => observer.observe(card));
   }
 
-  /* ── 3. Active TOC link on scroll ── */
+  
   const sectionIds = [
     'disc-mission',
     'disc-products',
@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', updateActiveToc, { passive: true });
   updateActiveToc(); // run once on load
 
-  /* ── 4. Smooth scroll on TOC click ── */
+  
   tocLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
@@ -815,7 +815,7 @@ function initProductCarePage() {
    BBW4LIFE — DISCLAIMER PAGE SCRIPTS
 ═══════════════════════════════════════════════════════════ */
 
-/* ── 1. Floating Hearts Background ── */
+
 (function () {
   const bg = document.getElementById('discHeartsBg');
   if (!bg) return;
@@ -844,7 +844,7 @@ function initProductCarePage() {
 })();
 
 
-/* ── 2. Scroll Reveal for Cards ── */
+
 (function () {
   const cards = document.querySelectorAll('.disc-card');
   if (!cards.length) return;
@@ -865,7 +865,7 @@ function initProductCarePage() {
 })();
 
 
-/* ── 3. Active TOC Link on Scroll ── */
+
 (function () {
   const sectionIds = [
     'disc-mission',

@@ -49,7 +49,7 @@
       z-index: 0;
     }
 
-    /* ── GATE SCREEN ── */
+    
     #gate-screen {
       position: fixed;
       inset: 0;
@@ -217,7 +217,7 @@
       to { opacity: 0; transform: scale(1.04); pointer-events: none; }
     }
 
-    /* ── MAIN DASHBOARD (hidden until auth) ── */
+    
     #dashboard { display: none; }
 
     .wrap {
@@ -228,7 +228,7 @@
       padding: 48px 28px 80px;
     }
 
-    /* ── HEADER ── */
+    
     header {
       margin-bottom: 40px;
       border-left: 3px solid var(--accent);
@@ -258,7 +258,7 @@
       letter-spacing: 0.05em;
     }
 
-    /* ── CONTROLS ── */
+    
     .controls {
       display: flex;
       align-items: center;
@@ -312,7 +312,7 @@
     .btn-copy:hover { box-shadow: 0 0 16px rgba(0,255,157,0.2); }
     .btn-copy.copied { color: #fff; border-color: var(--green); background: rgba(0,255,157,0.12); }
 
-    /* ── STATUS BAR ── */
+    
     .status-bar {
       font-size: 11px;
       color: var(--text-dim);
@@ -337,7 +337,7 @@
       50%       { opacity: 0.3; }
     }
 
-    /* ── STATS ROW ── */
+    
     .stats {
       display: none;
       gap: 16px;
@@ -368,7 +368,7 @@
     .stat-card .s-value.green { color: var(--green); }
     .stat-card .s-value.pink  { color: var(--accent2); }
 
-    /* ── CATEGORY TABS ── */
+    
     .cat-tabs {
       display: none;
       gap: 8px;
@@ -402,7 +402,7 @@
       color: var(--accent2);
     }
 
-    /* ── SUBCATEGORY FILTER ── */
+    
     .subcat-row {
       display: none;
       gap: 6px;
@@ -430,7 +430,7 @@
       color: var(--yellow);
     }
 
-    /* ── PRODUCT CARDS ── */
+    
     #product-view { display: none; }
 
     .product-card {
@@ -476,7 +476,7 @@
     .chevron { color: var(--text-dim); transition: transform 0.25s; font-size: 10px; }
     .product-card.open .chevron { transform: rotate(90deg); }
 
-    /* ── VARIANTS TABLE ── */
+    
     .variants-body { display: none; border-top: 1px solid var(--border); }
     .product-card.open .variants-body { display: block; }
 
@@ -510,7 +510,7 @@
     .td-weight { color: var(--text); }
     .td-stock  { font-weight: 700; }
 
-    /* ── RAW LOG ── */
+    
     #log-section { display: none; margin-top: 32px; }
     .section-toggle {
       display: flex;
@@ -549,13 +549,13 @@
     .log-dim   { color: #3a4a5e; }
     .log-info  { color: var(--text); }
 
-    /* ── SCROLLBAR ── */
+    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--surface); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
-    /* ── SKELETON ── */
+    
     .skeleton {
       background: linear-gradient(90deg, var(--surface) 25%, #151c24 50%, var(--surface) 75%);
       background-size: 200% 100%;
@@ -688,7 +688,7 @@
 
     let passwordLoaded  = false;
 
-    /* ── Ping server to verify function is available ── */
+    
     fetch('/.netlify/functions/get-private-settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -712,12 +712,12 @@
         gateAttempts.textContent = 'Unable to load configuration.';
       });
 
-    /* ── Show/Hide password ── */
+    
     gateEyeBtn.addEventListener('click', function () {
       gateInput.type = gateInput.type === 'password' ? 'text' : 'password';
     });
 
-    /* ── Check if account is locked ── */
+    
     function checkLockState() {
       var lockUntil = parseInt(localStorage.getItem(LOCK_KEY) || '0');
       var now       = Date.now();
@@ -726,7 +726,7 @@
       }
     }
 
-    /* ── Try to unlock ── */
+    
       function tryUnlock() {
         if (!passwordLoaded) return;
 
@@ -779,7 +779,7 @@
         });
       }
 
-    /* ── Apply lock UI ── */
+    
     function applyLock(msRemaining) {
       gateInput.disabled  = true;
       gateSubmit.disabled = true;
@@ -808,7 +808,7 @@
       tick();
     }
 
-    /* ── Unlock dashboard ── */
+    
     function unlockDashboard(animate) {
       if (animate) {
         gateScreen.classList.add('gate-screen-exit');

@@ -15,13 +15,11 @@
      DEFAULT SETTINGS (used when products.data.json is absent)
   ────────────────────────────────────────────────────────────── */
   const DEFAULTS = {
-    /* General */
+
     section_title: 'QUICK LINKS FOR OUR CUSTOMERS',
 
-    /* mobile behavior — key option */
     mobile_links_behavior: 'two_columns_mobile',
 
-    /* Col 1 */
     title1: 'EXPLORE MORE',
     links1: [
       { text: 'Most populare',   url: '/collections/most-popular.html' },
@@ -36,7 +34,6 @@
       { text: 'Our-Mission',     url: '#' }
     ],
 
-    /* Col 2 */
     title2: 'CUSTOMERS CARE',
     links2: [
       { text: 'Our newsletter',  url: '#' },
@@ -51,26 +48,22 @@
       { text: 'Terms shop',      url: '/policies/terms.html' }
     ],
 
-    /* Col 3 — info */
-    title3:           'BEAUTY HAS NO SIZE',
-    info_text:        '<strong>BBW4LIFE</strong> celebrates plus-size women and their natural <strong>beauty</strong>. Every wom&acirc;n is perfect as she is &mdash; <strong>confident, powerful</strong>, and beautiful in every size.',
+    title3:    'BEAUTY HAS NO SIZE',
+    info_text: '<strong>BBW4LIFE</strong> celebrates plus-size women and their natural <strong>beauty</strong>. Every wom&acirc;n is perfect as she is &mdash; <strong>confident, powerful</strong>, and beautiful in every size.',
 
-    /* Logo */
     logo_svg: `<?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 122.88 101.01" style="enable-background:new 0 0 122.88 101.01" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M61.44,0l5.88,4.77l7.48-1.2l2.69,7.08l7.08,2.69l-1.2,7.48l4.77,5.88l-4.77,5.88l1.2,7.48l-7.08,2.69 l-2.69,7.08l-7.48-1.2l-5.88,4.77l-5.88-4.77l-7.48,1.2l-2.69-7.08l-7.08-2.69l1.2-7.48l-4.77-5.88l4.77-5.88l-1.2-7.48l7.08-2.69 l2.69-7.08l7.48,1.2L61.44,0L61.44,0z M66.41,84.78h21.91c1.76-1.75,3.69-3.57,5.64-5.42c4.11-3.89,8.4-7.95,12.81-13.03 c5.04-5.81,5.58-7.82,7.11-13.51c0.29-1.07,0.61-2.27,1.03-3.76l2.62-9.21l0.03-0.1c1.4-4.1,1.51-6.81,0.93-8.37 c-0.18-0.48-0.41-0.8-0.68-0.97c-0.21-0.14-0.49-0.19-0.78-0.16c-0.68,0.07-1.45,0.5-2.15,1.27l-7.78,18.53 c-0.07,0.17-0.17,0.33-0.28,0.47c-0.46,0.83-1.08,1.64-1.88,2.41l-13.8,15.39c-0.75,0.84-2.04,0.91-2.87,0.16 c-0.84-0.75-0.91-2.04-0.16-2.87c1.87-2.08,16.37-16.31,15.63-19.5c-0.92-3.93-10.8,6.16-11.98,7.2l-0.03,0.03 c-5.79,5.48-8.28,6.78-12.82,9.15c-0.95,0.5-1.99,1.04-3.28,1.74c-0.51,0.28-1.01,0.62-1.5,0.99c-0.52,0.4-1.02,0.81-1.49,1.21 c-2.4,2.02-3.66,3.66-4.38,5.47c-0.75,1.88-1.02,4.17-1.39,7.31c-0.15,1.26-0.26,2.52-0.35,3.77 C66.47,83.59,66.44,84.19,66.41,84.78L66.41,84.78L66.41,84.78z M56.47,84.78H34.55c-1.76-1.75-3.69-3.57-5.65-5.42 c-4.11-3.89-8.4-7.95-12.81-13.03c-5.04-5.81-5.58-7.82-7.11-13.51c-0.29-1.07-0.61-2.27-1.03-3.76l-2.62-9.21l-0.03-0.1 c-1.4-4.1-1.51-6.81-0.93-8.37c0.18-0.48,0.41-0.8,0.68-0.97c0.21-0.14,0.49-0.19,0.78-0.16c0.68,0.07,1.45,0.5,2.15,1.27 l7.78,18.53c0.07,0.17,0.17,0.33,0.28,0.47c0.46,0.83,1.08,1.64,1.88,2.41l13.8,15.39c0.75,0.84,2.04,0.91,2.87,0.16 c0.84-0.75,0.91-2.04,0.16-2.87C32.9,63.52,18.4,49.29,19.14,46.1c0.92-3.93,10.8,6.16,11.98,7.2l0.03,0.03 c5.79,5.48,8.28,6.78,12.82,9.15c0.95,0.5,1.99,1.04,3.28,1.74c0.51,0.28,1.01,0.62,1.5,0.99c0.52,0.4,1.02,0.81,1.49,1.21 c2.4,2.02,3.66,3.66,4.38,5.47c0.75,1.88,1.02,4.17,1.39,7.31c0.15,1.26,0.26,2.52,0.35,3.77C56.41,83.59,56.44,84.19,56.47,84.78 L56.47,84.78L56.47,84.78z M29.45,85.48c-0.31,0.36-0.5,0.83-0.5,1.34v12.14c0,1.13,0.92,2.04,2.04,2.04h27.58 c1.13,0,2.04-0.92,2.04-2.04V86.71c0-1.3-0.08-2.7-0.17-4c-0.09-1.33-0.21-2.65-0.36-3.96c-0.4-3.43-0.7-5.94-1.66-8.35 c-0.99-2.47-2.58-4.6-5.53-7.09c-0.54-0.46-1.09-0.92-1.67-1.35c-0.61-0.46-1.27-0.9-2.01-1.31c-1.2-0.65-2.32-1.24-3.34-1.78 c-4.2-2.2-6.5-3.4-11.91-8.52c-0.04-0.04-0.09-0.08-0.13-0.11l-5.22-4.61c-2.64-3.09-7.87-6.77-11.68-3.43 c-2.03-4.83-4.03-15.36-10.67-16.01c-1.21-0.12-2.38,0.14-3.4,0.8c-0.97,0.63-1.77,1.61-2.27,2.96c-0.88,2.35-0.86,6,0.86,11.05 l2.6,9.15c0.38,1.32,0.71,2.59,1.02,3.71c1.7,6.35,2.3,8.6,7.97,15.12c4.49,5.17,8.89,9.33,13.1,13.32 C27.23,83.36,28.33,84.41,29.45,85.48L29.45,85.48L29.45,85.48z M33.35,88.86c0.27,0.06,0.55,0.06,0.83,0h22.34v8.06H33.03v-8.06 H33.35L33.35,88.86z M93.43,85.48c0.31,0.36,0.5,0.83,0.5,1.34v12.14c0,1.13-0.91,2.04-2.04,2.04H64.32 c-1.13,0-2.04-0.92-2.04-2.04V86.71c0-0.07,0-0.15,0.01-0.22c0.03-1.31,0.08-2.58,0.16-3.78c0.09-1.33,0.21-2.65,0.36-3.96 c0.4-3.43,0.7-5.94,1.66-8.35c0.99-2.47,2.58-4.6,5.53-7.09c0.54-0.46,1.09-0.92,1.67-1.35c0.61-0.46,1.27-0.9,2.01-1.31 c1.2-0.65,2.32-1.24,3.34-1.78c4.2-2.2,6.5-3.4,11.91-8.52c0.04-0.04,0.09-0.08,0.13-0.11l5.22-4.61 c2.64-3.09,7.87-6.77,11.68-3.43c0.99-2.37,4.41-11.65,5.59-13.07c1.46-1.75,3.31-2.77,5.08-2.95c1.21-0.12,2.38,0.14,3.4,0.8 c0.97,0.63,1.77,1.61,2.27,2.96c0.88,2.35,0.86,6-0.86,11.05l-2.6,9.15c-0.38,1.32-0.71,2.59-1.02,3.71 c-1.7,6.35-2.3,8.6-7.97,15.12c-4.49,5.17-8.88,9.33-13.1,13.32C95.65,83.36,94.55,84.41,93.43,85.48L93.43,85.48L93.43,85.48z M89.53,88.86c-0.27,0.06-0.55,0.06-0.83,0H66.36v8.06h23.49v-8.06H89.53L89.53,88.86z M61.44,17.18l2.75,6.72l7.25,0.54 l-5.54,4.69l1.73,7.06l-6.18-3.83l-6.18,3.83L57,29.14l-5.56-4.69l7.25-0.54l2.75-6.72H61.44L61.44,17.18z M61.44,11.61 c8.33,0,15.08,6.76,15.08,15.08c0,8.33-6.76,15.08-15.08,15.08c-8.33,0-15.08-6.76-15.08-15.08 C46.36,18.37,53.11,11.61,61.44,11.61L61.44,11.61z"/></g></svg>`,
-    logo_link:  '/',
+    logo_link: '/',
 
-    /* Col 4 — contact */
-    title4:           'NEED HELP? CONTACT US',
-    contact_text:     'Available Monday to Friday/ 7h:Am-10PM',
-    email_link:       'support@bbw4life.com',
-    whatsapp_chat_now_text: '💬 Chat With Us',
-    phone_number:     '18093770077',
-    phone_suffix_text:'/Only text please',
-    whatsapp_number:  '18296221518',
+    title4:                     'NEED HELP? CONTACT US',
+    contact_text:               'Available Monday to Friday/ 7h:Am-10PM',
+    email_link:                 'support@bbw4life.com',
+    whatsapp_chat_now_text:     '💬 Chat With Us',
+    phone_number:               '18093770077',
+    phone_suffix_text:          '/Only text please',
+    whatsapp_number:            '18296221518',
     whatsapp_send_button_text:  'Send',
 
-    /* Social */
-    social_title:        'Follow us in social Media',
+    social_title: 'Follow us in social Media',
     social_links: {
       facebook:  '#',
       twitter:   '#',
@@ -79,16 +72,13 @@
       tiktok:    '#'
     },
 
-    /* New In (col 5) — fallback placeholders uniquement */
-    novelty_title: 'NEW GEMS TO DISCOVER',
+    novelty_title:          'NEW GEMS TO DISCOVER',
     new_in_autoplay_enable: true,
     new_in_autoplay_delay:  5,
 
-    /* Bottom */
     copyright_year: '2026'
   };
 
-  /* SVG ICONS ------------------------------------------------- */
   const SOCIAL_SVGS = {
     facebook: `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
     twitter:  `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
@@ -101,15 +91,16 @@
      MAIN INIT
   ────────────────────────────────────────────────────────────── */
   function init() {
-    const all = window.__allProducts || [];
+    const all         = window.__allProducts || [];
     const rawSettings = all.find(p => p.type === 'settings') || {};
-    const s = Object.assign({}, DEFAULTS, rawSettings);
+    const s           = Object.assign({}, DEFAULTS, rawSettings);
+
     applySectionTitle(s);
     applyCol1(s);
     applyCol2(s);
     applyCol3(s);
     applyCol4(s);
-    applyCol5(s);
+    applyCol5(s, rawSettings);
     applyBottom(s);
     initMobileBehavior(s);
     initWhatsApp(s);
@@ -126,7 +117,7 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     3. COL 1 & 2 — links
+     2. COL 1 & 2 — links
   ────────────────────────────────────────────────────────────── */
   function buildLinks(s, colNum, ulEl, titleEl, titleKey) {
     if (!ulEl) return;
@@ -140,13 +131,13 @@
     }
 
     const fallback = s[`links${colNum}`] || [];
-    const list = items.length ? items : fallback;
+    const list     = items.length ? items : fallback;
 
     ulEl.innerHTML = '';
-    list.forEach(item => {
+    list.forEach(function (item) {
       const li = document.createElement('li');
       const a  = document.createElement('a');
-      a.href = item.url || '#';
+      a.href        = item.url || '#';
       a.textContent = item.text;
       li.appendChild(a);
       ulEl.appendChild(li);
@@ -162,37 +153,31 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     4. COL 3 — info text + logo
+     3. COL 3 — info text + logo
   ────────────────────────────────────────────────────────────── */
   function applyCol3(s) {
     const titleEl = $('bbwCol3Title');
     if (titleEl) titleEl.textContent = stripTags(s.title3 || DEFAULTS.title3);
 
     const infoEl = $('bbwInfoText');
-    if (infoEl) {
-      infoEl.innerHTML = s.info_text || DEFAULTS.info_text;
-    }
+    if (infoEl) infoEl.innerHTML = s.info_text || DEFAULTS.info_text;
 
     const logoEl = $('bbwFooterLogoSvg');
-    if (logoEl) {
-      logoEl.innerHTML = s.logo_svg || DEFAULTS.logo_svg;
-    }
+    if (logoEl) logoEl.innerHTML = s.logo_svg || DEFAULTS.logo_svg;
 
     const logoLink = $('bbwFooterLogoLink');
     if (logoLink) logoLink.href = s.logo_link || '/';
   }
 
   /* ──────────────────────────────────────────────────────────────
-     5. COL 4 — contact + social
+     4. COL 4 — contact + social
   ────────────────────────────────────────────────────────────── */
   function applyCol4(s) {
     const titleEl = $('bbwCol4Title');
     if (titleEl) titleEl.textContent = s.title4 || DEFAULTS.title4;
 
     const contactText = $('bbwContactText');
-    if (contactText) {
-      contactText.textContent = s.contact_text || '';
-    }
+    if (contactText) contactText.textContent = s.contact_text || '';
 
     const emailLink = $('bbwEmailLink');
     if (emailLink) emailLink.href = 'mailto:' + (s.email_link || '');
@@ -210,9 +195,7 @@
     if (phoneLink) phoneLink.href = 'tel:' + (s.phone_number || '');
 
     const socialTitle = $('bbwSocialTitle');
-    if (socialTitle) {
-      socialTitle.textContent = s.social_title || 'Follow us in social Media';
-    }
+    if (socialTitle) socialTitle.textContent = s.social_title || 'Follow us in social Media';
 
     const socialMap = {
       facebook:  { id: 'bbwSocFacebook',  urlKey: 'facebook'  },
@@ -223,49 +206,54 @@
     };
 
     const socialLinks = s.social_links || {};
-    Object.entries(socialMap).forEach(([key, cfg]) => {
+    Object.entries(socialMap).forEach(function ([key, cfg]) {
       const a = $(cfg.id);
       if (!a) return;
       a.innerHTML = SOCIAL_SVGS[key] || '';
-      const url = socialLinks[cfg.urlKey] || socialLinks[`${cfg.urlKey}_link`] || '#';
-      a.href = url;
+      const url   = socialLinks[cfg.urlKey] || socialLinks[cfg.urlKey + '_link'] || '#';
+      a.href      = url;
     });
   }
 
   /* ──────────────────────────────────────────────────────────────
-     6. COL 5 — New Gems slider
+     5. COL 5 — New Gems slider
+     rawSettings passé séparément pour éviter le merge partiel
   ────────────────────────────────────────────────────────────── */
-  function applyCol5(s) {
+  function applyCol5(s, rawSettings) {
     const titleEl = $('bbwCol5Title');
     if (titleEl) titleEl.textContent = stripTags(s.novelty_title || DEFAULTS.novelty_title);
 
     const wrapper = $('bbwNewInWrapper');
     if (!wrapper) return;
 
-    /* ── Récupère la config footer_new_gems ── */
     const gemsConfig    = s.footer_new_gems   || {};
     const collectionIds = gemsConfig.collection_ids || [];
     const productIds    = gemsConfig.product_ids    || [];
 
-    /* ── Récupère les sources depuis __allProducts ── */
-    const all        = window.__allProducts || [];
-    const jrgqCols   = (s.jrgq_collections && s.jrgq_collections.collections) || [];
-    const realProds  = all.filter(function(p) { return !p.type; });
+    const all = window.__allProducts || [];
 
-    /* ── Construit la liste alternée col → prod → col → prod... ── */
-    const slides = [];
-    const maxPairs = Math.max(collectionIds.length, productIds.length);
+    /* Lire jrgq_collections depuis rawSettings en priorité (évite merge partiel) */
+    const raw        = rawSettings || {};
+    const jrgqData   = raw.jrgq_collections || s.jrgq_collections || {};
+    const jrgqCols   = (jrgqData && jrgqData.collections) ? jrgqData.collections : [];
+    const realProds  = all.filter(function (p) { return !p.type; });
+
+    const slides    = [];
     const MAX_TITLE = 32;
 
     function truncate(str) {
-      return str && str.length > MAX_TITLE ? str.substring(0, MAX_TITLE) + '…' : (str || '');
+      return str && str.length > MAX_TITLE
+        ? str.substring(0, MAX_TITLE) + '…'
+        : (str || '');
     }
+
+    const maxPairs = Math.max(collectionIds.length, productIds.length);
 
     for (let i = 0; i < maxPairs; i++) {
 
-      /* Collection */
+      /* — collection — */
       if (collectionIds[i]) {
-        const col = jrgqCols.find(function(c) { return c.id === collectionIds[i]; });
+        const col = jrgqCols.find(function (c) { return c.id === collectionIds[i]; });
         if (col) {
           slides.push({
             image:        col.image || '',
@@ -276,15 +264,13 @@
         }
       }
 
-      /* Produit */
+      /* — product — */
       if (productIds[i]) {
-        const prod = realProds.find(function(p) { return p.id === productIds[i]; });
+        const prod = realProds.find(function (p) { return p.id === productIds[i]; });
         if (prod) {
-          let prodUrl = prod.url || '#';
-          /* Essaie d'utiliser getProductUrl si disponible dans le scope global */
-          if (typeof window.getProductUrl === 'function') {
-            prodUrl = window.getProductUrl(prod.id);
-          }
+          const prodUrl = typeof window.getProductUrl === 'function'
+            ? window.getProductUrl(prod.id)
+            : (prod.url || '#');
           slides.push({
             image:        prod.image || '',
             title:        truncate(prod.title),
@@ -295,35 +281,34 @@
       }
     }
 
-    /* ── Fallback si rien trouvé : 3 placeholders neutres ── */
+    /* Placeholder seulement si vraiment rien trouvé */
     if (!slides.length) {
+      console.warn('[BBW Footer] footer_new_gems: aucun slide trouvé — vérifier les IDs dans products.data.json');
       [
-        { image: 'https://placehold.co/300x280/1a1a1a/FFD700?text=Collection+1', title: 'Bbw4life collection', url: '#' },
-        { image: 'https://placehold.co/300x280/1a1a1a/FFD700?text=Collection+2', title: 'New Arrivals',        url: '#' },
-        { image: 'https://placehold.co/300x280/1a1a1a/FFD700?text=Collection+3', title: 'Best Sellers',        url: '#' }
-      ].forEach(function(item) {
+        { image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Curvy_Woman.png?v=1777936945', title: 'Curvy Woman', url: '/collections/curvy-woman.html' },
+        { image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/BBW_Original_Coming_Soon.png?v=1777936945', title: 'New Arrivals',        url: '/collections/bbw-features-products.html' },
+        { image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/Plus_Size_Men.png?v=1777937294', title: 'Men Plus Size',        url: '/collections/men-plus-size.html' }
+      ].forEach(function (item) {
         slides.push({ image: item.image, title: item.title, url: item.url, isCollection: false });
       });
     }
 
-    /* ── Injecte les slides dans le DOM ── */
     wrapper.innerHTML = '';
-
-    slides.forEach(function(item) {
+    slides.forEach(function (item) {
       const slide = document.createElement('div');
       slide.className = 'bbw-footer__newin-slide';
 
-      const a = document.createElement('a');
+      const a   = document.createElement('a');
       a.href      = item.url;
       a.className = 'bbw-footer__newin-link';
 
-      const img = document.createElement('img');
+      const img   = document.createElement('img');
       img.src       = item.image;
       img.alt       = item.title;
       img.loading   = 'lazy';
       img.className = 'bbw-footer__newin-img';
 
-      const cap = document.createElement('p');
+      const cap   = document.createElement('p');
       cap.className   = 'bbw-footer__newin-caption';
       cap.textContent = item.title;
       if (item.isCollection) cap.classList.add('bbw-footer__newin-caption--collection');
@@ -334,13 +319,12 @@
       wrapper.appendChild(slide);
     });
 
-    /* ── Affiche / cache la nav selon le nombre de slides ── */
     const nav = $('bbwNewInNav');
     if (nav) nav.style.display = slides.length > 1 ? 'block' : 'none';
   }
 
   /* ──────────────────────────────────────────────────────────────
-     7. BOTTOM BAR
+     6. BOTTOM BAR
   ────────────────────────────────────────────────────────────── */
   function applyBottom(s) {
     const copy = $('bbwCopyright');
@@ -351,19 +335,23 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     8. MOBILE BEHAVIOR
+     7. MOBILE BEHAVIOR
   ────────────────────────────────────────────────────────────── */
   function initMobileBehavior(s) {
     const footer = document.getElementById('bbw-footer');
     if (!footer) return;
-    let behavior = 'two_columns_mobile';
 
-    const raw = s.mobile_links_behavior;
-    if (typeof raw === 'string') {
-      behavior = raw.toLowerCase().trim();
+    let behavior = 'two_columns_mobile';
+    const raw    = s.mobile_links_behavior;
+
+    if (typeof raw === 'string' && raw.trim()) {
+      behavior = raw.trim().toLowerCase();
     } else if (raw && typeof raw === 'object') {
-      const found = Object.keys(raw).find(k => (raw[k] || '').toString().toLowerCase() === 'yes');
-      if (found) behavior = found.toLowerCase().trim();
+      /* Cherche la clé dont la valeur est "yes" */
+      const found = Object.keys(raw).find(function (k) {
+        return String(raw[k]).toLowerCase() === 'yes';
+      });
+      if (found) behavior = found.toLowerCase();
     }
 
     footer.classList.remove('bbw-behavior--hide', 'bbw-behavior--show-all', 'bbw-behavior--two-cols');
@@ -378,9 +366,8 @@
     }
   }
 
-  /* Collapsible — "hide_completely" mode only */
   function initCollapsible() {
-    document.querySelectorAll('.bbw-footer__col-title').forEach(title => {
+    document.querySelectorAll('.bbw-footer__col-title').forEach(function (title) {
       const icon = title.querySelector('.bbw-footer__col-icon');
       title.addEventListener('click', function () {
         if (window.innerWidth > 767) return;
@@ -393,7 +380,7 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     9. NEW IN SLIDER — autoplay + swipe + buttons
+     8. NEW IN SLIDER — autoplay + swipe + buttons
   ────────────────────────────────────────────────────────────── */
   function initNewInSlider(s) {
     const wrapper = $('bbwNewInWrapper');
@@ -450,14 +437,14 @@
       if (col5) {
         col5.addEventListener('mouseenter', stopAutoplay);
         col5.addEventListener('mouseleave', startAutoplay);
-        col5.addEventListener('touchstart', stopAutoplay, { passive: true });
-        col5.addEventListener('touchend',   startAutoplay, { passive: true });
+        col5.addEventListener('touchstart', stopAutoplay,   { passive: true });
+        col5.addEventListener('touchend',   startAutoplay,  { passive: true });
       }
     });
   }
 
   /* ──────────────────────────────────────────────────────────────
-     10. WHATSAPP CHAT
+     9. WHATSAPP CHAT
   ────────────────────────────────────────────────────────────── */
   function initWhatsApp(s) {
     const btn    = $('bbwChatNowBtn');
@@ -466,22 +453,22 @@
     const number = s.whatsapp_number || DEFAULTS.whatsapp_number;
 
     if (btn && sel && sendB) {
-      btn.addEventListener('click', () => {
-        const visible = sel.style.display === 'block';
+      btn.addEventListener('click', function () {
+        const visible   = sel.style.display === 'block';
         sel.style.display   = visible ? 'none' : 'block';
         sendB.style.display = visible ? 'none' : 'inline';
       });
 
-      sendB.addEventListener('click', () => {
+      sendB.addEventListener('click', function () {
         const msg = sel.value;
         if (!msg) { alert('Please select an issue to continue.'); return; }
-        window.open(`https://wa.me/${number}?text=${encodeURIComponent(msg)}`, '_blank');
+        window.open('https://wa.me/' + number + '?text=' + encodeURIComponent(msg), '_blank');
       });
     }
   }
 
   /* ──────────────────────────────────────────────────────────────
-     11. COUNTRY + LANG SELECTORS — bottom bar
+     10. COUNTRY + LANG SELECTORS — bottom bar
   ────────────────────────────────────────────────────────────── */
   function applyFooterSelectors(s) {
     const countryCfg     = s.country_selector  || {};
@@ -491,34 +478,28 @@
     const defaultCountry = localStorage.getItem('bbw_country') || countryCfg.default_country || 'us';
     const defaultLang    = localStorage.getItem('bbw_lang')    || langCfg.default_lang        || 'en';
 
-    /* ── Peupler le custom dropdown Country ── */
+    /* Country list */
     const countryList = document.getElementById('bbwCountryList');
     const countryEl   = document.getElementById('bbwFooterCountrySelect');
     if (countryList && countryOptions.length) {
       countryList.innerHTML = '';
       if (countryEl) countryEl.innerHTML = '';
-      countryOptions.forEach(opt => {
-        // Custom list
+      countryOptions.forEach(function (opt) {
         const li = document.createElement('li');
         li.dataset.value = opt.code;
         li.dataset.lang  = opt.lang || 'en';
-        li.innerHTML = `
-          <span class="opt-flag">${opt.flag || ''}</span>
-          <span class="opt-name">${opt.name || ''}</span>
-          <span class="opt-currency">${opt.currency || ''}</span>`;
+        li.innerHTML = `<span class="opt-flag">${opt.flag || ''}</span><span class="opt-name">${opt.name || ''}</span><span class="opt-currency">${opt.currency || ''}</span>`;
         if (opt.code === defaultCountry) li.classList.add('active');
         countryList.appendChild(li);
-        // Select caché
         if (countryEl) {
           const o = document.createElement('option');
-          o.value = opt.code;
+          o.value       = opt.code;
           o.textContent = opt.name;
           if (opt.code === defaultCountry) o.selected = true;
           countryEl.appendChild(o);
         }
       });
-      // Afficher le pays par défaut dans le trigger
-      const def = countryOptions.find(o => o.code === defaultCountry) || countryOptions[0];
+      const def = countryOptions.find(function (o) { return o.code === defaultCountry; }) || countryOptions[0];
       if (def) {
         const flagEl  = document.getElementById('bbwCountryFlag');
         const labelEl = document.getElementById('bbwCountryLabel');
@@ -527,32 +508,27 @@
       }
     }
 
-    /* ── Peupler le custom dropdown Language ── */
+    /* Lang list */
     const langList = document.getElementById('bbwLangList');
     const langEl   = document.getElementById('bbwFooterLangSelect');
     if (langList && langOptions.length) {
       langList.innerHTML = '';
       if (langEl) langEl.innerHTML = '';
-      langOptions.forEach(opt => {
-        // Custom list
+      langOptions.forEach(function (opt) {
         const li = document.createElement('li');
         li.dataset.value = opt.code;
-        li.innerHTML = `
-          <span class="opt-flag">${opt.flag || ''}</span>
-          <span class="opt-name">${opt.name || ''}</span>`;
+        li.innerHTML = `<span class="opt-flag">${opt.flag || ''}</span><span class="opt-name">${opt.name || ''}</span>`;
         if (opt.code === defaultLang) li.classList.add('active');
         langList.appendChild(li);
-        // Select caché
         if (langEl) {
           const o = document.createElement('option');
-          o.value = opt.code;
+          o.value       = opt.code;
           o.textContent = opt.flag + ' ' + opt.name;
           if (opt.code === defaultLang) o.selected = true;
           langEl.appendChild(o);
         }
       });
-      // Afficher la langue par défaut dans le trigger
-      const defL = langOptions.find(o => o.code === defaultLang) || langOptions[0];
+      const defL = langOptions.find(function (o) { return o.code === defaultLang; }) || langOptions[0];
       if (defL) {
         const flagEl  = document.getElementById('bbwLangFlag2');
         const labelEl = document.getElementById('bbwLangLabel2');
@@ -561,88 +537,92 @@
       }
     }
 
-    /* ── Logique open/close + sélection ── */
     initCustomSelects();
   }
 
   function initCustomSelects() {
 
-    // Toggle open/close
-    document.querySelectorAll('.bbw-custom-select__trigger').forEach(function(trigger) {
-      trigger.addEventListener('click', function(e) {
+    /* Toggle open/close */
+    document.querySelectorAll('.bbw-custom-select__trigger').forEach(function (trigger) {
+      trigger.addEventListener('click', function (e) {
         e.stopPropagation();
         const parent = trigger.closest('.bbw-custom-select');
         const isOpen = parent.classList.contains('open');
-        document.querySelectorAll('.bbw-custom-select').forEach(d => d.classList.remove('open'));
+        document.querySelectorAll('.bbw-custom-select').forEach(function (d) { d.classList.remove('open'); });
         if (!isOpen) parent.classList.add('open');
       });
     });
 
-    // Fermer si clic dehors
-    document.addEventListener('click', function() {
-      document.querySelectorAll('.bbw-custom-select').forEach(d => d.classList.remove('open'));
+    /* Fermer si clic dehors */
+    document.addEventListener('click', function () {
+      document.querySelectorAll('.bbw-custom-select').forEach(function (d) { d.classList.remove('open'); });
     });
 
-    // Sélection pays
+    /* Sélection pays */
     const countryList = document.getElementById('bbwCountryList');
     if (countryList) {
-      countryList.addEventListener('click', function(e) {
+      countryList.addEventListener('click', function (e) {
         const li = e.target.closest('li');
         if (!li) return;
-        const flag     = li.querySelector('.opt-flag').textContent;
-        const name     = li.querySelector('.opt-name').textContent;
-        const currency = li.querySelector('.opt-currency') ? li.querySelector('.opt-currency').textContent : '';
-        const code     = li.dataset.value;
-        const lang     = li.dataset.lang;
-        // Trigger
+        const flagEl2    = li.querySelector('.opt-flag');
+        const nameEl2    = li.querySelector('.opt-name');
+        const currencyEl = li.querySelector('.opt-currency');
+        const flag       = flagEl2     ? flagEl2.textContent     : '';
+        const name       = nameEl2     ? nameEl2.textContent     : '';
+        const currency   = currencyEl  ? currencyEl.textContent  : '';
+        const code       = li.dataset.value;
+        const lang       = li.dataset.lang;
         const flagEl  = document.getElementById('bbwCountryFlag');
         const labelEl = document.getElementById('bbwCountryLabel');
         if (flagEl)  flagEl.textContent  = flag;
         if (labelEl) labelEl.textContent = name + (currency ? ' | ' + currency : '');
-        // Active
-        countryList.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+        countryList.querySelectorAll('li').forEach(function (l) { l.classList.remove('active'); });
         li.classList.add('active');
-        // Select caché
         const sel = document.getElementById('bbwFooterCountrySelect');
         if (sel) sel.value = code;
-        // Fermer
-        document.getElementById('bbwCountryDrop').classList.remove('open');
-        // Traduire
+        const drop = document.getElementById('bbwCountryDrop');
+        if (drop) drop.classList.remove('open');
         if (lang && typeof translateTo === 'function') translateTo(lang);
       });
     }
 
-    // Search pays
+    /* Search pays */
     const search = document.getElementById('bbwCountrySearch');
     if (search) {
-      search.addEventListener('input', function() {
+      search.addEventListener('input', function () {
         const q = search.value.toLowerCase();
-        countryList.querySelectorAll('li').forEach(function(li) {
-          const name = li.querySelector('.opt-name').textContent.toLowerCase();
-          li.style.display = name.includes(q) ? '' : 'none';
-        });
+        if (countryList) {
+          countryList.querySelectorAll('li').forEach(function (li) {
+            const nameEl = li.querySelector('.opt-name');
+            const name   = nameEl ? nameEl.textContent.toLowerCase() : '';
+            li.style.display = name.includes(q) ? '' : 'none';
+          });
+        }
       });
-      search.addEventListener('click', function(e) { e.stopPropagation(); });
+      search.addEventListener('click', function (e) { e.stopPropagation(); });
     }
 
-    // Sélection langue
+    /* Sélection langue */
     const langList = document.getElementById('bbwLangList');
     if (langList) {
-      langList.addEventListener('click', function(e) {
+      langList.addEventListener('click', function (e) {
         const li = e.target.closest('li');
         if (!li) return;
-        const code = li.dataset.value;
-        const flag = li.querySelector('.opt-flag').textContent;
-        const name = li.querySelector('.opt-name').textContent;
+        const code    = li.dataset.value;
+        const flagEl2 = li.querySelector('.opt-flag');
+        const nameEl2 = li.querySelector('.opt-name');
+        const flag    = flagEl2 ? flagEl2.textContent : '';
+        const name    = nameEl2 ? nameEl2.textContent : '';
         const flagEl  = document.getElementById('bbwLangFlag2');
         const labelEl = document.getElementById('bbwLangLabel2');
         if (flagEl)  flagEl.textContent  = flag;
         if (labelEl) labelEl.textContent = name;
-        langList.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+        langList.querySelectorAll('li').forEach(function (l) { l.classList.remove('active'); });
         li.classList.add('active');
         const sel = document.getElementById('bbwFooterLangSelect');
         if (sel) sel.value = code;
-        document.getElementById('bbwLangDrop').classList.remove('open');
+        const drop = document.getElementById('bbwLangDrop');
+        if (drop) drop.classList.remove('open');
         if (typeof translateTo === 'function') translateTo(code);
       });
     }
@@ -658,23 +638,32 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     BOOTSTRAP
+     BOOTSTRAP — attend __allProducts ET le DOM footer
   ────────────────────────────────────────────────────────────── */
   function bootstrap() {
-    if (window.__allProducts && window.__allProducts.length) {
+    const dataReady = function () {
+      return window.__allProducts && window.__allProducts.length > 0;
+    };
+    const domReady = function () {
+      return !!document.getElementById('bbwFooterSectionTitle');
+    };
+
+    if (dataReady() && domReady()) {
       init();
-    } else {
-      let tries = 0;
-      const poll = setInterval(() => {
-        if (window.__allProducts && window.__allProducts.length) {
-          clearInterval(poll);
-          init();
-        } else if (++tries > 80) {
-          clearInterval(poll);
-          init();
-        }
-      }, 100);
+      return;
     }
+
+    let tries = 0;
+    const poll = setInterval(function () {
+      tries++;
+      if (dataReady() && domReady()) {
+        clearInterval(poll);
+        init();
+      } else if (tries > 150) { /* 15s max */
+        clearInterval(poll);
+        init(); /* init avec DEFAULTS si timeout */
+      }
+    }, 100);
   }
 
   if (document.readyState === 'loading') {
@@ -683,7 +672,6 @@
     bootstrap();
   }
 
-  /* Expose public API */
   window.bbwFooterInit = init;
 
 })();
@@ -1204,15 +1192,15 @@
      BIND EVENTS
   ────────────────────────────────────────────────────────────── */
   function bindEvents() {
-    /* Start button */
+    
     var startBtn = $('bbqStartBtn');
     if (startBtn) startBtn.addEventListener('click', function () { goTo(1); });
 
-    /* Close button */
+    
     var closeBtn = $('bbqCloseBtn');
     if (closeBtn) closeBtn.addEventListener('click', closeQuiz);
 
-    /* Overlay click outside modal */
+    
     var overlay = $('bbw-quiz-overlay');
     if (overlay) {
       overlay.addEventListener('click', function (e) {
@@ -1220,12 +1208,12 @@
       });
     }
 
-    /* Escape key */
+    
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeQuiz();
     });
 
-    /* Q1 option cards */
+    
     document.querySelectorAll('#bbqQ1Options .bbq-opt-card').forEach(function (btn) {
       btn.addEventListener('click', function () {
         document.querySelectorAll('#bbqQ1Options .bbq-opt-card').forEach(function (b) {
@@ -1237,7 +1225,7 @@
       });
     });
 
-    /* Q2 option cards */
+    
     document.querySelectorAll('#bbqQ2Options .bbq-opt-card').forEach(function (btn) {
       btn.addEventListener('click', function () {
         document.querySelectorAll('#bbqQ2Options .bbq-opt-card').forEach(function (b) {
@@ -1249,15 +1237,15 @@
       });
     });
 
-    /* Result — Add to cart */
+    
     var atcBtn = $('bbqAddToCartBtn');
     if (atcBtn) atcBtn.addEventListener('click', addResultToCart);
 
-    /* Retake */
+    
     var retakeBtn = $('bbqRetakeBtn');
     if (retakeBtn) retakeBtn.addEventListener('click', resetQuiz);
 
-    /* Back nav */
+    
     var backBtn = $('bbqNavBack');
     if (backBtn) backBtn.addEventListener('click', goBack);
 
@@ -1266,7 +1254,7 @@
        OR data-open-quiz="true" will open the quiz.
     ── */
     function bindOpenTriggers() {
-      /* Footer link injected by footer.js */
+      
       var footerLink = $('bbwFindYourBestLink');
       if (footerLink) {
         footerLink.addEventListener('click', function (e) {
@@ -1275,7 +1263,7 @@
         });
       }
 
-      /* Any other trigger */
+      
       document.querySelectorAll('[data-open-quiz]').forEach(function (el) {
         el.addEventListener('click', function (e) {
           e.preventDefault();
@@ -1286,7 +1274,7 @@
 
     bindOpenTriggers();
 
-    /* Re-bind after footer.js finishes injecting links */
+    
     setTimeout(bindOpenTriggers, 1200);
     setTimeout(bindOpenTriggers, 3000);
   }
@@ -1310,7 +1298,7 @@
     // Start on intro (hidden until opened)
     goTo(0);
 
-    /* ── Expose global open function ── */
+    
     window.openStyleQuiz = openQuiz;
     window.closeStyleQuiz = closeQuiz;
   }
@@ -1353,13 +1341,13 @@ document.addEventListener('click', function (e) {
 (function () {
   'use strict';
 
-  /* ── Sélecteurs ── */
+  
   var overlay  = document.getElementById('bbwStyleOverlay');
   var closeBtn = document.getElementById('bbwsCloseBtn');
   var tabs     = document.querySelectorAll('.bbws-tab');
   var panels   = document.querySelectorAll('.bbws-panel');
 
-  if (!overlay) return; /* Sécurité si le HTML n'est pas encore dans la page */
+  if (!overlay) return; 
 
   /* ─────────────────────────────────────────
      OUVRIR
@@ -1368,7 +1356,7 @@ document.addEventListener('click', function (e) {
     overlay.setAttribute('aria-hidden', 'false');
     overlay.classList.add('bbws-active');
     document.body.style.overflow = 'hidden';
-    /* Réinitialise sur le premier onglet à chaque ouverture */
+    
     switchTab('casual', false);
   }
 
@@ -1397,11 +1385,11 @@ document.addEventListener('click', function (e) {
 
       if (isActive) {
         p.classList.add('bbws-panel--active');
-        /* Déclenche l'animation d'entrée des images */
+        
         var imgs = p.querySelectorAll('.bbws-img-wrap');
         imgs.forEach(function (img) {
           img.style.animation = 'none';
-          /* Force reflow */
+          
           void img.offsetWidth;
           img.style.animation = '';
         });
@@ -1428,12 +1416,12 @@ document.addEventListener('click', function (e) {
     closeBtn.addEventListener('click', closeStylePopup);
   }
 
-  /* Clic en dehors du modal */
+  
   overlay.addEventListener('click', function (e) {
     if (e.target === overlay) closeStylePopup();
   });
 
-  /* Touche Échap */
+  
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('bbws-active')) {
       closeStylePopup();
@@ -1441,7 +1429,7 @@ document.addEventListener('click', function (e) {
   });
 
   function bindStyleTriggers() {
-    /* 1. Via attribut explicite */
+    
     document.querySelectorAll('[data-open-style-popup]').forEach(function (el) {
       if (!el._bbwsStyleBound) {
         el._bbwsStyleBound = true;
@@ -1452,7 +1440,7 @@ document.addEventListener('click', function (e) {
       }
     });
 
-    /* 2. Via texte : tout lien <a> ou <li> dont le texte inclut "bbw4life style" */
+    
     var allLinks = document.querySelectorAll('a, button');
     allLinks.forEach(function (el) {
       if (el._bbwsStyleBound) return;
@@ -1467,7 +1455,7 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* Bind initial + rebind après injection footer.js */
+  
   bindStyleTriggers();
   setTimeout(bindStyleTriggers, 800);
   setTimeout(bindStyleTriggers, 2000);
@@ -1479,7 +1467,7 @@ document.addEventListener('click', function (e) {
   window.openStylePopup  = openStylePopup;
   window.closeStylePopup = closeStylePopup;
 
-  /* Écoute globale (au cas où le lien est rendu dynamiquement) */
+  
   document.addEventListener('click', function (e) {
     var el = e.target;
     if (!el || el.tagName !== 'A') return;
@@ -1498,7 +1486,7 @@ document.addEventListener('click', function (e) {
 
 
 
-/* ── Find My Look ── */
+
 (function () {
   'use strict';
 
@@ -1526,26 +1514,26 @@ document.addEventListener('click', function (e) {
     }, 100);
   }
 
-  /* ── Récupère les settings exactement comme script.js le fait ── */
+  
   function getSettings() {
     var all = window.__allProducts || [];
     var settings = all.find(function (p) { return p.type === 'settings'; }) || {};
     return settings.find_your_look || {};
   }
 
-  /* ── Récupère un produit par son ID dans window.__allProducts ── */
+  
   function getProductById(id) {
     var all = window.__allProducts || [];
     return all.find(function (p) { return p.id === id; }) || null;
   }
 
-  /* ── Utilise upgradeShopifyImageUrl si disponible (défini dans script.js) ── */
+  
   function getProductImage(prod, colorName) {
     if (!prod) return '';
 
     var imgUrl = prod.image || '';
 
-    /* Si une couleur est précisée, cherche l'image du variant couleur */
+    
     if (colorName && prod.colors && prod.colors.length) {
       var colorObj = prod.colors.find(function (c) { return c.name === colorName; });
       if (colorObj && colorObj.image) {
@@ -1553,7 +1541,7 @@ document.addEventListener('click', function (e) {
       }
     }
 
-    /* Utilise upgradeShopifyImageUrl si disponible, exactement comme script.js */
+    
     if (typeof upgradeShopifyImageUrl === 'function' && imgUrl) {
       return upgradeShopifyImageUrl(imgUrl, 400);
     }
@@ -1565,11 +1553,11 @@ document.addEventListener('click', function (e) {
     return '$' + parseFloat(price || 0).toFixed(2);
   }
 
-  /* ── Construit une carte produit ── */
+  
   function buildProductCard(prod, styleLabel) {
     if (!prod) return null;
 
-    /* Image principale — première couleur si disponible */
+    
     var firstColor = (prod.colors && prod.colors.length) ? prod.colors[0].name : null;
     var imgSrc = getProductImage(prod, firstColor);
 
@@ -1581,7 +1569,7 @@ document.addEventListener('click', function (e) {
       priceHtml += '<del>' + formatPrice(comparePrice) + '</del>';
     }
 
-    /* URL produit — utilise getProductUrl si disponible (défini dans script.js) */
+    
     var url = '#';
     if (typeof getProductUrl === 'function') {
       url = getProductUrl(prod.id);
@@ -1607,7 +1595,7 @@ document.addEventListener('click', function (e) {
     return card;
   }
 
-  /* ── Rend les produits d'une morphologie ── */
+  
   function renderMorph(morphKey) {
     if (rendered[morphKey]) return;
     rendered[morphKey] = true;
@@ -1629,7 +1617,7 @@ document.addEventListener('click', function (e) {
       return;
     }
 
-    /* Grille : 3 items → 3 colonnes, sinon 2 colonnes */
+    
     var validItems = items.filter(function (item) {
       return !!getProductById(item.product_id);
     });
@@ -1650,7 +1638,7 @@ document.addEventListener('click', function (e) {
       }
     });
 
-    /* Met à jour le href du bouton CTA si une URL de collection est définie */
+    
     var panel = gridEl.closest('.bbwl-panel');
     if (panel && morphData.collection_url) {
       var ctaBtn = panel.querySelector('.bbwl-cta-btn');
@@ -1658,7 +1646,7 @@ document.addEventListener('click', function (e) {
     }
   }
 
-  /* ── Change d'onglet ── */
+  
   function switchTab(morphKey) {
     tabs.forEach(function (t) {
       var active = t.getAttribute('data-morph') === morphKey;
@@ -1670,11 +1658,11 @@ document.addEventListener('click', function (e) {
       var isActive = p.id === 'bbwl-panel-' + morphKey;
       if (isActive) {
         p.classList.add('bbwl-panel--active');
-        /* Redéclenche l'animation */
+        
         p.style.animation = 'none';
         void p.offsetWidth;
         p.style.animation = '';
-        /* Attend que les produits soient dispo puis rend */
+        
         waitForProducts(function () {
           renderMorph(morphKey);
         });
@@ -1684,31 +1672,31 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* ── Ouvre le popup ── */
+  
   function openLookPopup() {
     overlay.setAttribute('aria-hidden', 'false');
     overlay.classList.add('bbwl-active');
     document.body.style.overflow = 'hidden';
-    /* Réinitialise sur apple à chaque ouverture */
+    
     rendered = {};
     switchTab('apple');
   }
 
-  /* ── Ferme le popup ── */
+  
   function closeLookPopup() {
     overlay.classList.remove('bbwl-active');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
 
-  /* ── Onglets ── */
+  
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       switchTab(tab.getAttribute('data-morph'));
     });
   });
 
-  /* ── Fermeture ── */
+  
   if (closeBtn) closeBtn.addEventListener('click', closeLookPopup);
 
   overlay.addEventListener('click', function (e) {
@@ -1719,7 +1707,7 @@ document.addEventListener('click', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('bbwl-active')) closeLookPopup();
   });
 
-  /* ── Lie les déclencheurs "Find Your Look" ── */
+  
   function bindTriggers() {
     document.querySelectorAll('a, button, li').forEach(function (el) {
       if (el._bbwlLookBound) return;
@@ -1765,7 +1753,7 @@ document.addEventListener('click', function (e) {
 })();
 
 
-/* BIG DEALS */
+
 (function () {
   'use strict';
 
@@ -2051,7 +2039,7 @@ document.addEventListener('click', function (e) {
   var BBWC_OVERLAY_ID = 'bbwCommitmentOverlay';
   var BBWC_CLOSE_ID   = 'bbwcCloseBtn';
 
-  /* ── Ouvre le popup ── */
+  
   function bbwcOpen() {
     var overlay = document.getElementById(BBWC_OVERLAY_ID);
     if (!overlay) return;
@@ -2060,13 +2048,13 @@ document.addEventListener('click', function (e) {
     document.body.style.overflow = 'hidden';
   }
 
-  /* ── Ferme le popup ── */
+  
   function bbwcClose() {
     var overlay = document.getElementById(BBWC_OVERLAY_ID);
     if (!overlay) return;
     overlay.classList.remove('bbwc-active');
     overlay.setAttribute('aria-hidden', 'true');
-    /* Restitue le scroll seulement si aucun autre popup BBW n'est ouvert */
+    
     var otherOpen = document.querySelector(
       '#bbw-quiz-overlay.bbq-active, #bbwStyleOverlay.bbws-active, #bbwLookOverlay.bbwl-active, #bdOverlay.bd-active'
     );
@@ -2075,7 +2063,7 @@ document.addEventListener('click', function (e) {
     }
   }
 
-  /* ── Lie les déclencheurs "Commitment" dans le footer/partout ── */
+  
   function bbwcBindTriggers() {
     document.querySelectorAll('a, button, li').forEach(function (el) {
       if (el._bbwcBound) return;
@@ -2093,12 +2081,12 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* ── Écouteur global (liens injectés dynamiquement) ── */
+  
   document.addEventListener('click', function (e) {
     var el = e.target;
     if (!el) return;
 
-    /* Remonte au <a> ou <button> parent si le clic est sur un enfant (icone etc.) */
+    
     var anchor = el.closest ? el.closest('a, button, li') : el;
     if (!anchor) return;
 
@@ -2111,12 +2099,12 @@ document.addEventListener('click', function (e) {
     }
   });
 
-  /* ── Init : bouton fermer + overlay click + Échap ── */
+  
   function bbwcInit() {
     var overlay  = document.getElementById(BBWC_OVERLAY_ID);
     var closeBtn = document.getElementById(BBWC_CLOSE_ID);
 
-    if (!overlay) return; /* Sécurité si le HTML n'est pas encore en page */
+    if (!overlay) return; 
 
     if (closeBtn) {
       closeBtn.addEventListener('click', bbwcClose);
@@ -2132,21 +2120,21 @@ document.addEventListener('click', function (e) {
       }
     });
 
-    /* Bind initial + rebind après injections asynchrones de footer.js */
+    
     bbwcBindTriggers();
     setTimeout(bbwcBindTriggers, 800);
     setTimeout(bbwcBindTriggers, 2000);
     setTimeout(bbwcBindTriggers, 4000);
   }
 
-  /* ── Bootstrap ── */
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bbwcInit);
   } else {
     bbwcInit();
   }
 
-  /* ── API publique ── */
+  
   window.openCommitmentPopup  = bbwcOpen;
   window.closeCommitmentPopup = bbwcClose;
 
@@ -2181,7 +2169,7 @@ document.addEventListener('click', function (e) {
   var inputEmail = document.getElementById('bbwNlEmail');
   var inputBday  = document.getElementById('bbwNlBday');
 
-  if (!overlay) return; /* Safety — HTML not present */
+  if (!overlay) return; 
 
   /* ──────────────────────────────────────────────────────────
      RISING PARTICLES (ambient)
@@ -2241,7 +2229,7 @@ document.addEventListener('click', function (e) {
         'animation-delay:' + del + 's;';
       confettiEl.appendChild(piece);
     }
-    /* Clean up after animation */
+    
     setTimeout(function () {
       if (confettiEl) confettiEl.innerHTML = '';
     }, 2200);
@@ -2303,7 +2291,7 @@ document.addEventListener('click', function (e) {
     if (!errorEl) return;
     errorEl.textContent = msg;
     errorEl.classList.add('bbwnl-error--visible');
-    /* Re-trigger shake animation */
+    
     errorEl.style.animation = 'none';
     void errorEl.offsetHeight;
     errorEl.style.animation = '';
@@ -2328,7 +2316,7 @@ document.addEventListener('click', function (e) {
       var email     = (inputEmail  ? inputEmail.value.trim()  : '');
       var birthday  = (inputBday   ? inputBday.value.trim()   : '');
 
-      /* Validate email */
+      
       if (!email || !email.includes('@') || !email.includes('.')) {
         showError('Please enter a valid email address.');
         if (inputEmail) {
@@ -2342,7 +2330,7 @@ document.addEventListener('click', function (e) {
       showBtnLoader();
 
       try {
-        /* ── Primary call: existing newsletter-subscribe action ── */
+        
         var res = await fetch('/.netlify/functions/save-account', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -2361,12 +2349,12 @@ document.addEventListener('click', function (e) {
           throw new Error(data.error || 'Subscription failed. Please try again.');
         }
 
-        /* ── Show success ── */
+        
         if (form)      form.style.display      = 'none';
         if (successEl) successEl.style.display = 'block';
         fireConfetti();
 
-        /* Auto-close after 5 s */
+        
         setTimeout(closePopup, 5000);
 
       } catch (err) {
@@ -2383,18 +2371,18 @@ document.addEventListener('click', function (e) {
   if (closeBtn) closeBtn.addEventListener('click', closePopup);
   if (successClose) successClose.addEventListener('click', closePopup);
 
-  /* Backdrop click */
+  
   overlay.addEventListener('click', function (e) {
     var modal = overlay.querySelector('.bbwnl-modal');
     if (modal && !modal.contains(e.target)) closePopup();
   });
 
-  /* Escape key */
+  
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('bbwnl-active')) closePopup();
   });
 
-  /* Clear invalid class on input */
+  
   if (inputEmail) {
     inputEmail.addEventListener('input', function () {
       this.classList.remove('bbwnl-input--invalid');
@@ -2426,7 +2414,7 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* Global delegation for dynamically-injected footer links */
+  
   document.addEventListener('click', function (e) {
     var el = e.target.closest('a, button, li');
     if (!el) return;
@@ -2468,10 +2456,10 @@ document.addEventListener('click', function (e) {
   var BBWM_OVERLAY_ID = 'bbwMissionOverlay';
   var BBWM_CLOSE_ID   = 'bbwmCloseBtn';
 
-  /* ── Textes qui déclenchent le popup (en minuscules) ── */
+  
   var BBWM_TRIGGERS = ['our-mission', 'our mission', 'notre mission'];
 
-  /* ── Ouvre le popup ── */
+  
   function bbwmOpen() {
     var overlay = document.getElementById(BBWM_OVERLAY_ID);
     if (!overlay) return;
@@ -2480,13 +2468,13 @@ document.addEventListener('click', function (e) {
     document.body.style.overflow = 'hidden';
   }
 
-  /* ── Ferme le popup ── */
+  
   function bbwmClose() {
     var overlay = document.getElementById(BBWM_OVERLAY_ID);
     if (!overlay) return;
     overlay.classList.remove('bbwm-active');
     overlay.setAttribute('aria-hidden', 'true');
-    /* Restitue le scroll seulement si aucun autre popup BBW n'est ouvert */
+    
     var otherOpen = document.querySelector(
       '#bbw-quiz-overlay.bbq-active, #bbwStyleOverlay.bbws-active, ' +
       '#bbwLookOverlay.bbwl-active, #bdOverlay.bd-active, ' +
@@ -2497,7 +2485,7 @@ document.addEventListener('click', function (e) {
     }
   }
 
-  /* ── Vérifie si le texte correspond à un déclencheur ── */
+  
   function bbwmMatches(el) {
     if (!el) return false;
     if (el.getAttribute && el.getAttribute('data-open-mission') !== null) return true;
@@ -2505,7 +2493,7 @@ document.addEventListener('click', function (e) {
     return BBWM_TRIGGERS.indexOf(txt) !== -1;
   }
 
-  /* ── Lie les déclencheurs statiques ── */
+  
   function bbwmBindTriggers() {
     document.querySelectorAll('a, button, li').forEach(function (el) {
       if (el._bbwmBound) return;
@@ -2519,11 +2507,11 @@ document.addEventListener('click', function (e) {
     });
   }
 
-  /* ── Écouteur global (capture les liens injectés dynamiquement) ── */
+  
   document.addEventListener('click', function (e) {
     var el = e.target;
     if (!el) return;
-    /* Remonte au parent cliquable si le clic touche un enfant (icône, span…) */
+    
     var anchor = el.closest ? el.closest('a, button, li') : el;
     if (anchor && bbwmMatches(anchor)) {
       e.preventDefault();
@@ -2531,45 +2519,45 @@ document.addEventListener('click', function (e) {
     }
   });
 
-  /* ── Init ── */
+  
   function bbwmInit() {
     var overlay  = document.getElementById(BBWM_OVERLAY_ID);
     var closeBtn = document.getElementById(BBWM_CLOSE_ID);
 
     if (!overlay) return;
 
-    /* Bouton fermer */
+    
     if (closeBtn) {
       closeBtn.addEventListener('click', bbwmClose);
     }
 
-    /* Clic en dehors du modal */
+    
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) bbwmClose();
     });
 
-    /* Touche Échap */
+    
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && overlay.classList.contains('bbwm-active')) {
         bbwmClose();
       }
     });
 
-    /* Bind initial + rebind après injections asynchrones de footer.js */
+    
     bbwmBindTriggers();
     setTimeout(bbwmBindTriggers, 800);
     setTimeout(bbwmBindTriggers, 2000);
     setTimeout(bbwmBindTriggers, 4000);
   }
 
-  /* ── Bootstrap ── */
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', bbwmInit);
   } else {
     bbwmInit();
   }
 
-  /* ── API publique ── */
+  
   window.openMissionPopup  = bbwmOpen;
   window.closeMissionPopup = bbwmClose;
 

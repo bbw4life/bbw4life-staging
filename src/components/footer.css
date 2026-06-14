@@ -4,7 +4,7 @@
 ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Core Brand ── */
+  
   --bbw-black:          #0d0d0d;
   --bbw-black-soft:     #1a1a1a;
   --bbw-black-deep:     #111111;
@@ -27,7 +27,7 @@
 
   --bbw-transition:     all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* ── Footer Specific — PALETTE CRÈME ── */
+  
   --footer-bg:                     #fdf8f2;
   --footer-text:                   rgba(45, 26, 14, 0.60);
   --footer-link-color:             rgba(45, 26, 14, 0.80);
@@ -51,7 +51,7 @@
   --footer-padding-top:             12px;
   --footer-padding-bottom:          0px;
 
-  /* ── Tokens premium ── */
+  
   --bbw-shimmer-speed:      3.2s;
   --bbw-pulse-speed:        4s;
   --bbw-float-speed:        6s;
@@ -60,7 +60,7 @@
   --bbw-obsidian:           #fdf8f2;
   --bbw-gold-shine:         #f5e4c0;
 
-  /* ── Couleurs texte crème ── */
+  
   --cream-text-main:        #2d1a0e;
   --cream-text-soft:        rgba(45, 26, 14, 0.60);
   --cream-text-muted:       rgba(45, 26, 14, 0.38);
@@ -68,7 +68,7 @@
   --cream-surface:          rgba(255, 255, 255, 0.60);
 }
 
-/* ─── RESET ─── */
+
 .bbw-footer *,
 .bbw-footer *::before,
 .bbw-footer *::after {
@@ -181,7 +181,7 @@
     #fdf8f2;
 }
 
-/* Ligne dorée animée en haut */
+
 .bbw-footer::before {
   content: '';
   position: absolute;
@@ -202,7 +202,7 @@
   z-index: 10;
 }
 
-/* Halo doré sous la ligne */
+
 .bbw-footer::after {
   content: '';
   position: absolute;
@@ -218,7 +218,7 @@
   animation: bbwPulseGlow var(--bbw-pulse-speed) ease-in-out infinite;
 }
 
-/* ── Orbes de lumière dorée ── */
+
 .bbw-footer__orbe {
   position: absolute;
   border-radius: 50%;
@@ -252,7 +252,7 @@
   animation: bbwNightOrbe 12s ease-in-out infinite 4s;
 }
 
-/* ── TITRE DE SECTION ── */
+
 .bbw-footer__section-title {
   text-align: center;
   font-size: var(--footer-section-title-size-desktop);
@@ -262,7 +262,7 @@
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
 
-  /* Titre principal en noir */
+  
   color: #0d0d0d;
   -webkit-text-fill-color: #0d0d0d;
   background: none;
@@ -344,7 +344,7 @@
   margin-bottom: 12px;
   position: relative;
 
-  /* Or sur fond crème */
+  
   color: var(--cream-text-main);
   -webkit-text-fill-color: var(--cream-text-main);
   background: none;
@@ -353,7 +353,7 @@
   animation: bbwBorderPulse 3s ease-in-out infinite;
 }
 
-/* Micro-trait or sous le titre */
+
 .bbw-footer__col-title::after {
   content: '';
   position: absolute;
@@ -493,7 +493,7 @@
   font-weight: 700;
 }
 
-/* Logo */
+
 .bbw-footer__logo-wrapper {
   text-align: center;
   margin-top: 14px;
@@ -578,7 +578,7 @@
   outline: none;
 }
 
-/* Bouton WhatsApp */
+
 .bbw-footer__send-btn {
   margin-top: 8px;
   width: 80%;
@@ -617,7 +617,7 @@
   font-size: 11.5px;
 }
 
-/* ── SOCIAL — Icônes noires sur crème ── */
+
 .bbw-footer__social-wrapper {
   margin-top: 20px;
 }
@@ -903,7 +903,7 @@
   text-align: right;
 }
 
-/* Payment icons row */
+
 .bbw-footer__payments {
   display: flex;
   flex-wrap: wrap;
@@ -912,7 +912,7 @@
   margin-bottom: 8px;
 }
 
-/* Secure text — or */
+
 .bbw-footer__secure-text {
   font-size: 12px;
   color: var(--bbw-gold);
@@ -928,7 +928,7 @@
   font-size: 12px;
 }
 
-/* Brand + Powered */
+
 .bbw-footer__brand-link {
   color: inherit;
   text-decoration: none;
@@ -985,7 +985,7 @@
   left: 130%;
 }
 
-/* Brand native colors — conservées */
+
 .bbw-footer__pay-icon.fa-cc-visa        { color: #1a1f71; background: #fff; }
 .bbw-footer__pay-icon.fa-cc-mastercard  { color: #eb001b; background: #fff; }
 .bbw-footer__pay-icon.fa-cc-paypal      { color: #003087; background: #fff; }
@@ -1137,7 +1137,7 @@
   }
 }
 
-/* Very small screens */
+
 @media (max-width: 330px) {
   .bbw-footer__first-two {
     flex-direction: column !important;
@@ -1155,7 +1155,7 @@
    13. MOBILE BEHAVIOR CLASSES
 ══════════════════════════════════════════════════════════════ */
 
-/* ── MODE: two_columns_mobile ── */
+
 @media (max-width: 767px) {
 
   .bbw-behavior--two-cols .bbw-footer__first-two {
@@ -1256,7 +1256,7 @@
   }
 }
 
-/* ── MODE: show_all_centered ── */
+
 @media (max-width: 767px) {
 
   .bbw-behavior--show-all .bbw-footer__first-two {
@@ -1307,7 +1307,7 @@
   }
 }
 
-/* ── MODE: hide_completely ── */
+
 @media (max-width: 767px) {
 
   .bbw-behavior--hide .bbw-footer__first-two {
@@ -1501,7 +1501,7 @@ body { margin-bottom: 0 !important; }
   transform: rotate(180deg);
 }
 
-/* Dropdown panel */
+
 .bbw-custom-select__dropdown {
   position: absolute;
   bottom: calc(100% + 6px);
@@ -1528,7 +1528,7 @@ body { margin-bottom: 0 !important; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Search input */
+
 .bbw-custom-select__search {
   width: 100%;
   padding: 9px 12px;
@@ -1546,7 +1546,7 @@ body { margin-bottom: 0 !important; }
   color: var(--cream-text-muted);
 }
 
-/* List */
+
 .bbw-custom-select__list {
   list-style: none;
   margin: 0;
@@ -1606,7 +1606,7 @@ body { margin-bottom: 0 !important; }
   flex-shrink: 0;
 }
 
-/* Mobile */
+
 @media (max-width: 767px) {
   .bbw-custom-select {
     min-width: 0;
@@ -1692,7 +1692,7 @@ body { margin-bottom: 0 !important; }
   border-radius: 4px;
 }
 
-/* ── Top decorative band ── */
+
 .bbq-top-band {
   background: linear-gradient(90deg, #c0385e 0%, #7b3f6e 50%, #c9963e 100%);
   padding: 10px 24px;
@@ -1709,7 +1709,7 @@ body { margin-bottom: 0 !important; }
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* ── Close button ── */
+
 .bbq-close-btn {
   position: absolute;
   top: 14px;
@@ -1904,7 +1904,7 @@ body { margin-bottom: 0 !important; }
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
-  /* ← FIX: isole le contexte z-index */
+  
   isolation: isolate;
 }
 
@@ -1915,7 +1915,7 @@ body { margin-bottom: 0 !important; }
   background: linear-gradient(135deg, #d4506e 0%, #8f4d82 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
-  /* ← FIX: le pseudo-element reste DERRIÈRE le contenu */
+  
   z-index: -1;
 }
 
@@ -1924,7 +1924,7 @@ body { margin-bottom: 0 !important; }
 .bbq-cta-btn:active { transform: translateY(0); }
 
 
-/* Result CTA variant */
+
 .bbq-cta-btn--result {
   background: linear-gradient(135deg, #c9963e 0%, #e8bc6a 100%);
   box-shadow: 0 8px 28px rgba(201, 150, 62, 0.42);
@@ -2070,7 +2070,7 @@ body { margin-bottom: 0 !important; }
   line-height: 1.4;
 }
 
-/* Checkmark */
+
 .bbq-opt-check {
   position: absolute;
   top: 10px;
@@ -2227,7 +2227,7 @@ body { margin-bottom: 0 !important; }
   position: relative;
 }
 
-/* Confetti */
+
 .bbq-confetti {
   position: absolute;
   inset: 0;
@@ -2299,7 +2299,7 @@ body { margin-bottom: 0 !important; }
   line-height: 1.6;
 }
 
-/* Product preview card */
+
 .bbq-result-product {
   display: flex;
   align-items: center;
@@ -2353,7 +2353,7 @@ body { margin-bottom: 0 !important; }
   margin: 0;
 }
 
-/* Retake button */
+
 .bbq-retake-btn {
   display: inline-flex;
   align-items: center;
@@ -2517,7 +2517,7 @@ body { margin-bottom: 0 !important; }
    BBW4LIFE — STYLE LOOKBOOK POPUP CSS
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── KEYFRAMES ── */
+
 
 @keyframes bbwsFadeIn {
   from { opacity: 0; }
@@ -2597,7 +2597,7 @@ body { margin-bottom: 0 !important; }
   100% { background-position: 400% 0; }
 }
 
-/* ── OVERLAY ── */
+
 
 .bbws-overlay {
   position: fixed;
@@ -2621,7 +2621,7 @@ body { margin-bottom: 0 !important; }
   animation: bbwsFadeIn 0.45s ease forwards;
 }
 
-/* ── MODAL ── */
+
 
 .bbws-modal {
   position: relative;
@@ -2653,7 +2653,7 @@ body { margin-bottom: 0 !important; }
   border-radius: 4px;
 }
 
-/* ── PARTICULES ── */
+
 
 .bbws-particles {
   position: absolute;
@@ -2677,7 +2677,7 @@ body { margin-bottom: 0 !important; }
 .bbws-p5 { width:9px;  height:9px;  background:#7b3f6e; top:40%; left:3%;  animation-duration:3.5s; animation-delay:1.8s; opacity:0.5; }
 .bbws-p6 { width:8px;  height:8px;  background:#FFD700; top:35%; right:4%; animation-duration:4.8s; animation-delay:0.9s; opacity:0.6; }
 
-/* ── BOUTON FERMER ── */
+
 
 .bbws-close {
   position: absolute;
@@ -2711,7 +2711,7 @@ body { margin-bottom: 0 !important; }
   box-shadow: 0 4px 16px rgba(192,56,94,0.35);
 }
 
-/* ── BANDE SUPÉRIEURE SCROLLANTE ── */
+
 
 .bbws-topband {
   background: linear-gradient(90deg, #c0385e 0%, #7b3f6e 50%, #c9963e 100%);
@@ -2738,7 +2738,7 @@ body { margin-bottom: 0 !important; }
   will-change: transform;
 }
 
-/* ── EN-TÊTE ── */
+
 
 .bbws-header {
   text-align: center;
@@ -2804,7 +2804,7 @@ body { margin-bottom: 0 !important; }
   animation: bbwsLineExpand 1s ease-out 0.4s forwards;
 }
 
-/* ── ONGLETS ── */
+
 
 .bbws-tabs {
   display: flex;
@@ -2860,7 +2860,7 @@ body { margin-bottom: 0 !important; }
   box-shadow: 0 10px 28px rgba(192,56,94,0.42);
 }
 
-/* ── PANNEAUX ── */
+
 
 .bbws-panels {
   padding: 0 28px;
@@ -2891,7 +2891,7 @@ body { margin-bottom: 0 !important; }
   border-left: 3px solid rgba(201,150,62,0.50);
 }
 
-/* ── GRILLE D'IMAGES ── */
+
 
 .bbws-images-grid {
   display: grid;
@@ -2936,7 +2936,7 @@ body { margin-bottom: 0 !important; }
   transform: scale(1.08);
 }
 
-/* Overlay hover sur image */
+
 .bbws-img-wrap::before {
   content: '';
   position: absolute;
@@ -2952,7 +2952,7 @@ body { margin-bottom: 0 !important; }
   opacity: 1;
 }
 
-/* BADGES sur images */
+
 .bbws-img-badge {
   position: absolute;
   bottom: 9px;
@@ -2988,7 +2988,7 @@ body { margin-bottom: 0 !important; }
   transform: translateY(0);
 }
 
-/* ── BOUTON EXPLORER ── */
+
 
 .bbws-explore-btn {
   display: inline-flex;
@@ -3048,7 +3048,7 @@ body { margin-bottom: 0 !important; }
   border: 1px solid rgba(201,150,62,0.45);
 }
 
-/* ── WAVE BLOCK ── */
+
 
 .bbws-wave-block {
   position: relative;
@@ -3090,7 +3090,7 @@ body { margin-bottom: 0 !important; }
   pointer-events: none;
 }
 
-/* ── MARQUEE ── */
+
 
 .bbws-marquee-section {
   display: flex;
@@ -3142,7 +3142,7 @@ body { margin-bottom: 0 !important; }
   box-shadow: 0 8px 20px rgba(201,150,62,0.25);
 }
 
-/* ── PIED ── */
+
 
 .bbws-footer-line {
   display: flex;
@@ -3166,7 +3166,7 @@ body { margin-bottom: 0 !important; }
   animation: bbwsParticleFly 3s ease-in-out infinite;
 }
 
-/* ── RESPONSIVE ── */
+
 
 @media (max-width: 600px) {
   .bbws-modal {
@@ -3246,7 +3246,7 @@ body { margin-bottom: 0 !important; }
 
 
 
-/* BBW4LIFE — FIND YOUR LOOK Morphology Popup CSS */
+
 :root {
   --bbwl-gold:        #c9963e;
   --bbwl-gold-light:  #e8bc6a;
@@ -3703,7 +3703,7 @@ body { margin-bottom: 0 !important; }
 .bbwl-products-grid--2col { grid-template-columns:repeat(2,1fr); }
 .bbwl-products-grid--3col { grid-template-columns:repeat(3,1fr); }
 
-/* ── FIX 1 : Réduire la hauteur des images en grille 2 colonnes (desktop) ── */
+
 .bbwl-products-grid--2col .bbwl-prod-img-wrap {
   aspect-ratio: 1 / 1;
   max-height: 240px;
@@ -3995,7 +3995,7 @@ body { margin-bottom: 0 !important; }
 
   .bbwl-panels { padding:0 12px; }
 
-  /* ── FIX 2 : Titres morphologie visibles sur mobile ── */
+  
   .bbwl-morph-intro {
     flex-direction:column;
     gap:12px;
@@ -4008,7 +4008,7 @@ body { margin-bottom: 0 !important; }
     font-size:22px;
   }
 
-  /* Bloc texte : s'assure qu'il prend toute la largeur et reste visible */
+  
   .bbwl-morph-text {
     display:block;
     width:100%;
@@ -4028,11 +4028,11 @@ body { margin-bottom: 0 !important; }
     display:block;
   }
 
-  /* Grilles produits */
+  
   .bbwl-products-grid--2col { grid-template-columns:repeat(2,1fr); }
   .bbwl-products-grid--3col { grid-template-columns:repeat(2,1fr); }
 
-  /* Images : ratio plus compact sur mobile aussi */
+  
   .bbwl-products-grid--2col .bbwl-prod-img-wrap,
   .bbwl-products-grid--3col .bbwl-prod-img-wrap {
     aspect-ratio: 3 / 3.5;
@@ -4056,7 +4056,7 @@ body { margin-bottom: 0 !important; }
 
 
 
-/* BIG DEALS */
+
 :root {
   --bd-black: #0d0d0d;
   --bd-black-soft: #1a1a1a;
@@ -4126,7 +4126,7 @@ body { margin-bottom: 0 !important; }
   border-radius: 4px;
 }
 
-/* TOP BAND */
+
 .bd-topband {
   background: linear-gradient(90deg, var(--bd-rose), var(--bd-plum), var(--bd-gold-mid), var(--bd-rose));
   background-size: 400% 100%;
@@ -4163,7 +4163,7 @@ body { margin-bottom: 0 !important; }
   100% { transform: translateX(-50%); }
 }
 
-/* CLOSE */
+
 .bd-close {
   position: absolute;
   top: 14px;
@@ -4191,7 +4191,7 @@ body { margin-bottom: 0 !important; }
   box-shadow: 0 4px 18px rgba(192, 56, 94, 0.40);
 }
 
-/* INNER — flex colonne, tout empilé */
+
 .bd-inner {
   padding: 28px 28px 26px;
   display: flex;
@@ -4200,7 +4200,7 @@ body { margin-bottom: 0 !important; }
   gap: 0;
 }
 
-/* HEADER centré */
+
 .bd-header {
   text-align: center;
   margin-bottom: 20px;
@@ -4263,7 +4263,7 @@ body { margin-bottom: 0 !important; }
   line-height: 1.6;
 }
 
-/* COUNTDOWN — pleine largeur, sous le header */
+
 .bd-countdown-wrap {
   width: 100%;
   margin-bottom: 20px;
@@ -4340,7 +4340,7 @@ body { margin-bottom: 0 !important; }
   margin-top: -14px;
 }
 
-/* Barre d'urgence DANS le countdown */
+
 .bd-urgency-bar {
   height: 5px;
   background: rgba(255, 255, 255, 0.08);
@@ -4356,7 +4356,7 @@ body { margin-bottom: 0 !important; }
   transition: width 1s linear;
 }
 
-/* 3 CARDS EN 3 COLONNES ÉGALES */
+
 .bd-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -4557,7 +4557,7 @@ body { margin-bottom: 0 !important; }
   background: rgba(255, 215, 0, 0.10);
 }
 
-/* BOUTON EN DESSOUS */
+
 .bd-main-btn {
   display: flex;
   align-items: center;
@@ -4622,7 +4622,7 @@ body { margin-bottom: 0 !important; }
   color: rgba(255, 215, 0, 0.45);
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 600px) {
   .bd-inner {
     padding: 20px 16px 20px;
@@ -4637,7 +4637,7 @@ body { margin-bottom: 0 !important; }
     gap: 10px;
   }
 
-  /* Promos en 3 colonnes côte à côte sur mobile */
+  
   .bd-promos-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -4681,7 +4681,7 @@ body { margin-bottom: 0 !important; }
    BBW4LIFE — COMMITMENT POPUP 
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── Overlay ── */
+
 .bbwc-overlay {
   position: fixed;
   inset: 0;
@@ -4701,7 +4701,7 @@ body { margin-bottom: 0 !important; }
   visibility: visible;
 }
 
-/* ── Modal ── */
+
 .bbwc-modal {
   position: relative;
   width: 100%;
@@ -4724,7 +4724,7 @@ body { margin-bottom: 0 !important; }
   opacity: 1;
 }
 
-/* ── Close button ── */
+
 .bbwc-close {
   position: absolute;
   top: 16px;
@@ -4751,7 +4751,7 @@ body { margin-bottom: 0 !important; }
   border-color: var(--bbw-gold, #c9963e);
 }
 
-/* ── Header ── */
+
 .bbwc-header {
   text-align: center;
   margin-bottom: 28px;
@@ -4779,7 +4779,7 @@ body { margin-bottom: 0 !important; }
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.30);
 }
 
-/* ── Séparateur animé ── */
+
 .bbwc-separator {
   display: flex;
   align-items: center;
@@ -4815,7 +4815,7 @@ body { margin-bottom: 0 !important; }
   50%       { transform: scale(1.22); }
 }
 
-/* ── Texte intro après le titre ── */
+
 .bbwc-intro-text {
   font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 14px;
@@ -4831,7 +4831,7 @@ body { margin-bottom: 0 !important; }
   font-weight: 700;
 }
 
-/* ── Cards engagement ── */
+
 .bbwc-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4900,7 +4900,7 @@ body { margin-bottom: 0 !important; }
   font-weight: 600;
 }
 
-/* ── Citation fondateur ── */
+
 .bbwc-quote {
   position: relative;
   margin: 0 0 24px;
@@ -4962,7 +4962,7 @@ body { margin-bottom: 0 !important; }
   margin-right: 6px;
 }
 
-/* ── Footer CTA ── */
+
 .bbwc-footer {
   text-align: center;
 }
@@ -4999,7 +4999,7 @@ body { margin-bottom: 0 !important; }
   transform: translateX(4px);
 }
 
-/* ── Responsive mobile ── */
+
 @media (max-width: 520px) {
   .bbwc-modal {
     padding: 32px 20px 24px;
@@ -5026,7 +5026,7 @@ body { margin-bottom: 0 !important; }
    bbw-newsletter-popup.css
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── Overlay ──────────────────────────────────────────────── */
+
 .bbwnl-overlay {
   position: fixed;
   inset: 0;
@@ -5045,7 +5045,7 @@ body { margin-bottom: 0 !important; }
   opacity: 1;
 }
 
-/* ── Backdrop ─────────────────────────────────────────────── */
+
 .bbwnl-backdrop {
   position: absolute;
   inset: 0;
@@ -5054,7 +5054,7 @@ body { margin-bottom: 0 !important; }
   -webkit-backdrop-filter: blur(6px);
 }
 
-/* ── Modal ────────────────────────────────────────────────── */
+
 .bbwnl-modal {
   position: relative;
   width: 100%;
@@ -5081,7 +5081,7 @@ body { margin-bottom: 0 !important; }
   opacity: 1;
 }
 
-/* ── Orbs (decorative) ────────────────────────────────────── */
+
 .bbwnl-orb {
   position: absolute;
   border-radius: 50%;
@@ -5131,7 +5131,7 @@ body { margin-bottom: 0 !important; }
   to   { transform: translateY(-18px) scale(1.06); }
 }
 
-/* ── Wave top / bottom ────────────────────────────────────── */
+
 .bbwnl-wave-top,
 .bbwnl-wave-bot {
   position: absolute;
@@ -5167,7 +5167,7 @@ body { margin-bottom: 0 !important; }
   display: block;
 }
 
-/* ── Particles ────────────────────────────────────────────── */
+
 .bbwnl-particles {
   position: absolute;
   inset: 0;
@@ -5191,7 +5191,7 @@ body { margin-bottom: 0 !important; }
   100% { transform: translateY(-110%) translateX(var(--drift, 20px)) scale(0.4); opacity: 0; }
 }
 
-/* ── Close button ─────────────────────────────────────────── */
+
 .bbwnl-close {
   position: absolute;
   top: 16px;
@@ -5219,7 +5219,7 @@ body { margin-bottom: 0 !important; }
   transform: rotate(90deg) scale(1.1);
 }
 
-/* ── Body ─────────────────────────────────────────────────── */
+
 .bbwnl-body {
   position: relative;
   z-index: 2;
@@ -5227,7 +5227,7 @@ body { margin-bottom: 0 !important; }
   text-align: center;
 }
 
-/* ── Badge ────────────────────────────────────────────────── */
+
 .bbwnl-badge {
   display: inline-flex;
   align-items: center;
@@ -5279,7 +5279,7 @@ body { margin-bottom: 0 !important; }
   z-index: 1;
 }
 
-/* ── Crown ────────────────────────────────────────────────── */
+
 .bbwnl-crown-wrap {
   position: relative;
   display: inline-block;
@@ -5325,7 +5325,7 @@ body { margin-bottom: 0 !important; }
   to   { transform: scale(1.2); opacity: 1;   }
 }
 
-/* ── Title ────────────────────────────────────────────────── */
+
 .bbwnl-title {
   font-family: var(--font-display, 'Cormorant Garamond', Georgia, serif);
   font-size: 32px;
@@ -5344,7 +5344,7 @@ body { margin-bottom: 0 !important; }
   background-clip: text;
 }
 
-/* ── Subtitle ─────────────────────────────────────────────── */
+
 .bbwnl-subtitle {
   font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 14px;
@@ -5356,7 +5356,7 @@ body { margin-bottom: 0 !important; }
 .bbwnl-br-desk { display: none; }
 @media (min-width: 480px) { .bbwnl-br-desk { display: block; } }
 
-/* ── Benefits ─────────────────────────────────────────────── */
+
 .bbwnl-benefits {
   display: flex;
   flex-direction: column;
@@ -5412,7 +5412,7 @@ body { margin-bottom: 0 !important; }
   color: #2e2028;
 }
 
-/* ── Form ─────────────────────────────────────────────────── */
+
 .bbwnl-form {
   display: flex;
   flex-direction: column;
@@ -5514,7 +5514,7 @@ body { margin-bottom: 0 !important; }
   color: #1e1a1c;
 }
 
-/* ── Error ────────────────────────────────────────────────── */
+
 .bbwnl-error {
   font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 13px;
@@ -5539,7 +5539,7 @@ body { margin-bottom: 0 !important; }
   40%, 80% { transform: translateX(6px); }
 }
 
-/* ── CTA Button ───────────────────────────────────────────── */
+
 .bbwnl-cta {
   position: relative;
   width: 100%;
@@ -5608,7 +5608,7 @@ body { margin-bottom: 0 !important; }
   transform: none;
 }
 
-/* ── Footer note ──────────────────────────────────────────── */
+
 .bbwnl-note {
   font-family: var(--font-body, 'DM Sans', sans-serif);
   font-size: 11.5px;
@@ -5626,7 +5626,7 @@ body { margin-bottom: 0 !important; }
   font-size: 10px;
 }
 
-/* ── Success screen ───────────────────────────────────────── */
+
 .bbwnl-success {
   position: relative;
   padding: 20px 0 8px;
@@ -5719,11 +5719,11 @@ body { margin-bottom: 0 !important; }
   transform: scale(1.04);
 }
 
-/* ── Scrollbar for modal ──────────────────────────────────── */
+
 .bbwnl-modal { scrollbar-width: none; }
 .bbwnl-modal::-webkit-scrollbar { display: none; }
 
-/* ── Mobile adjustments ───────────────────────────────────── */
+
 @media (max-width: 480px) {
   .bbwnl-body {
     padding: 48px 22px 28px;
@@ -5744,7 +5744,7 @@ body { margin-bottom: 0 !important; }
    BBW4LIFE — MISSION POPUP 
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── Overlay ── */
+
 .bbwm-overlay {
   position: fixed;
   inset: 0;
@@ -5764,7 +5764,7 @@ body { margin-bottom: 0 !important; }
   visibility: visible;
 }
 
-/* ── Modal ── */
+
 .bbwm-modal {
   position: relative;
   width: 100%;
@@ -5791,7 +5791,7 @@ body { margin-bottom: 0 !important; }
   opacity: 1;
 }
 
-/* ── Particules dorées flottantes ── */
+
 .bbwm-particles {
   position: absolute;
   inset: 0;
@@ -5829,7 +5829,7 @@ body { margin-bottom: 0 !important; }
   100% { transform: translateY(-120%) scale(1.1); opacity: 0; }
 }
 
-/* ── Tous les enfants au-dessus des particules ── */
+
 .bbwm-close,
 .bbwm-header,
 .bbwm-timeline,
@@ -5839,7 +5839,7 @@ body { margin-bottom: 0 !important; }
   z-index: 1;
 }
 
-/* ── Bouton fermer ── */
+
 .bbwm-close {
   position: absolute;
   top: 16px;
@@ -5866,7 +5866,7 @@ body { margin-bottom: 0 !important; }
   transform: rotate(90deg);
 }
 
-/* ── Animation cinématique ── */
+
 .bbwm-anim {
   opacity: 0;
   transform: translateY(18px);
@@ -5879,7 +5879,7 @@ body { margin-bottom: 0 !important; }
   transform: translateY(0);
 }
 
-/* ── Header ── */
+
 .bbwm-header {
   text-align: center;
   margin-bottom: 24px;
@@ -5942,7 +5942,7 @@ body { margin-bottom: 0 !important; }
   font-weight: 700;
 }
 
-/* ── Séparateur ── */
+
 .bbwm-sep {
   display: flex;
   align-items: center;
@@ -5972,7 +5972,7 @@ body { margin-bottom: 0 !important; }
   font-size: 10px;
 }
 
-/* ── Timeline ── */
+
 .bbwm-timeline {
   margin: 24px 0;
   display: flex;
@@ -6025,7 +6025,7 @@ body { margin-bottom: 0 !important; }
   color: #fff;
 }
 
-/* Ligne verticale entre les blocs */
+
 .bbwm-line {
   width: 2px;
   flex: 1;
@@ -6067,7 +6067,7 @@ body { margin-bottom: 0 !important; }
   font-weight: 700;
 }
 
-/* ── Citation finale ── */
+
 .bbwm-quote-wrap {
   margin: 4px 0 24px;
   padding: 22px 24px;
@@ -6128,7 +6128,7 @@ body { margin-bottom: 0 !important; }
   color: #7a3a52;
 }
 
-/* ── CTA ── */
+
 .bbwm-footer {
   text-align: center;
 }
@@ -6166,7 +6166,7 @@ body { margin-bottom: 0 !important; }
   transform: translateX(5px);
 }
 
-/* ── Mobile ── */
+
 @media (max-width: 520px) {
   .bbwm-modal {
     padding: 32px 18px 28px;

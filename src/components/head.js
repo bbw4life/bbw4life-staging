@@ -964,7 +964,7 @@ const SEO_MAP = {
 
 };
 
-/* ─── Schema.org BlogPosting pour les articles ─── */
+
 function injectBlogSchema() {
     const path = window.location.pathname;
     if (!/\/blog\/article/.test(path)) return;
@@ -1018,7 +1018,7 @@ function injectGlobalHead() {
         .catch(err => console.error('[Head] Failed to load head.html:', err));
         }
 
-        /* ─── Injection SEO selon page ─── */
+        
         function injectPageSEO() {
             const path = window.location.pathname;
             const pathWithHtml = path.endsWith('.html') ? path : path + '.html';
@@ -1036,7 +1036,7 @@ function injectGlobalHead() {
         };
     }
 
-    /* Fallback global si page inconnue */
+    
     if (!seo) {
         seo = {
             title: 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion',
@@ -1048,12 +1048,12 @@ function injectGlobalHead() {
     }
 
  
-    /* Title */
+    
     document.title = seo.title;
     window.__seoTitle = seo.title;
     document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
 
-    /* Helper : crée ou met à jour une meta */
+    
     function setMeta(selector, attr, value) {
         let el = document.querySelector(selector);
         if (!el) {
@@ -1063,23 +1063,23 @@ function injectGlobalHead() {
         el.setAttribute(attr, value);
     }
 
-    /* Meta de base */
+    
     setMeta('meta[name="description"]',   'content', seo.description);
     setMeta('meta[name="keywords"]',      'content', seo.keywords);
     setMeta('meta[name="robots"]',        'content', 'index, follow');
 
-    /* Open Graph */
+    
     setMeta('meta[property="og:title"]',       'content', seo.title);
     setMeta('meta[property="og:description"]', 'content', seo.description);
     setMeta('meta[property="og:image"]',       'content', seo.og_image);
     setMeta('meta[property="og:url"]',         'content', seo.canonical);
 
-    /* Twitter Card */
+    
     setMeta('meta[name="twitter:title"]',       'content', seo.title);
     setMeta('meta[name="twitter:description"]', 'content', seo.description);
     setMeta('meta[name="twitter:image"]',       'content', seo.og_image);
 
-    /* Canonical */
+    
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
         canonical = document.createElement('link');
@@ -1090,7 +1090,7 @@ function injectGlobalHead() {
 }
 
 
-/* ─── Lancer tout ─── */
+
 injectGlobalHead().then(() => {
     injectPageSEO();
     injectBlogSchema();

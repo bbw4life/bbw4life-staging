@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const path  = require('path');
 const fs    = require('fs');
 
-/* ── Load products.data.json ── */
+
 async function loadProductsData() {
   const localPaths = [
     path.join(process.cwd(), 'products.data.json'),
@@ -14,7 +14,7 @@ async function loadProductsData() {
   for (const p of localPaths) {
     try {
       if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) { /* continue */ }
+    } catch (e) {  }
   }
   const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
   const res = await fetch(`${siteUrl}/products.data.json`);
@@ -32,13 +32,13 @@ async function loadSearchData() {
   for (const p of localPaths) {
     try {
       if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) { /* continue */ }
+    } catch (e) {  }
   }
   try {
     const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/search.data.json`);
     if (res.ok) return res.json();
-  } catch (e) { /* ignore */ }
+  } catch (e) {  }
   return null;
 }
 
@@ -52,17 +52,17 @@ async function loadBlogArticles() {
   for (const p of localPaths) {
     try {
       if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) { /* continue */ }
+    } catch (e) {  }
   }
   try {
     const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/blog/blog-articles.json`);
     if (res.ok) return res.json();
-  } catch (e) { /* ignore */ }
+  } catch (e) {  }
   return null;
 }
 
-/* ── Build product index ── */
+
 function buildProductIndex(rawData) {
   const allActive = rawData.filter(p => p.type !== 'settings' && p.id && p.active);
   const settings  = rawData.find(p => p.type === 'settings') || {};
@@ -404,7 +404,7 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
   const q        = query.toLowerCase();
   const keywords = q.split(/\s+/).filter(k => k.length >= 2);
 
-  /* ── FILTRE GENRE STRICT depuis settings ── */
+  
   let baseProducts = products;
   if (genderFilter === 'male') {
     baseProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
@@ -537,7 +537,7 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
   return { results: filtered.slice(0, 2), isVague: false };
 }
 
-/* ── Format delivery dates ── */
+
 function formatDelivery(startDate, endDate) {
   if (!startDate || !endDate) return null;
   try {
@@ -622,7 +622,7 @@ const PAGE_MAP = {
    BUILD SYSTEM PROMPT
 ══════════════════════════════════════════════════════ */
 function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
-  /* ── Founder context from settings ── */
+  
 const founder = settings.founder || {};
 const founderName        = founder.full_name    || 'Paul Francenel';
 const founderAge         = founder.age          || 26;
@@ -1161,7 +1161,7 @@ ${blogContext || '(not available)'}
 - If you have zero information about something the user asks → say clearly: "I don't have information about that." NEVER make up data.`;
 }
 
-/* ── Fallback / Error messages ── */
+
 function getFallbackMessage(lang) {
   const msgs = {
     fr: "Je suis très sollicitée en ce moment 😅 Réessayez dans quelques secondes !",

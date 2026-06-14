@@ -39,8 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { if (popup.classList.contains('show')) popup.classList.remove('show'); }, 10000);
     }
 
-    fetch('/products.data.json')
-      .then(response => response.json())
+    const _checkoutUrl = window.location.hostname === 'localhost' ? '/products.data.json' : '/.netlify/functions/get-products';
+        fetch(_checkoutUrl)
+        .then(response => response.json())
       .then(data => {
         productsData = data;
         const settings = productsData.find(item => item.type === "settings");
@@ -124,23 +125,57 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     // ====================== ACCOUNT PRE-FILL ======================
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-        const setField = (id, value) => {
-            const el = document.getElementById(id);
-            if (el && value) el.value = value;
-        };
-        setField('first-name',   localStorage.getItem('userFirstName')    || '');
-        setField('last-name',    localStorage.getItem('userLastName')     || '');
-        setField('email',        localStorage.getItem('userEmail')        || '');
-        setField('address',      localStorage.getItem('userAddressLine1') || '');
-        setField('city',         localStorage.getItem('userCity')         || '');
-        setField('state',        localStorage.getItem('userState')        || '');
-        setField('postal-code',  localStorage.getItem('userZip')          || '');
-        const line2 = localStorage.getItem('userLine2') || '';
-        setField('address2',      line2);
-        setField('address-line2', line2);
-        setField('addr-line2',    line2);
-    }
+        function prefillFromAccount() {
+            if (localStorage.getItem('isLoggedIn') !== 'true') return;
+
+            const fields = {
+                'first-name':   localStorage.getItem('userFirstName')    || '',
+                'last-name':    localStorage.getItem('userLastName')      || '',
+                'email':        localStorage.getItem('userEmail')         || '',
+                'address':      localStorage.getItem('userAddressLine1')  || '',
+                'address2':     localStorage.getItem('userLine2')         || '',
+                'address-line2':localStorage.getItem('userLine2')         || '',
+                'addr-line2':   localStorage.getItem('userLine2')         || '',
+                'city':         localStorage.getItem('userCity')          || '',
+                'state':        localStorage.getItem('userState')         || '',
+                'postal-code':  localStorage.getItem('userZip')           || '',
+            };
+
+            Object.entries(fields).forEach(([id, value]) => {
+                if (!value) return;
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            });
+
+            // ── Pré-sélectionner le pays et charger les villes ──
+            const savedCountry = localStorage.getItem('userCountry') || '';
+            const savedCity    = localStorage.getItem('userCity')    || '';
+
+            if (savedCountry) {
+                console.log('[Prefill] Country found:', savedCountry);
+                // Attendre que les pays soient chargés
+                const trySelectCountry = setInterval(() => {
+                    const countryList = document.getElementById('country-list');
+                    if (!countryList) return;
+                    const items = countryList.querySelectorAll('li[data-label]');
+                    if (!items.length) return;
+
+                    clearInterval(trySelectCountry);
+
+                    const match = Array.from(items).find(
+                        li => li.dataset.label === savedCountry
+                    );
+                    if (match) {
+                        match.click(); // déclenche la sélection + chargement des villes
+                    }
+                }, 200);
+            }
+        }
+
+        // Appeler après le fetch des produits ET après le DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(prefillFromAccount, 800);
+        });
 
     // ====================== RENDER CART ======================
     function renderCart() {
@@ -289,87 +324,124 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ====================== PAYMENT ======================
     payButton.addEventListener('click', async () => {
-        if (!validateForm()) return;
-        if (!cart.length) {
-            showErrorPopup('Your cart is empty. Please add some products before checking out.');
+    if (!validateForm()) return;
+    if (!cart.length) {
+        showErrorPopup('Your cart is empty. Please add some products before checking out.');
+        return;
+    }
+
+    payButton.disabled = true;
+    payButton.textContent = "Processing...";
+
+    const pendingAffEmail = sessionStorage.getItem('pendingAffPromo');
+    if (pendingAffEmail && appliedPromo && appliedPromo.isAffiliate) {
+        try {
+            await fetch('/.netlify/functions/save-account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'aff-mark-promo-used', email: pendingAffEmail })
+            });
+        } catch(e) { console.warn('Could not mark promo as used:', e.message); }
+        sessionStorage.removeItem('pendingAffPromo');
+    }
+
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+    try {
+        const shippingData = await getShippingData();
+        shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
+
+        const discountedCart = getDiscountedCart();
+        const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || 'Standard Shipping';
+        const clientSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+        const clientTotal = clientSubtotal; // serveur recalcule tout
+
+        // ── ÉTAPE 1 : Validation serveur + token ──
+        const validationRes = await fetch('/.netlify/functions/validate-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'validate',
+                cart: discountedCart,
+                shipping: shippingData,
+                shippingMethod: selectedMethodPay,
+                clientTotal
+            })
+        });
+        const validationData = await validationRes.json();
+        if (!validationRes.ok || !validationData.success) {
+            showErrorPopup(validationData.errors?.join('\n') || validationData.error || 'Validation failed. Please try again.');
+            payButton.disabled = false;
+            payButton.textContent = "Pay Now";
             return;
         }
 
-        payButton.disabled = true;
-        payButton.textContent = "Processing...";
+        const { cartToken, sanitizedCart, shippingCost, taxAmount } = validationData;
 
-        const pendingAffEmail = sessionStorage.getItem('pendingAffPromo');
-        if (pendingAffEmail && appliedPromo && appliedPromo.isAffiliate) {
-            try {
-                await fetch('/.netlify/functions/save-account', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'aff-mark-promo-used', email: pendingAffEmail })
-                });
-            } catch(e) { console.warn('Could not mark promo as used:', e.message); }
-            sessionStorage.removeItem('pendingAffPromo');
-        }
-
-        const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-
-        try {
-            const shippingData = await getShippingData();
-
-            shippingData.affRef = window.getAffRef ? window.getAffRef() : (localStorage.getItem('aff_ref') || '');
-
-            const discountedCart = getDiscountedCart();
-            const discountedSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-            const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || '';
-            const freeThreshPay = (() => { const s = productsData.find(i => i.type === 'settings'); return s?.cart_drawer?.free_shipping_threshold || 0; })();
-            const isFreePayMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethodPay);
-            const isFreePayThresh = freeThreshPay > 0 && discountedSubtotal >= freeThreshPay;
-            const taxes = (isFreePayMethod || isFreePayThresh) ? 0 : discountedSubtotal * TAX_RATE;
-            const effectiveShippingPay = (isFreePayMethod || isFreePayThresh) ? 0 : SHIPPING_COST;
-
-            if (paymentMethod === 'stripe') {
-                const STRIPE_PUBLIC_KEY = "pk_test_51PMDwoF9QAVBUyaUqwc7ekbAhyZdI9oA3ubZT8b7TtWGrykoPLvsql4mexEwEoS5pggyssqN6jpj2w5VQMHOSftf00q97Rbt1f";
-                const stripe = Stripe(STRIPE_PUBLIC_KEY);
-                const response = await fetch('/.netlify/functions/create-stripe-session', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        cart: discountedCart,
-                        shipping: shippingData,
-                        shipping_cost: effectiveShippingPay.toFixed(2),
-                        tax: taxes.toFixed(2),
-                        aff_promo_discount: (affPromoApplied && affPromoDiscount > 0) ? affPromoDiscount : 0
-                    })
-                });
-                const data = await response.json();
-                if (!response.ok || !data.sessionId) throw new Error(data.error || 'Stripe session failed');
-                localStorage.setItem("pendingOrder", "stripe");
-                await stripe.redirectToCheckout({ sessionId: data.sessionId });
-
-            } else {
-                const response = await fetch('/.netlify/functions/paypal-create-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        cart: discountedCart,
-                        shipping: shippingData,
-                        shipping_cost: effectiveShippingPay.toFixed(2),
-                        tax: taxes.toFixed(2),
-                        aff_promo_discount: (affPromoApplied && affPromoDiscount > 0) ? affPromoDiscount : 0
-                    })
-                });
-                const data = await response.json();
-                if (!response.ok || !data.orderID) throw new Error(data.error || 'PayPal order failed');
-                const paypalDomain = data.paypalDomain || 'https://www.sandbox.paypal.com';
-                localStorage.setItem("pendingOrder", "paypal");
-                window.location.href = `${paypalDomain}/checkoutnow?token=${data.orderID}`;
-            }
-        } catch (error) {
-            console.error("Payment error:", error.message);
-            showErrorPopup('Payment failed. Please try again.');
+        // ── ÉTAPE 2 : Vérification token avant paiement ──
+        const verifyRes = await fetch('/.netlify/functions/validate-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'verify-token',
+                cart: sanitizedCart,
+                shippingMethod: selectedMethodPay,
+                clientTotal,
+                cartToken
+            })
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyRes.ok || !verifyData.success) {
+            showErrorPopup(verifyData.error || 'Cart integrity check failed. Please refresh and try again.');
             payButton.disabled = false;
             payButton.textContent = "Pay Now";
+            return;
         }
-    });
+
+        // ── ÉTAPE 3 : Paiement avec totaux serveur ──
+        if (paymentMethod === 'stripe') {
+            const STRIPE_PUBLIC_KEY = "pk_test_51PMDwoF9QAVBUyaUqwc7ekbAhyZdI9oA3ubZT8b7TtWGrykoPLvsql4mexEwEoS5pggyssqN6jpj2w5VQMHOSftf00q97Rbt1f";
+            const stripe = Stripe(STRIPE_PUBLIC_KEY);
+            const response = await fetch('/.netlify/functions/create-stripe-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cart: sanitizedCart,
+                    shipping: shippingData,
+                    cartToken
+                })
+            });
+            const data = await response.json();
+            if (!response.ok || !data.sessionId) throw new Error(data.error || 'Stripe session failed');
+            localStorage.setItem("pendingOrder", "stripe");
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
+
+        } else {
+            const response = await fetch('/.netlify/functions/paypal-create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cart: sanitizedCart,
+                    shipping: shippingData,
+                    shipping_cost: shippingCost.toFixed(2),
+                    tax: taxAmount.toFixed(2),
+                    cartToken
+                })
+            });
+            const data = await response.json();
+            if (!response.ok || !data.orderID) throw new Error(data.error || 'PayPal order failed');
+            const paypalDomain = data.paypalDomain || 'https://www.sandbox.paypal.com';
+            localStorage.setItem("pendingOrder", "paypal");
+            window.location.href = `${paypalDomain}/checkoutnow?token=${data.orderID}`;
+        }
+
+    } catch (error) {
+        console.error("Payment error:", error.message);
+        showErrorPopup('Payment failed. Please try again.');
+        payButton.disabled = false;
+        payButton.textContent = "Pay Now";
+    }
+});
 
     // ====================== MODALS ======================
     const refundLink = document.getElementById('refund-policy-link');

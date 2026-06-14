@@ -12,7 +12,7 @@
 </head>
 <body>
 
-   <!-- ══════════════ READING PROGRESS BAR ══════════════ -->
+   
   <div id="reading-progress-bar" aria-hidden="true"></div>
 
   <!-- ═══════════════════════════════════════
@@ -44,12 +44,12 @@
           <span class="ac-hero__badge"><i class="fas fa-undo-alt"></i> 30-day returns</span>
         </div>
       </div>
-      <!-- Shimmer lines -->
+      
       <div class="ac-hero__line ac-hero__line--top"></div>
       <div class="ac-hero__line ac-hero__line--bottom"></div>
     </section>
 
-    <!-- SOCIAL PROOF BAR -->
+    
     <div class="col-social-proof-bar">
       <div class="col-social-proof-inner">
         <div class="col-sp-item">
@@ -115,7 +115,7 @@
     <section class="ac-main">
       <div class="ac-wrapper">
         <div class="ac-grid" id="all-collections-grid">
-          <!-- Skeleton placeholders shown while JS loads -->
+          
           <div class="ac-skeleton"></div>
           <div class="ac-skeleton"></div>
           <div class="ac-skeleton"></div>
@@ -126,32 +126,31 @@
       </div>
     </section>
 
-    <!-- ═══════════════════════════════════════
-         MARQUEE STRIP
-    ═══════════════════════════════════════ -->
-    <div class="col-marquee-section">
-      <div class="col-marquee-track">
-        <div class="col-marquee-inner">
-          <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to 50% Off</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $50+</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to 50% Off</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $50+</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
-          <span class="col-marquee-sep">✦</span>
-          <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
-          <span class="col-marquee-sep">✦</span>
+    
+      <div class="col-marquee-section">
+        <div class="col-marquee-track">
+          <div class="col-marquee-inner">
+            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-fire"></i> Flash Sale — Up to <span class="col-marquee-discount"></span> Off</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-truck"></i> Free Shipping on Orders $<span class="col-marquee-free-shipping"></span>+</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-heart"></i> Beauty Has No Sizes</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-shield-alt"></i> 30-Day Money-Back Guarantee</span>
+            <span class="col-marquee-sep">✦</span>
+            <span class="col-marquee-item"><i class="fas fa-bolt"></i> Limited Stock — Order Before It's Gone</span>
+            <span class="col-marquee-sep">✦</span>
+          </div>
         </div>
       </div>
     </div>
@@ -177,7 +176,7 @@
   <script src="/collections/collections.js"></script>
   <script src="/cart-page.js"></script>
 
-  <!-- Injection header / breadcrumb / footer -->
+  
   <script>
   fetch('/src/components/header.html')
     .then(r => r.text())
@@ -215,7 +214,7 @@
     .catch(err => console.error('Newsletter load error:', err));
 </script>
 
-  <!-- Hero particles -->
+  
   <script>
     (function () {
       var c = document.getElementById('acHeroParticles');

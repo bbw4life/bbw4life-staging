@@ -1,7 +1,7 @@
 (function BlogBannerSearch() {
   'use strict';
 
-  /* ── Flatten blog-articles.json en tableau plat pour la recherche ── */
+  
   function flattenArticles(data) {
     var articles = [];
 
@@ -57,12 +57,12 @@
     return articles;
   }
 
-  /* ── Normalise une chaîne ── */
+  
   function normalize(s) {
     return (s || '').toLowerCase().trim();
   }
 
-  /* ── Recherche dans le tableau plat ── */
+  
   function search(articles, q) {
     if (!q || q.length < 2) return [];
     var n = normalize(q);
@@ -75,21 +75,21 @@
     }).slice(0, 7);
   }
 
-  /* ── Surligne le terme recherché ── */
+  
   function highlight(text, q) {
     if (!q || !text) return text || '';
     var esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     return text.replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
   }
 
-  /* ── Récupère la position absolue d'un élément ── */
+  
   function getAbsTop(el) {
     var top = 0, node = el;
     while (node) { top += node.offsetTop || 0; node = node.offsetParent; }
     return top;
   }
 
-  /* ── Scroll vers l'article et highlight temporaire ── */
+  
   function scrollToArticle(article) {
     var el = document.querySelector(article.selector);
     if (!el) return;
@@ -101,7 +101,7 @@
     setTimeout(function () { el.classList.remove('bsearch-highlight'); }, 2400);
   }
 
-  /* ── Initialisation ── */
+  
   function init(articles) {
 
     var input = document.getElementById('blog-search-input');
@@ -109,7 +109,7 @@
 
     var wrapper = input.closest('.blog-search');
 
-    /* Créer le dropdown et l'ajouter au body */
+    
     var drop = document.createElement('div');
     drop.className = 'bsearch-drop';
     document.body.appendChild(drop);
@@ -118,7 +118,7 @@
     var current   = [];
     var closeT    = null;
 
-    /* ── Positionne le dropdown sous l'input ── */
+    
     function positionDrop() {
       var rect      = input.getBoundingClientRect();
       drop.style.top   = (rect.bottom + window.scrollY + 6) + 'px';
@@ -126,7 +126,7 @@
       drop.style.width = rect.width + 'px';
     }
 
-    /* ── Rendu du dropdown ── */
+    
     function render(results, q) {
       drop.innerHTML = '';
 
@@ -141,7 +141,7 @@
         var item = document.createElement('div');
         item.className = 'bsearch-item';
 
-        /* Métadonnées (auteur, vues, date) */
+        
         var meta = [];
         if (a.author) meta.push('<span class="bsearch-meta-author"><i class="fi fi-rr-user"></i> ' + a.author + '</span>');
         if (a.views)  meta.push('<span class="bsearch-meta-views"><i class="fi fi-rr-eye"></i> ' + a.views + '</span>');
@@ -158,7 +158,7 @@
             '<button class="bsearch-btn-read" title="Lire l\'article">Lire →</button>' +
           '</div>';
 
-        /* Clic sur "Voir" */
+        
         item.querySelector('.bsearch-btn-show').addEventListener('mousedown', function (e) {
           e.preventDefault();
           close();
@@ -166,13 +166,13 @@
           scrollToArticle(a);
         });
 
-        /* Clic sur "Lire" */
+        
         item.querySelector('.bsearch-btn-read').addEventListener('mousedown', function (e) {
           e.preventDefault();
           window.location.href = a.url;
         });
 
-        /* Clic sur la ligne entière */
+        
         item.addEventListener('mousedown', function (e) {
           if (e.target.tagName === 'BUTTON') return;
           e.preventDefault();
@@ -188,7 +188,7 @@
     function open()  { positionDrop(); drop.classList.add('open'); }
     function close() { drop.classList.remove('open'); activeIdx = -1; }
 
-    /* ── Navigation clavier ── */
+    
     function setActive(idx) {
       var items = drop.querySelectorAll('.bsearch-item');
       items.forEach(function (el, i) {
@@ -197,7 +197,7 @@
       activeIdx = idx;
     }
 
-    /* ── Lancer la recherche ── */
+    
     function doSearch() {
       var q = input.value.trim();
       if (q.length < 2) { close(); return; }
@@ -207,7 +207,7 @@
       activeIdx = -1;
     }
 
-    /* ── Action sur Entrée ou clic icône ── */
+    
     function doAction() {
       var art = (activeIdx >= 0 && current[activeIdx]) ? current[activeIdx] : current[0];
       if (!art) return;
@@ -216,7 +216,7 @@
       scrollToArticle(art);
     }
 
-    /* ── Événements ── */
+    
     input.addEventListener('input', doSearch);
 
     input.addEventListener('keydown', function (e) {
@@ -227,14 +227,14 @@
       else if (e.key === 'Escape')    { close(); input.blur(); }
     });
 
-    /* Icône recherche cliquable */
+    
     var icon = wrapper ? wrapper.querySelector('.search-icon-inner') : null;
     if (icon) {
       icon.style.cursor = 'pointer';
       icon.addEventListener('click', doAction);
     }
 
-    /* Bouton "Search" cliquable */
+    
     var searchBtn = wrapper ? wrapper.querySelector('.search-btn') : null;
     if (searchBtn) {
       searchBtn.addEventListener('click', function (e) {
@@ -261,7 +261,7 @@
     });
   }
 
-  /* ── Chargement du JSON ── */
+  
   function load() {
     fetch('/blog/blog-articles.json')
       .then(function (r) { return r.json(); })

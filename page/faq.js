@@ -80,7 +80,7 @@
     { text: "I'm a journalist or media professional. How do I reach BBW4LIFE?", cat: "support", catLabel: "Support", keywords: ["press", "media", "journalist", "interview", "article", "publication"] },
   ];
 
-  /* Icônes catégories */
+  
   const CAT_ICONS = {
     movement:  'fi fi-rr-heart',
     products:  'fi fi-rr-shopping-bag',
@@ -256,7 +256,7 @@
     });
   }
 
-  /* ── RENDER SUGGESTIONS ── */
+  
   function renderSuggestions(query) {
     const suggestBox = document.getElementById('faqSuggestions');
     if (!suggestBox) return;
@@ -343,13 +343,13 @@
     if (suggestBox) suggestBox.classList.remove('visible');
   }
 
-  /* ── Highlight le query dans le texte de suggestion ── */
+  
   function highlightSuggestion(text, query) {
     const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
     return text.replace(regex, '<mark>$1</mark>');
   }
 
-  /* ── Naviguer vers une question spécifique ── */
+  
   function navigateToQuestion(questionText, cat) {
     // 1. Afficher tous les groupes si besoin
     const groups = document.querySelectorAll('.faq-group');
@@ -506,7 +506,7 @@
     updateNoResults();
   }
 
-  /* ── Highlight match in question text ── */
+  
   function highlightText(item, query) {
     const btn = item.querySelector('.faq-question span:first-child');
     if (!btn) return;
