@@ -8089,15 +8089,15 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.updatePassword = async () => {
-    const email = document.getElementById('security-email').value.trim();
     const email = localStorage.getItem('userEmail');
+    const token = localStorage.getItem('userAccountToken');
     const newPassword = document.getElementById('new-password').value.trim();
     if (!email || !newPassword) return showToast("Email and new password are required");
     try {
       const res = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update-password', email, newPassword })
+        body: JSON.stringify({ action: 'update-password', email, newPassword, token })
       });
       const data = await res.json();
       if (data.success) {
