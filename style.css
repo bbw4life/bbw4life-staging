@@ -3597,43 +3597,80 @@ body {
     bottom: 9%;
   }
 }
- 
+
+
 
 
 
 /* ================================================================
-   BBW4LIFE — IMAGE LOADER SPINNER (texte en cercle)
+   BBW4LIFE — IMAGE LOADER PRELOADER v3
 ================================================================ */
-.bbw-img-loader {
+
+.bbw-il-container {
   position: absolute;
   inset: 0;
+  z-index: 25;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 8;
-  pointer-events: none;
   background: linear-gradient(135deg,
     rgba(255,253,250,0.97) 0%,
     rgba(250,247,242,0.98) 50%,
     rgba(255,252,248,0.97) 100%);
   border-radius: inherit;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition: opacity 0.42s ease, visibility 0.42s ease;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-.bbw-img-loader--hidden {
+.bbw-il-container.bbw-il--hidden {
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 }
 
-.bbw-img-loader__circle {
+/* col-card : couvre toute la zone media */
+.bbw-il-col-card {
+  border-radius: 0;
+  z-index: 25;
+}
+
+/* ── Wrapper centré ── */
+.bbw-il-wrap {
   position: relative;
-  width: 140px;
-  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
 
+/* ── Double ring (comme le premier CSS) ── */
+.bbw-il-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(228,183,34,0.90);
+  border-right-color: rgba(255,215,80,0.50);
+  animation: bbwIlRing 1.6s linear infinite;
+}
 
-.bbw-img-loader__circle::before {
+.bbw-il-ring--outer {
+  inset: -6px;
+  border-width: 1.5px;
+  border-top-color: rgba(180,140,20,0.40);
+  border-left-color: rgba(228,183,34,0.25);
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  animation: bbwIlRing 2.4s linear infinite reverse;
+}
+
+@keyframes bbwIlRing {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Centre glow ── */
+.bbw-il-wrap::before {
   content: '';
   position: absolute;
   inset: 16px;
@@ -3648,50 +3685,46 @@ body {
     inset 0 0 18px rgba(200,180,140,0.15);
 }
 
-
-.bbw-img-loader__ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: rgba(228,183,34,0.90);
-  border-right-color: rgba(255,215,80,0.50);
-  animation: bbwLoaderRing 1.6s linear infinite;
-}
-
-.bbw-img-loader__ring--outer {
-  inset: -6px;
-  border-width: 1.5px;
-  border-top-color: rgba(180,140,20,0.40);
-  border-left-color: rgba(228,183,34,0.25);
-  animation: bbwLoaderRing 2.4s linear infinite reverse;
-}
-
-
-.bbw-img-loader__svg {
+/* ── SVG texte rotatif ── */
+.bbw-il-ring-svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  animation: bbwLoaderText 8s linear infinite;
+  animation: bbwIlRotate 8s linear infinite;
+  overflow: visible;
 }
 
-.bbw-img-loader__svg textPath {
+@keyframes bbwIlRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Lettres ── */
+.bbw-il-char {
   font-family: 'Cormorant Garamond', 'Georgia', serif;
-  font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
-  fill: url(#bbwLoaderGrad);
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
+/* ── Centre ── */
+.bbw-il-center {
+  position: relative;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%,
+    rgba(248,236,180,0.55) 0%,
+    rgba(201,150,62,0.15) 55%,
+    transparent 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-.bbw-img-loader__dot {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
+/* ── Point central pulsant ── */
+.bbw-il-dot {
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%,
     #ffffff 0%,
@@ -3700,152 +3733,67 @@ body {
   box-shadow:
     0 0 14px rgba(228,183,34,0.85),
     0 0 4px  rgba(255,255,255,0.6);
-  animation: bbwLoaderDot 1.6s ease-in-out infinite;
+  animation: bbwIlPulse 1.6s ease-in-out infinite;
 }
 
-
-@keyframes bbwLoaderRing {
-  to { transform: rotate(360deg); }
-}
-@keyframes bbwLoaderText {
-  to { transform: rotate(360deg); }
-}
-@keyframes bbwLoaderDot {
-  0%, 100% { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
-  50%       { transform: translate(-50%, -50%) scale(1.5); opacity: 0.75; }
-}
-
-
-#main-image-slider .main-image .bbw-img-loader .bbw-img-loader__circle {
-  width: 180px;
-  height: 180px;
-}
-#main-image-slider .main-image .bbw-img-loader .bbw-img-loader__svg textPath {
-  font-size: 13px;
-}
-
-.cart-item-img-wrap .bbw-img-loader .bbw-img-loader__circle,
-.cp-item-img-wrap   .bbw-img-loader .bbw-img-loader__circle {
-  width: 80px;
-  height: 80px;
-}
-.cart-item-img-wrap .bbw-img-loader .bbw-img-loader__svg textPath,
-.cp-item-img-wrap   .bbw-img-loader .bbw-img-loader__svg textPath {
-  font-size: 8.5px;
-  letter-spacing: 1px;
-}
-
-.drawer-extra-card__img-wrap .bbw-img-loader .bbw-img-loader__circle,
-.cp-extra-card__img-wrap     .bbw-img-loader .bbw-img-loader__circle {
-  width: 90px;
-  height: 90px;
-}
-
-.bbwpg-card__img-wrap .bbw-img-loader .bbw-img-loader__circle,
-.rv-card__img-wrap    .bbw-img-loader .bbw-img-loader__circle,
-.fs-img-frame         .bbw-img-loader .bbw-img-loader__circle {
-  width: 120px;
-  height: 120px;
-}
-
-.cs-media .bbw-img-loader .bbw-img-loader__circle {
-  width: 110px;
-  height: 110px;
-}
-
-.mini-media-slider .bbw-img-loader .bbw-img-loader__circle {
-  width: 100px;
-  height: 100px;
-}
-
-.col-rv-card .bbw-img-loader .bbw-img-loader__circle,
-.col-fbt-card .bbw-img-loader .bbw-img-loader__circle {
-  width: 90px;
-  height: 90px;
-}
-
-.highlight-product-card .bbw-img-loader .bbw-img-loader__circle {
-  width: 110px;
-  height: 110px;
-}
-
-.product-card .bbw-img-loader .bbw-img-loader__circle {
-  width: 120px;
-  height: 120px;
-}
-
-@media (max-width: 768px) {
-  .bbw-img-loader__circle {
-    width: 100px !important;
-    height: 100px !important;
+@keyframes bbwIlPulse {
+  0%, 100% {
+    transform: translate(0,0) scale(1);
+    opacity: 1;
   }
-  .bbw-img-loader__svg textPath {
-    font-size: 9.5px !important;
-  }
-  #main-image-slider .main-image .bbw-img-loader .bbw-img-loader__circle {
-    width: 130px !important;
-    height: 130px !important;
+  50% {
+    transform: translate(0,0) scale(1.5);
+    opacity: 0.75;
   }
 }
 
-
-.bd-product-item {
-  position: relative;
-}
-
-.bd-product-item .bbw-img-loader .bbw-img-loader__circle {
-  width: 110px;
-  height: 110px;
-}
-
-.bd-product-item .bbw-img-loader .bbw-img-loader__svg textPath {
-  font-size: 10px;
-}
-
-
-/* ── STORY CIRCLES — image loader spinner ── */
+/* ── Story circles ── */
 .story-circle-ring {
   position: relative;
+  overflow: hidden;
 }
 
-.story-circle-ring .bbw-img-loader {
+.story-circle-ring .bbw-il-container {
   border-radius: 50%;
 }
 
-.story-circle-ring .bbw-img-loader .bbw-img-loader__circle {
-  width: 45px;
-  height: 45px;
-}
-
-.story-circle-ring .bbw-img-loader .bbw-img-loader__svg textPath {
-  font-size: 5px;
-  letter-spacing: 1px;
-}
-
-.story-circle-ring .bbw-img-loader__dot {
-  width: 4px;
-  height: 4px;
-}
-
-.story-circle-ring .bbw-img-loader__ring {
+.story-circle-ring .bbw-il-ring {
   border-width: 1px;
 }
 
+/* ── Cart / cp items ── */
+.cart-item-img-wrap,
+.cp-item-img-wrap {
+  position: relative;
+}
+
+/* ── Col-card media ── */
+.col-card__media {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Mobile overrides ── */
 @media (max-width: 768px) {
-  .story-circle-ring .bbw-img-loader .bbw-img-loader__circle {
+  .bbw-il-wrap {
+    width: 100px !important;
+    height: 100px !important;
+  }
+  .bbw-il-char {
+    font-size: 9.5px !important;
+  }
+  #main-image-slider .main-image .bbw-il-container .bbw-il-wrap {
+    width: 130px !important;
+    height: 130px !important;
+  }
+  .story-circle-ring .bbw-il-container .bbw-il-wrap {
     width: 35px !important;
     height: 35px !important;
   }
-  .story-circle-ring .bbw-img-loader .bbw-img-loader__svg textPath {
+  .story-circle-ring .bbw-il-char {
     font-size: 4px !important;
   }
 }
-
-.bbw-img-loader[data-disabled="true"],
-body[data-loader-off] .bbw-img-loader {
-  display: none !important;
-}
-
 
 
 /* ================================================================
