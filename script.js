@@ -10034,7 +10034,6 @@ document.addEventListener('DOMContentLoaded', function () {
       <div id="cf-cookie-overlay"></div>
       <div id="cf-cookie-modal">
 
-        
         <div class="cfck-header">
           <div class="cfck-header-left">
             <div class="cfck-icon-wrap">
@@ -10058,14 +10057,12 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         </div>
 
-        
         <div class="cfck-body">
           <p class="cfck-desc">
             BBW4LIFE uses cookies to improve your experience, analyze traffic, and — with your permission — personalize content. Your data is never sold. Read our
             <a href="/policies/privacy.html" class="cfck-link">Privacy Policy</a> for full details.
           </p>
 
-          
           <div class="cfck-panels" id="cfck-panels">
 
             <div class="cfck-panel cfck-panel--required">
@@ -10123,19 +10120,10 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         </div>
 
-        
         <div class="cfck-footer">
           <button class="cfck-btn cfck-btn--ghost" id="cfck-reject">Reject all</button>
           <button class="cfck-btn cfck-btn--outline" id="cfck-save">Save preferences</button>
           <button class="cfck-btn cfck-btn--primary" id="cfck-accept">Accept all</button>
-        </div>
-
-        
-        <div class="cfck-confirm" id="cfck-confirm" aria-live="polite">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <span id="cfck-confirm-text">Preferences saved!</span>
         </div>
 
       </div>
@@ -10143,28 +10131,11 @@ document.addEventListener('DOMContentLoaded', function () {
     return el;
   }
 
-  /* ── Show confirmation then close ── */
-  function showConfirmAndClose(msg) {
-    const confirm = document.getElementById('cfck-confirm');
-    const confirmText = document.getElementById('cfck-confirm-text');
-    if (confirm && confirmText) {
-      confirmText.textContent = msg;
-      confirm.classList.add('cfck-confirm--visible');
-      setTimeout(() => {
-        closePopup();
-      }, 1400);
-    }
-  }
-
-  /* ── Close popup ── */
+  /* ── Close popup — instant, no waiting ── */
   function closePopup() {
     const popup = document.getElementById('cf-cookie-popup');
-    if (popup) {
-      popup.classList.add('cfck-hiding');
-      setTimeout(() => {
-        if (popup.parentNode) popup.parentNode.removeChild(popup);
-      }, 400);
-    }
+    if (!popup) return;
+    if (popup.parentNode) popup.parentNode.removeChild(popup);
   }
 
   /* ── Init ── */
@@ -10181,47 +10152,39 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    /* Close X */
+    /* Close X — instant */
     document.getElementById('cfck-close-x').addEventListener('click', () => {
       saveConsent({ analytics: false, marketing: false });
-      showConfirmAndClose('Preferences saved!');
+      closePopup();
     });
 
-    /* Overlay click → reject */
+    /* Overlay click → reject — instant */
     document.getElementById('cf-cookie-overlay').addEventListener('click', () => {
       saveConsent({ analytics: false, marketing: false });
       closePopup();
     });
 
-    /* Reject all */
+    /* Reject all — instant */
     document.getElementById('cfck-reject').addEventListener('click', () => {
-      const analyticsEl = document.getElementById('cfck-analytics');
-      const marketingEl = document.getElementById('cfck-marketing');
-      if (analyticsEl) analyticsEl.checked = false;
-      if (marketingEl) marketingEl.checked = false;
       saveConsent({ analytics: false, marketing: false });
-      showConfirmAndClose('All optional cookies rejected.');
+      closePopup();
     });
 
-    /* Save preferences */
+    /* Save preferences — instant */
     document.getElementById('cfck-save').addEventListener('click', () => {
       const analytics = document.getElementById('cfck-analytics')?.checked ?? true;
       const marketing = document.getElementById('cfck-marketing')?.checked ?? false;
       saveConsent({ analytics, marketing });
-      showConfirmAndClose('Your preferences have been saved!');
+      closePopup();
     });
 
-    /* Accept all */
+    /* Accept all — instant */
     document.getElementById('cfck-accept').addEventListener('click', () => {
-      const analyticsEl = document.getElementById('cfck-analytics');
-      const marketingEl = document.getElementById('cfck-marketing');
-      if (analyticsEl) analyticsEl.checked = true;
-      if (marketingEl) marketingEl.checked = true;
       saveConsent({ analytics: true, marketing: true });
-      showConfirmAndClose('All cookies accepted. Thank you! 🎉');
+      closePopup();
     });
 
-    /* Escape key */
+    /* Escape key — instant */
     document.addEventListener('keydown', function onEsc(e) {
       if (e.key === 'Escape') {
         saveConsent({ analytics: false, marketing: false });
@@ -12404,14 +12367,8 @@ function injectColFbt() {
   } else {
     setTimeout(runAll, 400);
   }
-
-  /* Observer les mutations DOM */
-  var observer = new MutationObserver(function(mutations) {
-    var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-    if (relevant) runAll();
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
+  setTimeout(runAll, 1500);
+  setTimeout(runAll, 4000);
 
   /* Events système */
   document.addEventListener('cart:update',     runAll);
