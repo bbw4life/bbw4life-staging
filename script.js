@@ -12580,7 +12580,7 @@ function injectColFbt() {
 
 
 /* ================================================================
-   BBW4LIFE — IMAGE LOADER (Preload Spinner) v3
+   BBW4LIFE — IMAGE LOADER (Preload Spinner) v4 — sans MutationObserver
 ================================================================ */
 (function initImageLoader() {
   'use strict';
@@ -12830,45 +12830,22 @@ function injectColFbt() {
       });
     }
 
-    /* ── Première injection ── */
+    /* ── Première injection (chargement initial du DOM statique) ── */
     injectAll();
 
-    /* ── Guard anti-boucle ── */
-    var isInjecting = false;
+    /* ── Deuxième passe différée : rattrape les cards injectées
+       dynamiquement après le fetch de products.data.json
+       (collection slider, recently viewed, bundle deal, story circles,
+       mini product slider, featured spotlight, etc.) ── */
+    setTimeout(injectAll, 1500);
 
-    var observer = new MutationObserver(function(mutations) {
-      var relevant = mutations.some(function(m) {
-        return Array.from(m.addedNodes).some(function(node) {
-          return node.nodeType === 1 &&
-                 !node.classList.contains('bbw-il-container') &&
-                 !node.classList.contains('bbw-il-wrap') &&
-                 !node.classList.contains('bbw-il-ring') &&
-                 !node.classList.contains('bbw-il--hidden');
-        });
-      });
-      if (!relevant || isInjecting) return;
-      isInjecting = true;
-      setTimeout(function() {
-        injectAll();
-        isInjecting = false;
-      }, 120);
-    });
+    /* ── Troisième passe de sécurité, plus tardive, pour les sections
+       qui se construisent encore plus tard (ex: lazy sections) ── */
+    setTimeout(injectAll, 4000);
 
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    document.addEventListener('cart:update', function() {
-      if (isInjecting) return;
-      isInjecting = true;
-      injectAll();
-      isInjecting = false;
-    });
-
-    document.addEventListener('wishlist:change', function() {
-      if (isInjecting) return;
-      isInjecting = true;
-      injectAll();
-      isInjecting = false;
-    });
+    /* ── Mises à jour dynamiques ciblées : panier et wishlist ── */
+    document.addEventListener('cart:update',     injectAll);
+    document.addEventListener('wishlist:change', injectAll);
   }
 
   if (window.__allProducts && window.__allProducts.length) {
