@@ -1,5 +1,6 @@
 // netlify/functions/save-account.js
 const { google } = require('googleapis');
+const { verifyAccountToken } = require('./account-token');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -11,7 +12,27 @@ exports.handler = async (event) => {
     const { action = 'signup', lastName, firstName, email, phone = "", password, newsletter = "No", birthday = "",
             line1, line2, city, state, zip, newPassword,
             totalAmount = 0, totalQuantity = 0, orderItems = [],
-            currentCartQuantity = null } = body;
+            currentCartQuantity = null, token } = body;
+
+    // ── Actions sensibles : nécessitent un token valide lié à l'email ──
+    const PROTECTED_ACTIONS = [
+      'get-stats',
+      'update-address',
+      'update-profile-photo',
+      'update-password',
+      'aff-get-stats',
+      'aff-create',
+      'aff-withdraw-request'
+    ];
+
+    if (PROTECTED_ACTIONS.includes(action)) {
+      if (!verifyAccountToken(email, token)) {
+        return {
+          statusCode: 401,
+          body: JSON.stringify({ success: false, error: 'Unauthorized' })
+        };
+      }
+    }
 
     const normalize = (str) => str ? str.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase() : "";
     const auth = new google.auth.GoogleAuth({
