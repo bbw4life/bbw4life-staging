@@ -7899,6 +7899,20 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('userProfilePhoto', data.profilePhoto);
         loadProfilePhoto();
       }
+
+      if (data.addressLine1 !== undefined) localStorage.setItem('userAddressLine1', data.addressLine1 || '');
+      if (data.line2  !== undefined) localStorage.setItem('userLine2',  data.line2  || '');
+      if (data.city   !== undefined) localStorage.setItem('userCity',   data.city   || '');
+      if (data.state  !== undefined) localStorage.setItem('userState',  data.state  || '');
+      if (data.zip    !== undefined) localStorage.setItem('userZip',    data.zip    || '');
+
+      const addressStr2 = [data.addressLine1, data.line2, data.city, data.state, data.zip].filter(Boolean).join(', ');
+      if (addressStr2) {
+        localStorage.setItem('userAddress', addressStr2);
+        const addrEl = document.getElementById('user-address');
+        if (addrEl) addrEl.textContent = addressStr2;
+      }
+
       console.log(`✅ Stats loaded - Reviews Written = ${data.reviewsCount}`);
 
       const statValues = document.querySelectorAll('.membership-stats-grid .stat-value');
