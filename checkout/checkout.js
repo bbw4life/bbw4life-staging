@@ -125,57 +125,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
     // ====================== ACCOUNT PRE-FILL ======================
-        function prefillFromAccount() {
-            if (localStorage.getItem('isLoggedIn') !== 'true') return;
-
-            const fields = {
-                'first-name':   localStorage.getItem('userFirstName')    || '',
-                'last-name':    localStorage.getItem('userLastName')      || '',
-                'email':        localStorage.getItem('userEmail')         || '',
-                'address':      localStorage.getItem('userAddressLine1')  || '',
-                'address2':     localStorage.getItem('userLine2')         || '',
-                'address-line2':localStorage.getItem('userLine2')         || '',
-                'addr-line2':   localStorage.getItem('userLine2')         || '',
-                'city':         localStorage.getItem('userCity')          || '',
-                'state':        localStorage.getItem('userState')         || '',
-                'postal-code':  localStorage.getItem('userZip')           || '',
-            };
-
-            Object.entries(fields).forEach(([id, value]) => {
-                if (!value) return;
-                const el = document.getElementById(id);
-                if (el) el.value = value;
-            });
-
-            // ── Pré-sélectionner le pays et charger les villes ──
-            const savedCountry = localStorage.getItem('userCountry') || '';
-            const savedCity    = localStorage.getItem('userCity')    || '';
-
-            if (savedCountry) {
-                console.log('[Prefill] Country found:', savedCountry);
-                // Attendre que les pays soient chargés
-                const trySelectCountry = setInterval(() => {
-                    const countryList = document.getElementById('country-list');
-                    if (!countryList) return;
-                    const items = countryList.querySelectorAll('li[data-label]');
-                    if (!items.length) return;
-
-                    clearInterval(trySelectCountry);
-
-                    const match = Array.from(items).find(
-                        li => li.dataset.label === savedCountry
-                    );
-                    if (match) {
-                        match.click(); // déclenche la sélection + chargement des villes
-                    }
-                }, 200);
-            }
-        }
-
-        // Appeler après le fetch des produits ET après le DOM
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(prefillFromAccount, 800);
-        });
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        const setField = (id, value) => {
+            const el = document.getElementById(id);
+            if (el && value) el.value = value;
+        };
+        setField('first-name',   localStorage.getItem('userFirstName')    || '');
+        setField('last-name',    localStorage.getItem('userLastName')     || '');
+        setField('email',        localStorage.getItem('userEmail')        || '');
+        setField('address',      localStorage.getItem('userAddressLine1') || '');
+        setField('city',         localStorage.getItem('userCity')         || '');
+        setField('state',        localStorage.getItem('userState')        || '');
+        setField('postal-code',  localStorage.getItem('userZip')          || '');
+        const line2 = localStorage.getItem('userLine2') || '';
+        setField('address2',      line2);
+        setField('address-line2', line2);
+        setField('addr-line2',    line2);
+    }
 
     // ====================== RENDER CART ======================
     function renderCart() {
