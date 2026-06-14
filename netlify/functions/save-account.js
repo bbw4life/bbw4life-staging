@@ -175,14 +175,19 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         body: JSON.stringify({
-          orders: parseInt(currentRow[6] || 0),
-          totalSpent: parseFloat(currentRow[7] || 0),
+          orders:         parseInt(currentRow[6]  || 0),
+          totalSpent:     parseFloat(currentRow[7] || 0),
           quantityInCart: parseInt(currentRow[14] || 0),
-          history: history,
-          memberSince: currentRow[15] || "January 2026",
-          points: parseInt(currentRow[6] || 0) * 10,
-          reviewsCount: parseInt(currentRow[8] || 0),
-          profilePhoto: currentRow[17] || ""
+          history:        history,
+          memberSince:    currentRow[15] || "January 2026",
+          points:         parseInt(currentRow[6]  || 0) * 10,
+          reviewsCount:   parseInt(currentRow[8]  || 0),
+          profilePhoto:   currentRow[17] || "",
+          addressLine1:   currentRow[9]  || "",
+          line2:          currentRow[10] || "",
+          city:           currentRow[11] || "",
+          state:          currentRow[12] || "",
+          zip:            currentRow[13] || ""
         })
       };
     }

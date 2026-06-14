@@ -7647,6 +7647,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('addr-state').value = localStorage.getItem('userState') || '';
       document.getElementById('addr-zip').value   = localStorage.getItem('userZip') || '';
     }
+
+    if (id === 'password-popup') {
+    const secEmail = document.getElementById('security-email');
+    if (secEmail) secEmail.value = localStorage.getItem('userEmail') || '';
+  }
   };
   window.closeAccountPopup = (id) => { const popup = document.getElementById(id); if (popup) popup.classList.remove('open'); };
 
@@ -8077,6 +8082,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('userAddress', addressStr || 'No default address set');
+        localStorage.setItem('userAddressLine1', line1);
+        localStorage.setItem('userLine2',        line2);
+        localStorage.setItem('userCity',         city);
+        localStorage.setItem('userState',        state);
+        localStorage.setItem('userZip',          zip);
         document.getElementById('user-address').textContent = addressStr || 'No default address set';
         showToast("Address saved successfully!");
         closeAccountPopup('address-popup');
