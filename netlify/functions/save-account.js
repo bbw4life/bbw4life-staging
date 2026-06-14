@@ -1,6 +1,6 @@
 // netlify/functions/save-account.js
 const { google } = require('googleapis');
-const { verifyAccountToken } = require('./utils/account-token');
+const { verifyAccountToken } = require('./account-token');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {

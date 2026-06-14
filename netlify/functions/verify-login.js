@@ -1,5 +1,5 @@
 const { google } = require("googleapis");
-const { generateAccountToken } = require("./utils/account-token");
+const { generateAccountToken } = require('./account-token');;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
