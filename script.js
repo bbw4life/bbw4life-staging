@@ -8221,6 +8221,9 @@ function loadProfilePhoto() {
 
   if (!createBtn) return;
 
+  const pathname = window.location.pathname.toLowerCase();
+  if (!/account/.test(pathname)) return;
+
   const userEmail = localStorage.getItem('userEmail') || '';
   if (!userEmail) return;
 
@@ -8717,7 +8720,8 @@ function loadProfilePhoto() {
   }
 
 setTimeout(syncFromSheet, 5000);
-setInterval(syncFromSheet, 60000);
+if (window.__affSyncInterval) clearInterval(window.__affSyncInterval);
+window.__affSyncInterval = setInterval(syncFromSheet, 60000);
 
 })();
 });
