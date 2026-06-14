@@ -7809,7 +7809,6 @@ document.addEventListener('DOMContentLoaded', () => {
           loginBtn.textContent = "Your account Loading...";
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('userEmail', email);
-          localStorage.setItem('userAccountToken', data.token);
           localStorage.setItem('userFirstName', data.user.firstName);
           localStorage.setItem('userLastName',  data.user.lastName);
           localStorage.setItem('userAddressLine1', data.user.addressLine1 || '');
@@ -7869,13 +7868,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadAccountStats() {
     const email = localStorage.getItem('userEmail');
-    const token = localStorage.getItem('userAccountToken');
     if (!email) return;
     try {
       const res = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'get-stats', email, token })
+        body: JSON.stringify({ action: 'get-stats', email })
       });
       const data = await res.json();
 
@@ -8061,7 +8059,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.saveAddress = async () => {
     const email = localStorage.getItem('userEmail');
-    const token = localStorage.getItem('userAccountToken');
     const line1 = document.getElementById('addr-line1').value.trim();
     const line2 = document.getElementById('addr-line2').value.trim();
     const city = document.getElementById('addr-city').value.trim();
@@ -8089,15 +8086,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.updatePassword = async () => {
-    const email = localStorage.getItem('userEmail');
-    const token = localStorage.getItem('userAccountToken');
+    const email = document.getElementById('security-email').value.trim();
     const newPassword = document.getElementById('new-password').value.trim();
     if (!email || !newPassword) return showToast("Email and new password are required");
     try {
       const res = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update-password', email, newPassword, token })
+        body: JSON.stringify({ action: 'update-password', email, newPassword })
       });
       const data = await res.json();
       if (data.success) {
@@ -8178,7 +8174,7 @@ function loadProfilePhoto() {
       await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'update-profile-photo', email, photoBase64: base64, token: localStorage.getItem('userAccountToken') })
+        body: JSON.stringify({ action: 'update-profile-photo', email, photoBase64: base64 })
       });
       window.showToast && window.showToast('Profile photo updated!');
     } catch (e) {
@@ -8220,9 +8216,6 @@ function loadProfilePhoto() {
   const statusMsg      = document.getElementById('aff-status-msg');
 
   if (!createBtn) return;
-
-  const pathname = window.location.pathname.toLowerCase();
-  if (!/account/.test(pathname)) return;
 
   const userEmail = localStorage.getItem('userEmail') || '';
   if (!userEmail) return;
@@ -8591,7 +8584,7 @@ function loadProfilePhoto() {
           await fetch('/.netlify/functions/save-account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet, token: localStorage.getItem('userAccountToken') })
+            body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet })
           });
         } catch(e) { console.warn('[Affiliation] save failed:', e.message); }
       }
@@ -8633,7 +8626,7 @@ function loadProfilePhoto() {
         const res  = await fetch('/.netlify/functions/save-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail, token: localStorage.getItem('userAccountToken') })
+          body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail })
         });
         const data = await res.json();
 
@@ -8680,12 +8673,11 @@ function loadProfilePhoto() {
   // ── Sync depuis le sheet au chargement ──
   async function syncFromSheet() {
     if (!userEmail) return;
-    const token = localStorage.getItem('userAccountToken');
     try {
       const res  = await fetch('/.netlify/functions/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail, token })
+        body: JSON.stringify({ action: 'aff-get-stats', email: userEmail })
       });
       const data = await res.json();
       if (data.success && data.affiliates && data.affiliates.length) {
@@ -8720,8 +8712,6 @@ function loadProfilePhoto() {
   }
 
 setTimeout(syncFromSheet, 5000);
-if (window.__affSyncInterval) clearInterval(window.__affSyncInterval);
-window.__affSyncInterval = setInterval(syncFromSheet, 60000);
 
 })();
 });
