@@ -26,15 +26,16 @@ function isRateLimited(ip) {
   return false;
 }
 
-async function getSettings() {
+// ── MODIFICATION : retourne tout le tableau au lieu de juste settings ──
+async function getAllProductsData() {
   try {
     const BASE_URL = process.env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
-    if (!res.ok) throw new Error('Failed');
+    if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
-    return data.find(p => p.type === 'settings') || {};
+    return Array.isArray(data) ? data : [];
   } catch {
-    return {};
+    return [];
   }
 }
 
@@ -71,7 +72,8 @@ function validateCart(cart) {
   return errors;
 }
 
-function computeServerTotal(cart, settings, shippingMethod) {
+// ── MODIFICATION : relit les vrais prix depuis products.data.json ──
+function computeServerTotal(cart, settings, allProducts, shippingMethod) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
   const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.00;
@@ -80,17 +82,32 @@ function computeServerTotal(cart, settings, shippingMethod) {
   const buyQty = parseInt(cd.promo_buy_quantity) || 0;
   const getQty = parseInt(cd.promo_get_quantity)  || 0;
 
+  // Produits réels uniquement (exclut le nœud settings)
+  const realProducts = allProducts.filter(p => !p.type);
+
   const paidQty = cart
     .filter(i => !i.isFreePromo)
     .reduce((s, i) => s + (parseInt(i.quantity) || 0), 0);
 
   const sanitized = cart.map(item => {
+    // ── Produit gratuit promo ──
     if (item.isFreePromo && buyQty && getQty && paidQty >= buyQty) {
       return { ...item, price: 0 };
     }
     if (item.isFreePromo && (!buyQty || paidQty < buyQty)) {
       return { ...item, isFreePromo: false };
     }
+
+    // ── Relit le vrai prix depuis products.data.json ──
+    const prod = realProducts.find(p => p.id === item.id);
+    if (prod) {
+      const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
+      const trustedPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
+      // Si le prix trouvé est valide, on l'impose — sinon fallback prix client
+      return { ...item, price: isNaN(trustedPrice) ? parseFloat(item.price) : trustedPrice };
+    }
+
+    // ── Produit non trouvé dans le catalogue → garde le prix client ──
     return item;
   });
 
@@ -149,10 +166,14 @@ exports.handler = async (event) => {
         return res(400, { success: false, errors: allErrors });
       }
 
-      const settings = await getSettings();
+      // ── Charge tout products.data.json ──
+      const allProducts = await getAllProductsData();
+      const settings    = allProducts.find(p => p.type === 'settings') || {};
+
       const { subtotal, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
         cart,
         settings,
+        allProducts,
         shippingMethod || 'Standard Shipping'
       );
 
@@ -186,18 +207,25 @@ exports.handler = async (event) => {
       if (!cart || !cartToken || clientTotal === undefined) {
         return res(400, { success: false, error: 'Missing data for token verification' });
       }
-      const settings = await getSettings();
-      const { total, sanitizedCart } = computeServerTotal(cart, settings, shippingMethod || 'Standard Shipping');
+
+      // ── Charge tout products.data.json ──
+      const allProducts = await getAllProductsData();
+      const settings    = allProducts.find(p => p.type === 'settings') || {};
+
+      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping');
+
       let valid = false;
       try {
         valid = verifyCartToken(sanitizedCart, total, cartToken, process.env.CHECKOUT_SECRET);
       } catch {
         valid = false;
       }
+
       if (!valid) {
         console.warn(`[CHECKOUT SECURITY] Invalid cart token — IP: ${ip}`);
         return res(400, { success: false, error: 'Cart integrity check failed. Please refresh and try again.' });
       }
+
       return res(200, { success: true, total, sanitizedCart });
     }
 

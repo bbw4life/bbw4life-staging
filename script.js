@@ -10034,6 +10034,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div id="cf-cookie-overlay"></div>
       <div id="cf-cookie-modal">
 
+        
         <div class="cfck-header">
           <div class="cfck-header-left">
             <div class="cfck-icon-wrap">
@@ -10057,12 +10058,14 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         </div>
 
+        
         <div class="cfck-body">
           <p class="cfck-desc">
             BBW4LIFE uses cookies to improve your experience, analyze traffic, and — with your permission — personalize content. Your data is never sold. Read our
             <a href="/policies/privacy.html" class="cfck-link">Privacy Policy</a> for full details.
           </p>
 
+          
           <div class="cfck-panels" id="cfck-panels">
 
             <div class="cfck-panel cfck-panel--required">
@@ -10120,10 +10123,19 @@ document.addEventListener('DOMContentLoaded', function () {
           </div>
         </div>
 
+        
         <div class="cfck-footer">
           <button class="cfck-btn cfck-btn--ghost" id="cfck-reject">Reject all</button>
           <button class="cfck-btn cfck-btn--outline" id="cfck-save">Save preferences</button>
           <button class="cfck-btn cfck-btn--primary" id="cfck-accept">Accept all</button>
+        </div>
+
+        
+        <div class="cfck-confirm" id="cfck-confirm" aria-live="polite">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span id="cfck-confirm-text">Preferences saved!</span>
         </div>
 
       </div>
@@ -10131,11 +10143,28 @@ document.addEventListener('DOMContentLoaded', function () {
     return el;
   }
 
-  /* ── Close popup — instant, no waiting ── */
+  /* ── Show confirmation then close ── */
+  function showConfirmAndClose(msg) {
+    const confirm = document.getElementById('cfck-confirm');
+    const confirmText = document.getElementById('cfck-confirm-text');
+    if (confirm && confirmText) {
+      confirmText.textContent = msg;
+      confirm.classList.add('cfck-confirm--visible');
+      setTimeout(() => {
+        closePopup();
+      }, 1400);
+    }
+  }
+
+  /* ── Close popup ── */
   function closePopup() {
     const popup = document.getElementById('cf-cookie-popup');
-    if (!popup) return;
-    if (popup.parentNode) popup.parentNode.removeChild(popup);
+    if (popup) {
+      popup.classList.add('cfck-hiding');
+      setTimeout(() => {
+        if (popup.parentNode) popup.parentNode.removeChild(popup);
+      }, 400);
+    }
   }
 
   /* ── Init ── */
@@ -10152,39 +10181,47 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-    /* Close X — instant */
+    /* Close X */
     document.getElementById('cfck-close-x').addEventListener('click', () => {
       saveConsent({ analytics: false, marketing: false });
-      closePopup();
+      showConfirmAndClose('Preferences saved!');
     });
 
-    /* Overlay click → reject — instant */
+    /* Overlay click → reject */
     document.getElementById('cf-cookie-overlay').addEventListener('click', () => {
       saveConsent({ analytics: false, marketing: false });
       closePopup();
     });
 
-    /* Reject all — instant */
+    /* Reject all */
     document.getElementById('cfck-reject').addEventListener('click', () => {
+      const analyticsEl = document.getElementById('cfck-analytics');
+      const marketingEl = document.getElementById('cfck-marketing');
+      if (analyticsEl) analyticsEl.checked = false;
+      if (marketingEl) marketingEl.checked = false;
       saveConsent({ analytics: false, marketing: false });
-      closePopup();
+      showConfirmAndClose('All optional cookies rejected.');
     });
 
-    /* Save preferences — instant */
+    /* Save preferences */
     document.getElementById('cfck-save').addEventListener('click', () => {
       const analytics = document.getElementById('cfck-analytics')?.checked ?? true;
       const marketing = document.getElementById('cfck-marketing')?.checked ?? false;
       saveConsent({ analytics, marketing });
-      closePopup();
+      showConfirmAndClose('Your preferences have been saved!');
     });
 
-    /* Accept all — instant */
+    /* Accept all */
     document.getElementById('cfck-accept').addEventListener('click', () => {
+      const analyticsEl = document.getElementById('cfck-analytics');
+      const marketingEl = document.getElementById('cfck-marketing');
+      if (analyticsEl) analyticsEl.checked = true;
+      if (marketingEl) marketingEl.checked = true;
       saveConsent({ analytics: true, marketing: true });
-      closePopup();
+      showConfirmAndClose('All cookies accepted. Thank you! 🎉');
     });
 
-    /* Escape key — instant */
+    /* Escape key */
     document.addEventListener('keydown', function onEsc(e) {
       if (e.key === 'Escape') {
         saveConsent({ analytics: false, marketing: false });
@@ -12367,8 +12404,14 @@ function injectColFbt() {
   } else {
     setTimeout(runAll, 400);
   }
-  setTimeout(runAll, 1500);
-  setTimeout(runAll, 4000);
+
+  /* Observer les mutations DOM */
+  var observer = new MutationObserver(function(mutations) {
+    var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+    if (relevant) runAll();
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 
   /* Events système */
   document.addEventListener('cart:update',     runAll);
@@ -12532,292 +12575,3 @@ function injectColFbt() {
 })();
 
 
-
-
-
-
-/* ================================================================
-   BBW4LIFE — IMAGE LOADER (Preload Spinner) v4 — sans MutationObserver
-================================================================ */
-(function initImageLoader() {
-  'use strict';
-
-  function run() {
-    const allProducts = window.__allProducts || [];
-    const settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
-    const cfg         = settings.image_loader || {};
-
-    if ((cfg.show || 'no').toLowerCase().trim() !== 'yes') return;
-
-    const loaderText = cfg.text || 'BBW4LIFE.COM ✦ WAIT TO LOAD ✦ ';
-
-    function makeLoaderHTML(size) {
-      const s        = size || 90;
-      const cx       = s / 2;
-      const cy       = s / 2;
-      const radius   = s / 2 - 10;
-      const chars    = loaderText.split('');
-      const total    = chars.length;
-      const fontSize = Math.max(4, Math.round(s * 0.072));
-
-      const letters = chars.map(function(ch, i) {
-        const angle  = (360 / total) * i - 90;
-        const rad    = angle * (Math.PI / 180);
-        const x      = cx + radius * Math.cos(rad);
-        const y      = cy + radius * Math.sin(rad);
-        const rotate = angle + 90;
-        return (
-          '<text class="bbw-il-char" ' +
-          'font-size="' + fontSize + '" ' +
-          'x="' + x.toFixed(2) + '" ' +
-          'y="' + y.toFixed(2) + '" ' +
-          'transform="rotate(' + rotate.toFixed(2) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ')">' +
-          (ch === ' ' ? '\u00A0' : ch) +
-          '</text>'
-        );
-      }).join('');
-
-      const dotSize   = Math.max(6, Math.round(s * 0.11));
-      const centerBox = Math.round(s * 0.30);
-      const uid       = 'bbwIlGold_' + Math.round(s);
-
-      return (
-        '<div class="bbw-il-wrap" aria-hidden="true" style="width:' + s + 'px;height:' + s + 'px;">' +
-          '<div class="bbw-il-ring"></div>' +
-          '<div class="bbw-il-ring bbw-il-ring--outer"></div>' +
-          '<svg class="bbw-il-ring-svg" viewBox="0 0 ' + s + ' ' + s + '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-            '<defs>' +
-              '<linearGradient id="' + uid + '" x1="0%" y1="0%" x2="100%" y2="100%">' +
-                '<stop offset="0%"   stop-color="#f5e6a3"/>' +
-                '<stop offset="30%"  stop-color="#e8bc6a"/>' +
-                '<stop offset="60%"  stop-color="#c9963e"/>' +
-                '<stop offset="100%" stop-color="#a0722a"/>' +
-              '</linearGradient>' +
-            '</defs>' +
-            '<g class="bbw-il-text-ring" fill="url(#' + uid + ')">' + letters + '</g>' +
-          '</svg>' +
-          '<div class="bbw-il-center" style="width:' + centerBox + 'px;height:' + centerBox + 'px;">' +
-            '<div class="bbw-il-dot" style="width:' + dotSize + 'px;height:' + dotSize + 'px;"></div>' +
-          '</div>' +
-        '</div>'
-      );
-    }
-
-    function attachLoader(wrap, size) {
-      if (!wrap || wrap.querySelector('.bbw-il-container')) return;
-      const pos = getComputedStyle(wrap).position;
-      if (pos === 'static') wrap.style.position = 'relative';
-
-      const loader = document.createElement('div');
-      loader.className = 'bbw-il-container';
-      loader.innerHTML = makeLoaderHTML(size || 90);
-      wrap.appendChild(loader);
-
-      const imgs = wrap.querySelectorAll('img');
-      if (!imgs.length) {
-        setTimeout(function() {
-          loader.classList.add('bbw-il--hidden');
-          setTimeout(function() { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 420);
-        }, 2000);
-        return;
-      }
-
-      let done = 0;
-      const total = imgs.length;
-
-      function checkDone() {
-        done++;
-        if (done >= total) {
-          loader.classList.add('bbw-il--hidden');
-          setTimeout(function() { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 420);
-        }
-      }
-
-      imgs.forEach(function(img) {
-        if (img.complete && img.naturalWidth > 0) {
-          checkDone();
-        } else {
-          img.addEventListener('load',  checkDone, { once: true });
-          img.addEventListener('error', checkDone, { once: true });
-        }
-      });
-    }
-
-    function injectColCard(card) {
-      const media = card.querySelector('.col-card__media');
-      if (!media || media.querySelector('.bbw-il-container')) return;
-
-      if (getComputedStyle(media).position === 'static') {
-        media.style.position = 'relative';
-      }
-
-      const loader = document.createElement('div');
-      loader.className = 'bbw-il-container bbw-il-col-card';
-      loader.innerHTML = makeLoaderHTML(80);
-      media.insertBefore(loader, media.firstChild);
-
-      const imgs = media.querySelectorAll('img');
-      if (!imgs.length) {
-        setTimeout(function() {
-          loader.classList.add('bbw-il--hidden');
-          setTimeout(function() { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 420);
-        }, 2000);
-        return;
-      }
-
-      let done = 0;
-      const total = imgs.length;
-
-      function checkDone() {
-        done++;
-        if (done >= total) {
-          loader.classList.add('bbw-il--hidden');
-          setTimeout(function() { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 420);
-        }
-      }
-
-      imgs.forEach(function(img) {
-        if (img.complete && img.naturalWidth > 0) {
-          checkDone();
-        } else {
-          img.addEventListener('load',  checkDone, { once: true });
-          img.addEventListener('error', checkDone, { once: true });
-        }
-      });
-    }
-
-    function injectAll() {
-
-      /* 1. Page produit — main-image */
-      document.querySelectorAll('#main-image-slider .main-image').forEach(function(w) {
-        attachLoader(w, 180);
-      });
-
-      /* 2. Collections grid */
-      document.querySelectorAll('.col-product-card').forEach(injectColCard);
-
-      /* 3. BBW Product Grid Featured */
-      document.querySelectorAll('.bbwpg-card__img-wrap').forEach(function(w) {
-        attachLoader(w, 120);
-      });
-
-      /* 4. Collection Slider */
-      document.querySelectorAll('.cs-media').forEach(function(w) {
-        attachLoader(w, 110);
-      });
-
-      /* 5. Recently Viewed — rv-card */
-      document.querySelectorAll('.rv-card__img-wrap').forEach(function(w) {
-        attachLoader(w, 120);
-      });
-
-      /* 6. Featured Spotlight */
-      var fsFrame = document.querySelector('.fs-img-frame');
-      if (fsFrame) attachLoader(fsFrame, 120);
-
-      /* 7. Mini product slider */
-      document.querySelectorAll('.mini-media-slider').forEach(function(w) {
-        attachLoader(w, 100);
-      });
-
-      /* 8. Cart drawer items */
-      document.querySelectorAll('.cart-item-img-wrap').forEach(function(w) {
-        attachLoader(w, 80);
-      });
-
-      /* 9. Cart page items */
-      document.querySelectorAll('.cp-item-img-wrap').forEach(function(w) {
-        attachLoader(w, 80);
-      });
-
-      /* 10. Drawer extra + Cart page extra */
-      document.querySelectorAll(
-        '.drawer-extra-card__img-wrap, .cp-extra-card__img-wrap'
-      ).forEach(function(w) {
-        attachLoader(w, 90);
-      });
-
-      /* 11. Highlight product cards */
-      document.querySelectorAll('.highlight-product-card').forEach(function(w) {
-        attachLoader(w, 110);
-      });
-
-      /* 12. Product cards génériques */
-      document.querySelectorAll('.product-card').forEach(function(card) {
-        var img = card.querySelector('img');
-        if (img && img.parentElement && img.parentElement !== card) {
-          attachLoader(img.parentElement, 120);
-        } else {
-          attachLoader(card, 120);
-        }
-      });
-
-      /* 13. Col recently viewed */
-      document.querySelectorAll('.col-rv-card').forEach(function(card) {
-        var img = card.querySelector('.col-rv-card__img');
-        if (img && img.parentElement) attachLoader(img.parentElement, 90);
-        else attachLoader(card, 90);
-      });
-
-      /* 14. Col FBT */
-      document.querySelectorAll('.col-fbt-card').forEach(function(card) {
-        var img = card.querySelector('.col-fbt-card__img');
-        if (img && img.parentElement) attachLoader(img.parentElement, 90);
-        else attachLoader(card, 90);
-      });
-
-      /* 15. Wishlist modal */
-      document.querySelectorAll('.wishlist-item').forEach(function(item) {
-        var img = item.querySelector('img');
-        if (img && img.parentElement) attachLoader(img.parentElement, 64);
-      });
-
-      /* 16. Story circles */
-      document.querySelectorAll('.story-circle-item .story-circle-ring').forEach(function(ring) {
-        attachLoader(ring, 45);
-      });
-
-      /* 17. Brand Discovery product items */
-      document.querySelectorAll('.bd-product-item').forEach(function(item) {
-        var img = item.querySelector('img');
-        if (!img) return;
-        var wrap = img.parentElement;
-        if (!wrap) return;
-        attachLoader(wrap, 110);
-      });
-    }
-
-    /* ── Première injection (chargement initial du DOM statique) ── */
-    injectAll();
-
-    /* ── Deuxième passe différée : rattrape les cards injectées
-       dynamiquement après le fetch de products.data.json
-       (collection slider, recently viewed, bundle deal, story circles,
-       mini product slider, featured spotlight, etc.) ── */
-    setTimeout(injectAll, 1500);
-
-    /* ── Troisième passe de sécurité, plus tardive, pour les sections
-       qui se construisent encore plus tard (ex: lazy sections) ── */
-    setTimeout(injectAll, 4000);
-
-    /* ── Mises à jour dynamiques ciblées : panier et wishlist ── */
-    document.addEventListener('cart:update',     injectAll);
-    document.addEventListener('wishlist:change', injectAll);
-  }
-
-  if (window.__allProducts && window.__allProducts.length) {
-    run();
-  } else {
-    var tries = 0;
-    var wait = setInterval(function() {
-      tries++;
-      if (window.__allProducts && window.__allProducts.length) {
-        clearInterval(wait);
-        run();
-      } else if (tries > 80) {
-        clearInterval(wait);
-      }
-    }, 100);
-  }
-
-})();
