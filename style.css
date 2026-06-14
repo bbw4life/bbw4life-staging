@@ -3629,7 +3629,6 @@ body {
   pointer-events: none;
 }
 
-/* col-card : couvre toute la zone media */
 .bbw-il-col-card {
   border-radius: 0;
   z-index: 25;
@@ -3644,7 +3643,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Double ring (comme le premier CSS) ── */
+/* ── Double ring ── */
 .bbw-il-ring {
   position: absolute;
   inset: 0;
@@ -3669,7 +3668,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* ── Centre glow ── */
+/* ── Glow centre ── */
 .bbw-il-wrap::before {
   content: '';
   position: absolute;
@@ -3738,11 +3737,11 @@ body {
 
 @keyframes bbwIlPulse {
   0%, 100% {
-    transform: translate(0,0) scale(1);
+    transform: scale(1);
     opacity: 1;
   }
   50% {
-    transform: translate(0,0) scale(1.5);
+    transform: scale(1.5);
     opacity: 0.75;
   }
 }

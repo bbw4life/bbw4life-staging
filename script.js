@@ -12595,12 +12595,12 @@ function injectColFbt() {
     const loaderText = cfg.text || 'BBW4LIFE.COM ✦ WAIT TO LOAD ✦ ';
 
     function makeLoaderHTML(size) {
-      const s      = size || 90;
-      const cx     = s / 2;
-      const cy     = s / 2;
-      const radius = s / 2 - 10;
-      const chars  = loaderText.split('');
-      const total  = chars.length;
+      const s        = size || 90;
+      const cx       = s / 2;
+      const cy       = s / 2;
+      const radius   = s / 2 - 10;
+      const chars    = loaderText.split('');
+      const total    = chars.length;
       const fontSize = Math.max(4, Math.round(s * 0.072));
 
       const letters = chars.map(function(ch, i) {
@@ -12830,18 +12830,45 @@ function injectColFbt() {
       });
     }
 
+    /* ── Première injection ── */
     injectAll();
 
+    /* ── Guard anti-boucle ── */
+    var isInjecting = false;
+
     var observer = new MutationObserver(function(mutations) {
-      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-      if (relevant) {
-        setTimeout(injectAll, 50);
-      }
+      var relevant = mutations.some(function(m) {
+        return Array.from(m.addedNodes).some(function(node) {
+          return node.nodeType === 1 &&
+                 !node.classList.contains('bbw-il-container') &&
+                 !node.classList.contains('bbw-il-wrap') &&
+                 !node.classList.contains('bbw-il-ring') &&
+                 !node.classList.contains('bbw-il--hidden');
+        });
+      });
+      if (!relevant || isInjecting) return;
+      isInjecting = true;
+      setTimeout(function() {
+        injectAll();
+        isInjecting = false;
+      }, 120);
     });
+
     observer.observe(document.body, { childList: true, subtree: true });
 
-    document.addEventListener('cart:update', function() { injectAll(); });
-    document.addEventListener('wishlist:change', function() { injectAll(); });
+    document.addEventListener('cart:update', function() {
+      if (isInjecting) return;
+      isInjecting = true;
+      injectAll();
+      isInjecting = false;
+    });
+
+    document.addEventListener('wishlist:change', function() {
+      if (isInjecting) return;
+      isInjecting = true;
+      injectAll();
+      isInjecting = false;
+    });
   }
 
   if (window.__allProducts && window.__allProducts.length) {
