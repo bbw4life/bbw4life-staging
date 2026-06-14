@@ -12375,13 +12375,8 @@ function injectColFbt() {
     setTimeout(runAll, 400);
   }
 
-  /* Observer les mutations DOM */
-  var observer = new MutationObserver(function(mutations) {
-    var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-    if (relevant) runAll();
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
+  /* Exposition pour l'observer partagé */
+  window.__bbwRefreshWishlistIcons = runAll;
 
   /* Events système */
   document.addEventListener('cart:update',     runAll);
@@ -12497,38 +12492,12 @@ function injectColFbt() {
     }, 100);
   }
 
-  /* ── Observer les mutations DOM (cards chargées dynamiquement) ── */
-  const observer = new MutationObserver(function(mutations) {
-    const relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-    if (!relevant) return;
-
+  /* Exposition pour l'observer partagé */
+  window.__bbwRefreshWatermark = function() {
     const allProducts = window.__allProducts || [];
     const settings    = allProducts.find(function(p) { return p.type === 'settings'; }) || {};
     const wm          = settings.watermark || {};
     if ((wm.show || 'no').toLowerCase().trim() !== 'yes') return;
-
-    const TEXT = wm.text || 'bbw4life.com';
-
-    function makeWatermark() {
-      const el = document.createElement('span');
-      el.className   = 'bbw-watermark';
-      el.textContent = TEXT;
-      el.setAttribute('aria-hidden', 'true');
-      return el;
-    }
-
-    function inject(wrap) {
-      if (!wrap || wrap.querySelector('.bbw-watermark')) return;
-      const pos = getComputedStyle(wrap).position;
-      if (pos === 'static') wrap.style.position = 'relative';
-      wrap.appendChild(makeWatermark());
-    }
-
-    function injectOnImg(img) {
-      if (!img) return;
-      const wrap = img.parentElement;
-      if (wrap) inject(wrap);
-    }
 
     document.querySelectorAll(
       '#main-image-slider .main-image, .col-card__media, .bbwpg-card__img-wrap, ' +
@@ -12538,9 +12507,7 @@ function injectColFbt() {
     ).forEach(inject);
 
     document.querySelectorAll('.col-rv-card__img, .col-fbt-card__img').forEach(injectOnImg);
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
+  };
 
 })();
 
@@ -12782,19 +12749,15 @@ function injectColFbt() {
     injectSvgDefs();
     runAll(text);
 
-    var observer = new MutationObserver(function(mutations) {
+    /* Exposition pour l'observer partagé */
+    window.__bbwRefreshImageLoader = function() {
       if (!isEnabled()) {
         removeAll();
         injectKillStyle();
-        observer.disconnect();
         return;
       }
-      var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
-      if (!relevant) return;
       runAll(text);
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
+    };
 
     document.addEventListener('cart:update', function() {
       if (!isEnabled()) { removeAll(); return; }
@@ -12806,5 +12769,47 @@ function injectColFbt() {
       runAll(text);
     });
   });
+
+})();
+
+
+
+/* ════════════════════════════════════════════════════════
+   BBW4LIFE — SHARED MUTATION OBSERVER (unique pour tout le site)
+════════════════════════════════════════════════════════ */
+(function initSharedDomObserver() {
+  'use strict';
+
+  var debounceTimer = null;
+
+  function runAllRefreshes() {
+    if (typeof window.__bbwRefreshWishlistIcons === 'function') {
+      window.__bbwRefreshWishlistIcons();
+    }
+    if (typeof window.__bbwRefreshWatermark === 'function') {
+      window.__bbwRefreshWatermark();
+    }
+    if (typeof window.__bbwRefreshImageLoader === 'function') {
+      window.__bbwRefreshImageLoader();
+    }
+  }
+
+  var sharedObserver = new MutationObserver(function(mutations) {
+    var relevant = mutations.some(function(m) { return m.addedNodes.length > 0; });
+    if (!relevant) return;
+
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(runAllRefreshes, 200);
+  });
+
+  function start() {
+    sharedObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start);
+  } else {
+    start();
+  }
 
 })();
