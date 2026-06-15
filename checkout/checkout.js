@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const discountedCart = getDiscountedCart();
         const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || 'Standard Shipping';
         const clientSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-        const clientTotal = clientSubtotal; // serveur recalcule tout
+        const clientTotal = parseFloat(document.getElementById('total').textContent.replace('$', '')) || clientSubtotal;
 
         // ── ÉTAPE 1 : Validation serveur + token ──
         const validationRes = await fetch('/.netlify/functions/validate-checkout', {
