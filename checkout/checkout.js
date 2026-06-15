@@ -320,7 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const discountedCart = getDiscountedCart();
         const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || 'Standard Shipping';
         const clientSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-        const clientTotal = clientSubtotal; // serveur recalcule tout
+        const isFreeMethodPay = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethodPay);
+        const settingsPay = productsData.find(i => i.type === 'settings');
+        const resolvedShipping = parseFloat(settingsPay?.shipping_cost) || SHIPPING_COST;
+        const resolvedTax = parseFloat(settingsPay?.tax_rate) || TAX_RATE;
+        const clientShipping = isFreeMethodPay ? 0 : resolvedShipping;
+        const clientTax = isFreeMethodPay ? 0 : parseFloat((clientSubtotal * resolvedTax).toFixed(2));
+        const clientTotal = parseFloat((clientSubtotal + clientShipping + clientTax).toFixed(2));
+        const clientTotal = clientSubtotal;
 
         // ── ÉTAPE 1 : Validation serveur + token ──
         const validationRes = await fetch('/.netlify/functions/validate-checkout', {
@@ -739,13 +746,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return s?.cart_drawer?.free_shipping_threshold || 0;
         })();
        const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
-        const isFreeMethodPay = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethodPay);
-        const settings = productsData.find(i => i.type === 'settings');
-        const resolvedShipping = parseFloat(settings?.shipping_cost) || SHIPPING_COST;
-        const resolvedTax = parseFloat(settings?.tax_rate) || TAX_RATE;
-        const clientShipping = isFreeMethodPay ? 0 : resolvedShipping;
-        const clientTax = isFreeMethodPay ? 0 : parseFloat((clientSubtotal * resolvedTax).toFixed(2));
-        const clientTotal = parseFloat((clientSubtotal + clientShipping + clientTax).toFixed(2));
+        const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
+        const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
+        const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
+        const effectiveTax = (isFreeByThreshold || isFreeMethod) ? 0 : subtotal * TAX_RATE;
         let affPromoDiscountAmount = 0;
         if (affPromoApplied && affPromoDiscount > 0) {
             affPromoDiscountAmount = subtotal * (affPromoDiscount / 100);
