@@ -3872,6 +3872,7 @@ initAnnouncementBar();
     let selectedProductId = '';
     let selectedSize      = '';
     let selectedColor     = '';
+    let selectedProductImage = ''; 
     let reservationPrice  = 10;
 
     function injectPriceLabels(price) {
@@ -3939,6 +3940,9 @@ initAnnouncementBar();
         if (prod) {
           selectedProductId = pid;
           selectedProgram   = prod.title;
+          selectedProductImage = (prod.media && prod.media.length > 0)
+            ? upgradeShopifyImageUrl(prod.media[0], 600)
+            : upgradeShopifyImageUrl(prod.image, 600);
           populateSizeSelect(prod);
           populateColorSelect(prod);
         }
@@ -4156,7 +4160,15 @@ initAnnouncementBar();
 
       const res = await fetch('/.netlify/functions/create-reservation-stripe-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl })
+        body: JSON.stringify({
+          action: 'create',
+          amount: reservationPrice,
+          program: selectedProgram,
+          productId: selectedProductId,
+          productImage: selectedProductImage,
+          customer: clientData,
+          returnUrl
+        })
       });
       const data = await res.json();
       if (!data.success || !data.sessionId) throw new Error(data.error || 'Stripe session failed.');

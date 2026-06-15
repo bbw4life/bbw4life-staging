@@ -1439,6 +1439,77 @@ select:focus {
 }
 
 
+
+
+/* ── Success Popup ── */
+#success-popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 99999;
+    background: rgba(0,0,0,0.45);
+    align-items: center;
+    justify-content: center;
+}
+#success-popup.show {
+    display: flex;
+}
+.success-popup-inner {
+    background: #fff;
+    border-radius: 16px;
+    padding: 10px 18px 8px;
+    width: 270px;
+    max-width: 85%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    position: relative;
+    animation: popupBounce 0.35s cubic-bezier(.36,.07,.19,.97);
+}
+.success-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #34d399, #16a34a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(34,160,107,0.35);
+}
+.success-icon-wrap i {
+    font-size: 24px;
+    color: #fff;
+}
+.success-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+.success-close {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1;
+    padding: 4px;
+    transition: color 0.2s;
+}
+.success-close:hover { color: #333; }
+@keyframes popupBounce {
+    0%   { opacity: 0; transform: scale(0.85); }
+    60%  { opacity: 1; transform: scale(1.04); }
+    100% { transform: scale(1); }
+}
+
+
 /* ════════════════════════════════════════════════════════════════
    MISC HELPERS
 ════════════════════════════════════════════════════════════════ */

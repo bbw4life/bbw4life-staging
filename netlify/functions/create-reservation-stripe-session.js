@@ -1,6 +1,4 @@
 // netlify/functions/create-reservation-stripe-session.js
-// action=create  → crée la session Stripe
-// action=verify  → vérifie le paiement ET sauvegarde dans le sheet
 
 const stripe     = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { google } = require('googleapis');
@@ -53,18 +51,35 @@ exports.handler = async (event) => {
     // ACTION : create — crée la session
     // ════════════════════════════════
     if (action === 'create') {
-      const { amount, program, customer } = body;
+      const { amount, program, customer, productId, productImage } = body;
 
-      const stripePriceId = process.env.RESERVATION_STRIPE_PRICE_ID || '';
-      if (!stripePriceId) throw new Error('RESERVATION_STRIPE_PRICE_ID not configured.');
+      const reservationAmount = parseFloat(amount);
+      if (!reservationAmount || reservationAmount <= 0) {
+        throw new Error('Invalid reservation amount.');
+      }
 
       const BASE_URL  = process.env.BASE_URL || '';
       const returnUrl = body.returnUrl || `${BASE_URL}/`;
 
+      const productName = program
+        ? `Reservation — ${program}`
+        : 'BBW4LIFE Product Reservation';
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         mode:                 'payment',
-        line_items: [{ price: stripePriceId, quantity: 1 }],
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name:        productName,
+              description: 'Refundable reservation fee — deducted from your final order total.',
+              images:      productImage ? [productImage] : [],
+            },
+            unit_amount: Math.round(reservationAmount * 100),
+          },
+          quantity: 1,
+        }],
         customer_email: customer.email || undefined,
         metadata: {
           firstName: customer.firstName || '',
@@ -72,6 +87,7 @@ exports.handler = async (event) => {
           email:     customer.email     || '',
           phone:     customer.phone     || '',
           program:   program            || '',
+          productId: productId          || '',
           amount:    String(amount),
         },
         success_url: `${returnUrl}?res_session_id={CHECKOUT_SESSION_ID}`,
