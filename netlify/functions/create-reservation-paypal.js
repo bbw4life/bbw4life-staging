@@ -1,16 +1,22 @@
+// netlify/functions/create-reservation-paypal.js
+
 const fetch      = require('node-fetch');
 const { google } = require('googleapis');
 
-async function getServerReservationPrice() {
+// ── Lire reservation_price depuis products.data.json (anti-tamper) ──
+async function getReservationPrice() {
   try {
     const BASE_URL = process.env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
-    if (!res.ok) throw new Error('Failed to fetch products');
+    if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
-    const settings = (Array.isArray(data) ? data : []).find(p => p.type === 'settings') || {};
-    return parseFloat(settings.reservation_price) || 10;
-  } catch {
-    return 10;
+    const arr = Array.isArray(data) ? data : [];
+    const settings = arr.find(function(p) { return p.type === 'settings'; }) || {};
+    const price = parseFloat(settings.reservation_price);
+    if (!price || price <= 0) throw new Error('reservation_price not set in settings');
+    return price;
+  } catch (err) {
+    throw new Error('Cannot read reservation price from server: ' + err.message);
   }
 }
 
@@ -86,8 +92,8 @@ exports.handler = async (event) => {
     if (action === 'create') {
       const { program, customer } = body;
 
-      // ── Prix lu depuis le serveur uniquement (anti-manipulation client) ──
-      const amount = await getServerReservationPrice();
+      // ── Prix lu côté serveur — le montant du client est ignoré ──
+      const serverAmount = await getReservationPrice();
 
       const BASE_URL     = process.env.BASE_URL || '';
       const returnUrl    = body.returnUrl || `${BASE_URL}/`;
@@ -98,10 +104,10 @@ exports.handler = async (event) => {
         purchase_units: [{
           amount: {
             currency_code: 'USD',
-            value: parseFloat(amount).toFixed(2),
+            value: serverAmount.toFixed(2),
           },
           description: `CurvaFit Reservation — ${program || 'Program'}`,
-          custom_id:   `${customer.email || ''}|${customer.firstName || ''}|${customer.lastName || ''}|${customer.phone || ''}|${program || ''}|${amount}`,
+          custom_id:   `${customer.email || ''}|${customer.firstName || ''}|${customer.lastName || ''}|${customer.phone || ''}|${program || ''}|${serverAmount}`,
         }],
         application_context: {
           return_url: `${returnUrl}?res_paypal=1`,

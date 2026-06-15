@@ -1,17 +1,22 @@
+// netlify/functions/create-reservation-stripe-session.js
+
 const stripe     = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { google } = require('googleapis');
-const fetch      = require('node-fetch');
 
-async function getServerReservationPrice() {
+// ── Lire reservation_price depuis products.data.json (anti-tamper) ──
+async function getReservationPrice() {
   try {
     const BASE_URL = process.env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
-    if (!res.ok) throw new Error('Failed to fetch products');
+    if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
-    const settings = (Array.isArray(data) ? data : []).find(p => p.type === 'settings') || {};
-    return parseFloat(settings.reservation_price) || 10;
-  } catch {
-    return 10;
+    const arr = Array.isArray(data) ? data : [];
+    const settings = arr.find(function(p) { return p.type === 'settings'; }) || {};
+    const price = parseFloat(settings.reservation_price);
+    if (!price || price <= 0) throw new Error('reservation_price not set in settings');
+    return price;
+  } catch (err) {
+    throw new Error('Cannot read reservation price from server: ' + err.message);
   }
 }
 
@@ -65,11 +70,8 @@ exports.handler = async (event) => {
     if (action === 'create') {
       const { program, customer, productId, productImage } = body;
 
-      // ── Prix lu depuis le serveur uniquement (anti-manipulation client) ──
-      const reservationAmount = await getServerReservationPrice();
-      if (!reservationAmount || reservationAmount <= 0) {
-        throw new Error('Invalid reservation amount.');
-      }
+      // ── Prix lu côté serveur — le montant du client est ignoré ──
+      const reservationAmount = await getReservationPrice();
 
       const BASE_URL  = process.env.BASE_URL || '';
       const returnUrl = body.returnUrl || `${BASE_URL}/`;
