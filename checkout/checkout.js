@@ -39,9 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { if (popup.classList.contains('show')) popup.classList.remove('show'); }, 10000);
     }
 
-    const _checkoutUrl = window.location.hostname === 'localhost' ? '/products.data.json' : '/.netlify/functions/get-products';
-        fetch(_checkoutUrl)
-        .then(response => response.json())
+    fetch('/products.data.json')
+      .then(response => response.json())
       .then(data => {
         productsData = data;
         const settings = productsData.find(item => item.type === "settings");
