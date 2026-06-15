@@ -7966,8 +7966,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
        function getUrlFromId(productId) {
+          if (!productId) return null;
           const prods = (window.__allProducts || []).filter(p => !p.type);
-          const idx = prods.findIndex(p => String(p.id) === String(productId));
+          const idx = prods.findIndex(p => 
+            String(p.id).trim() === String(productId).trim()
+          );
           if (idx === -1) return null;
           return `/products/product${idx + 1}.html`;
         }
@@ -7992,7 +7995,7 @@ document.addEventListener('DOMContentLoaded', () => {
           orderItemsDiv.className = 'order-items';
 
           order.items.forEach(item => {
-            const itemId = item.id || item.product_id || '';
+            const itemId = item.product_id || item.id || item.cj_product_id || '';
             const prods = window.__allProducts || [];
             const resolvedColor = resolveColor(item, prods);
 
@@ -8039,14 +8042,12 @@ document.addEventListener('DOMContentLoaded', () => {
             orderItemsDiv.appendChild(itemEl);
 
             itemEl.addEventListener('click', function () {
-              if (!itemId) return;
-              const url = getUrlFromId(itemId);
-              if (url) {
-                window.location.href = url;
-              } else {
-                console.warn(`Product ID="${itemId}" not found in products.data.json`);
-              }
-            });
+            if (!itemId) return;
+            const url = getUrlFromId(itemId);
+            if (url) {
+              window.open(url, '_self');
+            }
+          });
           });
 
           entry.appendChild(orderItemsDiv);
