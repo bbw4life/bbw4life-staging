@@ -1,5 +1,6 @@
 // save-pending-order.js
 const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');
 exports.handler = async (event) => {
   console.log('[SAVE PENDING] Function invoked');
   try {
@@ -56,6 +57,15 @@ exports.handler = async (event) => {
           spreadsheetId, range, valueInputOption: "RAW", insertDataOption: "INSERT_ROWS", resource: { values }
         });
         console.log(`[SAVE PENDING] ✅ SAUVEGARDE OK dans ${range}`);
+        await notifyTelegram(
+        `🛍️ <b>Pdg Francenel, une nouvelle commande vient de passer!</b>\n\n` +
+        `🆔 <b>Order ID:</b> ${internalOrderId}\n` +
+        `👤 <b>Client:</b> ${shipping.fullName}\n` +
+        `📧 <b>Email:</b> ${shipping.email}\n` +
+        `💳 <b>Paiement:</b> ${payment_provider}\n` +
+        `📦 <b>Quantité:</b> ${item.quantity || 1}\n` +
+        `🌍 <b>Pays:</b> ${shipping.country}`
+      );
         success = true;
         break;
       } catch (err) {

@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -75,7 +76,13 @@ exports.handler = async (event) => {
       }),
     }).catch(e => console.warn('[Email] plan_request trigger failed:', e.message));
 
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    await notifyTelegram(
+    `⏳ <b>Pdg Francenel, un client vient de mettre en attente un des design BBW4LIFE!</b>\n\n` +
+    `👤 <b>Nom:</b> ${firstName} ${lastName}\n` +
+    `📧 <b>Email:</b> ${email}\n` +
+    `🎨 <b>Produit:</b> ${program}`
+  );
+  return { statusCode: 200, body: JSON.stringify({ success: true }) };
 
   } catch (error) {
     console.error('PLAN REQUEST ERROR:', error.message);

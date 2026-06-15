@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');
 
 const SHEET_NAME = 'bbw4life-stories';
 
@@ -10,7 +11,7 @@ function getAuth() {
     },
     scopes: ['https://www.googleapis.com/auth/spreadsheets']
   });
-}
+}   
 
 function formatDate() {
   const d = new Date();
@@ -32,13 +33,6 @@ async function saveStory(body) {
 
   const auth   = getAuth();
   const sheets = google.sheets({ version: 'v4', auth });
-
-  // Colonnes :
-  // A=firstName, B=age, C=email, D=country,
-  // E=bodyPressureDuration, F=bbwHelped, G=discoveredWhen,
-  // H=selfChange, I=wordToday, J=toldBefore,
-  // K=story, L=mentalQuote, M=rating, N=photo, O=anonymous,
-  // P=status, Q=date
   const values = [[
     firstName.trim(),
     age                  || '',
@@ -67,6 +61,13 @@ async function saveStory(body) {
     resource: { values }
   });
 
+  await notifyTelegram(
+    `💕 <b>Waww Pdg Francenel, une personne vient de partager son story, c'est en attente!</b>\n\n` +
+    `👤 <b>Prénom:</b> ${firstName}\n` +
+    `📧 <b>Email:</b> ${email}\n` +
+    `🌍 <b>Pays:</b> ${country || 'N/A'}\n` +
+    `⭐ <b>Note:</b> ${rating || '5'}/5`
+  );
   return { success: true };
 }
 
@@ -81,12 +82,6 @@ async function fetchStories() {
   });
 
   const rows = res.data.values || [];
-
-  // A=0, B=1, C=2, D=3,
-  // E=4(bodyPressureDuration), F=5(bbwHelped), G=6(discoveredWhen),
-  // H=7(selfChange), I=8(wordToday), J=9(toldBefore),
-  // K=10(story), L=11(mentalQuote), M=12(rating), N=13(photo),
-  // O=14(anonymous), P=15(status), Q=16(date)
   const stories = rows
     .slice(1)
     .filter(r => r[15] && r[15].toString().toLowerCase() === 'approved')

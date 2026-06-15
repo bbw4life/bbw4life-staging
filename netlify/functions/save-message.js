@@ -1,5 +1,6 @@
 // netlify/functions/save-message.js
 const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');   
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -50,6 +51,13 @@ exports.handler = async (event) => {
             resource: { values }
         });
 
+        await notifyTelegram(
+        `📩 <b>Pdg Francenel, un client vient de vous envoyer un message depuis la page contact!</b>\n\n` +
+        `👤 <b>Nom:</b> ${firstName} ${lastName}\n` +
+        `📧 <b>Email:</b> ${email}\n` +
+        `📌 <b>Sujet:</b> ${subject}\n` +
+        `🗂️ <b>Catégorie:</b> ${category || 'N/A'}`
+        );
         return { statusCode: 200, body: JSON.stringify({ success: true }) };
     } catch (error) {
         console.error("SAVE MESSAGE ERROR:", error.message);

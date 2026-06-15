@@ -1,4 +1,5 @@
 const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -82,7 +83,7 @@ exports.handler = async (event) => {
             "",           // D - Last Name
             "",           // E - Email
             "",           // F - Phone
-            "",           // G - Size
+            "",           // G - Size 
             "",           // H - Color
             "",           // I - Product Title
             "",           // J - Product Description
@@ -259,10 +260,13 @@ exports.handler = async (event) => {
       }
     });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: true })
-    };
+    await notifyTelegram(
+      `🎨 <b>Pdg Francenel, un client vient de demander un produit personnalisé!</b>\n\n` +
+      `👤 <b>Nom:</b> ${firstname} ${lastname}\n` +
+      `📧 <b>Email:</b> ${email}\n` +
+      `👗 <b>Produit demandé:</b> ${product_title}`
+    );
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
 
   } catch (error) {
     console.error("PERSONALIZED PRODUCT ERROR:", error.message);
