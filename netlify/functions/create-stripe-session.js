@@ -137,12 +137,13 @@ exports.handler = async (event) => {
       success_url: `${process.env.BASE_URL}/thankyou.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.BASE_URL}/checkout.html`,
       metadata: {
-        eprolo_data: JSON.stringify(eproloData).substring(0, 490),
-        shipping:    JSON.stringify(shipping).substring(0, 490),
-        colors:      JSON.stringify(colorsData).substring(0, 490),
-        sizes:       JSON.stringify(sizesData).substring(0, 490),
-        item_ids:    JSON.stringify(cart.map(i => i.id)).substring(0, 490)
-    }
+        eprolo_data:    JSON.stringify(eproloData).substring(0, 490),
+        shipping:       JSON.stringify(shipping).substring(0, 490),
+        images:         JSON.stringify(imagesData).substring(0, 490),
+        colors:         JSON.stringify(colorsData).substring(0, 490),
+        sizes:          JSON.stringify(sizesData).substring(0, 490),
+        images_variant: JSON.stringify(imagesVariant).substring(0, 490)
+      }
     });
 
     return {
