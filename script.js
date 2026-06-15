@@ -5260,15 +5260,17 @@ if (rcCheckoutBtn) {
         );
 
         const payload = {
-            firstname:     form.querySelector('[name="firstname"]').value,
-            lastname:      form.querySelector('[name="lastname"]').value,
-            email:         form.querySelector('[name="email"]').value,
-            phone:         form.querySelector('[name="phone"]').value,
-            product_title: form.querySelector('[name="product_title"]').value,
-            product_desc:  form.querySelector('[name="product_desc"]').value,
-            image1_base64: image1Base64,
-            image2_base64: image2Base64
-        };
+          firstname:     form.querySelector('[name="firstname"]').value,
+          lastname:      form.querySelector('[name="lastname"]').value,
+          email:         form.querySelector('[name="email"]').value,
+          phone:         form.querySelector('[name="phone"]').value,
+          size:          (form.querySelector('[name="size"]') || {}).value || '',
+          color:         (form.querySelector('[name="color"]') || {}).value || '',
+          product_title: form.querySelector('[name="product_title"]').value,
+          product_desc:  form.querySelector('[name="product_desc"]').value,
+          image1_base64: image1Base64,
+          image2_base64: image2Base64
+      };
 
         try {
             const res  = await fetch('/.netlify/functions/save-personalized-product', {
@@ -7964,7 +7966,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
        function getUrlFromId(productId) {
-          const prods = window.__allProducts || [];
+          const prods = (window.__allProducts || []).filter(p => !p.type);
           const idx = prods.findIndex(p => String(p.id) === String(productId));
           if (idx === -1) return null;
           return `/products/product${idx + 1}.html`;
