@@ -1,6 +1,4 @@
 // netlify/functions/create-reservation-paypal.js
-// action=create  → crée l'ordre PayPal
-// action=capture → capture le paiement ET sauvegarde dans le sheet
 
 const fetch      = require('node-fetch');
 const { google } = require('googleapis');

@@ -251,10 +251,6 @@
 
 
 
-
-
-
-
   <div id="colQvOverlay" class="col-qv-overlay" style="display:none">
     <div class="col-qv-modal">
       <button class="col-qv-close" id="colQvClose"><i class="fas fa-times"></i></button>
