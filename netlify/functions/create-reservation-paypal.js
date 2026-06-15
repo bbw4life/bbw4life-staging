@@ -1,7 +1,18 @@
-// netlify/functions/create-reservation-paypal.js
-
 const fetch      = require('node-fetch');
 const { google } = require('googleapis');
+
+async function getServerReservationPrice() {
+  try {
+    const BASE_URL = process.env.BASE_URL || '';
+    const res = await fetch(`${BASE_URL}/products.data.json`);
+    if (!res.ok) throw new Error('Failed to fetch products');
+    const data = await res.json();
+    const settings = (Array.isArray(data) ? data : []).find(p => p.type === 'settings') || {};
+    return parseFloat(settings.reservation_price) || 10;
+  } catch {
+    return 10;
+  }
+}
 
 async function getPaypalToken(PAYPAL_BASE) {
   const auth = Buffer.from(
@@ -73,7 +84,10 @@ exports.handler = async (event) => {
     // ACTION : create — crée l'ordre
     // ════════════════════════════════
     if (action === 'create') {
-      const { amount, program, customer } = body;
+      const { program, customer } = body;
+
+      // ── Prix lu depuis le serveur uniquement (anti-manipulation client) ──
+      const amount = await getServerReservationPrice();
 
       const BASE_URL     = process.env.BASE_URL || '';
       const returnUrl    = body.returnUrl || `${BASE_URL}/`;

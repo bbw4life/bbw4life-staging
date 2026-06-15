@@ -8041,13 +8041,17 @@ document.addEventListener('DOMContentLoaded', () => {
             itemEl.appendChild(infoDiv);
             orderItemsDiv.appendChild(itemEl);
 
+            itemEl.style.cursor = 'pointer';
+            itemEl.querySelectorAll('*').forEach(function(child) {
+              child.style.pointerEvents = 'none';
+            });
             itemEl.addEventListener('click', function () {
-            if (!itemId) return;
-            const url = getUrlFromId(itemId);
-            if (url) {
-              window.open(url, '_self');
-            }
-          });
+              if (!itemId) return;
+              const url = getUrlFromId(itemId);
+              if (url) {
+                window.open(url, '_self');
+              }
+            });
           });
 
           entry.appendChild(orderItemsDiv);

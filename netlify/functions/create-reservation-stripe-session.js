@@ -1,7 +1,19 @@
-// netlify/functions/create-reservation-stripe-session.js
-
 const stripe     = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { google } = require('googleapis');
+const fetch      = require('node-fetch');
+
+async function getServerReservationPrice() {
+  try {
+    const BASE_URL = process.env.BASE_URL || '';
+    const res = await fetch(`${BASE_URL}/products.data.json`);
+    if (!res.ok) throw new Error('Failed to fetch products');
+    const data = await res.json();
+    const settings = (Array.isArray(data) ? data : []).find(p => p.type === 'settings') || {};
+    return parseFloat(settings.reservation_price) || 10;
+  } catch {
+    return 10;
+  }
+}
 
 async function saveToSheet(data) {
   const auth = new google.auth.GoogleAuth({
@@ -51,9 +63,10 @@ exports.handler = async (event) => {
     // ACTION : create — crée la session
     // ════════════════════════════════
     if (action === 'create') {
-      const { amount, program, customer, productId, productImage } = body;
+      const { program, customer, productId, productImage } = body;
 
-      const reservationAmount = parseFloat(amount);
+      // ── Prix lu depuis le serveur uniquement (anti-manipulation client) ──
+      const reservationAmount = await getServerReservationPrice();
       if (!reservationAmount || reservationAmount <= 0) {
         throw new Error('Invalid reservation amount.');
       }
@@ -88,7 +101,7 @@ exports.handler = async (event) => {
           phone:     customer.phone     || '',
           program:   program            || '',
           productId: productId          || '',
-          amount:    String(amount),
+          amount:    String(reservationAmount),
         },
         success_url: `${returnUrl}?res_session_id={CHECKOUT_SESSION_ID}`,
         cancel_url:  returnUrl,
