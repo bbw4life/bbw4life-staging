@@ -320,14 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const discountedCart = getDiscountedCart();
         const selectedMethodPay = document.querySelector('.shipping-option.selected')?.dataset.method || 'Standard Shipping';
         const clientSubtotal = discountedCart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-        const isFreeMethodPay = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethodPay);
-        const settingsPay = productsData.find(i => i.type === 'settings');
-        const resolvedShipping = parseFloat(settingsPay?.shipping_cost) || SHIPPING_COST;
-        const resolvedTax = parseFloat(settingsPay?.tax_rate) || TAX_RATE;
-        const clientShipping = isFreeMethodPay ? 0 : resolvedShipping;
-        const clientTax = isFreeMethodPay ? 0 : parseFloat((clientSubtotal * resolvedTax).toFixed(2));
-        const clientTotal = parseFloat((clientSubtotal + clientShipping + clientTax).toFixed(2));
-        const clientTotal = clientSubtotal;
+        const clientTotal = clientSubtotal; // serveur recalcule tout
 
         // ── ÉTAPE 1 : Validation serveur + token ──
         const validationRes = await fetch('/.netlify/functions/validate-checkout', {
@@ -745,7 +738,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const s = productsData.find(i => i.type === 'settings');
             return s?.cart_drawer?.free_shipping_threshold || 0;
         })();
-       const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
         const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
         const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
         const effectiveShipping = (isFreeByThreshold || isFreeMethod) ? 0 : SHIPPING_COST;
