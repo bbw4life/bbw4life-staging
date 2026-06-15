@@ -330,7 +330,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 cart: discountedCart,
                 shipping: shippingData,
                 shippingMethod: selectedMethodPay,
-                clientTotal
+                clientTotal,
+                promoCode: appliedPromo ? appliedPromo.code : null
             })
         });
         const validationData = await validationRes.json();

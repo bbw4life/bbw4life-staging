@@ -73,7 +73,7 @@ function validateCart(cart) {
 }
 
 // ── MODIFICATION : relit les vrais prix depuis products.data.json ──
-function computeServerTotal(cart, settings, allProducts, shippingMethod) {
+function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
   const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.00;
@@ -84,6 +84,14 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
 
   // Produits réels uniquement (exclut le nœud settings)
   const realProducts = allProducts.filter(p => !p.type);
+
+  // ── Résoudre le promo code depuis settings ──
+  const promos = settings.promos || [];
+  let promoPercent = 0;
+  if (promoCode) {
+    const promo = promos.find(p => p.code.toUpperCase() === promoCode.toUpperCase());
+    if (promo) promoPercent = parseFloat(promo.percent) || 0;
+  }
 
   const paidQty = cart
     .filter(i => !i.isFreePromo)
@@ -102,9 +110,12 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
     const prod = realProducts.find(p => p.id === item.id);
     if (prod) {
       const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
-      const trustedPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
-      // Si le prix trouvé est valide, on l'impose — sinon fallback prix client
-      return { ...item, price: isNaN(trustedPrice) ? parseFloat(item.price) : trustedPrice };
+      const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
+      const clientPrice  = parseFloat(item.price);
+      const finalPrice = (!isNaN(clientPrice) && clientPrice <= catalogPrice + 0.01)
+        ? clientPrice
+        : catalogPrice;
+      return { ...item, price: finalPrice };
     }
 
     // ── Produit non trouvé dans le catalogue → garde le prix client ──
@@ -115,20 +126,24 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
 
-  const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
+  // ── Appliquer la réduction promo ──
+  const discountAmount = promoPercent > 0 ? parseFloat((subtotal * (promoPercent / 100)).toFixed(2)) : 0;
+  const subtotalAfterPromo = parseFloat((subtotal - discountAmount).toFixed(2));
+
+  const freeByThreshold = freeThreshold > 0 && subtotalAfterPromo >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFree = freeByThreshold || freeByMethod;
-
   const shipping = isFree ? 0 : SHIPPING_COST;
-  const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const total    = subtotal + shipping + tax;
+  const tax = isFree ? 0 : parseFloat((subtotalAfterPromo * TAX_RATE).toFixed(2));
+  const total = subtotalAfterPromo + shipping + tax;
 
   return {
-    subtotal:     parseFloat(subtotal.toFixed(2)),
-    shippingCost: parseFloat(shipping.toFixed(2)),
-    taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        parseFloat(total.toFixed(2)),
-    sanitizedCart: sanitized
+      subtotal:      parseFloat(subtotal.toFixed(2)),
+      discountAmount,
+      shippingCost:  parseFloat(shipping.toFixed(2)),
+      taxAmount:     parseFloat(tax.toFixed(2)),
+      total:         parseFloat(total.toFixed(2)),
+      sanitizedCart: sanitized
   };
 }
 
@@ -155,7 +170,7 @@ exports.handler = async (event) => {
   try {
     if (!event.body) return res(400, { success: false, error: 'No data received' });
 
-    const { action, cart, shipping, shippingMethod, clientTotal, cartToken } = JSON.parse(event.body);
+    const { action, cart, shipping, shippingMethod, clientTotal, cartToken, promoCode } = JSON.parse(event.body);
 
     if (action === 'validate') {
       const shippingErrors = validateShipping(shipping || {});
@@ -174,7 +189,8 @@ exports.handler = async (event) => {
         cart,
         settings,
         allProducts,
-        shippingMethod || 'Standard Shipping'
+        shippingMethod || 'Standard Shipping',
+        promoCode || null  // ← ajouter ici
       );
 
       if (clientTotal !== undefined) {
@@ -193,14 +209,15 @@ exports.handler = async (event) => {
       const token = generateCartToken(sanitizedCart, total, process.env.CHECKOUT_SECRET);
 
       return res(200, {
-        success: true,
-        subtotal,
-        shippingCost,
-        taxAmount,
-        total,
-        cartToken: token,
-        sanitizedCart
-      });
+      success: true,
+      subtotal,
+      discountAmount,
+      shippingCost,
+      taxAmount,
+      total,
+      cartToken: token,
+      sanitizedCart
+    });
     }
 
     if (action === 'verify-token') {
@@ -212,7 +229,7 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping');
+      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping', promoCode || null);
 
       let valid = false;
       try {
