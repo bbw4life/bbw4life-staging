@@ -20,7 +20,7 @@ async function getSettings() {
 function computeTotals(cart, settings, shippingMethod) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
-  const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.10;
+  const TAX_RATE = parseFloat(settings.tax_rate) || 0.00;
   const freeShippingThreshold = parseFloat(cd.free_shipping_threshold) || 0;
 
   const subtotal = cart.reduce((sum, item) => {
@@ -137,13 +137,12 @@ exports.handler = async (event) => {
       success_url: `${process.env.BASE_URL}/thankyou.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.BASE_URL}/checkout.html`,
       metadata: {
-        eprolo_data:    JSON.stringify(eproloData),
-        shipping:       JSON.stringify(shipping),
-        images:         JSON.stringify(imagesData),
-        colors:         JSON.stringify(colorsData),
-        sizes:          JSON.stringify(sizesData),
-        images_variant: JSON.stringify(imagesVariant)
-      }
+        eprolo_data: JSON.stringify(eproloData).substring(0, 490),
+        shipping:    JSON.stringify(shipping).substring(0, 490),
+        colors:      JSON.stringify(colorsData).substring(0, 490),
+        sizes:       JSON.stringify(sizesData).substring(0, 490),
+        item_ids:    JSON.stringify(cart.map(i => i.id)).substring(0, 490)
+    }
     });
 
     return {

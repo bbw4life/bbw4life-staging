@@ -120,7 +120,7 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
   const isFree = freeByThreshold || freeByMethod;
 
   const shipping = isFree ? 0 : SHIPPING_COST;
-  const tax      = isFree ? 0 : subtotal * TAX_RATE;
+  const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
   const total    = subtotal + shipping + tax;
 
   return {
