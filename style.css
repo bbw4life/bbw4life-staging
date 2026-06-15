@@ -3790,6 +3790,17 @@ body {
     visibility: visible;
 }
 
+
+@media (max-width: 768px) {
+    .paul-tooltip {
+        font-size: 0.70rem;
+        white-space: normal;
+        max-width: 160px;
+        text-align: center;
+        line-height: 1.4;
+    }
+}
+
 /* ================================================================
    POPUP OVERLAY
 ================================================================ */
@@ -4054,10 +4065,17 @@ body {
     font-family: 'DM Sans', sans-serif;
 }
 .auth-form input[type="checkbox"] {
-    width: auto !important;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
     margin: 0;
     flex-shrink: 0;
     accent-color: #c0385e;
+    transform: none !important;
+    transition: none !important;
 }
 
 

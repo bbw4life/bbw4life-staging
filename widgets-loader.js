@@ -144,9 +144,9 @@
     <div id="authContainer">
       <div id="loginForm" class="auth-form">
         <h3 id="paul-login-title"></h3>
-        <input type="email" placeholder="Email" required>
+        <input type="email" id="login-email" name="email" autocomplete="email" placeholder="Email" required>
         <div class="password-input-wrapper" style="position:relative !important;">
-          <input type="password" id="login-password" placeholder="Password" required>
+          <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="Password" required>
           <span class="password-toggle" data-target="login-password"><i class="fi fi-sr-eye"></i></span>
         </div>
         <label><input type="checkbox"> <span id="paul-remember-label"></span></label>
@@ -157,12 +157,12 @@
       </div>
       <div id="signupForm" class="auth-form" style="display:none;">
         <h3 id="paul-signup-title"></h3>
-        <input type="text" placeholder="Last Name" required>
-        <input type="text" placeholder="First Name" required>
-        <input type="email" placeholder="Email" required>
-        <input type="tel" placeholder="Phone (optional)">
+        <input type="text" placeholder="Last Name" autocomplete="family-name" required>
+        <input type="text" placeholder="First Name" autocomplete="given-name" required>
+        <input type="email" placeholder="Email" name="email" autocomplete="email" required>
+        <input type="tel" placeholder="Phone (optional)" autocomplete="tel">
         <div class="password-input-wrapper" style="position:relative !important;">
-          <input type="password" id="signup-password" placeholder="Password" required>
+          <input type="password" id="signup-password" name="password" autocomplete="new-password" placeholder="Password" required>
           <span class="password-toggle" data-target="signup-password"><i class="fi fi-sr-eye"></i></span>
         </div>
         <label><input type="checkbox"> <span id="paul-newsletter-label"></span></label>
@@ -172,13 +172,13 @@
       </div>
       <div id="forgotForm" class="auth-form" style="display:none;">
         <h3 id="paul-forgot-title"></h3>
-        <input type="email" id="forgot-email" placeholder="" required>
+        <input type="email" id="forgot-email" name="email" autocomplete="email" placeholder="" required>
         <div class="password-input-wrapper" style="position:relative !important;">
-          <input type="password" id="forgot-new-password" placeholder="" required>
+          <input type="password" id="forgot-new-password" name="new-password" autocomplete="new-password" placeholder="" required>
           <span class="password-toggle" data-target="forgot-new-password"><i class="fi fi-sr-eye"></i></span>
         </div>
         <div class="password-input-wrapper" style="position:relative !important;">
-          <input type="password" id="forgot-confirm-password" placeholder="" required>
+          <input type="password" id="forgot-confirm-password" name="confirm-password" autocomplete="new-password" placeholder="" required>
           <span class="password-toggle" data-target="forgot-confirm-password"><i class="fi fi-sr-eye"></i></span>
         </div>
         <p id="forgot-error-msg" style="color:#e74c3c; font-size:0.82rem; display:none; margin:6px 0;"></p>
