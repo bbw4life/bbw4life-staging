@@ -139,13 +139,27 @@ exports.handler = async (event) => {
         const countriesData = await countriesRes.json();
         const found = countriesData.find(c => c.cca2 === shipping.countryCode);
         if (found) {
+          const countryCode = (found.idd?.root || '').replace('+', '');
+
           const suffixes = found.idd?.suffixes || [];
-          const callingCode = suffixes.length === 1
-            ? found.idd.root.replace('+', '') + suffixes[0]
-            : found.idd.root.replace('+', '');
-          let nationalNumber = shipping.phone.replace(/^\+/, '').replace(/\D/g, '');
-          if (nationalNumber.startsWith(callingCode)) nationalNumber = nationalNumber.slice(callingCode.length);
-          payer.phone = { phone_type: "MOBILE", phone_number: { country_code: callingCode, national_number: nationalNumber } };
+          const fullDialCode = suffixes.length === 1
+            ? countryCode + suffixes[0]
+            : countryCode;
+
+          let nationalNumber = shipping.phone.replace(/\D/g, '');
+          if (nationalNumber.startsWith(fullDialCode)) {
+            nationalNumber = nationalNumber.slice(fullDialCode.length);
+          } else if (nationalNumber.startsWith(countryCode)) {
+            nationalNumber = nationalNumber.slice(countryCode.length);
+          }
+
+          payer.phone = {
+            phone_type: "MOBILE",
+            phone_number: {
+              country_code: countryCode,
+              national_number: nationalNumber
+            }
+          };
         }
       } catch (err) {}
     }
