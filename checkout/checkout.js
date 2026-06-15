@@ -739,10 +739,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return s?.cart_drawer?.free_shipping_threshold || 0;
         })();
        const isFreeByThreshold = freeShipThresh > 0 && subtotal >= freeShipThresh;
-        const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethod);
-        const isFree = isFreeByThreshold || isFreeMethod;
-        const effectiveShipping = isFree ? 0 : SHIPPING_COST;
-        const effectiveTax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
+        const isFreeMethodPay = ['Standard Shipping', 'Economy Shipping'].includes(selectedMethodPay);
+        const settings = productsData.find(i => i.type === 'settings');
+        const resolvedShipping = parseFloat(settings?.shipping_cost) || SHIPPING_COST;
+        const resolvedTax = parseFloat(settings?.tax_rate) || TAX_RATE;
+        const clientShipping = isFreeMethodPay ? 0 : resolvedShipping;
+        const clientTax = isFreeMethodPay ? 0 : parseFloat((clientSubtotal * resolvedTax).toFixed(2));
+        const clientTotal = parseFloat((clientSubtotal + clientShipping + clientTax).toFixed(2));
         let affPromoDiscountAmount = 0;
         if (affPromoApplied && affPromoDiscount > 0) {
             affPromoDiscountAmount = subtotal * (affPromoDiscount / 100);
