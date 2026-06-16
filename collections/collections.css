@@ -1,7 +1,5 @@
 /* ================================================================
    BBW4LIFE — COLLECTION PAGE CSS
-   Adapté aux variables BBW4LIFE : rose #c0385e · or #c9963e · noir #0d0d0d
-   Structure 100% préservée — z-index drawer élevé
 ================================================================ */
 
 :root {
@@ -855,6 +853,11 @@
 .col-check__label { font-size: 13px; color: var(--col-text-2); flex: 1; }
 .col-check__label em { font-style: normal; color: var(--col-text-3); margin-left: 4px; }
 
+
+.col-grid.list-view .col-card__select {
+  top: 40px !important;
+  right: 8px !important;
+}
 
 .col-price-display {
   display: flex;

@@ -1579,24 +1579,27 @@ function showErrorPopup(message) {
         if (viewBtn) viewBtn.href = getProductUrl(spotlightId);
 
         // Stock dynamique
-        if (prod.cj_id) {
-          const fsStock = section.querySelector('.fs-stock');
-          if (fsStock) {
-            fsStock.innerHTML = '⏳ Checking stock...';
-            fetch(`/.netlify/functions/get-product-stock?cj_id=${prod.cj_id}`)
-              .then(r => r.json())
-              .then(stockData => {
-                if (stockData.success && stockData.totalStock !== null) {
-                  const s = stockData.totalStock;
-                  const color = s <= 100 ? '🔴' : s <= 200 ? '🟡' : '🟢';
-                  fsStock.innerHTML = `${color} Only <strong>${s} left</strong> in stock`;
-                } else {
-                  fsStock.style.display = 'none';
-                }
-              })
-              .catch(() => { fsStock.style.display = 'none'; });
+          if (prod.cj_id) {
+            const fsStock = section.querySelector('.fs-stock');
+            if (fsStock) {
+              fsStock.innerHTML = '⏳ Checking stock...';
+              fetch(`/.netlify/functions/get-product-stock?cj_id=${prod.cj_id}`)
+                .then(r => r.json())
+                .then(stockData => {
+                  if (stockData.success && stockData.totalStock !== null) {
+                    const inventoryMode = (settings.inventory_display_mode || 'anderson').toLowerCase().trim();
+                    const s = inventoryMode === 'francenel'
+                      ? stockData.totalStock
+                      : capDisplayStock(stockData.totalStock);
+                    const color = s <= 100 ? '🔴' : s <= 200 ? '🟡' : '🟢';
+                    fsStock.innerHTML = `${color} Only <strong>${s} left</strong> in stock`;
+                  } else {
+                    fsStock.style.display = 'none';
+                  }
+                })
+                .catch(() => { fsStock.style.display = 'none'; });
+            }
           }
-        }
       })();
 
       // ══════════════════════════════════════════
