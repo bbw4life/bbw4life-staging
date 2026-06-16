@@ -9328,18 +9328,44 @@ function initStockBar(cjId) {
               const stock = inventoryMode === 'francenel' ? data.totalStock : capDisplayStock(data.totalStock);
               let level, pct, hintText;
 
-              if (stock > 200) {
-                  level    = 'high';
-                  pct      = 100;
-                  hintText = 'High demand — order yours before it sells out!';
-              } else if (stock > 100) {
-                  level    = 'medium';
-                  pct      = Math.round((stock / 200) * 100);
-                  hintText = 'Selling fast — grab yours while you can!';
+              if (inventoryMode === 'francenel') {
+                  // Comportement original intact
+                  if (stock > 200) {
+                      level    = 'high';
+                      pct      = 100;
+                      hintText = 'High demand — order yours before it sells out!';
+                  } else if (stock > 100) {
+                      level    = 'medium';
+                      pct      = Math.round((stock / 200) * 100);
+                      hintText = 'Selling fast — grab yours while you can!';
+                  } else {
+                      level    = 'low';
+                      pct      = Math.max(8, Math.round((stock / 100) * 50));
+                      hintText = '⚠️ Almost gone — don\'t miss out!';
+                  }
               } else {
-                  level    = 'low';
-                  pct      = Math.max(8, Math.round((stock / 100) * 50));
-                  hintText = '⚠️ Almost gone — don\'t miss out!';
+                  // Mode anderson — barre proportionnelle au stock affiché
+                  if (stock > 1000) {
+                      level    = 'high';
+                      pct      = 100;
+                      hintText = 'High demand — order yours before it sells out!';
+                  } else if (stock > 400) {
+                      level    = 'medium';
+                      pct      = Math.round((stock / 1000) * 100);
+                      hintText = 'Selling fast — grab yours while you can!';
+                  } else if (stock > 200) {
+                      level    = 'medium-low';
+                      pct      = Math.round((stock / 400) * 60);
+                      hintText = 'Limited stock — order soon!';
+                  } else if (stock > 100) {
+                      level    = 'low';
+                      pct      = Math.round((stock / 200) * 40);
+                      hintText = '⚠️ Almost gone — don\'t miss out!';
+                  } else {
+                      level    = 'critical';
+                      pct      = Math.max(8, Math.round((stock / 100) * 25));
+                      hintText = '🔴 Last units — order now!';
+                  }
               }
 
             // Label

@@ -914,6 +914,17 @@
 .pp-stock-block.error { display: none; }
 
 
+.pp-stock-label.stock--medium-low .pp-stock-qty { color: #d97706; }
+.pp-stock-label.stock--critical   .pp-stock-qty { color: #b91c1c; }
+
+.pp-stock-bar-fill.stock--medium-low {
+    background: linear-gradient(90deg, #d97706, #f59e0b);
+}
+.pp-stock-bar-fill.stock--critical {
+    background: linear-gradient(90deg, #b91c1c, #dc2626);
+    animation: stockPulse 1.4s ease-in-out infinite;
+}
+
 /* ════════════════════════════
    BUNDLE
    → Style jrgq-gallery-stats-strip sur conteneur
