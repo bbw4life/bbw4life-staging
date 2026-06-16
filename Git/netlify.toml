@@ -1,9 +1,13 @@
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
+[build]
+  environment = { NODE_VERSION = "18" }
 
 [build.environment]
   NODE_OPTIONS = "--no-deprecation"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/**"]
 
 [functions.environment]
   NODE_OPTIONS = "--no-deprecation"

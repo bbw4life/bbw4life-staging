@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const fetch  = require('node-fetch');
 
 const SANDBOX = process.env.NOWPAYMENTS_SANDBOX === 'true';
 const BASE_URL_NOW = SANDBOX
