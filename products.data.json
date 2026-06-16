@@ -4291,6 +4291,7 @@
  },
   {
     "type": "settings",
+    "inventory_display_mode": "anderson",
     "product_title_badge": "yes",
     "thumbnails_desktop_vertical_left": "yes",
     "thumbnails_desktop_horizontal_below": "no",

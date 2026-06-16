@@ -92,7 +92,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify({
+        body: JSON.stringify({ 
           success:      true,
           cj_id:        cj_id,
           internal_id:  rawParam,
