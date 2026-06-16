@@ -194,10 +194,6 @@ if (shipping.email) {
 }
 
 
-
-
-
-
     const affRef = (provider === 'paypal' ? (purchaseUnit?.reference_id || '').split('|')[5] : shipping.affRef) || null;
     
     if (affRef) {

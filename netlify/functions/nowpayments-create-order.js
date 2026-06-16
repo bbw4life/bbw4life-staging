@@ -1,9 +1,9 @@
 const https  = require('https');
 const fetch  = require('node-fetch');
 
-// ── Mode : sandbox hardcodé pour les tests ──
-const BASE_URL_NOW = 'api.sandbox.nowpayments.io';
-const API_KEY      = process.env.NOWPAYMENTS_API_KEY_SANDBOX;
+// ── Mode LIVE ──
+const BASE_URL_NOW = 'api.nowpayments.io';
+const API_KEY      = process.env.NOWPAYMENTS_API_KEY;
 
 // ── Fetch settings from products.data.json ──
 async function getSettings() {
@@ -42,10 +42,10 @@ function sanitizeCart(cart, settings) {
 
 // ── Compute totals ──
 function computeTotals(cart, settings, shippingMethod) {
-  const cd                  = settings.cart_drawer || {};
-  const SHIPPING_COST       = parseFloat(settings.shipping_cost) || 10.00;
-  const TAX_RATE            = parseFloat(settings.tax_rate)      || 0.00;
-  const freeShipThreshold   = parseFloat(cd.free_shipping_threshold) || 0;
+  const cd                = settings.cart_drawer || {};
+  const SHIPPING_COST     = parseFloat(settings.shipping_cost) || 10.00;
+  const TAX_RATE          = parseFloat(settings.tax_rate)      || 0.00;
+  const freeShipThreshold = parseFloat(cd.free_shipping_threshold) || 0;
 
   const subtotal = cart.reduce((sum, item) =>
     sum + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0), 0);
@@ -61,7 +61,7 @@ function computeTotals(cart, settings, shippingMethod) {
   };
 }
 
-// ── HTTPS helper (natif Node — pas de restriction réseau) ──
+// ── HTTPS helper natif Node ──
 function httpsPost(hostname, path, data, headers) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(data);
@@ -75,15 +75,22 @@ function httpsPost(hostname, path, data, headers) {
         ...headers
       }
     };
-    const req = https.request(options, (res) => {
+    const req = https.request(options, (response) => {
       let raw = '';
-      res.on('data', chunk => raw += chunk);
-      res.on('end', () => {
-        try { resolve({ status: res.statusCode, data: JSON.parse(raw) }); }
-        catch { resolve({ status: res.statusCode, data: {} }); }
+      response.on('data', chunk => raw += chunk);
+      response.on('end', () => {
+        try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
+        catch { resolve({ status: response.statusCode, data: {} }); }
       });
     });
-    req.on('error', reject);
+    req.on('error', (err) => {
+      console.error('[NOWPAYMENTS] HTTPS error:', err.message);
+      reject(err);
+    });
+    req.setTimeout(10000, () => {
+      req.destroy();
+      reject(new Error('NOWPayments request timeout'));
+    });
     req.write(body);
     req.end();
   });
@@ -100,15 +107,17 @@ exports.handler = async (event) => {
     }
 
     if (!API_KEY) {
+      console.error('[NOWPAYMENTS] Missing API key');
       return res(500, { success: false, error: 'NOWPayments not configured' });
     }
+
+    console.log(`[NOWPAYMENTS] Mode: LIVE | Host: ${BASE_URL_NOW}`);
 
     // ── Load settings + sanitize cart ──
     const settings       = await getSettings();
     const cart           = sanitizeCart(rawCart, settings);
     const shippingMethod = shipping?.shipping_method || 'Standard Shipping';
 
-    // ── Utilise les totaux passés par validate-checkout (déjà vérifiés côté serveur) ──
     const shippingCost = shipping_cost !== undefined
       ? parseFloat(shipping_cost)
       : computeTotals(cart, settings, shippingMethod).shippingCost;
@@ -128,7 +137,7 @@ exports.handler = async (event) => {
       ? cart[0].title.substring(0, 100)
       : `BBW4LIFE — ${cart.length} articles`;
 
-    const body = {
+    const invoiceBody = {
       price_amount:        parseFloat(totalAmount),
       price_currency:      'usd',
       order_id:            orderId,
@@ -140,19 +149,26 @@ exports.handler = async (event) => {
       is_fee_paid_by_user: false,
     };
 
+    console.log('[NOWPAYMENTS] Creating invoice:', orderId, '| Amount:', totalAmount, 'USD');
+
     const result = await httpsPost(
       BASE_URL_NOW,
       '/v1/invoice',
-      body,
+      invoiceBody,
       { 'x-api-key': API_KEY }
     );
 
-    console.log('[NOWPAYMENTS] Response:', result.status, JSON.stringify(result.data));
+    console.log('[NOWPAYMENTS] Response status:', result.status);
 
     if (result.status !== 200 || !result.data.invoice_url) {
-      console.error('[NOWPAYMENTS] Error:', JSON.stringify(result.data));
-      return res(500, { success: false, error: result.data.message || 'NOWPayments order failed' });
+      console.error('[NOWPAYMENTS] Error response:', JSON.stringify(result.data));
+      return res(500, {
+        success: false,
+        error: result.data?.message || result.data?.error || 'NOWPayments invoice creation failed'
+      });
     }
+
+    console.log('[NOWPAYMENTS] Invoice created:', result.data.id);
 
     return res(200, {
       success:    true,
@@ -163,7 +179,7 @@ exports.handler = async (event) => {
 
   } catch (err) {
     console.error('[NOWPAYMENTS] Fatal:', err.message);
-    return res(500, { success: false, error: 'Internal server error' });
+    return res(500, { success: false, error: err.message || 'Internal server error' });
   }
 };
 
