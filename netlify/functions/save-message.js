@@ -58,7 +58,21 @@ exports.handler = async (event) => {
         `📌 <b>Sujet:</b> ${subject}\n` +
         `🗂️ <b>Catégorie:</b> ${category || 'N/A'}`
         );
-        return { statusCode: 200, body: JSON.stringify({ success: true }) };
+        // ── Email Contact Auto-Reply ──
+            fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                trigger:   'contact_reply',
+                email:     email,
+                firstName: firstName,
+                lastName:  lastName,
+                subject:   subject,
+                category:  category || 'N/A'
+            })
+            }).catch(e => console.warn('[Email] contact_reply failed:', e.message));
+
+            return { statusCode: 200, body: JSON.stringify({ success: true }) };
     } catch (error) {
         console.error("SAVE MESSAGE ERROR:", error.message);
         return { 

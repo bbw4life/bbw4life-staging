@@ -1062,6 +1062,14 @@ select:focus {
 }
 
 
+/* ── NOWPayments label ── */
+.payment-label:has(input[value="nowpayments"]:checked) {
+  border-color: #6c5ce7;
+  background: linear-gradient(135deg, rgba(108,92,231,0.06), rgba(108,92,231,0.02));
+  box-shadow: 0 0 0 2px rgba(108,92,231,0.15), 0 3px 14px rgba(108,92,231,0.10);
+}
+
+
 /* ════════════════════════════════════════════════════════════════
    POLICIES FOOTER
 ════════════════════════════════════════════════════════════════ */

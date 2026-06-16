@@ -124,6 +124,16 @@ exports.handler = async (event) => {
 
     await notifyTelegram(rapport);
 
+    // ── Lancer le tracking checker en même temps ──
+    try {
+      await fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto?action=tracking&secret=${process.env.REPORT_SECRET}`, {
+        method: 'GET'
+      });
+      console.log('[DailyReport] Tracking checker triggered');
+    } catch (e) {
+      console.warn('[DailyReport] Tracking trigger failed:', e.message);
+    }
+
     return {
       statusCode: 200,
       body: JSON.stringify({ success: true, today })

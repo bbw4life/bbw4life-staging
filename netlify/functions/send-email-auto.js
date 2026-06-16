@@ -4,6 +4,7 @@
 
 const { Resend } = require('resend');
 const { google }  = require('googleapis');
+const crypto = require('crypto');
 
 // ════════════════════════════════════════════════════════════════
 //  ENVIRONMENT
@@ -210,6 +211,188 @@ async function deliver(to, subject, html) {
     return true;
   } catch (e) {
     console.error(`[Resend] ✗ ${to}:`, e.message);
+    return false;
+  }
+}
+
+
+// ════════════════════════════════════════════════════════════════
+//  EPROLO — TRACKING CHECKER
+// ════════════════════════════════════════════════════════════════
+
+function buildEproloSign() {
+  const apiKey    = process.env.EPROLO_API_KEY;
+  const apiSecret = process.env.EPROLO_API_SECRET;
+  const timestamp = Date.now();
+  const sign      = crypto.createHash('md5').update(apiKey + timestamp + apiSecret).digest('hex');
+  return { apiKey, timestamp, sign };
+}
+
+async function getEproloOrderTracking(internalOrderId) {
+  try {
+    const { apiKey, timestamp, sign } = buildEproloSign();
+
+    const url = `https://openapi.eprolo.com/order_list.html?sign=${sign}&timestamp=${timestamp}&order_id=${encodeURIComponent(internalOrderId)}&status=0&page_size=1`;
+
+    const res  = await fetch(url, {
+      method:  'GET',
+      headers: { 'apiKey': apiKey }
+    });
+
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { return null; }
+
+    if (data.code !== '0' && data.code !== 0) {
+      console.warn(`[EPROLO Tracking] API error: ${data.msg}`);
+      return null;
+    }
+
+    const list  = (data.data && data.data.list) || [];
+    const order = list[0];
+    if (!order) return null;
+
+    // Tracking est dans logistics[]
+    const logistics = (order.logistics || [])[0];
+    if (!logistics || !logistics.tracking_number) return null;
+
+    return {
+      trackingNumber: logistics.tracking_number,
+      carrier:        logistics.tracking_company || null,
+      trackingUrl:    logistics.tracking_url     || null
+    };
+
+  } catch (e) {
+    console.warn('[EPROLO Tracking] Error:', e.message);
+    return null;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  TRACKING SCHEDULER — appelé par cron-job.org toutes les 12h
+// ════════════════════════════════════════════════════════════════
+async function runTrackingChecker(sheets, settings) {
+  console.log('[Tracking] Starting tracking check...');
+
+  const rows = await sheetRead(
+    sheets,
+    process.env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
+    'bbw4life-pending-orders!A:S'
+  );
+
+  if (rows.length <= 1) {
+    console.log('[Tracking] No orders found');
+    return { checked: 0, found: 0 };
+  }
+
+  const now     = new Date();
+  let checked   = 0;
+  let found     = 0;
+
+  // Regrouper par payment_id pour éviter les doublons
+  const processed = new Set();
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+
+    const internalOrderId = row[0]  || '';
+    const paymentId       = row[2]  || '';
+    const fullName        = row[3]  || '';
+    const email           = row[4]  || '';
+    const status          = (row[14] || '').toLowerCase();
+    const orderDateStr    = row[16] || '';
+    const trackingCol     = row[18] || ''; // Col S = Tracking Number
+
+    // Skip si déjà un tracking ou pas successful
+    if (trackingCol)                   continue;
+    if (status !== 'successful')       continue;
+    if (!email || !email.includes('@')) continue;
+    if (processed.has(paymentId))      continue;
+
+    // Vérifier que 24h sont passées depuis la commande
+    if (orderDateStr) {
+      const orderDate = new Date(orderDateStr);
+      const hoursElapsed = (now - orderDate) / (1000 * 60 * 60);
+      if (hoursElapsed < 24) {
+        console.log(`[Tracking] Order ${internalOrderId} — only ${hoursElapsed.toFixed(1)}h elapsed, skipping`);
+        continue;
+      }
+    }
+
+    checked++;
+    processed.add(paymentId);
+
+    // Interroger EPROLO
+    const result = await getEproloOrderTracking(internalOrderId);
+
+    if (result && result.trackingNumber) {
+      found++;
+
+      // 1. Sauvegarder le tracking dans le sheet (col S = index 18, ligne i+1)
+      try {
+        await sheets.spreadsheets.values.update({
+          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
+          range:         `bbw4life-pending-orders!S${i + 1}`,
+          valueInputOption: 'RAW',
+          resource: { values: [[result.trackingNumber]] }
+        });
+        console.log(`[Tracking] ✅ Saved tracking ${result.trackingNumber} for order ${internalOrderId}`);
+      } catch (e) {
+        console.warn('[Tracking] Failed to save tracking:', e.message);
+      }
+
+      // 2. Envoyer email tracking au client
+      const nameParts = fullName.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName  = nameParts.slice(1).join(' ') || '';
+
+      await trySendDirect(email, T.ORDER_TRACKING, async () => {
+        return await composeOrderTracking({
+          firstName,
+          lastName,
+          orderId:        internalOrderId,
+          trackingNumber: result.trackingNumber,
+          carrier:        result.carrier || ''
+        }, settings);
+      });
+
+      console.log(`[Tracking] ✅ Email sent to ${email}`);
+
+      // Notifier Telegram
+      try {
+        await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            chat_id:    process.env.TELEGRAM_CHAT_ID,
+            text:       `📦 <b>Tracking trouvé!</b>\n\n👤 <b>Client:</b> ${fullName}\n📧 <b>Email:</b> ${email}\n🔢 <b>Tracking:</b> ${result.trackingNumber}\n🚚 <b>Carrier:</b> ${result.carrier || 'N/A'}`,
+            parse_mode: 'HTML'
+          })
+        });
+      } catch (e) {
+        console.warn('[Tracking] Telegram notify failed:', e.message);
+      }
+
+    } else {
+      console.log(`[Tracking] ⏳ No tracking yet for ${internalOrderId}`);
+    }
+
+    // Pause entre chaque requête EPROLO
+    await sleep(800);
+  }
+
+  console.log(`[Tracking] Done — checked: ${checked} | found: ${found}`);
+  return { checked, found };
+}
+
+// Helper send sans log check (pour tracking — 1 seul envoi par commande grâce au sheet)
+async function trySendDirect(email, type, composeFn) {
+  if (!email || !email.includes('@')) return false;
+  try {
+    const { subject, html } = await composeFn();
+    return await deliver(email, subject, html);
+  } catch (e) {
+    console.error(`[trySendDirect] Error ${email}/${type}:`, e.message);
     return false;
   }
 }
@@ -755,7 +938,7 @@ async function composeOrderTracking(data, settings) {
         </td>
       </tr>
     </table>
-    ${cCTA('Track My Order →', `${BASE_URL}/page/order-tracking.html`)}
+    ${cCTA('Track My Order →', data.trackingUrl || `${BASE_URL}/page/order-tracking.html`)}
     ${cDivider()}
     <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:${BBW.textLight};text-align:center;">
       Order: <strong style="color:${BBW.dark};">#${orderId || 'BBW4LIFE'}</strong>
@@ -1263,8 +1446,27 @@ exports.handler = async (event) => {
     }
 
     // ── BATCH / SCHEDULER MODE (GET) ──────────────────────
-    // Called by cron-job.org to process newsletter sequences
+    
+    // ── BATCH / SCHEDULER MODE (GET) ──────────────────────
+
     if (event.httpMethod === 'GET') {
+      const params = event.queryStringParameters || {};
+
+      // ── Tracking checker (appelé par cron toutes les 12h) ──
+      if (params.action === 'tracking') {
+        const secret = params.secret;
+        if (secret !== process.env.REPORT_SECRET) {
+          return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
+        }
+        const trackResult = await runTrackingChecker(sheets, settings);
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({ success: true, ...trackResult })
+        };
+      }
+
+      // ── Newsletter batch (existant) ──
       console.log('[Handler] Batch newsletter sequence mode');
 
       const accountRows = await sheetRead(

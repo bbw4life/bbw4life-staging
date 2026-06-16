@@ -170,6 +170,30 @@ exports.handler = async (event) => {
     }
 
 
+    // ── Email Order Confirmation ──
+if (shipping.email) {
+  fetch(`${BASE_URL}/.netlify/functions/send-email-auto`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      trigger:    'order_confirm',
+      email:      shipping.email,
+      firstName:  shipping.firstName || '',
+      lastName:   shipping.lastName  || '',
+      orderId:    paymentId,
+      items:      orderItems,
+      total:      totalAmount,
+      shippingAddress: [
+        shipping.address,
+        shipping.city,
+        shipping.state,
+        shipping.country
+      ].filter(Boolean).join(', ')
+    })
+  }).catch(e => console.warn('[Email] order_confirm failed:', e.message));
+}
+
+
 
 
 

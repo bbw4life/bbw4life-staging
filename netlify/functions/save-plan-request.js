@@ -63,18 +63,20 @@ exports.handler = async (event) => {
       resource:         { values }
     });
 
-    fetch(`${process.env.URL}/.netlify/functions/send-email-auto`, {
+    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        trigger: 'plan_request',
-        email,
-        firstName,
-        program,
-        size:  size  || '',
-        color: color || ''
-      }),
-    }).catch(e => console.warn('[Email] plan_request trigger failed:', e.message));
+        trigger:   'plan_request',
+        email:     email,
+        firstName: firstName,
+        lastName:  lastName,
+        program:   program,
+        productId: productId || '',
+        size:      size  || '',
+        color:     color || ''
+      })
+    }).catch(e => console.warn('[Email] plan_request failed:', e.message));
 
     await notifyTelegram(
     `⏳ <b>Pdg Francenel, un client vient de mettre en attente un des design BBW4LIFE!</b>\n\n` +
@@ -82,7 +84,21 @@ exports.handler = async (event) => {
     `📧 <b>Email:</b> ${email}\n` +
     `🎨 <b>Produit:</b> ${program}`
   );
-  return { statusCode: 200, body: JSON.stringify({ success: true }) };
+  // ── Email Custom Product ──
+    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trigger:       'custom_product',
+        email:         email,
+        firstname:     firstname,
+        lastname:      lastname,
+        product_title: product_title,
+        product_desc:  product_desc
+      })
+    }).catch(e => console.warn('[Email] custom_product failed:', e.message));
+
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
 
   } catch (error) {
     console.error('PLAN REQUEST ERROR:', error.message);
