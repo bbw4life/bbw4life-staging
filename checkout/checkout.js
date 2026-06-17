@@ -369,7 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 cart: sanitizedCart,
                 shippingMethod: selectedMethodPay,
                 clientTotal,
-                cartToken
+                cartToken,
+                promoCode: appliedPromo ? appliedPromo.code : null
             })
         });
         const verifyData = await verifyRes.json();
