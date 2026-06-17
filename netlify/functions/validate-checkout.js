@@ -71,6 +71,44 @@ function validateCart(cart) {
   return errors;
 }
 
+function resolvePromoDiscountPercent(promoCode, cart, settings) {
+  if (!promoCode) return 0;
+
+  const code = String(promoCode).trim().toUpperCase();
+  if (!code) return 0;
+
+  const hasBundle  = cart.some(i => i.fromBundle);
+  const hasUpsell  = cart.some(i => i.fromUpsell);
+  const hasFreePromo = cart.some(i => i.isFreePromo);
+
+  // Mêmes règles d'incompatibilité que côté client
+  if (hasBundle || hasUpsell || hasFreePromo) return 0;
+
+  const cd = settings.cart_drawer || {};
+  const countFreeForPromo = String(cd.promo_count_free_items || 'No').toLowerCase() === 'yes';
+  const totalQuantity = countFreeForPromo
+    ? cart.reduce((s, i) => s + (parseInt(i.quantity) || 0), 0)
+    : cart.filter(i => !i.isFreePromo).reduce((s, i) => s + (parseInt(i.quantity) || 0), 0);
+
+  // ── Code affilié ──
+  const affCfg     = settings.affiliation || {};
+  const affPrefix  = String(affCfg.promo_code_prefix || '').toUpperCase();
+  const affPercent = parseFloat(affCfg.promo_code_discount_percent) || 0;
+
+  if (affPrefix && (code === affPrefix || code.startsWith(affPrefix + '-'))) {
+    return affPercent > 0 ? affPercent : 0;
+  }
+
+  // ── Code promo normal (settings.promos[]) ──
+  const promos = Array.isArray(settings.promos) ? settings.promos : [];
+  const promo = promos.find(p => String(p.code || '').toUpperCase() === code);
+  if (promo && parseInt(promo.items) === totalQuantity) {
+    return parseFloat(promo.percent) || 0;
+  }
+
+  return 0;
+}
+
 function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
@@ -102,11 +140,14 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       const clientPrice = parseFloat(item.price);
       const prod = realProducts.find(p => p.id === item.id);
       if (prod) {
+        // Vérifier que le prix bundle est bien <= prix catalogue (sécurité minimale)
         const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
         const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
+        // On accepte le prix client s'il est <= prix catalogue (bundle = réduction)
         if (!isNaN(clientPrice) && clientPrice <= catalogPrice) {
           return { ...item, price: clientPrice };
         }
+        // Si le prix client est supérieur au catalogue, on prend le catalogue
         return { ...item, price: isNaN(catalogPrice) ? clientPrice : catalogPrice };
       }
       return item;
@@ -139,46 +180,19 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
     return item;
   });
 
-  let subtotal = sanitized.reduce((s, i) => {
+  const rawSubtotal = sanitized.reduce((s, i) => {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
 
-  // ── Application du code promo depuis settings.promos ──
-  let promoDiscountAmount = 0;
-  if (promoCode && Array.isArray(settings.promos) && settings.promos.length > 0) {
-    const normalizedInput = promoCode.trim().toUpperCase();
-    const matchedPromo = settings.promos.find(
-      p => p.code && p.code.trim().toUpperCase() === normalizedInput
-    );
+  // ── Réduction code promo (normal OU affilié), résolue UNIQUEMENT depuis settings ──
+  const promoPercent = resolvePromoDiscountPercent(promoCode, sanitized, settings);
+  const promoDiscountAmount = promoPercent > 0
+    ? parseFloat((rawSubtotal * (promoPercent / 100)).toFixed(2))
+    : 0;
 
-    if (matchedPromo) {
-      const discountPct = parseFloat(matchedPromo.percent) || 0;
-      if (discountPct > 0) {
-        promoDiscountAmount = subtotal * (discountPct / 100);
-        subtotal = subtotal - promoDiscountAmount;
-        if (subtotal < 0) subtotal = 0;
-      }
-    } else {
-      // Code non trouvé dans settings.promos → vérifier si c'est un code affilié
-      // (préfixe depuis settings.affiliation.promo_code_prefix)
-      const affCfg = settings.affiliation || {};
-      const affPrefix = (affCfg.promo_code_prefix || '').toUpperCase();
-      const affDiscountPct = parseFloat(affCfg.promo_code_discount_percent) || 0;
+  const subtotal = parseFloat((rawSubtotal - promoDiscountAmount).toFixed(2));
 
-      if (
-        affPrefix &&
-        affDiscountPct > 0 &&
-        (normalizedInput === affPrefix || normalizedInput.startsWith(affPrefix + '-'))
-      ) {
-        // Code affilié valide selon le format — le serveur accepte la réduction
-        promoDiscountAmount = subtotal * (affDiscountPct / 100);
-        subtotal = subtotal - promoDiscountAmount;
-        if (subtotal < 0) subtotal = 0;
-      }
-    }
-  }
-
-  const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
+  const freeByThreshold = freeThreshold > 0 && rawSubtotal >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFree = freeByThreshold || freeByMethod;
 
@@ -187,12 +201,13 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
   const total    = subtotal + shipping + tax;
 
   return {
-    subtotal:             parseFloat(subtotal.toFixed(2)),
-    promoDiscountAmount:  parseFloat(promoDiscountAmount.toFixed(2)),
-    shippingCost:         parseFloat(shipping.toFixed(2)),
-    taxAmount:            parseFloat(tax.toFixed(2)),
-    total:                parseFloat(total.toFixed(2)),
-    sanitizedCart:        sanitized
+    subtotal:     parseFloat(subtotal.toFixed(2)),
+    shippingCost: parseFloat(shipping.toFixed(2)),
+    taxAmount:    parseFloat(tax.toFixed(2)),
+    total:        parseFloat(total.toFixed(2)),
+    promoPercent,
+    promoDiscountAmount,
+    sanitizedCart: sanitized
   };
 }
 
@@ -233,7 +248,7 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { subtotal, promoDiscountAmount, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
+      const { subtotal, shippingCost, taxAmount, total, sanitizedCart, promoPercent, promoDiscountAmount } = computeServerTotal(
         cart,
         settings,
         allProducts,
@@ -244,8 +259,8 @@ exports.handler = async (event) => {
       if (clientTotal !== undefined) {
         const clientTotalRounded = parseFloat(parseFloat(clientTotal).toFixed(2));
         const diff = Math.abs(clientTotalRounded - total);
-        if (diff > 0.50) {
-          console.warn(`[CHECKOUT SECURITY] Price mismatch — client: $${clientTotal} | server: $${total} | IP: ${ip}`);
+        if (diff > 0.10) {
+          console.warn(`[CHECKOUT SECURITY] Price mismatch — client: $${clientTotal} | server: $${total} | promoCode: ${promoCode || 'none'} | promoPercent: ${promoPercent} | IP: ${ip}`);
           return res(400, {
             success: false,
             error: 'Price mismatch detected. Please refresh and try again.',
@@ -259,10 +274,11 @@ exports.handler = async (event) => {
       return res(200, {
         success: true,
         subtotal,
-        promoDiscountAmount,
         shippingCost,
         taxAmount,
         total,
+        promoPercent,
+        promoDiscountAmount,
         cartToken: token,
         sanitizedCart
       });
