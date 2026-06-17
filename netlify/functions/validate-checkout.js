@@ -180,31 +180,32 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
     return item;
   });
 
-  const rawSubtotal = sanitized.reduce((s, i) => {
+  // subtotal = somme brute du panier (équivalent exact de getSubtotal() côté client : PAS réduit)
+  const subtotal = sanitized.reduce((s, i) => {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
-
-  // ── Réduction code promo (normal OU affilié), résolue UNIQUEMENT depuis settings ──
   const promoPercent = resolvePromoDiscountPercent(promoCode, sanitized, settings);
   const promoDiscountAmount = promoPercent > 0
-    ? parseFloat((rawSubtotal * (promoPercent / 100)).toFixed(2))
+    ? parseFloat((subtotal * (promoPercent / 100)).toFixed(2))
     : 0;
 
-  const subtotal = parseFloat((rawSubtotal - promoDiscountAmount).toFixed(2));
-
-  const freeByThreshold = freeThreshold > 0 && rawSubtotal >= freeThreshold;
+  const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFree = freeByThreshold || freeByMethod;
 
   const shipping = isFree ? 0 : SHIPPING_COST;
+  // Taxe calculée sur le subtotal BRUT (avant réduction), comme effectiveTax côté client
   const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const total    = subtotal + shipping + tax;
+
+  // finalTotal = subtotal + tax + shipping - discountAmount (ordre identique à checkout.js)
+  const rawTotal = subtotal + shipping + tax - promoDiscountAmount;
+  const total = Math.max(0, parseFloat(rawTotal.toFixed(2)));
 
   return {
     subtotal:     parseFloat(subtotal.toFixed(2)),
     shippingCost: parseFloat(shipping.toFixed(2)),
     taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        parseFloat(total.toFixed(2)),
+    total:        total,
     promoPercent,
     promoDiscountAmount,
     sanitizedCart: sanitized
