@@ -2,6 +2,21 @@
 const { google } = require("googleapis");
 const fetch = require("node-fetch");
 
+// ── Lit le switch global Yes/No depuis l'onglet Settings ──
+async function getAutoFulfillMode(sheets, spreadsheetId) {
+  try {
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: "Settings!A1"
+    });
+    const value = (res.data.values?.[0]?.[0] || "yes").trim().toLowerCase();
+    return value === "no" ? "no" : "yes"; // sécurité : tout sauf "no" explicite = "yes"
+  } catch (e) {
+    console.log('[RETRY PENDING] Onglet Settings introuvable, mode par défaut: yes');
+    return "yes";
+  }
+}
+
 exports.handler = async () => {
   console.log('[RETRY PENDING] 🚀 Démarrage - ' + new Date().toISOString());
   try {
@@ -35,12 +50,20 @@ exports.handler = async () => {
       return { statusCode: 200, body: JSON.stringify({ success: true, processed: 0 }) };
     }
 
+    const autoMode = await getAutoFulfillMode(sheets, spreadsheetId);
+    console.log(`[RETRY PENDING] Mode auto-fulfill : ${autoMode.toUpperCase()}`);
+
     const dataRows = rows.slice(1);
     const groups = {};
     dataRows.forEach((row, index) => {
       const paymentId = row[2] || "";
       const status = (row[14] || "").toLowerCase();
-      if (status === "pending" || status === "failed") {
+
+      const shouldProcess = autoMode === "yes"
+        ? (status === "pending" || status === "failed")
+        : (status === "approved"); // mode manuel : uniquement les lignes que TOI tu passes à "approved"
+
+      if (shouldProcess) {
         if (!groups[paymentId]) groups[paymentId] = [];
         groups[paymentId].push({ row, lineNumber: index + 2 });
       }
