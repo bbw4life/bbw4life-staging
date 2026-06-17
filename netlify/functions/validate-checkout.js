@@ -152,14 +152,16 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
 
   const shipping = isFree ? 0 : SHIPPING_COST;
   const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const total    = subtotal + shipping + tax;
+ const totalBeforeDiscount = subtotal + shipping + tax;
+  const total = Math.max(0, totalBeforeDiscount - discountAmount);
 
   return {
-    subtotal:     parseFloat(subtotal.toFixed(2)),
-    shippingCost: parseFloat(shipping.toFixed(2)),
-    taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        parseFloat(total.toFixed(2)),
-    sanitizedCart: sanitized
+    subtotal:       parseFloat(subtotal.toFixed(2)),
+    shippingCost:   parseFloat(shipping.toFixed(2)),
+    taxAmount:      parseFloat(tax.toFixed(2)),
+    discountAmount: parseFloat(discountAmount.toFixed(2)),
+    total:          parseFloat(total.toFixed(2)),
+    sanitizedCart
   };
 }
 

@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const forceReset = urlParams.get('reset') === '1';
 
     // ── NOWPayments : commande déjà traitée par le webhook ──
-        if (provider === 'nowpayments') {
+        const provider = urlParams.get('provider') || '';
+         if (provider === 'nowpayments') {
             localStorage.removeItem('cart');
             if (spinner) spinner.style.display = 'none';
             showSuccess();

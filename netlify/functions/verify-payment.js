@@ -139,7 +139,7 @@ exports.handler = async (event) => {
     console.log("[PAYPAL] Final shipping pulled:", JSON.stringify(shipping));
       paymentVerified = true;
 
-      
+
 
     // ====================== NOWPAYMENTS ======================
     } else if (provider === "nowpayments") {
@@ -152,7 +152,15 @@ exports.handler = async (event) => {
 
     if (!paymentVerified || cart.length === 0) throw new Error("Payment verification failed or cart empty");
 
-    let totalAmount = provider === "stripe" ? session.amount_total / 100 : parseFloat(purchaseUnit.amount.value);
+    let totalAmount = 0;
+    if (provider === "stripe") {
+      totalAmount = session.amount_total / 100;
+    } else if (provider === "paypal") {
+      totalAmount = parseFloat(purchaseUnit.amount.value);
+    } else if (provider === "nowpayments") {
+      const parsed = JSON.parse(event.body);
+      totalAmount = parseFloat(parsed.totalAmount) || 0;
+    }
     const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     const orderItems = cart.map(item => ({
