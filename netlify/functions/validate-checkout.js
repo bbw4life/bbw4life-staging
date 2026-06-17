@@ -98,38 +98,54 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       return { ...item, isFreePromo: false };
     }
 
-    // ── Bundle : le prix réduit vient du client, on ne l'écrase pas ──
-    if (item.fromBundle) {
-      const clientPrice = parseFloat(item.price);
-      const prod = realProducts.find(p => p.id === item.id);
-      if (prod) {
-        // Vérifier que le prix bundle est bien <= prix catalogue (sécurité minimale)
-        const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
-        const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
-        // On accepte le prix client s'il est <= prix catalogue (bundle = réduction)
-        if (!isNaN(clientPrice) && clientPrice <= catalogPrice) {
-          return { ...item, price: clientPrice };
-        }
-        // Si le prix client est supérieur au catalogue, on prend le catalogue
-        return { ...item, price: isNaN(catalogPrice) ? clientPrice : catalogPrice };
-      }
-      return item;
-    }
+    // ── Bundle : prix calculé CÔTÉ SERVEUR depuis les settings ──
+      if (item.fromBundle) {
+        const prod = realProducts.find(p => p.id === item.id);
+        if (prod) {
+          const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
+          const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
 
-    // ── Upsell : le prix réduit vient du client, on ne l'écrase pas ──
-    if (item.fromUpsell) {
-      const clientPrice = parseFloat(item.price);
-      const prod = realProducts.find(p => p.id === item.id);
-      if (prod) {
-        const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
-        const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
-        if (!isNaN(clientPrice) && clientPrice <= catalogPrice) {
-          return { ...item, price: clientPrice };
+          const maxBundleDiscount = Math.max(
+            parseFloat(prod.trio_discount  || 0),
+            parseFloat(prod.duo_discount   || 0),
+            parseFloat(prod.single_discount|| 0)
+          );
+          const minAllowedPrice = parseFloat((catalogPrice * (1 - maxBundleDiscount / 100)).toFixed(2));
+          const serverBundlePrice = Math.max(minAllowedPrice, catalogPrice * 0.50); // plancher à -50% même si discount > 50%
+
+          return { ...item, price: parseFloat(serverBundlePrice.toFixed(2)) };
         }
-        return { ...item, price: isNaN(catalogPrice) ? clientPrice : catalogPrice };
+        return item;
       }
-      return item;
-    }
+
+      // ── Upsell : prix calculé CÔTÉ SERVEUR depuis les settings ──
+      if (item.fromUpsell) {
+        const prod = realProducts.find(p => p.id === item.id);
+        if (prod) {
+          const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
+          const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
+
+          // Lire le discount upsell depuis settings.product_upsell
+          const upsellCfg = settings.product_upsell || {};
+          let upsellDiscountPct = 0;
+          // Chercher dans toutes les configs upsell le discount max applicable à ce produit
+          for (const key of Object.keys(upsellCfg)) {
+            const entry = upsellCfg[key];
+            if (!entry || !Array.isArray(entry.items)) continue;
+            const found = entry.items.find(i => i.product_id === prod.id);
+            if (found) {
+              const pct = parseFloat(entry.discount_percent || 0);
+              if (pct > upsellDiscountPct) upsellDiscountPct = pct;
+            }
+          }
+          const serverUpsellPrice = parseFloat(
+            (catalogPrice * (1 - upsellDiscountPct / 100)).toFixed(2)
+          );
+
+          return { ...item, price: parseFloat(serverUpsellPrice.toFixed(2)) };
+        }
+        return item;
+      }
 
     // ── Prix normal : relit depuis le catalogue ──
     const prod = realProducts.find(p => p.id === item.id);
@@ -168,6 +184,15 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       discountAmount = parseFloat((subtotal * (promo.percent / 100)).toFixed(2));
     }
   }
+
+
+  // ── Sécurité : pas de promo code sur bundle ou upsell ──
+if (promoCode && discountAmount > 0) {
+  const hasBundleOrUpsell = sanitized.some(i => i.fromBundle || i.fromUpsell);
+  if (hasBundleOrUpsell) {
+    discountAmount = 0;
+  }
+}
 
   const total = parseFloat((subtotal + shipping + tax - discountAmount).toFixed(2));
 
