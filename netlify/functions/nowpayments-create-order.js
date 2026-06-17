@@ -155,24 +155,26 @@ exports.handler = async (event) => {
 
     const totalAmount = parseFloat((subtotal + shippingCost + taxAmount).toFixed(2));
 
-    // ── Check minimum amount for usd → usdttrc20 ──
+    // ── Check minimum amount using TRX (lowest minimum ~$2) ──
+    // Invoice uses is_fixed_rate:false so customer can pay with any coin.
+    // We check against TRX as the floor — if total passes TRX min, it's safe.
     try {
       const minRes = await httpsGet(
         BASE_URL_NOW,
-        '/v1/min-amount?currency_from=usd&currency_to=usdttrc20&fiat_equivalent=usd',
+        '/v1/min-amount?currency_from=trx&currency_to=trx',
         { 'x-api-key': API_KEY }
       );
 
       if (minRes.status === 200 && minRes.data?.min_amount) {
-        const minAmount = parseFloat(minRes.data.min_amount);
-        console.log(`[NOWPAYMENTS] Min amount: $${minAmount} | Order total: $${totalAmount}`);
+        const minUSD = parseFloat(minRes.data?.fiat_equivalent) ;
+        console.log(`[NOWPAYMENTS] Min amount (USD floor): $${minUSD} | Order total: $${totalAmount}`);
 
-        if (totalAmount < minAmount) {
-          console.warn(`[NOWPAYMENTS] Order total $${totalAmount} is below minimum $${minAmount}`);
+        if (totalAmount < minUSD) {
+          console.warn(`[NOWPAYMENTS] Order total $${totalAmount} is below minimum $${minUSD}`);
           return res(400, {
             success: false,
-            error: `Order total ($${totalAmount}) is below the minimum required amount ($${minAmount.toFixed(2)}) for crypto payment.`,
-            min_amount: minAmount,
+            error: `Order total ($${totalAmount}) is below the minimum required for crypto payment ($${minUSD.toFixed(2)}).`,
+            min_amount: minUSD,
             total_amount: totalAmount,
           });
         }
