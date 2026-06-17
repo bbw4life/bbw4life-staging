@@ -1,7 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const fetch = require('node-fetch');
-const { google } = require('googleapis');
-const { getAndDeleteTempOrder } = require('./temp-orders-store');
+const {
+  getAndDeleteTempOrder,
+  isOrderAlreadyProcessed,
+  markOrderAsProcessed
+} = require('./temp-orders-store');
 
 exports.handler = async (event) => {
   console.log("=== VERIFY PAYMENT STARTED ===");
@@ -12,10 +15,19 @@ exports.handler = async (event) => {
     const paymentId = sessionId || orderID;
     if (!paymentId) throw new Error("Missing payment ID");
 
-    const alreadyProcessed = await isAlreadyProcessed(paymentId);
+    // ── ANTI-DOUBLON : vérification ET marquage immédiat avant tout traitement ──
+    const alreadyProcessed = await isOrderAlreadyProcessed(paymentId);
     if (alreadyProcessed) {
       console.log(`🚫 DUPLICATE DETECTED (${paymentId}) → SKIP`);
       return response(200, { success: true, message: "Duplicate - already processed" });
+    }
+
+    // On marque IMMÉDIATEMENT, avant tout fulfillment, pour bloquer tout refresh
+    // qui arriverait pendant le traitement (race condition).
+    const marked = await markOrderAsProcessed(paymentId);
+    if (!marked) {
+      console.error(`[ANTI-DUPLICATE] Impossible de marquer ${paymentId} — abandon par sécurité`);
+      throw new Error("Could not secure payment processing lock");
     }
 
     let cart = [];
@@ -126,10 +138,6 @@ exports.handler = async (event) => {
       };
       console.log("[PAYPAL] Final shipping pulled:", JSON.stringify(shipping));
       paymentVerified = true;
-    console.log("[PAYPAL] Final shipping pulled:", JSON.stringify(shipping));
-      paymentVerified = true;
-
-
 
     // ====================== NOWPAYMENTS ======================
     } else if (provider === "nowpayments") {
@@ -249,63 +257,6 @@ if (shipping.email) {
     return response(500, { success: false, error: error.message });
   }
 };
-
-// ====================== ANTI-DUPLICATE ULTRA STRICT ======================
-async function isAlreadyProcessed(paymentId) {
-  try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n")
-      },
-      scopes: ["https://www.googleapis.com/auth/spreadsheets"]
-    });
-    const sheets = google.sheets({ version: "v4", auth });
-    const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-
-    const rangesToTry = ["PendingOrders!A:Z", "Sheet1!A:Z", "Feuille 1!A:Z", "Orders!A:Z", "Sheet2!A:Z"];
-
-    // === PHASE 1 : VÉRIFICATION ===
-    for (const range of rangesToTry) {
-      try {
-        const res = await sheets.spreadsheets.values.get({ spreadsheetId, range });
-        const rows = res.data.values || [];
-        for (const row of rows) {
-          if (row.some(cell => cell && cell.toString().includes(paymentId))) return true;
-        }
-      } catch (e) {}
-    }
-
-    // === PHASE 2 : MARQUAGE IMMÉDIAT (ANTI-RACE CONDITION) ===
-    let marked = false;
-    for (const range of rangesToTry) {
-      const sheetName = range.split('!')[0];
-      const appendRange = `${sheetName}!A:A`;
-      try {
-        await sheets.spreadsheets.values.append({
-          spreadsheetId,
-          range: appendRange,
-          valueInputOption: 'RAW',
-          insertDataOption: 'INSERT_ROWS',
-          resource: {
-            values: [[`PROCESSED_${paymentId}`, new Date().toISOString(), 'VERIFIED_BY_ANTI_DUPLICATE']]
-          }
-        });
-        marked = true;
-        console.log(`[ANTI-DUPLICATE] SUCCESS: Marked ${paymentId} in ${appendRange}`);
-        break;
-      } catch (appendErr) {}
-    }
-    if (!marked) {
-      console.error("[ANTI-DUPLICATE] WARNING: Could not mark - proceeding (très rare)");
-    }
-
-    return false;
-  } catch (e) {
-    console.error("[DUPLICATE CHECK ERROR]", e.message);
-    return false;
-  }
-}
 
 async function saveAsPending(item, shipping, BASE_URL, provider, paymentId, status = "pending_stock") {
   try {

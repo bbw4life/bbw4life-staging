@@ -16,6 +16,27 @@ const SPREADSHEET_ID = process.env.SHEET_ID_BBW4LIFE_PENDING_ORDERS;
 const SHEET_TAB       = "Temp_Orders";
 const SHEET_RANGE     = `${SHEET_TAB}!A:D`;
 
+// ── Onglet dédié au marquage anti-doublon (même spreadsheet) ──
+const PROCESSED_TAB   = "Processed_Orders";
+const PROCESSED_RANGE = `${PROCESSED_TAB}!A:B`;
+
+// ── Crée l'onglet Processed_Orders s'il n'existe pas encore ──
+async function ensureProcessedTabExists(sheets) {
+  const meta = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
+  const exists = meta.data.sheets.some(s => s.properties.title === PROCESSED_TAB);
+  if (exists) return;
+
+  await sheets.spreadsheets.batchUpdate({
+    spreadsheetId: SPREADSHEET_ID,
+    resource: {
+      requests: [{
+        addSheet: { properties: { title: PROCESSED_TAB } }
+      }]
+    }
+  });
+  console.log(`[TEMP ORDERS] Onglet "${PROCESSED_TAB}" créé`);
+}
+
 // ── Écrit cart + shipping dans le sheet temporaire, identifié par orderId ──
 async function saveTempOrder(orderId, cart, shipping) {
   const sheets = getSheetsClient();
@@ -82,4 +103,51 @@ async function getAndDeleteTempOrder(orderId) {
   return { cart, shipping };
 }
 
-module.exports = { saveTempOrder, getAndDeleteTempOrder };
+// ── Vérifie si paymentId a déjà été traité (lecture fiable, onglet dédié) ──
+async function isOrderAlreadyProcessed(paymentId) {
+  const sheets = getSheetsClient();
+  try {
+    await ensureProcessedTabExists(sheets);
+
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: PROCESSED_RANGE
+    });
+    const rows = res.data.values || [];
+    return rows.some(row => row[0] === paymentId);
+  } catch (e) {
+    console.error("[TEMP ORDERS] Erreur vérification doublon:", e.message);
+    // En cas d'erreur de lecture, on ne bloque pas le paiement légitime,
+    // mais on log clairement pour investigation.
+    return false;
+  }
+}
+
+// ── Marque paymentId comme traité (écriture fiable, onglet dédié) ──
+async function markOrderAsProcessed(paymentId) {
+  const sheets = getSheetsClient();
+  try {
+    await ensureProcessedTabExists(sheets);
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: PROCESSED_RANGE,
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      resource: {
+        values: [[paymentId, new Date().toISOString()]]
+      }
+    });
+    return true;
+  } catch (e) {
+    console.error("[TEMP ORDERS] Échec marquage doublon:", e.message);
+    return false;
+  }
+}
+
+module.exports = {
+  saveTempOrder,
+  getAndDeleteTempOrder,
+  isOrderAlreadyProcessed,
+  markOrderAsProcessed
+};

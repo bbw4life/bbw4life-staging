@@ -37,7 +37,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    console.log("🔄 Bypassing alreadyVerified check for debugging");
+    // ── Garde-fou côté client : si ce paiement a déjà été vérifié dans CETTE session,
+    // on n'appelle même pas le serveur — évite les appels réseau inutiles au refresh.
+    // Le blocage réel et définitif (même après 1 million de refresh, même sur un
+    // autre appareil/navigateur) est assuré côté serveur dans verify-payment.js.
+    const verifiedId = sessionId || orderID;
+    if (sessionStorage.getItem("paymentVerified") === verifiedId) {
+        console.log("✅ Already verified in this session — skipping server call");
+        spinner.style.display = "none";
+        showSuccess();
+        return;
+    }
 
     try {
         const functionUrl = `${window.location.origin}/.netlify/functions/verify-payment`;
@@ -62,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error(data.error || "There was an issue verifying your order. Please contact BBW4LIFE support and we'll take care of you right away.");
         }
 
-        sessionStorage.setItem("paymentVerified", sessionId || orderID);
+        sessionStorage.setItem("paymentVerified", verifiedId);
 
         showSuccess();
         console.log("🎉 VERIFICATION COMPLETED — Welcome to the BBW4LIFE family!");
