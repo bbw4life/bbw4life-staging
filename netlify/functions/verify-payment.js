@@ -1,6 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
+const { getAndDeleteTempOrder } = require('./temp-orders-store');
 
 exports.handler = async (event) => {
   console.log("=== VERIFY PAYMENT STARTED ===");
@@ -29,32 +30,21 @@ exports.handler = async (event) => {
     if (provider === "stripe") {
       session = await stripe.checkout.sessions.retrieve(sessionId);
       if (session.payment_status !== "paid") throw new Error("Stripe not paid");
-      const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, { limit: 100 });
-      const storedEprolo = JSON.parse(session.metadata.eprolo_data || "[]");
-      const storedImages = JSON.parse(session.metadata.images || "[]");
-      // CORRECTION : lecture couleur, taille, image variant
-      const storedColors      = JSON.parse(session.metadata.colors         || "[]");
-      const storedSizes       = JSON.parse(session.metadata.sizes          || "[]");
-      const storedImgVariant  = JSON.parse(session.metadata.images_variant || "[]");
-      cart = lineItems.data
-        .filter(li => {
-          const name = (li.description || '').toLowerCase();
-          return name !== 'shipping' && name !== 'taxes' && li.description !== null;
-        })
-        .map((li, i) => {
-          const eproloItem = storedEprolo[i] || {};
-          return {
-            title:         li.description,
-            price:         (li.amount_total / 100) / li.quantity,
-            quantity:      li.quantity,
-            variantsid:    eproloItem.variantsid || null,
-            image:         storedImgVariant[i] || storedImages[i] || '',
-            image_variant: storedImgVariant[i] || storedImages[i] || '',
-            color:         storedColors[i] || '',
-            size:          storedSizes[i]  || ''
-          };
-        });
-      shipping = JSON.parse(session.metadata.shipping || "{}");
+
+      const tempOrder = await getAndDeleteTempOrder(sessionId);
+      if (!tempOrder) throw new Error("Stripe order data not found in temp store");
+
+      cart = (tempOrder.cart || []).map(item => ({
+        title:         item.title,
+        price:         parseFloat(item.price) || 0,
+        quantity:      parseInt(item.quantity) || 1,
+        variantsid:    item.cj_variant_id || item.variantsid || null,
+        image:         item.image || '',
+        image_variant: item.image || '',
+        color:         item.color || '',
+        size:          item.size  || ''
+      }));
+      shipping = tempOrder.shipping || {};
       paymentVerified = true;
 
     // ====================== PAYPAL (CORRIGÉ + PAYS RÉCUPÉRÉ) ======================
@@ -130,7 +120,7 @@ exports.handler = async (event) => {
         city: ship.address?.admin_area_2 || "",
         state: ship.address?.admin_area_1 || "",
         postalCode: ship.address?.postal_code || "",
-        country: countryName,                    // ← MAINTENANT CORRECT
+        country: countryName,
         countryCode: countryCode,
         shipping_method: refParts[4] || "Standard Shipping"
       };
@@ -287,7 +277,6 @@ async function isAlreadyProcessed(paymentId) {
     }
 
     // === PHASE 2 : MARQUAGE IMMÉDIAT (ANTI-RACE CONDITION) ===
-    // La commande est marquée AVANT tout traitement → impossible de dupliquer
     let marked = false;
     for (const range of rangesToTry) {
       const sheetName = range.split('!')[0];

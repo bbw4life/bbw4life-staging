@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const fetch  = require('node-fetch');
+const { saveTempOrder } = require('./temp-orders-store');
 
 // ── Fetch settings from products.data.json ──────────────────────────
 async function getSettings() {
@@ -27,9 +28,7 @@ function computeTotals(cart, settings, shippingMethod) {
     return sum + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0);
   }, 0);
 
-  // Gratuit si méthode Standard ou Economy
   const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
-  // Gratuit si subtotal >= threshold
   const isFreeByThreshold = freeShippingThreshold > 0 && subtotal >= freeShippingThreshold;
 
   const isFree = isFreeMethod || isFreeByThreshold;
@@ -123,28 +122,16 @@ exports.handler = async (event) => {
       });
     }
 
-    // ── Metadata for fulfillment ──
-    const eproloData    = cart.map(item => ({ variantsid: item.cj_variant_id || '' }));
-    const imagesData    = cart.map(item => item.image  || '');
-    const colorsData    = cart.map(item => item.color  || '');
-    const sizesData     = cart.map(item => item.size   || '');
-    const imagesVariant = cart.map(item => item.image  || '');
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
       success_url: `${process.env.BASE_URL}/thankyou.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${process.env.BASE_URL}/checkout.html`,
-      metadata: {
-        eprolo_data:    JSON.stringify(eproloData).substring(0, 490),
-        shipping:       JSON.stringify(shipping).substring(0, 490),
-        images:         JSON.stringify(imagesData).substring(0, 490),
-        colors:         JSON.stringify(colorsData).substring(0, 490),
-        sizes:          JSON.stringify(sizesData).substring(0, 490),
-        images_variant: JSON.stringify(imagesVariant).substring(0, 490)
-      }
     });
+
+    // ── Stocker cart + shipping complets dans le Sheet temporaire (clé = session.id) ──
+    await saveTempOrder(session.id, cart, shipping);
 
     return {
       statusCode: 200,

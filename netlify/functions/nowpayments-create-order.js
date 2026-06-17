@@ -1,5 +1,6 @@
 const https = require('https');
 const fetch = require('node-fetch');
+const { saveTempOrder } = require('./temp-orders-store');
 
 // ── Mode LIVE ──
 const BASE_URL_NOW = 'api.nowpayments.io';
@@ -61,7 +62,7 @@ function computeTotals(cart, settings, shippingMethod) {
   };
 }
 
-// ── HTTPS helper natif Node ──
+// ── HTTPS POST helper ──
 function httpsPost(hostname, path, data, headers) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(data);
@@ -129,7 +130,20 @@ exports.handler = async (event) => {
     const subtotal = cart.reduce((sum, item) =>
       sum + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0), 0);
 
-    const totalAmount = (subtotal + shippingCost + taxAmount).toFixed(2);
+    const totalAmount = parseFloat((subtotal + shippingCost + taxAmount).toFixed(2));
+
+    // ── Minimum order amount for NOWPayments ──
+    const NOW_MIN_USD = 20.00;
+    if (totalAmount < NOW_MIN_USD) {
+      console.warn(`[NOWPAYMENTS] Order total $${totalAmount} is below minimum $${NOW_MIN_USD}`);
+      return res(400, {
+        success:      false,
+        error:        `Crypto payment requires a minimum order of $${NOW_MIN_USD.toFixed(2)}. Your total is $${totalAmount}.`,
+        min_amount:   NOW_MIN_USD,
+        total_amount: totalAmount,
+      });
+    }
+    console.log(`[NOWPAYMENTS] Amount check passed: $${totalAmount} >= $${NOW_MIN_USD}`);
 
     const BASE_SITE  = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
     const orderId    = `BBW-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
@@ -137,16 +151,15 @@ exports.handler = async (event) => {
       ? cart[0].title.substring(0, 100)
       : `BBW4LIFE — ${cart.length} articles`;
 
-    // ── Encoder cart + shipping dans order_description (récupéré par le webhook) ──
-    const orderData = JSON.stringify({ cart, shipping });
-    // Limité à 500 chars dans order_description — on tronque le titre des items si besoin
-    const encodedData = Buffer.from(orderData).toString('base64');
+    // ── Stocker cart + shipping dans le Sheet temporaire (clé = orderId) ──
+    await saveTempOrder(orderId, cart, shipping);
+    console.log('[NOWPAYMENTS] Temp order saved | orderId:', orderId);
 
     const invoiceBody = {
-      price_amount:        parseFloat(totalAmount),
+      price_amount:        totalAmount,
       price_currency:      'usd',
       order_id:            orderId,
-      order_description:   encodedData,
+      order_description:   orderTitle,
       ipn_callback_url:    `${BASE_SITE}/.netlify/functions/nowpayments-webhook`,
       success_url:         `${BASE_SITE}/thankyou.html?provider=nowpayments&orderId=${orderId}`,
       cancel_url:          `${BASE_SITE}/checkout.html`,

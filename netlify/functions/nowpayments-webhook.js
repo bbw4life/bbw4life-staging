@@ -1,26 +1,8 @@
 const crypto = require('crypto');
 const fetch  = require('node-fetch');
-const https  = require('https');
+const { getAndDeleteTempOrder } = require('./temp-orders-store');
 
 const IPN_SECRET = process.env.NOWPAYMENTS_IPN_SECRET;
-
-// ── Récupérer les détails du paiement depuis l'API NOWPayments ──
-function httpsGet(hostname, path, headers) {
-  return new Promise((resolve, reject) => {
-    const options = { hostname, path, method: 'GET', headers };
-    const req = https.request(options, (response) => {
-      let raw = '';
-      response.on('data', chunk => raw += chunk);
-      response.on('end', () => {
-        try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
-        catch { resolve({ status: response.statusCode, data: {} }); }
-      });
-    });
-    req.on('error', reject);
-    req.setTimeout(10000, () => { req.destroy(); reject(new Error('Timeout')); });
-    req.end();
-  });
-}
 
 exports.handler = async (event) => {
   try {
@@ -57,33 +39,32 @@ exports.handler = async (event) => {
     const BASE_SITE = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
     const orderId   = body.order_id;
 
-    // ── Récupérer cart + shipping depuis l'invoice NOWPayments ──
+    // ── Récupérer cart + shipping depuis le Sheet temporaire ──
     let cart     = [];
     let shipping = {};
     try {
-      const invoiceRes = await httpsGet(
-        'api.nowpayments.io',
-        `/v1/invoice/${body.invoice_id || ''}`,
-        { 'x-api-key': process.env.NOWPAYMENTS_API_KEY }
-      );
-      const description = invoiceRes.data?.order_description || '';
-      const decoded     = JSON.parse(Buffer.from(description, 'base64').toString('utf8'));
-      cart     = decoded.cart     || [];
-      shipping = decoded.shipping || {};
+      const tempOrder = await getAndDeleteTempOrder(orderId);
+      if (!tempOrder) {
+        console.error('[NOWPAYMENTS WEBHOOK] No temp order found for orderId:', orderId);
+        return res(404, { error: 'Order data not found' });
+      }
+      cart     = tempOrder.cart     || [];
+      shipping = tempOrder.shipping || {};
       console.log('[NOWPAYMENTS WEBHOOK] Cart + shipping récupérés | items:', cart.length);
     } catch (e) {
-      console.error('[NOWPAYMENTS WEBHOOK] Failed to decode order data:', e.message);
+      console.error('[NOWPAYMENTS WEBHOOK] Failed to retrieve temp order:', e.message);
       return res(500, { error: 'Could not retrieve order data' });
     }
 
     // ── Appeler verify-payment avec cart + shipping ──
+    // Fix: verify-payment.js lit `orderID` (pas `paymentId`) pour NOWPayments
     try {
       await fetch(`${BASE_SITE}/.netlify/functions/verify-payment`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({
-          provider:  'nowpayments',
-          paymentId: orderId,
+          provider:    'nowpayments',
+          orderID:     orderId,
           cart,
           shipping,
           totalAmount: body.price_amount
