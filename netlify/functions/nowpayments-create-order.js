@@ -61,7 +61,31 @@ function computeTotals(cart, settings, shippingMethod) {
   };
 }
 
-// ── HTTPS helper natif Node ──
+// ── HTTPS GET helper ──
+function httpsGet(hostname, path, headers) {
+  return new Promise((resolve, reject) => {
+    const options = { hostname, path, method: 'GET', headers };
+    const req = https.request(options, (response) => {
+      let raw = '';
+      response.on('data', chunk => raw += chunk);
+      response.on('end', () => {
+        try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
+        catch { resolve({ status: response.statusCode, data: {} }); }
+      });
+    });
+    req.on('error', (err) => {
+      console.error('[NOWPAYMENTS] HTTPS GET error:', err.message);
+      reject(err);
+    });
+    req.setTimeout(10000, () => {
+      req.destroy();
+      reject(new Error('NOWPayments GET request timeout'));
+    });
+    req.end();
+  });
+}
+
+// ── HTTPS POST helper ──
 function httpsPost(hostname, path, data, headers) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify(data);
@@ -129,7 +153,36 @@ exports.handler = async (event) => {
     const subtotal = cart.reduce((sum, item) =>
       sum + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0), 0);
 
-    const totalAmount = (subtotal + shippingCost + taxAmount).toFixed(2);
+    const totalAmount = parseFloat((subtotal + shippingCost + taxAmount).toFixed(2));
+
+    // ── Check minimum amount for usd → usdttrc20 ──
+    try {
+      const minRes = await httpsGet(
+        BASE_URL_NOW,
+        '/v1/min-amount?currency_from=usd&currency_to=usdttrc20&fiat_equivalent=usd',
+        { 'x-api-key': API_KEY }
+      );
+
+      if (minRes.status === 200 && minRes.data?.min_amount) {
+        const minAmount = parseFloat(minRes.data.min_amount);
+        console.log(`[NOWPAYMENTS] Min amount: $${minAmount} | Order total: $${totalAmount}`);
+
+        if (totalAmount < minAmount) {
+          console.warn(`[NOWPAYMENTS] Order total $${totalAmount} is below minimum $${minAmount}`);
+          return res(400, {
+            success: false,
+            error: `Order total ($${totalAmount}) is below the minimum required amount ($${minAmount.toFixed(2)}) for crypto payment.`,
+            min_amount: minAmount,
+            total_amount: totalAmount,
+          });
+        }
+      } else {
+        console.warn('[NOWPAYMENTS] Could not retrieve min-amount, proceeding anyway:', JSON.stringify(minRes.data));
+      }
+    } catch (minErr) {
+      // Non-blocking — if min-amount check fails, we still attempt invoice creation
+      console.warn('[NOWPAYMENTS] min-amount check failed (non-blocking):', minErr.message);
+    }
 
     const BASE_SITE  = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
     const orderId    = `BBW-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
@@ -139,11 +192,10 @@ exports.handler = async (event) => {
 
     // ── Encoder cart + shipping dans order_description (récupéré par le webhook) ──
     const orderData = JSON.stringify({ cart, shipping });
-    // Limité à 500 chars dans order_description — on tronque le titre des items si besoin
     const encodedData = Buffer.from(orderData).toString('base64');
 
     const invoiceBody = {
-      price_amount:        parseFloat(totalAmount),
+      price_amount:        totalAmount,
       price_currency:      'usd',
       order_id:            orderId,
       order_description:   encodedData,
