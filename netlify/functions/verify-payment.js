@@ -136,6 +136,18 @@ exports.handler = async (event) => {
       };
       console.log("[PAYPAL] Final shipping pulled:", JSON.stringify(shipping));
       paymentVerified = true;
+    console.log("[PAYPAL] Final shipping pulled:", JSON.stringify(shipping));
+      paymentVerified = true;
+
+      
+
+    // ====================== NOWPAYMENTS ======================
+    } else if (provider === "nowpayments") {
+      const parsed = JSON.parse(event.body);
+      cart     = parsed.cart     || [];
+      shipping = parsed.shipping || {};
+      if (cart.length === 0) throw new Error("Cart empty from NOWPayments webhook");
+      paymentVerified = true;
     }
 
     if (!paymentVerified || cart.length === 0) throw new Error("Payment verification failed or cart empty");

@@ -11,6 +11,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const orderID    = urlParams.get('token');
     const forceReset = urlParams.get('reset') === '1';
 
+    // ── NOWPayments : commande déjà traitée par le webhook ──
+        if (provider === 'nowpayments') {
+            localStorage.removeItem('cart');
+            if (spinner) spinner.style.display = 'none';
+            showSuccess();
+            return;
+        }
+
     console.log(`📌 sessionId: ${sessionId} | orderID: ${orderID} | forceReset: ${forceReset}`);
 
     if (forceReset) {

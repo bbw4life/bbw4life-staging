@@ -1,5 +1,5 @@
-const https  = require('https');
-const fetch  = require('node-fetch');
+const https = require('https');
+const fetch = require('node-fetch');
 
 // ── Mode LIVE ──
 const BASE_URL_NOW = 'api.nowpayments.io';
@@ -137,11 +137,16 @@ exports.handler = async (event) => {
       ? cart[0].title.substring(0, 100)
       : `BBW4LIFE — ${cart.length} articles`;
 
+    // ── Encoder cart + shipping dans order_description (récupéré par le webhook) ──
+    const orderData = JSON.stringify({ cart, shipping });
+    // Limité à 500 chars dans order_description — on tronque le titre des items si besoin
+    const encodedData = Buffer.from(orderData).toString('base64');
+
     const invoiceBody = {
       price_amount:        parseFloat(totalAmount),
       price_currency:      'usd',
       order_id:            orderId,
-      order_description:   orderTitle,
+      order_description:   encodedData,
       ipn_callback_url:    `${BASE_SITE}/.netlify/functions/nowpayments-webhook`,
       success_url:         `${BASE_SITE}/thankyou.html?provider=nowpayments&orderId=${orderId}`,
       cancel_url:          `${BASE_SITE}/checkout.html`,
