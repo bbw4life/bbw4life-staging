@@ -71,7 +71,27 @@ function validateCart(cart) {
   return errors;
 }
 
-function computeServerTotal(cart, settings, allProducts, shippingMethod) {
+function resolvePromoDiscountPercent(settings, promoCode, promoIsAffiliate, promoPercentFromClient, hasBundleOrUpsellOrFree) {
+  if (!promoCode || hasBundleOrUpsellOrFree) return 0;
+
+  if (promoIsAffiliate) {
+    const affCfg = settings.affiliation || {};
+    const affPrefix = (affCfg.promo_code_prefix || '').toUpperCase();
+    const codeUpper = String(promoCode).toUpperCase();
+
+    const isValidAffCode = affPrefix && (codeUpper === affPrefix || codeUpper.startsWith(affPrefix + '-'));
+    if (!isValidAffCode) return 0;
+    const maxAffPercent = parseFloat(affCfg.promo_code_discount_percent) || 0;
+    const clientPct = parseFloat(promoPercentFromClient) || 0;
+    return Math.min(clientPct, maxAffPercent);
+  }
+
+  const promos = settings.promos || [];
+  const match = promos.find(p => p.code.toUpperCase() === String(promoCode).toUpperCase());
+  return match ? (parseFloat(match.percent) || 0) : 0;
+}
+
+function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode, promoIsAffiliate, promoPercentFromClient) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
   const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.00;
@@ -146,20 +166,28 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
 
+  // ── Résolution du code promo (standard ou affilié) depuis settings ──
+  const hasBundleOrUpsellOrFree = sanitized.some(i => i.fromBundle || i.fromUpsell || i.isFreePromo);
+  const discountPercent = resolvePromoDiscountPercent(settings, promoCode, promoIsAffiliate, promoPercentFromClient, hasBundleOrUpsellOrFree);
+  const discountAmount = parseFloat((subtotal * (discountPercent / 100)).toFixed(2));
+  const discountedSubtotal = Math.max(0, subtotal - discountAmount);
+
   const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFree = freeByThreshold || freeByMethod;
 
   const shipping = isFree ? 0 : SHIPPING_COST;
   const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const total    = subtotal + shipping + tax;
+  const total    = discountedSubtotal + shipping + tax;
 
   return {
-    subtotal:     parseFloat(subtotal.toFixed(2)),
-    shippingCost: parseFloat(shipping.toFixed(2)),
-    taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        parseFloat(total.toFixed(2)),
-    sanitizedCart: sanitized
+    subtotal:       parseFloat(subtotal.toFixed(2)),
+    discountPercent,
+    discountAmount,
+    shippingCost:   parseFloat(shipping.toFixed(2)),
+    taxAmount:      parseFloat(tax.toFixed(2)),
+    total:          parseFloat(total.toFixed(2)),
+    sanitizedCart:  sanitized
   };
 }
 
@@ -186,7 +214,17 @@ exports.handler = async (event) => {
   try {
     if (!event.body) return res(400, { success: false, error: 'No data received' });
 
-    const { action, cart, shipping, shippingMethod, clientTotal, cartToken } = JSON.parse(event.body);
+    const {
+      action,
+      cart,
+      shipping,
+      shippingMethod,
+      clientTotal,
+      cartToken,
+      promoCode,
+      promoPercent,
+      promoIsAffiliate
+    } = JSON.parse(event.body);
 
     if (action === 'validate') {
       const shippingErrors = validateShipping(shipping || {});
@@ -200,11 +238,14 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { subtotal, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
+      const { subtotal, discountPercent, discountAmount, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
         cart,
         settings,
         allProducts,
-        shippingMethod || 'Standard Shipping'
+        shippingMethod || 'Standard Shipping',
+        promoCode || null,
+        !!promoIsAffiliate,
+        promoPercent || 0
       );
 
       if (clientTotal !== undefined) {
@@ -225,6 +266,8 @@ exports.handler = async (event) => {
       return res(200, {
         success: true,
         subtotal,
+        discountPercent,
+        discountAmount,
         shippingCost,
         taxAmount,
         total,
@@ -241,7 +284,15 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping');
+      const { total, sanitizedCart } = computeServerTotal(
+        cart,
+        settings,
+        allProducts,
+        shippingMethod || 'Standard Shipping',
+        promoCode || null,
+        !!promoIsAffiliate,
+        promoPercent || 0
+      );
 
       let valid = false;
       try {
