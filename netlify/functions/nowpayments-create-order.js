@@ -132,19 +132,6 @@ exports.handler = async (event) => {
 
     const totalAmount = parseFloat((subtotal + shippingCost + taxAmount).toFixed(2));
 
-    // ── Minimum order amount for NOWPayments ──
-    const NOW_MIN_USD = 20.00;
-    if (totalAmount < NOW_MIN_USD) {
-      console.warn(`[NOWPAYMENTS] Order total $${totalAmount} is below minimum $${NOW_MIN_USD}`);
-      return res(400, {
-        success:      false,
-        error:        `Crypto payment requires a minimum order of $${NOW_MIN_USD.toFixed(2)}. Your total is $${totalAmount}.`,
-        min_amount:   NOW_MIN_USD,
-        total_amount: totalAmount,
-      });
-    }
-    console.log(`[NOWPAYMENTS] Amount check passed: $${totalAmount} >= $${NOW_MIN_USD}`);
-
     const BASE_SITE  = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
     const orderId    = `BBW-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
     const orderTitle = cart.length === 1
