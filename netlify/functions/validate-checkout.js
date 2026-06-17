@@ -153,7 +153,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
 
   const shipping = isFree ? 0 : SHIPPING_COST;
   const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-  const total    = subtotal + shipping + tax;
 
   // ── Promo code (depuis settings.promos) ──
   let discountAmount = 0;
@@ -205,7 +204,7 @@ exports.handler = async (event) => {
   try {
     if (!event.body) return res(400, { success: false, error: 'No data received' });
 
-    const { action, cart, shipping, shippingMethod, clientTotal, cartToken } = JSON.parse(event.body);
+    const { action, cart, shipping, shippingMethod, clientTotal, cartToken, promoCode } = JSON.parse(event.body);
 
     if (action === 'validate') {
       const shippingErrors = validateShipping(shipping || {});
