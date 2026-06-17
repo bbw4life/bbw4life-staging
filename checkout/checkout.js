@@ -341,15 +341,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const validationRes = await fetch('/.netlify/functions/validate-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-                action: 'verify-token',
-                cart: sanitizedCart,
+            body: JSON.stringify({
+                action: 'validate',
+                cart: discountedCart,
+                shipping: shippingData,
                 shippingMethod: selectedMethodPay,
                 clientTotal,
-                cartToken,
-                promoCode: appliedPromo ? appliedPromo.code : null,
-                promoPercent: appliedPromo ? appliedPromo.percent : 0,
-                promoIsAffiliate: appliedPromo ? !!appliedPromo.isAffiliate : false
+                promoCode: appliedPromo ? appliedPromo.code : null
             })
         });
         const validationData = await validationRes.json();
