@@ -244,7 +244,7 @@ exports.handler = async (event) => {
       if (clientTotal !== undefined) {
         const clientTotalRounded = parseFloat(parseFloat(clientTotal).toFixed(2));
         const diff = Math.abs(clientTotalRounded - total);
-        if (diff > 0.10) {
+        if (diff > 0.50) {
           console.warn(`[CHECKOUT SECURITY] Price mismatch — client: $${clientTotal} | server: $${total} | IP: ${ip}`);
           return res(400, {
             success: false,
