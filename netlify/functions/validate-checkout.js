@@ -71,45 +71,7 @@ function validateCart(cart) {
   return errors;
 }
 
-function resolvePromoDiscountPercent(promoCode, cart, settings) {
-  if (!promoCode) return 0;
-
-  const code = String(promoCode).trim().toUpperCase();
-  if (!code) return 0;
-
-  const hasBundle  = cart.some(i => i.fromBundle);
-  const hasUpsell  = cart.some(i => i.fromUpsell);
-  const hasFreePromo = cart.some(i => i.isFreePromo);
-
-  // Mêmes règles d'incompatibilité que côté client
-  if (hasBundle || hasUpsell || hasFreePromo) return 0;
-
-  const cd = settings.cart_drawer || {};
-  const countFreeForPromo = String(cd.promo_count_free_items || 'No').toLowerCase() === 'yes';
-  const totalQuantity = countFreeForPromo
-    ? cart.reduce((s, i) => s + (parseInt(i.quantity) || 0), 0)
-    : cart.filter(i => !i.isFreePromo).reduce((s, i) => s + (parseInt(i.quantity) || 0), 0);
-
-  // ── Code affilié ──
-  const affCfg     = settings.affiliation || {};
-  const affPrefix  = String(affCfg.promo_code_prefix || '').toUpperCase();
-  const affPercent = parseFloat(affCfg.promo_code_discount_percent) || 0;
-
-  if (affPrefix && (code === affPrefix || code.startsWith(affPrefix + '-'))) {
-    return affPercent > 0 ? affPercent : 0;
-  }
-
-  // ── Code promo normal (settings.promos[]) ──
-  const promos = Array.isArray(settings.promos) ? settings.promos : [];
-  const promo = promos.find(p => String(p.code || '').toUpperCase() === code);
-  if (promo && parseInt(promo.items) === totalQuantity) {
-    return parseFloat(promo.percent) || 0;
-  }
-
-  return 0;
-}
-
-function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode) {
+function computeServerTotal(cart, settings, allProducts, shippingMethod) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
   const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.00;
@@ -180,34 +142,23 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
     return item;
   });
 
-  // subtotal = somme brute du panier (équivalent exact de getSubtotal() côté client : PAS réduit)
   const subtotal = sanitized.reduce((s, i) => {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
-  const promoPercent = resolvePromoDiscountPercent(promoCode, sanitized, settings);
-  const promoDiscountAmount = promoPercent > 0
-    ? parseFloat((subtotal * (promoPercent / 100)).toFixed(2))
-    : 0;
 
   const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFree = freeByThreshold || freeByMethod;
 
   const shipping = isFree ? 0 : SHIPPING_COST;
-  // Taxe calculée sur le subtotal BRUT (avant réduction), comme effectiveTax côté client
   const tax = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
-
-  // finalTotal = subtotal + tax + shipping - discountAmount (ordre identique à checkout.js)
-  const rawTotal = subtotal + shipping + tax - promoDiscountAmount;
-  const total = Math.max(0, parseFloat(rawTotal.toFixed(2)));
+  const total    = subtotal + shipping + tax;
 
   return {
     subtotal:     parseFloat(subtotal.toFixed(2)),
     shippingCost: parseFloat(shipping.toFixed(2)),
     taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        total,
-    promoPercent,
-    promoDiscountAmount,
+    total:        parseFloat(total.toFixed(2)),
     sanitizedCart: sanitized
   };
 }
@@ -235,7 +186,7 @@ exports.handler = async (event) => {
   try {
     if (!event.body) return res(400, { success: false, error: 'No data received' });
 
-    const { action, cart, shipping, shippingMethod, clientTotal, cartToken, promoCode } = JSON.parse(event.body);
+    const { action, cart, shipping, shippingMethod, clientTotal, cartToken } = JSON.parse(event.body);
 
     if (action === 'validate') {
       const shippingErrors = validateShipping(shipping || {});
@@ -249,19 +200,18 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { subtotal, shippingCost, taxAmount, total, sanitizedCart, promoPercent, promoDiscountAmount } = computeServerTotal(
+      const { subtotal, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
         cart,
         settings,
         allProducts,
-        shippingMethod || 'Standard Shipping',
-        promoCode || null
+        shippingMethod || 'Standard Shipping'
       );
 
       if (clientTotal !== undefined) {
         const clientTotalRounded = parseFloat(parseFloat(clientTotal).toFixed(2));
         const diff = Math.abs(clientTotalRounded - total);
         if (diff > 0.10) {
-          console.warn(`[CHECKOUT SECURITY] Price mismatch — client: $${clientTotal} | server: $${total} | promoCode: ${promoCode || 'none'} | promoPercent: ${promoPercent} | IP: ${ip}`);
+          console.warn(`[CHECKOUT SECURITY] Price mismatch — client: $${clientTotal} | server: $${total} | IP: ${ip}`);
           return res(400, {
             success: false,
             error: 'Price mismatch detected. Please refresh and try again.',
@@ -278,8 +228,6 @@ exports.handler = async (event) => {
         shippingCost,
         taxAmount,
         total,
-        promoPercent,
-        promoDiscountAmount,
         cartToken: token,
         sanitizedCart
       });
@@ -293,13 +241,7 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { total, sanitizedCart } = computeServerTotal(
-        cart,
-        settings,
-        allProducts,
-        shippingMethod || 'Standard Shipping',
-        promoCode || null
-      );
+      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping');
 
       let valid = false;
       try {

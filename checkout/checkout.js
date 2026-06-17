@@ -207,14 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTotals();
     }
 
-   paymentOptions.forEach(option => {
+    paymentOptions.forEach(option => {
         option.addEventListener('change', () => {
-            const labels = {
-                stripe:      'Pay with Card',
-                paypal:      'Pay with PayPal',
-                nowpayments: 'Pay with Crypto'
-            };
-            payButton.textContent = labels[option.value] || 'Pay Now';
+            payButton.textContent = option.value === 'stripe' ? 'Pay with Card' : 'Pay with PayPal';
         });
     });
 
@@ -398,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem("pendingOrder", "stripe");
             await stripe.redirectToCheckout({ sessionId: data.sessionId });
 
-        } else if (paymentMethod === 'paypal') {
+        } else {
             const response = await fetch('/.netlify/functions/paypal-create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -415,28 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const paypalDomain = data.paypalDomain || 'https://www.sandbox.paypal.com';
             localStorage.setItem("pendingOrder", "paypal");
             window.location.href = `${paypalDomain}/checkoutnow?token=${data.orderID}`;
-
-        } else if (paymentMethod === 'nowpayments') {
-            const response = await fetch('/.netlify/functions/nowpayments-create-order', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    cart:          sanitizedCart,
-                    shipping:      shippingData,
-                    shipping_cost: shippingCost.toFixed(2),
-                    tax:           taxAmount.toFixed(2),
-                    cartToken
-                })
-            });
-            const data = await response.json();
-            if (!response.ok || !data.invoiceUrl) {
-                throw new Error(data.error || 'NOWPayments order failed');
-            }
-            localStorage.setItem('pendingOrder', 'nowpayments');
-            window.location.href = data.invoiceUrl;
         }
-
-
 
     } catch (error) {
         console.error("Payment error:", error.message);
