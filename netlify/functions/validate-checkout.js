@@ -71,7 +71,7 @@ function validateCart(cart) {
   return errors;
 }
 
-function computeServerTotal(cart, settings, allProducts, shippingMethod) {
+function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
   const TAX_RATE      = parseFloat(settings.tax_rate)      || 0.00;
@@ -102,14 +102,11 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
       const clientPrice = parseFloat(item.price);
       const prod = realProducts.find(p => p.id === item.id);
       if (prod) {
-        // Vérifier que le prix bundle est bien <= prix catalogue (sécurité minimale)
         const variant = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
         const catalogPrice = variant ? parseFloat(variant.price) : parseFloat(prod.price);
-        // On accepte le prix client s'il est <= prix catalogue (bundle = réduction)
         if (!isNaN(clientPrice) && clientPrice <= catalogPrice) {
           return { ...item, price: clientPrice };
         }
-        // Si le prix client est supérieur au catalogue, on prend le catalogue
         return { ...item, price: isNaN(catalogPrice) ? clientPrice : catalogPrice };
       }
       return item;
@@ -142,9 +139,44 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
     return item;
   });
 
-  const subtotal = sanitized.reduce((s, i) => {
+  let subtotal = sanitized.reduce((s, i) => {
     return s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0);
   }, 0);
+
+  // ── Application du code promo depuis settings.promos ──
+  let promoDiscountAmount = 0;
+  if (promoCode && Array.isArray(settings.promos) && settings.promos.length > 0) {
+    const normalizedInput = promoCode.trim().toUpperCase();
+    const matchedPromo = settings.promos.find(
+      p => p.code && p.code.trim().toUpperCase() === normalizedInput
+    );
+
+    if (matchedPromo) {
+      const discountPct = parseFloat(matchedPromo.percent) || 0;
+      if (discountPct > 0) {
+        promoDiscountAmount = subtotal * (discountPct / 100);
+        subtotal = subtotal - promoDiscountAmount;
+        if (subtotal < 0) subtotal = 0;
+      }
+    } else {
+      // Code non trouvé dans settings.promos → vérifier si c'est un code affilié
+      // (préfixe depuis settings.affiliation.promo_code_prefix)
+      const affCfg = settings.affiliation || {};
+      const affPrefix = (affCfg.promo_code_prefix || '').toUpperCase();
+      const affDiscountPct = parseFloat(affCfg.promo_code_discount_percent) || 0;
+
+      if (
+        affPrefix &&
+        affDiscountPct > 0 &&
+        (normalizedInput === affPrefix || normalizedInput.startsWith(affPrefix + '-'))
+      ) {
+        // Code affilié valide selon le format — le serveur accepte la réduction
+        promoDiscountAmount = subtotal * (affDiscountPct / 100);
+        subtotal = subtotal - promoDiscountAmount;
+        if (subtotal < 0) subtotal = 0;
+      }
+    }
+  }
 
   const freeByThreshold = freeThreshold > 0 && subtotal >= freeThreshold;
   const freeByMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
@@ -155,11 +187,12 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod) {
   const total    = subtotal + shipping + tax;
 
   return {
-    subtotal:     parseFloat(subtotal.toFixed(2)),
-    shippingCost: parseFloat(shipping.toFixed(2)),
-    taxAmount:    parseFloat(tax.toFixed(2)),
-    total:        parseFloat(total.toFixed(2)),
-    sanitizedCart: sanitized
+    subtotal:             parseFloat(subtotal.toFixed(2)),
+    promoDiscountAmount:  parseFloat(promoDiscountAmount.toFixed(2)),
+    shippingCost:         parseFloat(shipping.toFixed(2)),
+    taxAmount:            parseFloat(tax.toFixed(2)),
+    total:                parseFloat(total.toFixed(2)),
+    sanitizedCart:        sanitized
   };
 }
 
@@ -186,7 +219,7 @@ exports.handler = async (event) => {
   try {
     if (!event.body) return res(400, { success: false, error: 'No data received' });
 
-    const { action, cart, shipping, shippingMethod, clientTotal, cartToken } = JSON.parse(event.body);
+    const { action, cart, shipping, shippingMethod, clientTotal, cartToken, promoCode } = JSON.parse(event.body);
 
     if (action === 'validate') {
       const shippingErrors = validateShipping(shipping || {});
@@ -200,11 +233,12 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { subtotal, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
+      const { subtotal, promoDiscountAmount, shippingCost, taxAmount, total, sanitizedCart } = computeServerTotal(
         cart,
         settings,
         allProducts,
-        shippingMethod || 'Standard Shipping'
+        shippingMethod || 'Standard Shipping',
+        promoCode || null
       );
 
       if (clientTotal !== undefined) {
@@ -225,6 +259,7 @@ exports.handler = async (event) => {
       return res(200, {
         success: true,
         subtotal,
+        promoDiscountAmount,
         shippingCost,
         taxAmount,
         total,
@@ -241,7 +276,13 @@ exports.handler = async (event) => {
       const allProducts = await getAllProductsData();
       const settings    = allProducts.find(p => p.type === 'settings') || {};
 
-      const { total, sanitizedCart } = computeServerTotal(cart, settings, allProducts, shippingMethod || 'Standard Shipping');
+      const { total, sanitizedCart } = computeServerTotal(
+        cart,
+        settings,
+        allProducts,
+        shippingMethod || 'Standard Shipping',
+        promoCode || null
+      );
 
       let valid = false;
       try {
