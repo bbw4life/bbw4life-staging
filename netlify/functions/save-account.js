@@ -1,4 +1,5 @@
 // netlify/functions/save-account.js
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 const { verifyAccountToken } = require('./account-token');
 

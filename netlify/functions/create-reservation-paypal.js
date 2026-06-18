@@ -1,5 +1,5 @@
 // netlify/functions/create-reservation-paypal.js
-
+process.removeAllListeners('warning');
 const fetch      = require('node-fetch');
 const { google } = require('googleapis');
 

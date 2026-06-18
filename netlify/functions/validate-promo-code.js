@@ -2,7 +2,7 @@
    BBW4LIFE — VALIDATE PROMO CODE (Single-Use Affiliate Code)
    Netlify Function : /.netlify/functions/validate-promo-code
 ================================================================ */
-
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 
 async function getSheets() {

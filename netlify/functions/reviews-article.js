@@ -1,4 +1,5 @@
 // netlify/functions/reviews-article.js
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 
 const SHEET_NAME = 'bbw4life-reviews-article';

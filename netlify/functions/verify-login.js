@@ -1,3 +1,4 @@
+process.removeAllListeners('warning');
 const { google } = require("googleapis");
 const { generateAccountToken } = require('./account-token');
 

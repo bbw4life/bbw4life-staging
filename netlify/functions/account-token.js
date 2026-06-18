@@ -1,3 +1,4 @@
+process.removeAllListeners('warning');
 // netlify/functions/account-token.js
 const crypto = require('crypto');
 

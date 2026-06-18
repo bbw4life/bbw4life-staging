@@ -1,3 +1,4 @@
+process.removeAllListeners('warning');
 const crypto = require('crypto');
 
 const INTERNAL_TO_CJ = {

@@ -1,4 +1,5 @@
 // netlify/functions/save-review.js
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 
 exports.handler = async (event) => {

@@ -1,4 +1,5 @@
 // netlify/functions/save-message.js
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 const { notifyTelegram } = require('./notify-telegram');   
 

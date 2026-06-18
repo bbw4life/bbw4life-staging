@@ -1,4 +1,5 @@
 // validate-checkout.js
+process.removeAllListeners('warning');
 const fetch  = require('node-fetch');
 const crypto = require('crypto');
 

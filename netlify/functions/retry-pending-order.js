@@ -1,4 +1,5 @@
 // retry-pending-order.js - VERSION AMÉLIORÉE (traite un par un sans se bloquer)
+process.removeAllListeners('warning');
 const { google } = require("googleapis");
 const fetch = require("node-fetch");
 

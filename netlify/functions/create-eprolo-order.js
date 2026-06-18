@@ -1,4 +1,6 @@
 // create-eprolo-order.js - VERSION CORRIGÉE
+process.removeAllListeners('warning');
+process.removeAllListeners('warning');
 const fetch = require('node-fetch');
 const crypto = require('crypto');
 

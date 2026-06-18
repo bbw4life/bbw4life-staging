@@ -1,5 +1,5 @@
 // netlify/functions/create-reservation-stripe-session.js
-
+process.removeAllListeners('warning');
 const stripe     = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { google } = require('googleapis');
 

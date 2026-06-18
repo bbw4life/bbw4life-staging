@@ -1,4 +1,5 @@
 // temp-orders-store.js
+process.removeAllListeners('warning');
 const { google } = require('googleapis');
 
 function getSheetsClient() {

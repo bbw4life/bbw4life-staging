@@ -1,5 +1,5 @@
+process.removeAllListeners('warning');
 const https = require('https');
-
 // Cache en mémoire (6 heures)
 let cachedRates = null;
 let cacheTime   = 0;

@@ -1,6 +1,5 @@
 // netlify/functions/send-email-auto.js
-// BBW4LIFE — Complete Email Automation System
-// Powered by Resend + Groq AI
+process.removeAllListeners('warning');
 
 const { Resend } = require('resend');
 const { google }  = require('googleapis');

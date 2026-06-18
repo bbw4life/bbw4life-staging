@@ -1,3 +1,4 @@
+process.removeAllListeners('warning');
 const crypto = require('crypto');
 const fetch  = require('node-fetch');
 const { getAndDeleteTempOrder } = require('./temp-orders-store');

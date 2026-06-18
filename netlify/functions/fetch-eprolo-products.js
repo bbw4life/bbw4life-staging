@@ -1,4 +1,5 @@
 // fetch-eprolo-products.js — VERSION PARALLÈLE + CATÉGORIES
+process.removeAllListeners('warning');
 const crypto = require('crypto');
 
 const CATEGORIES = [
