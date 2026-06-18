@@ -131,21 +131,21 @@
 
 
 .os-marquee-strip--warm {
-  background: linear-gradient(90deg, var(--os-gold-pale) 0%, #fdf5e8 50%, var(--os-gold-pale) 100%);
+  background: #080808 !important;
   border-top: 1.5px solid rgba(201, 150, 62, 0.30);
   border-bottom: 1.5px solid rgba(201, 150, 62, 0.30);
 }
 
 
 .os-marquee-strip--rose {
-  background: linear-gradient(90deg, var(--os-rose-pale) 0%, #fdf0f3 50%, var(--os-rose-pale) 100%);
+  background: #080808;
   border-top: 1.5px solid rgba(192, 56, 94, 0.22);
   border-bottom: 1.5px solid rgba(192, 56, 94, 0.22);
 }
 
 
 .os-marquee-strip--gold {
-  background: linear-gradient(90deg, #1a0e08 0%, #2a1a10 50%, #1a0e08 100%);
+  background: #080808;
   border-top: 1.5px solid rgba(201, 150, 62, 0.45);
   border-bottom: 1.5px solid rgba(201, 150, 62, 0.45);
 }
@@ -156,16 +156,16 @@
   content: '';
   position: absolute;
   top: 0; bottom: 0;
-  width: 80px; 
+  width: 80px;
   z-index: 2;
   pointer-events: none;
 }
-.os-marquee-strip--warm::before  { left:0; background: linear-gradient(90deg, var(--os-gold-pale), transparent); }
-.os-marquee-strip--warm::after   { right:0; background: linear-gradient(270deg, var(--os-gold-pale), transparent); }
-.os-marquee-strip--rose::before  { left:0; background: linear-gradient(90deg, var(--os-rose-pale), transparent); }
-.os-marquee-strip--rose::after   { right:0; background: linear-gradient(270deg, var(--os-rose-pale), transparent); }
-.os-marquee-strip--gold::before  { left:0; background: linear-gradient(90deg, #1a0e08, transparent); }
-.os-marquee-strip--gold::after   { right:0; background: linear-gradient(270deg, #1a0e08, transparent); }
+.os-marquee-strip--warm::before  { left:0; background: linear-gradient(90deg, #080808, transparent); }
+.os-marquee-strip--warm::after   { right:0; background: linear-gradient(270deg, #080808, transparent); }
+.os-marquee-strip--rose::before  { left:0; background: linear-gradient(90deg, #080808, transparent); }
+.os-marquee-strip--rose::after   { right:0; background: linear-gradient(270deg, #080808, transparent); }
+.os-marquee-strip--gold::before  { left:0; background: linear-gradient(90deg, #080808, transparent); }
+.os-marquee-strip--gold::after   { right:0; background: linear-gradient(270deg, #080808, transparent); }
 
 .os-marquee-inner {
   display: flex;
@@ -201,7 +201,7 @@
 }
 
 .os-marquee-strip--warm .os-mq-item,
-.os-marquee-strip--rose .os-mq-item { color: rgba(42, 16, 32, 0.65); }
+.os-marquee-strip--rose .os-mq-item { color: rgba(255, 255, 255, 0.70); }
 .os-marquee-strip--gold .os-mq-item { color: rgba(255, 255, 255, 0.70); }
 
 .os-marquee-strip--warm .os-mq-item i { color: var(--os-rose); }
@@ -440,10 +440,22 @@
 ───────────────────────────────────────────────────────── */
 .os-turning-section {
   padding: 15px 0 10px;
-  background: linear-gradient(160deg, #1a0812 0%, #2a1020 40%, #1a0812 100%) !important;
+  background: linear-gradient(160deg, #0d0508 0%, #1a0a14 40%, #0d0508 100%) !important;
   position: relative;
   overflow: hidden;
   isolation: isolate;
+}
+
+/* ── NOISE TEXTURE GRAVIER SABLE SUR FOND ── */
+.os-turning-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.04 0 0 0 0 0.04 0 0 0 0 0.04 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
 }
 
 
@@ -494,19 +506,19 @@
   justify-content: center;
   width: 68px; height: 68px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--os-rose) 0%, var(--os-plum) 100%);
+  background: linear-gradient(135deg, #b8860b 0%, #7a5500 100%);
   box-shadow:
-    0 0 0 10px rgba(192, 56, 94, 0.12),
-    0 0 0 20px rgba(192, 56, 94, 0.05),
-    0 8px 32px rgba(192, 56, 94, 0.45);
+    0 0 0 10px rgba(184, 134, 11, 0.12),
+    0 0 0 20px rgba(184, 134, 11, 0.05),
+    0 8px 32px rgba(184, 134, 11, 0.45);
   font-size: 1.6rem;
   color: #fff;
   margin-bottom: 24px;
   animation: os-icon-glow 2.5s ease-in-out infinite;
 }
 @keyframes os-icon-glow {
-  0%, 100% { box-shadow: 0 0 0 10px rgba(192,56,94,0.12), 0 0 0 20px rgba(192,56,94,0.05), 0 8px 32px rgba(192,56,94,0.45); }
-  50%       { box-shadow: 0 0 0 16px rgba(192,56,94,0.16), 0 0 0 32px rgba(192,56,94,0.06), 0 12px 50px rgba(192,56,94,0.65); }
+  0%, 100% { box-shadow: 0 0 0 10px rgba(184,134,11,0.12), 0 0 0 20px rgba(184,134,11,0.05), 0 8px 32px rgba(184,134,11,0.45); }
+  50%       { box-shadow: 0 0 0 16px rgba(184,134,11,0.16), 0 0 0 32px rgba(184,134,11,0.06), 0 12px 50px rgba(184,134,11,0.65); }
 }
 
 .os-turning-label {
@@ -1410,15 +1422,28 @@
 }
 .os-av-text strong { color: var(--os-ink); }
 
+
+
 /* ─────────────────────────────────────────────────────────
    SECTION 6 — MESSAGE FROM THE FOUNDER
 ───────────────────────────────────────────────────────── */
 .os-founder-section {
   padding: 15px 0 10px;
-  background: linear-gradient(160deg, #1a0812 0%, #2a1520 40%, #1a0812 100%);
+  background: #050505;
   position: relative;
   overflow: hidden;
   isolation: isolate;
+}
+
+/* ── NOISE TEXTURE GRAVIER SABLE SUR FOND NOIR ── */
+.os-founder-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.04 0 0 0 0 0.04 0 0 0 0 0.04 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 1;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .os-founder-orb {
@@ -1426,6 +1451,7 @@
   border-radius: 50%;
   pointer-events: none;
   filter: blur(100px);
+  z-index: 0;
 }
 .os-founder-orb--1 {
   width: 600px; height: 600px;
@@ -1447,6 +1473,7 @@
     linear-gradient(90deg, rgba(201, 150, 62, 0.04) 1px, transparent 1px);
   background-size: 70px 70px;
   pointer-events: none;
+  z-index: 0;
 }
 
 .os-founder-header {
@@ -1480,7 +1507,6 @@
     0 32px 80px rgba(0, 0, 0, 0.45),
     0 0 60px rgba(201, 150, 62, 0.08);
   z-index: 2;
-  position: relative;
   overflow: hidden;
 }
 
@@ -3673,8 +3699,18 @@
 .au-mission-section {
   position: relative;
   padding: 15px 0 10px;
-  background: linear-gradient(160deg, #0d0a07 0%, #1a110c 40%, #0d0a07 100%);
+  background: linear-gradient(160deg, #000000 0%, #000000 40%, #050403 100%);
   overflow: hidden;
+  isolation: isolate;
+}
+.au-mission-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.85 0 0 0 0 0.85 0 0 0 0 0.85 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.40;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .au-mission-particles {
@@ -10439,20 +10475,23 @@ body.disc-page {
 
 /* ═══════════════════════════════════════════
    SECTION 4 — PHILOSOPHY (premium marquee)
-   Fond : bordeaux/prune profond — plus premium, pas noir pur
 ═══════════════════════════════════════════ */
 .pc-philosophy-section {
   position: relative;
   padding: 15px 0 10px;
-  background: linear-gradient(
-    160deg,
-    #2b0a1a 0%,
-    #3d1230 30%,
-    #2e1040 60%,
-    #2b0a1a 100%
-  );
+  background: linear-gradient(160deg, #050403 0%, #0a0806 40%, #050403 100%);
   overflow: hidden;
   isolation: isolate;
+}
+
+.pc-philosophy-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.85 0 0 0 0 0.85 0 0 0 0 0.85 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.30;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .pc-philo-orb {
@@ -10487,15 +10526,30 @@ body.disc-page {
   justify-content: center;
   width: 66px; height: 66px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--pc-rose), var(--pc-plum));
+  background: linear-gradient(135deg, #b8860b 0%, #7a5500 100%);
   color: #fff;
   font-size: 1.5rem;
   margin-bottom: 24px;
   box-shadow:
-    0 0 0 12px rgba(192, 56, 94, 0.12),
-    0 0 0 24px rgba(192, 56, 94, 0.05),
-    0 10px 36px rgba(192, 56, 94, 0.40);
+    0 0 0 12px rgba(184, 134, 11, 0.12),
+    0 0 0 24px rgba(184, 134, 11, 0.05),
+    0 10px 36px rgba(184, 134, 11, 0.40);
   animation: pc-cta-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes pc-cta-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 12px rgba(184, 134, 11, 0.12),
+      0 0 0 24px rgba(184, 134, 11, 0.05),
+      0 10px 36px rgba(184, 134, 11, 0.40);
+  }
+  50% {
+    box-shadow:
+      0 0 0 18px rgba(184, 134, 11, 0.16),
+      0 0 0 36px rgba(184, 134, 11, 0.06),
+      0 14px 52px rgba(184, 134, 11, 0.65);
+  }
 }
 
 .pc-philosophy-section .pc-eyebrow {
@@ -10533,7 +10587,6 @@ body.disc-page {
   line-height: 1.80;
   margin: 0 0 36px;
 }
-
 
 .pc-philo-pillars {
   display: flex;

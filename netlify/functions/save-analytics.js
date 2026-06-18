@@ -1,3 +1,4 @@
+// save-analytics.js — BBW4LIFE Analytics + Orders
 process.removeAllListeners('warning');
 const { google } = require('googleapis');
 
@@ -22,20 +23,37 @@ exports.handler = async (event) => {
       scopes: ["https://www.googleapis.com/auth/spreadsheets"]
     });
 
-    const sheets = google.sheets({ version: "v4", auth });
+    const sheets        = google.sheets({ version: "v4", auth });
     const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ANALYTICS;
 
+    // ══════════════════════════════════════
+    //  GET — read all rows
+    // ══════════════════════════════════════
     if (event.httpMethod === "GET") {
       const res = await sheets.spreadsheets.values.get({
         spreadsheetId,
-        range: "bbw4life-analytics!A:O"
+        range: "bbw4life-analytics!A:T"
       });
       const rows = res.data.values || [];
-      return { statusCode: 200, headers, body: JSON.stringify({ success: true, rows }) };
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ success: true, rows })
+      };
     }
 
+    // ══════════════════════════════════════
+    //  POST — write one row
+    // ══════════════════════════════════════
     if (event.httpMethod === "POST") {
-      if (!event.body) return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: "No body" }) };
+      if (!event.body) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ success: false, error: "No body" })
+        };
+      }
+
       const data = JSON.parse(event.body);
 
       // ── Géolocalisation IP ──
@@ -45,9 +63,9 @@ exports.handler = async (event) => {
       try {
         const rawIp =
           (event.headers["x-nf-client-connection-ip"] || "").trim() ||
-          (event.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
-          (event.headers["x-real-ip"] || "").trim() ||
-          (event.headers["client-ip"] || "").trim() ||
+          (event.headers["x-forwarded-for"]           || "").split(",")[0].trim() ||
+          (event.headers["x-real-ip"]                 || "").trim() ||
+          (event.headers["client-ip"]                 || "").trim() ||
           "";
 
         const ip = rawIp.replace(/^::ffff:/, "");
@@ -73,35 +91,48 @@ exports.handler = async (event) => {
       }
 
       const row = [[
-        data.timestamp    || new Date().toISOString(),
-        data.sessionId    || "",
-        country,
-        city,
-        data.pageUrl      || "",
-        data.pageTitle    || "",
-        data.timeOnPage   || 0,
-        data.clicks       || 0,
-        data.menuClicks   || 0,
-        data.scrollDepth  || 0,
-        data.referrer     || "direct",
-        data.device       || "desktop",
-        data.browser      || "unknown",
-        data.screenWidth  || 0,
-        data.actionsCount || 0
+        data.timestamp    || new Date().toISOString(),  // A
+        data.sessionId    || "",                         // B
+        country,                                         // C
+        city,                                            // D
+        data.pageUrl      || "",                         // E
+        data.pageTitle    || "",                         // F
+        data.timeOnPage   || 0,                          // G
+        data.clicks       || 0,                          // H
+        data.menuClicks   || 0,                          // I
+        data.scrollDepth  || 0,                          // J
+        data.referrer     || "direct",                   // K
+        data.device       || "desktop",                  // L
+        data.browser      || "unknown",                  // M
+        data.screenWidth  || 0,                          // N
+        data.actionsCount || 0,                          // O
+        data.orderId      || "",                         // P
+        data.orderTotal   || "",                         // Q
+        data.currency     || "",                         // R
+        data.itemsCount   || "",                         // S
+        data.orderCountry || ""                          // T
       ]];
 
       await sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: "bbw4life-analytics!A:O",
-        valueInputOption: "RAW",
-        insertDataOption: "INSERT_ROWS",
-        resource: { values: row }
+        range:             "bbw4life-analytics!A:T",
+        valueInputOption:  "RAW",
+        insertDataOption:  "INSERT_ROWS",
+        resource:          { values: row }
       });
 
-      return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ success: true })
+      };
     }
 
-    return { statusCode: 405, headers, body: JSON.stringify({ success: false, error: "Method not allowed" }) };
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ success: false, error: "Method not allowed" })
+    };
 
   } catch (err) {
     console.error("[ANALYTICS]", err.message);
