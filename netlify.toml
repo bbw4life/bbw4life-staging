@@ -11,3 +11,7 @@
 [functions.retry-pending-order]
   schedule = "*/5 * * * *"
   background = true
+
+[functions.detect-abandoned-cart]
+  schedule = "*/10 * * * *"
+  background = true

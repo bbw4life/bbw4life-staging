@@ -26,6 +26,7 @@ const T = {
   CONTACT_REPLY:      'contact_reply',
   PLAN_REQUEST:       'plan_request',
   CUSTOM_PRODUCT:     'custom_product',
+  CART_ABANDONED:     'cart_abandoned',
 };
 
 // ════════════════════════════════════════════════════════════════
@@ -824,6 +825,19 @@ Plain text only.`
   return copy || `Your personalized product request has been received and we are genuinely impressed by your vision for ${productTitle}. At BBW4LIFE, we believe every woman deserves something made just for her.\n\nOur design team will carefully review your request and evaluate the possibility of bringing your idea to life on the website. We'll keep you posted — and whether or not it becomes a product, the fact that you shared your idea with us means a lot.`;
 }
 
+
+async function genCartAbandonedCopy(name) {
+  const copy = await callGroq(
+    `EMAIL TYPE: Abandoned cart recovery — BBW4LIFE.
+RECIPIENT: ${name}
+Write 2 short paragraphs (blank line between):
+- Para 1 (2 sentences): Notice she left something behind in her cart. Warm, curious tone, not guilt-tripping. Ask gently what held her back.
+- Para 2 (2 sentences): Reassure her items are saved and waiting. Mention a special gift below to help her finish her order.
+Plain text only, no greeting, no sign-off.`
+  );
+  return copy || `We noticed you left something behind in your cart — and we just wanted to check in. Sometimes life gets busy, or maybe something wasn't quite clear, and we'd genuinely love to know if there's anything we can help with.\n\nYour items are safely saved and waiting for you, exactly where you left them. To make it even easier to come back, we've added a little gift below just for you.`;
+}
+
 // ════════════════════════════════════════════════════════════════
 //  EMAIL COMPOSERS
 // ════════════════════════════════════════════════════════════════
@@ -1322,6 +1336,63 @@ async function composeCustomProduct(data, settings) {
   };
 }
 
+// ── 12. Abandoned Cart Recovery ───────────────────────────────
+async function composeCartAbandoned(data, settings) {
+  const { firstName, lastName, items = [], promoCode, promoPercent, restartLink } = data;
+  const name = firstName || lastName || 'Beautiful';
+  const copy = await genCartAbandonedCopy(name);
+
+  const itemsHTML = items.map(item => cOrderItem(item)).join('');
+  const finalRestartLink = restartLink || `${BASE_URL}/checkout.html`;
+
+  const bodyHTML = `
+    <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
+        color:${BBW.rose};letter-spacing:0.08em;text-transform:uppercase;">Your Cart Is Waiting 🛍️</p>
+    ${cParagraphs(copy)}
+    ${itemsHTML ? `
+    ${cDivider()}
+    <p style="margin:0 0 14px;font-family:Georgia,serif;font-size:15px;font-weight:700;color:${BBW.dark};">
+      Still in your cart:
+    </p>
+    ${itemsHTML}` : ''}
+    ${promoCode ? `
+    ${cDivider()}
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+           style="border-radius:16px;overflow:hidden;
+                  background:linear-gradient(135deg,${BBW.dark2},${BBW.rose},${BBW.gold});">
+      <tr>
+        <td style="padding:28px;text-align:center;">
+          <p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:11px;
+              color:rgba(255,255,255,0.60);text-transform:uppercase;letter-spacing:0.12em;">🎁 A Little Gift For You</p>
+          <p style="margin:0 0 4px;font-family:Georgia,serif;font-size:34px;font-weight:700;
+              color:${BBW.goldL};letter-spacing:0.12em;">${promoCode}</p>
+          <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.78);">
+            ${promoPercent ? `${promoPercent}% off your order` : 'Exclusive discount'}
+          </p>
+        </td>
+      </tr>
+    </table>` : ''}
+    ${cCTA('Restart My Order →', finalRestartLink)}
+    ${cDivider()}
+    <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:${BBW.textLight};text-align:center;">
+      Beauty Has No Sizes — and your spot in the BBW4LIFE family is still waiting. 👑
+    </p>`;
+
+  return {
+    subject: `${name}, you left something beautiful behind 🛍️`,
+    html: masterTemplate({
+      preheader:    `Your cart is saved and waiting — plus a little gift to welcome you back.`,
+      headerGrad:   `background:linear-gradient(145deg,${BBW.dark2} 0%,${BBW.rose} 50%,${BBW.gold} 100%)`,
+      topBadge:     'Cart Saved For You',
+      headline:     "Don't forget this. 🛍️",
+      subHeadline:  'Your items are exactly where you left them.',
+      bodyHTML,
+      settings,
+      showCEO:      true,
+    }),
+  };
+}
+
 // ════════════════════════════════════════════════════════════════
 //  SEND HELPER — with log check
 // ════════════════════════════════════════════════════════════════
@@ -1434,6 +1505,13 @@ exports.handler = async (event) => {
       if (trigger === T.CUSTOM_PRODUCT) {
         await trySend(email, T.CUSTOM_PRODUCT,
           () => composeCustomProduct(body, settings),
+          sheets, sentLog, results);
+      }
+
+      // ── Cart Abandoned ──
+      if (trigger === T.CART_ABANDONED) {
+        await trySend(email, T.CART_ABANDONED,
+          () => composeCartAbandoned(body, settings),
           sheets, sentLog, results);
       }
 

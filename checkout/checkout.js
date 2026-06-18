@@ -1,5 +1,49 @@
 // checkout.js
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+
+    // ====================== RESTORE ABANDONED CART ======================
+    const urlParams = new URLSearchParams(window.location.search);
+    const restoreOrderId = urlParams.get('restore');
+
+    if (restoreOrderId) {
+        try {
+            const res = await fetch(`/.netlify/functions/restore-abandoned-cart?orderId=${encodeURIComponent(restoreOrderId)}`);
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                if (Array.isArray(data.cart) && data.cart.length > 0) {
+                    localStorage.setItem('cart', JSON.stringify(data.cart));
+                }
+
+                const s = data.shipping || {};
+                const setIfPresent = (id, value) => {
+                    const el = document.getElementById(id);
+                    if (el && value) el.value = value;
+                };
+                // Pré-remplissage différé car le formulaire existe déjà dans le DOM à ce stade
+                setIfPresent('first-name',  s.firstName);
+                setIfPresent('last-name',   s.lastName);
+                setIfPresent('email',       s.email);
+                setIfPresent('phone',       s.phone);
+                setIfPresent('state',       s.state);
+                setIfPresent('postal-code', s.postalCode);
+                setIfPresent('address',     s.address);
+
+                if (data.promoCode) {
+                    const promoInput = document.getElementById('promo-input');
+                    if (promoInput) promoInput.value = data.promoCode;
+                }
+
+                console.log(`[ABANDONED CART] Panier restauré pour ${restoreOrderId}`);
+            } else {
+                console.warn('[ABANDONED CART] Restauration échouée:', data.error);
+            }
+        } catch (e) {
+            console.warn('[ABANDONED CART] Erreur restauration:', e.message);
+        }
+    }
+    // ====================== END RESTORE ABANDONED CART ======================
+
     let cart = [];
     try {
         cart = JSON.parse(localStorage.getItem('cart')) || [];
