@@ -23,8 +23,6 @@ exports.handler = async (event) => {
       return response(200, { success: true, message: "Duplicate - already processed" });
     }
 
-    // On marque IMMÉDIATEMENT, avant tout fulfillment, pour bloquer tout refresh
-    // qui arriverait pendant le traitement (race condition).
     const marked = await markOrderAsProcessed(paymentId);
     if (!marked) {
       console.error(`[ANTI-DUPLICATE] Impossible de marquer ${paymentId} — abandon par sécurité`);
@@ -60,7 +58,7 @@ exports.handler = async (event) => {
       shipping = tempOrder.shipping || {};
       paymentVerified = true;
 
-    // ====================== PAYPAL (CORRIGÉ + PAYS RÉCUPÉRÉ) ======================
+    // ====================== PAYPAL ======================
     } else if (provider === "paypal") {
       const PAYPAL_BASE = process.env.PAYPAL_ENV === "live" ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com";
       const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString("base64");
@@ -104,7 +102,6 @@ exports.handler = async (event) => {
       const ship = purchaseUnit.shipping || {};
       const refParts = purchaseUnit.reference_id ? purchaseUnit.reference_id.split('|') : [];
 
-      // === RÉCUPÉRATION DU VRAI PAYS (plus jamais "United States" par défaut) ===
       let countryCode = refParts[3] || ship.address?.country_code || "US";
       let countryName = "United States";
       try {
@@ -188,33 +185,57 @@ exports.handler = async (event) => {
       });
     }
 
-
     // ── Email Order Confirmation ──
-if (shipping.email) {
-  fetch(`${BASE_URL}/.netlify/functions/send-email-auto`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      trigger:    'order_confirm',
-      email:      shipping.email,
-      firstName:  shipping.firstName || '',
-      lastName:   shipping.lastName  || '',
-      orderId:    paymentId,
-      items:      orderItems,
-      total:      totalAmount,
-      shippingAddress: [
-        shipping.address,
-        shipping.city,
-        shipping.state,
-        shipping.country
-      ].filter(Boolean).join(', ')
-    })
-  }).catch(e => console.warn('[Email] order_confirm failed:', e.message));
-}
+    if (shipping.email) {
+      fetch(`${BASE_URL}/.netlify/functions/send-email-auto`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          trigger:    'order_confirm',
+          email:      shipping.email,
+          firstName:  shipping.firstName || '',
+          lastName:   shipping.lastName  || '',
+          orderId:    paymentId,
+          items:      orderItems,
+          total:      totalAmount,
+          shippingAddress: [
+            shipping.address,
+            shipping.city,
+            shipping.state,
+            shipping.country
+          ].filter(Boolean).join(', ')
+        })
+      }).catch(e => console.warn('[Email] order_confirm failed:', e.message));
+    }
 
+    // ── Analytics : enregistrer la commande dans le sheet ──
+    fetch(`${BASE_URL}/.netlify/functions/save-analytics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        timestamp:    new Date().toISOString(),
+        sessionId:    paymentId,
+        pageUrl:      `${BASE_URL}/checkout.html`,
+        pageTitle:    'Checkout — Order Confirmed',
+        timeOnPage:   0,
+        clicks:       0,
+        menuClicks:   0,
+        scrollDepth:  0,
+        referrer:     provider,
+        device:       '',
+        browser:      '',
+        screenWidth:  0,
+        actionsCount: 0,
+        orderId:      paymentId,
+        orderTotal:   totalAmount.toFixed(2),
+        currency:     'USD',
+        itemsCount:   totalQuantity,
+        orderCountry: shipping.country || ''
+      })
+    }).catch(e => console.warn('[Analytics] save-analytics failed:', e.message));
 
     const affRef = (provider === 'paypal' ? (purchaseUnit?.reference_id || '').split('|')[5] : shipping.affRef) || null;
-    
+
     if (affRef) {
       try {
         await fetch(`${BASE_URL}/.netlify/functions/save-account`, {
@@ -231,9 +252,6 @@ if (shipping.email) {
         console.warn("[AFFILIATION] Erreur commission:", e.message);
       }
     }
-
-
-
 
     console.log("=== DÉBUT FULFILLMENT SÉQUENTIEL ===");
     const cartMap = {};
