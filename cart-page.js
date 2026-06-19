@@ -105,6 +105,9 @@
       if (layout)  layout.style.display  = 'none';
       if (emptyEl) emptyEl.style.display = 'block';
       hideDynamicSections();
+      // Masquer le banner du drawer
+      var drawerBanner = document.querySelector('.cart-drawer .cart-drawer__paul-banner');
+      if (drawerBanner) drawerBanner.style.display = 'none';
       updateSummary();
       updateHeader();
       return;
@@ -820,7 +823,7 @@
   ════════════════════════════════════════════════════ */
   function showDynamicSections() {
     ['cp-countdown','cp-progress-container','cp-promo-message-wrap',
-     'cp-paul-banner','cp-promo-codes-container','cp-social-proof',
+     'cp-paul-banner','cp-promo-codes-container','cp-social-proof','bbw-order-timeline-page',
      'cp-share-section',
      'cp-extra-section',
      'cp-marquee-strip'
@@ -833,7 +836,7 @@
   function hideDynamicSections() {
     ['cp-countdown','cp-progress-container','cp-promo-message-wrap',
      'cp-paul-banner','cp-promo-codes-container','cp-social-proof',
-     'cp-share-section','cp-upsell-section',
+     'cp-share-section','cp-upsell-section','bbw-order-timeline-page',
      'cp-extra-section',
      'cp-marquee-strip'
     ].forEach(function (id) {
@@ -1145,6 +1148,13 @@
       initCartShareReceiver();
       listenCartUpdates();
       setTimeout(updateProgressBar, 100);
+
+      // Fix cart.html : forcer initCartDrawerExtras dans le drawer au chargement
+      if (getCart().length > 0) {
+        setTimeout(function () {
+          if (typeof initCartDrawerExtras === 'function') initCartDrawerExtras();
+        }, 500);
+      }
     });
   });
 

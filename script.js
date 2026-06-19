@@ -6413,6 +6413,8 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (promoCodes)  promoCodes.style.display   = 'none';
       const drawerExtra = document.getElementById('drawer-extra-section');
       if (drawerExtra) drawerExtra.style.display = 'none';
+      const bbwTimeline = document.getElementById('bbw-order-timeline-drawer');
+      if (bbwTimeline) bbwTimeline.style.display = 'none';
     } else {
       if (emptyCart)           emptyCart.style.display           = 'none';
       if (reviewsCarouselCart) reviewsCarouselCart.style.display = 'block';
@@ -6426,6 +6428,8 @@ document.dispatchEvent(new Event('wishlist:change'));
       if (promoCodes)  promoCodes.style.display   = 'block';
       const drawerExtra2 = document.getElementById('drawer-extra-section');
       if (drawerExtra2) drawerExtra2.style.display = '';
+      const bbwTimeline = document.getElementById('bbw-order-timeline-drawer');
+      if (bbwTimeline) bbwTimeline.style.display = '';
 
      const BBW_FEATURED_IDS = [
         'Pdg-Francenel-product69','Pdg-Francenel-product70','Pdg-Francenel-product71',
@@ -6774,9 +6778,9 @@ document.dispatchEvent(new Event('wishlist:change'));
             if (promoCodes)  promoCodes.style.display   = 'none';
             if (drawerExtra) drawerExtra.style.display = 'none';
         }, 150); // après initCartDrawerExtras (100ms)
-    } else {
-        setTimeout(() => initCartDrawerExtras(), 100);
-    }
+      } else {
+            if (cart.length > 0) setTimeout(() => initCartDrawerExtras(), 100);
+        }
 }
 
   // ================================================================
@@ -12637,5 +12641,3 @@ function injectColFbt() {
   observer.observe(document.body, { childList: true, subtree: true });
 
 })();
-
-

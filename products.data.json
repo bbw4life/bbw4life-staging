@@ -5186,6 +5186,36 @@
       "quote": "You dream it. We build it. Our brand, your curves, your voice."
     },
     {
+      "id": "bbw4life-new-arrivals",
+      "title": "New Arrivals",
+      "subtitle": "Fresh plus size styles added every week — be the first to wear what's new.",
+      "url": "/collections/bbw4life-new-arrivals.html",
+      "cta_label": "Shop New Arrivals →",
+      "image": "https://cdn.shopify.com/s/files/1/0746/5346/6724/files/New_arrivals.png?v=1781828071",
+      "product_ids": [
+        "Pdg-Francenel-product9",
+        "Pdg-Francenel-product11",
+        "Pdg-Francenel-product4",
+        "Pdg-Francenel-product22",
+        "Pdg-Francenel-product47",
+        "Pdg-Francenel-product27",
+        "Pdg-Francenel-product51",
+        "Pdg-Francenel-product30",
+        "Pdg-Francenel-product40",
+        "Pdg-Francenel-product10",
+        "Pdg-Francenel-product49",
+        "Pdg-Francenel-product14",
+        "Pdg-Francenel-product43"
+      ],
+      "stat_label": "New This Week",
+      "stat_value": "Fresh This Week",
+      "name": "New Arrivals",
+      "quote": "Fresh drops, bold styles — because queens never wear the same thing twice.",
+      "hero_title": "New Arrivals",
+      "hero_subtitle": "Fresh plus size styles added every week — be the first to wear what's new.",
+      "hero_eyebrow": "Just Dropped"
+    },
+    {
       "id": "shoes-sandals",
       "title": "Shoes & Sandals",
       "subtitle": "Bold, beautiful footwear designed for curvy women who refuse to be invisible.",
@@ -5307,13 +5337,17 @@
     "jrgq_index": 4
   },
   {
-  "id": "bbw4life-pants-skirts",
-  "settings_key": "jrgq_collections",
-  "jrgq_index": 5
-},
- {
-  "id": "shoes-sandals",
-    "settings_key": "shoes-sandals",
+    "id": "bbw4life-pants-skirts",
+    "settings_key": "jrgq_collections",
+    "jrgq_index": 5
+  },
+  {
+    "id": "shoes-sandals",
+    "settings_key": "shoes-sandals"
+  },
+  {
+    "id": "bbw4life-new-arrivals",
+    "settings_key": "jrgq_collections",
     "jrgq_index": 6
   }
 ],

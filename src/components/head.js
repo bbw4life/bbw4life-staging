@@ -98,6 +98,14 @@ const SEO_MAP = {
         canonical: 'https://bbw4life.com/collections/shoes-sandals.html'
     },
 
+    '/collections/bbw4life-new-arrivals.html': {
+        title: 'New Arrivals — Fresh Plus Size Fashion Every Week | BBW4LIFE',
+        description: 'Discover BBW4LIFE\'s newest plus size arrivals — bold dresses, swimwear, tops, beauty & more added every week. Sizes XL to 6XL. Be the first to wear what\'s new. Free worldwide shipping. 30-day returns.',
+        keywords: 'new arrivals plus size, new curvy fashion, BBW4LIFE new arrivals, plus size new styles 2026, curvy fashion drops, BBW new collection, plus size trending, new curvy dresses, BBW4LIFE weekly drops, fresh plus size styles, curvy woman new arrivals, BBW new styles, plus size fashion drops, new arrivals curvy woman, BBW4LIFE new drops, body positive new arrivals, plus size hot new, curvy styles drop, new plus size arrivals, curvy fashion update, weekly plus size arrivals, new curvy styles, BBW4LIFE latest, plus size fresh styles, BBW4LIFE new weekly, curvy fashion new arrivals, body positive new styles, plus size fashion new, BBW new products 2026, curvy woman new collection',
+        og_image: 'https://cdn.shopify.com/s/files/1/0746/5346/6724/files/BBW_Original_Coming_Soon.png?v=1777936945',
+        canonical: 'https://bbw4life.com/collections/bbw4life-new-arrivals.html'
+    },
+
     // ─────────────────────────────────────────────────────
     // PAGES
     // ─────────────────────────────────────────────────────
@@ -1088,8 +1096,6 @@ function injectGlobalHead() {
     }
     canonical.href = seo.canonical;
 }
-
-
 
 injectGlobalHead().then(() => {
     injectPageSEO();
