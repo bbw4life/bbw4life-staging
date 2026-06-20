@@ -153,6 +153,17 @@ document.addEventListener('DOMContentLoaded', async () => {
               }
             });
           })();
+
+          // ══ TOGGLE NOWPAYMENTS (CRYPTO) OPTION ══
+          (function toggleNowPayments() {
+            const showCrypto = (settings.show_nowpayments || 'yes').toLowerCase().trim() === 'yes';
+            if (showCrypto) return;
+
+            const cryptoRadio = document.querySelector('input[name="payment"][value="nowpayments"]');
+            const cryptoLabel = cryptoRadio ? cryptoRadio.closest('.payment-label') : null;
+            if (cryptoLabel) cryptoLabel.style.display = 'none';
+          })();
+          
         }
         applyPromoFreeItems();
         // ══ COLLAPSIBLE ORDER SUMMARY ══

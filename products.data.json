@@ -4292,6 +4292,7 @@
   {
     "type": "settings",
     "inventory_display_mode": "anderson",
+    "show_nowpayments": "yes",
     "product_title_badge": "yes",
     "thumbnails_desktop_vertical_left": "yes",
     "thumbnails_desktop_horizontal_below": "no",
@@ -4767,16 +4768,18 @@
     "show_thumbnails": "yes",
     "thumbnails_position_desktop": "right",
     "thumbnails_position_mobile": "top",
-    "show_individual_buttons": "yes",
+    "show_individual_buttons": "no",
     "button_1": { "text": "Discover",   "url": "/collections/nouveautes.html" },
     "button_2": { "text": "Promotions", "url": "/collections/soldes.html" },
     "button_3": { "text": "Our brands", "url": "/collections/marques.html" },
     "main_button": {
-      "text": "Add pack to cart", 
+      "text": "Unlock the Full Pack", 
       "product_ids": [
-        "Pdg-Francenel-product1",
-        "Pdg-Francenel-product2",
-        "Pdg-Francenel-product3"
+        "Pdg-Francenel-product4",
+        "Pdg-Francenel-product13",
+        "Pdg-Francenel-product14",
+        "Pdg-Francenel-product15",
+        "Pdg-Francenel-product2"
       ]
     },
     "show_countdown": "yes",

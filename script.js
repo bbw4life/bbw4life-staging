@@ -3716,9 +3716,17 @@ initAnnouncementBar();
 
   if (!cols.length) return;
 
+  // ── IDs à exclure uniquement de cette section (jrgq-gallery-mosaic) ──
+  const HIDDEN_IN_JRGQ = ['bbw4life-new-arrivals'];
+  const visibleCols = cols.filter(function(col) {
+    return !HIDDEN_IN_JRGQ.includes(col.id);
+  });
+
+  if (!visibleCols.length) return;
+
   mosaic.innerHTML = '';
 
-  cols.forEach(function(col, idx) {
+  visibleCols.forEach(function(col, idx) {
     // Classe de positionnement identique à l'original
     var posClass = 'jrgq-gal-item--' + (idx + 1);
     var featClass = col.featured ? ' jrgq-gal-item--featured' : '';
@@ -11087,7 +11095,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (btnMain) {
         btnMain.classList.add('bbw-hero__btn--added');
-        btnMain.textContent = '✓ Ajouté au panier…';
+        btnMain.textContent = 'Adding to cart… redirecting';
         setTimeout(function () { window.location.href = '/checkout/checkout.html'; }, 800);
       } else {
         window.location.href = '/checkout/checkout.html';
