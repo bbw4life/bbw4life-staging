@@ -1006,25 +1006,46 @@ function injectBlogSchema() {
 
 function injectGlobalHead() {
     return fetch('/src/components/head.html')
-        .then(r => r.text())
+        .then(r => {
+            // ── Cloudflare : vérifier que la réponse est bien du HTML valide ──
+            if (!r.ok) {
+                console.warn('[Head] head.html not found (' + r.status + ') — skipping injection');
+                return;
+            }
+            const contentType = r.headers.get('content-type') || '';
+            if (!contentType.includes('text/html') && !contentType.includes('text/plain')) {
+                console.warn('[Head] head.html returned unexpected type: ' + contentType);
+                return;
+            }
+            return r.text();
+        })
         .then(html => {
+            if (!html) return;
+            // ── Vérifier que ce n'est pas une page d'erreur ──
+            if (html.includes('<!DOCTYPE') && html.includes('<title>') && !html.includes('animations')) {
+                console.warn('[Head] head.html seems to be an error page — skipping');
+                return;
+            }
             const temp = document.createElement('div');
             temp.innerHTML = html;
             Array.from(temp.children).forEach(el => {
-                if (el.tagName === 'SCRIPT') {
-                    // Recrée le script pour forcer l'exécution
-                    const s = document.createElement('script');
-                    if (el.src) s.src = el.src;
-                    else s.textContent = el.textContent;
-                    s.defer = el.defer;
-                    document.head.appendChild(s);
-                } else {
-                    document.head.appendChild(el.cloneNode(true));
+                try {
+                    if (el.tagName === 'SCRIPT') {
+                        const s = document.createElement('script');
+                        if (el.src) s.src = el.src;
+                        else s.textContent = el.textContent;
+                        s.defer = el.defer;
+                        document.head.appendChild(s);
+                    } else {
+                        document.head.appendChild(el.cloneNode(true));
+                    }
+                } catch(e) {
+                    console.warn('[Head] Failed to inject element:', el.tagName, e.message);
                 }
             });
         })
-        .catch(err => console.error('[Head] Failed to load head.html:', err));
-        }
+        .catch(err => console.warn('[Head] Failed to load head.html:', err.message));
+}
 
         
         function injectPageSEO() {
@@ -1097,7 +1118,12 @@ function injectGlobalHead() {
     canonical.href = seo.canonical;
 }
 
+// APRÈS
 injectGlobalHead().then(() => {
+    injectPageSEO();
+    injectBlogSchema();
+}).catch(() => {
+
     injectPageSEO();
     injectBlogSchema();
 });
