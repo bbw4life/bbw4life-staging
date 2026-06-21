@@ -4746,6 +4746,9 @@ if (window.innerWidth <= 768) {
 
 
 
+// ═══════════════════════════════════════
+//  BREADCRUMBS
+// ═══════════════════════════════════════
 (function initBreadcrumbs() {
   const settings = (products.find(p => p.type === 'settings') || {});
   const bc = settings.breadcrumbs || {};
@@ -6773,10 +6776,9 @@ document.dispatchEvent(new Event('wishlist:change'));
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) return;
     const qty = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const cartItemIds = [...new Set(cart.map(item => item.id))];
     await fetch('/save-account', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'update-cart-quantity', email: userEmail, currentCartQuantity: qty, cartItemIds, token: localStorage.getItem('userAccountToken') })
+      body: JSON.stringify({ action: 'update-cart-quantity', email: userEmail, currentCartQuantity: qty })
     }).catch(() => {});
   }
 
@@ -7608,18 +7610,9 @@ const cartWrapper = document.querySelector('.icon-wrapper:has(.cart-icon)');
   if (announcementItems.length > 0) setInterval(() => showAnnouncementItem((announcementCurrent + 1) % announcementItems.length), 4000);
 
   // ====================== AUTO OPEN CART ======================
-  if (window.location.pathname.toLowerCase().includes('bbw4life-all-product.html') && localStorage.getItem('autoOpenCart') === 'true') {
+  if ((window.location.pathname.toLowerCase().includes('bbw4life-all-product.html') || window.location.pathname.toLowerCase().includes('bbw4life-all-product.html')) && localStorage.getItem('autoOpenCart') === 'true') {
     localStorage.removeItem('autoOpenCart');
-    let __tries = 0;
-    const __waitDrawer = setInterval(() => {
-      __tries++;
-      if (typeof window.openCartDrawer === 'function') {
-        clearInterval(__waitDrawer);
-        window.openCartDrawer();
-      } else if (__tries > 50) {
-        clearInterval(__waitDrawer);
-      }
-    }, 100);
+    setTimeout(() => { if (typeof openCartDrawer === 'function') openCartDrawer(); }, 1200);
   }
 
   (function initHeaderParticles() {
@@ -7924,69 +7917,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(loadAccountStats, 3000);
   }
 
- window.openSavedItems = async () => {
+  window.openSavedItems = () => {
     if (localStorage.getItem('isLoggedIn') !== 'true') {
       showToast("Please log in to view your saved items");
       return;
     }
-
-    const userEmail = localStorage.getItem('userEmail');
-    const token     = localStorage.getItem('userAccountToken');
-
-    try {
-      const res  = await fetch('/save-account', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'get-stats', email: userEmail, token })
-      });
-      const data = await res.json();
-
-      console.log('[openSavedItems] get-stats response:', data);
-
-      const localCart   = JSON.parse(localStorage.getItem('cart') || '[]');
-      const cartIsEmpty = !Array.isArray(localCart) || localCart.length === 0;
-
-      console.log('[openSavedItems] cartIsEmpty:', cartIsEmpty, '| cartItemIds:', data.cartItemIds);
-
-      if (cartIsEmpty && data.cartItemIds && data.cartItemIds.length > 0) {
-        let allProducts = [];
-        try {
-          const pr = await fetch('/products.data.json');
-          allProducts = await pr.json();
-        } catch(e) { allProducts = []; }
-
-        const rebuiltCart = data.cartItemIds.map(id => {
-          const prod = allProducts.find(p => p.id === id);
-          if (!prod) return null;
-          const firstVariant = (prod.variants && prod.variants.length > 0) ? prod.variants[0] : null;
-          const color  = firstVariant ? (firstVariant.color || null) : null;
-          const size   = firstVariant ? (firstVariant.size  || null) : null;
-          const price  = firstVariant ? firstVariant.price  : prod.price;
-          const colorObj = (color && prod.colors) ? prod.colors.find(c => c.name === color) : null;
-          const image  = colorObj ? (colorObj.image || prod.image) : prod.image;
-
-          return {
-            id:            prod.id,
-            title:         prod.title,
-            price:         price,
-            compare_price: prod.compare_price,
-            image:         (typeof upgradeShopifyImageUrl === 'function') ? upgradeShopifyImageUrl(image || prod.image) : (image || prod.image),
-            size:          size  || null,
-            color:         color || null,
-            quantity:      1,
-            cj_product_id: prod.cj_id,
-            cj_variant_id: firstVariant ? firstVariant.vid : null
-          };
-        }).filter(Boolean);
-
-        if (rebuiltCart.length > 0) {
-          localStorage.setItem('cart', JSON.stringify(rebuiltCart));
-        }
-      }
-    } catch (e) {
-      console.warn('[openSavedItems] Could not restore cart from server:', e.message);
-    }
-
     localStorage.setItem('autoOpenCart', 'true');
     window.location.href = '/collections/bbw4life-all-product.html';
   };
