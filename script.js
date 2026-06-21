@@ -4826,7 +4826,7 @@ if (window.innerWidth <= 768) {
 
   function tryBuild() {
     const title = window.__seoTitle || document.title;
-    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+    if (title) {
       build(title);
       return true;
     }
@@ -4844,9 +4844,9 @@ if (window.innerWidth <= 768) {
       if (window.__seoTitle) {
         clearInterval(poll);
         build(window.__seoTitle);
-      } else if (attempts > 800) {
+      } else if (attempts > 50) {
         clearInterval(poll);
-        build(document.title);
+        build(document.title || 'BBW4LIFE');
       }
     }, 100);
   }
