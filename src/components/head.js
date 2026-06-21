@@ -8,7 +8,7 @@ const SEO_MAP = {
     // ─────────────────────────────────────────────────────
     // HOME
     // ─────────────────────────────────────────────────────
-    '/index': {
+    '/index.html': {
         title: 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion for Curvy Women',
         description: 'BBW4LIFE — the #1 plus size fashion brand for curvy women. Shop bold dresses, swimwear, beauty & more in sizes XL to 6XL. Free shipping on orders $50+. 30-day returns. Beauty Has No Size.',
         keywords: 'plus size fashion, curvy women clothing, BBW4LIFE, body positive fashion, plus size dresses, BBW clothing, curvy fashion 2026, plus size swimwear, plus size beauty, BBW style, big beautiful women fashion, body positive brand, plus size outfits, curvy woman style, plus size collection, BBW4LIFE shop, plus size tops, curvy woman fashion, size XL to 6XL, body positive movement, plus size boutique, curvy woman dresses, BBW fashion store, plus size brand, size inclusive fashion, free shipping plus size, BBW4LIFE collection, curvy body fashion, plus size women clothing, beauty has no size',
@@ -1046,8 +1046,8 @@ function injectGlobalHead() {
 
     
     if (!seo) {
-        seo = {
-            title: 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion',
+    seo = {
+        title: 'BBW4LIFE | Plus Size Fashion & Beauty',
             description: 'BBW4LIFE — Bold plus size fashion for curvy women. Beauty Has No Size. Shop dresses, swimwear, beauty and more.',
             keywords: 'BBW4LIFE, plus size fashion, curvy women, body positive fashion, beauty has no size',
             og_image: 'https://bbw4life.com/public/og-home.jpg',

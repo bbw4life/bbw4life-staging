@@ -4826,7 +4826,7 @@ if (window.innerWidth <= 768) {
 
   function tryBuild() {
     const title = window.__seoTitle || document.title;
-    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+    if (title && title.length > 10) {
       build(title);
       return true;
     }
