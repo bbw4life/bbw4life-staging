@@ -5402,11 +5402,8 @@ if (rcCheckoutBtn) {
         if (!productSection) return;
 
         const pid     = productSection.dataset.productId;
-       const product = products.find(p => p.id === pid);
-        if (!product) {
-            setTimeout(initStickyATC, 500);
-            return;
-        }
+        const product = products.find(p => p.id === pid);
+        if (!product) return;
 
         // ── Éléments DOM ──
         const bar         = document.getElementById('sticky-atc');
