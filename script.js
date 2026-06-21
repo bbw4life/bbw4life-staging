@@ -4847,7 +4847,7 @@ if (window.innerWidth <= 768) {
       } else if (attempts > 200) {
         clearInterval(poll);
         build(document.title);
-    }
+      }
     }, 100);
   }
 
@@ -5589,7 +5589,7 @@ if (rcCheckoutBtn) {
         const addToCartMainBtn = document.querySelector('.product-content .add-to-cart');
 
         function checkStickyVisibility() {
-        if (!footer) return;
+        if (!footer || !products || !products.length) return;
 
         const footerTop    = footer.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
