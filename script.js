@@ -7,7 +7,7 @@
     const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     document.cookie = `aff_ref=${encodeURIComponent(refParam)};expires=${expires};path=/;SameSite=Lax`;
     
-    fetch('/.netlifyfunctions/save-account', {
+    fetch('/save-account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'aff-track-click', username: refParam }),
@@ -135,7 +135,7 @@ function bbwShowPromoWarningPopup(code, discountPct) {
 window.bbwValidateAffPromoCode = async function (code) {
   if (!code) return null;
   try {
-    const res  = await fetch('/.netlify/functions/validate-promo-code', {
+    const res  = await fetch('/validate-promo-code', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ action: 'validate', code: code, consume: false })
@@ -154,7 +154,7 @@ window.bbwValidateAffPromoCode = async function (code) {
 window.bbwConsumeAffPromoCode = async function (code) {
   if (!code) return;
   try {
-    await fetch('/.netlify/functions/validate-promo-code', {
+    await fetch('/validate-promo-code', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ action: 'validate', code: code, consume: true })
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionsCount
       };
 
-      fetch('/.netlify/functions/save-analytics', {
+      fetch('/save-analytics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -1583,7 +1583,7 @@ function showErrorPopup(message) {
             const fsStock = section.querySelector('.fs-stock');
             if (fsStock) {
               fsStock.innerHTML = '⏳ Checking stock...';
-              fetch(`/.netlify/functions/get-product-stock?cj_id=${prod.cj_id}`)
+              fetch(`/get-product-stock?cj_id=${prod.cj_id}`)
                 .then(r => r.json())
                 .then(stockData => {
                   if (stockData.success && stockData.totalStock !== null) {
@@ -4169,7 +4169,7 @@ initAnnouncementBar();
     async function handleStripe() {
       const returnUrl = window.location.origin + window.location.pathname;
 
-      const res = await fetch('/.netlify/functions/create-reservation-stripe-session', {
+      const res = await fetch('/create-reservation-stripe-session', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'create',
@@ -4196,7 +4196,7 @@ initAnnouncementBar();
     async function handlePaypal() {
       const returnUrl = window.location.origin + window.location.pathname;
 
-      const res = await fetch('/.netlify/functions/create-reservation-paypal', {
+      const res = await fetch('/create-reservation-paypal', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'create', amount: reservationPrice, program: selectedProgram, customer: clientData, returnUrl })
       });
@@ -4272,7 +4272,7 @@ initAnnouncementBar();
 
       // ← CAPTURE PAYPAL
       try {
-        await fetch('/.netlify/functions/create-reservation-paypal', {
+        await fetch('/create-reservation-paypal', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'capture', orderID, clientData: pendingClient, program: pendingProgram, amount: reservationPrice })
         });
@@ -4297,7 +4297,7 @@ initAnnouncementBar();
     async function savePlanRequestToSheet(client) {
       if (!client) return;
       try {
-        const res = await fetch('/.netlify/functions/save-plan-request', {
+        const res = await fetch('/save-plan-request', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             firstName: client.firstName  || '',
@@ -5284,7 +5284,7 @@ if (rcCheckoutBtn) {
       };
 
         try {
-            const res  = await fetch('/.netlify/functions/save-personalized-product', {
+            const res  = await fetch('/save-personalized-product', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify(payload)
@@ -6230,7 +6230,7 @@ if (newsletterForm) {
     }
 
     try {
-      const res = await fetch('/.netlify/functions/save-account', {
+      const res = await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'newsletter-subscribe', email: email })
@@ -6296,7 +6296,7 @@ document.addEventListener('submit', async function(e) {
   }
 
   try {
-    const res = await fetch('/.netlify/functions/save-account', {
+    const res = await fetch('/save-account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'newsletter-subscribe', email: email })
@@ -6751,7 +6751,7 @@ document.dispatchEvent(new Event('wishlist:change'));
     const userEmail = localStorage.getItem('userEmail');
     if (!userEmail) return;
     const qty = cart.reduce((sum, item) => sum + item.quantity, 0);
-    await fetch('/.netlify/functions/save-account', {
+    await fetch('/save-account', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'update-cart-quantity', email: userEmail, currentCartQuantity: qty })
     }).catch(() => {});
@@ -7738,7 +7738,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = registerBtn.textContent;
       registerBtn.textContent = "Creating account..."; registerBtn.disabled = true;
       try {
-        const res  = await fetch('/.netlify/functions/save-account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lastName, firstName, email, phone, password, newsletter }) });
+        const res  = await fetch('/save-account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lastName, firstName, email, phone, password, newsletter }) });
         const data = await res.json();
         if (data.success) { registerBtn.textContent = "Your profil is ready..."; window.showToast("Account created successfully!"); setTimeout(() => goToLogin.click(), 800); }
         else { registerBtn.textContent = originalText; registerBtn.disabled = false; window.showToast("Error: " + (data.error || "Unknown")); }
@@ -7783,7 +7783,7 @@ document.addEventListener('DOMContentLoaded', () => {
       paulForgotBtn.disabled = true;
 
       try {
-        const res  = await fetch('/.netlify/functions/save-account', {
+        const res  = await fetch('/save-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'reset-password', email: emailVal, newPassword: newPass })
@@ -7837,7 +7837,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = loginBtn.textContent;
       loginBtn.textContent = "Checking..."; loginBtn.disabled = true;
       try {
-        const res  = await fetch('/.netlify/functions/verify-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+        const res  = await fetch('/verify-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
         const data = await res.json();
         if (data.success) {
           loginBtn.textContent = "Your account Loading...";
@@ -7906,7 +7906,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('userAccountToken');
     if (!email) return;
     try {
-      const res = await fetch('/.netlify/functions/save-account', {
+      const res = await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'get-stats', email, token })
@@ -8122,7 +8122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const zip = document.getElementById('addr-zip').value.trim();
     const addressStr = [line1, line2, city, state, zip].filter(Boolean).join(', ');
     try {
-      const res = await fetch('/.netlify/functions/save-account', {
+      const res = await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'update-address', email, line1, line2, city, state, zip, token })
@@ -8152,7 +8152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newPassword = document.getElementById('new-password').value.trim();
     if (!email || !newPassword) return showToast("Email and new password are required");
     try {
-      const res = await fetch('/.netlify/functions/save-account', {
+      const res = await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'update-password', email, newPassword, token })
@@ -8233,7 +8233,7 @@ function loadProfilePhoto() {
     const email = localStorage.getItem('userEmail');
     if (!email) return;
     try {
-      await fetch('/.netlify/functions/save-account', {
+      await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'update-profile-photo', email, photoBase64: base64, token: localStorage.getItem('userAccountToken') })
@@ -8532,7 +8532,7 @@ function loadProfilePhoto() {
     // Enregistrer dans Google Sheets (une seule fois)
     if (!localStorage.getItem('bbw_promo_registered_' + code)) {
       try {
-        await fetch('/.netlify/functions/validate-promo-code', {
+        await fetch('/validate-promo-code', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -8643,7 +8643,7 @@ function loadProfilePhoto() {
         affiliatesFromSheet.push(newAff);
 
         try {
-          await fetch('/.netlify/functions/save-account', {
+          await fetch('/save-account', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'aff-create', email: userEmail, allAffiliates: affiliatesFromSheet, token: localStorage.getItem('userAccountToken') })
@@ -8685,7 +8685,7 @@ function loadProfilePhoto() {
       withdrawBtn.innerHTML = '<div class="plan-spinner"></div> Sending...';
 
       try {
-        const res  = await fetch('/.netlify/functions/save-account', {
+        const res  = await fetch('/save-account', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'aff-withdraw-request', email: userEmail, paypalName, paypalEmail, token: localStorage.getItem('userAccountToken') })
@@ -8737,7 +8737,7 @@ function loadProfilePhoto() {
     if (!userEmail) return;
     const token = localStorage.getItem('userAccountToken');
     try {
-      const res  = await fetch('/.netlify/functions/save-account', {
+      const res  = await fetch('/save-account', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'aff-get-stats', email: userEmail, token })
@@ -9122,7 +9122,7 @@ if (storyForm) {
     };
 
     try {
-      const res  = await fetch('/.netlify/functions/story-share', {
+      const res  = await fetch('/story-share', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload)
@@ -9209,7 +9209,7 @@ async function loadCommunityStories() {
   if (!grid) return;
 
   try {
-    const res  = await fetch('/.netlify/functions/story-share');
+    const res  = await fetch('/story-share');
     const data = await res.json();
 
     if (!data.success || !data.stories.length) return;
@@ -9328,7 +9328,7 @@ function initStockBar(cjId) {
     const hint  = document.getElementById('pp-stock-hint');
     if (!block || !label || !fill || !hint) return;
 
-    fetch(`/.netlify/functions/get-product-stock?cj_id=${cjId}`)
+    fetch(`/get-product-stock?cj_id=${cjId}`)
         .then(function(res) { return res.json(); })
         .then(function(data) {
             block.classList.remove('loading');
@@ -9983,7 +9983,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
 
       try {
-        const response = await fetch('/.netlify/functions/chat', {
+        const response = await fetch('/chat', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({
@@ -10523,7 +10523,7 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error('Stripe subscription price ID not configured yet. Please set it in your dashboard.');
         }
 
-        const res  = await fetch('/.netlify/functions/create-plan-stripe-session', {
+        const res  = await fetch('/create-plan-stripe-session', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({
@@ -10558,7 +10558,7 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error('PayPal plan ID not configured yet. Please set it in your dashboard.');
         }
 
-        const res  = await fetch('/.netlify/functions/create-plan-paypal-subscription', {
+        const res  = await fetch('/create-plan-paypal-subscription', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({
@@ -10614,7 +10614,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const provider = sessionId ? 'stripe' : 'paypal';
             const paymentId = sessionId || subId || ppToken;
 
-            const verifyRes  = await fetch('/.netlify/functions/verify-plan-payment', {
+            const verifyRes  = await fetch('/verify-plan-payment', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ provider, paymentId, planKey: pendingPlanKey }),
@@ -10654,7 +10654,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ────────────────────────────────────────────────── */
     async function savePlanRequest(payload) {
         try {
-            await fetch('/.netlify/functions/save-plan-request', {
+            await fetch('/save-plan-request', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({

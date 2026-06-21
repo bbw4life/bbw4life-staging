@@ -1701,5 +1701,5 @@ export async function onRequestGet(context) {
   } catch (fatal) {
     console.error('[Handler] Fatal error:', fatal.message, fatal.stack);
     return new Response(JSON.stringify({ success: false, error: fatal.message }), { status: 500, headers: CORS_HEADERS });
-  }
+  } 
 }

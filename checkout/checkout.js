@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (restoreOrderId) {
         try {
-            const res = await fetch(`/.netlify/functions/restore-abandoned-cart?orderId=${encodeURIComponent(restoreOrderId)}`);
+            const res = await fetch(`/restore-abandoned-cart?orderId=${encodeURIComponent(restoreOrderId)}`);
             const data = await res.json();
 
             if (res.ok && data.success) {
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pendingAffEmail = sessionStorage.getItem('pendingAffPromo');
     if (pendingAffEmail && appliedPromo && appliedPromo.isAffiliate) {
         try {
-            await fetch('/.netlify/functions/save-account', {
+            await fetch('/save-account', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'aff-mark-promo-used', email: pendingAffEmail })
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const clientTotal = parseFloat(document.getElementById('total').textContent.replace('$', '')) || clientSubtotal;
 
         // ── ÉTAPE 1 : Validation serveur + token ──
-        const validationRes = await fetch('/.netlify/functions/validate-checkout', {
+        const validationRes = await fetch('/validate-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const { cartToken, sanitizedCart, shippingCost, taxAmount } = validationData;
 
         // ── ÉTAPE 2 : Vérification token avant paiement ──
-        const verifyRes = await fetch('/.netlify/functions/validate-checkout', {
+        const verifyRes = await fetch('/validate-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (paymentMethod === 'stripe') {
             const STRIPE_PUBLIC_KEY = "pk_test_51PMDwoF9QAVBUyaUqwc7ekbAhyZdI9oA3ubZT8b7TtWGrykoPLvsql4mexEwEoS5pggyssqN6jpj2w5VQMHOSftf00q97Rbt1f";
             const stripe = Stripe(STRIPE_PUBLIC_KEY);
-            const response = await fetch('/.netlify/functions/create-stripe-session', {
+            const response = await fetch('/create-stripe-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             await stripe.redirectToCheckout({ sessionId: data.sessionId });
 
         } else if (paymentMethod === 'paypal') {
-            const response = await fetch('/.netlify/functions/paypal-create-order', {
+            const response = await fetch('/paypal-create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -473,7 +473,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = `${paypalDomain}/checkoutnow?token=${data.orderID}`;
 
         } else if (paymentMethod === 'nowpayments') {
-            const response = await fetch('/.netlify/functions/nowpayments-create-order', {
+            const response = await fetch('/nowpayments-create-order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
