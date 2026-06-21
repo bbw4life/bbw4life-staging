@@ -1,0 +1,108 @@
+process.removeAllListeners('warning');
+const { google } = require('googleapis');
+const { notifyTelegram } = require('./notify-telegram');
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: JSON.stringify({ success: false, error: 'Method not allowed' }) };
+  }
+
+  try {
+    
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      program,
+      productId,
+      size,
+      color,
+      consent
+    } = JSON.parse(event.body);
+
+    if (!firstName || !lastName || !email || !program) {
+      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'Missing required fields' }) };
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      credentials: {
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        private_key:  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
+      },
+      scopes: ['https://www.googleapis.com/auth/spreadsheets']
+    });
+
+    const sheets        = google.sheets({ version: 'v4', auth });
+    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_PLAN_REQUEST;
+
+    function formatDate() {
+      const d = new Date();
+      return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear().toString().slice(-2)} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+    }
+
+    
+    const values = [[
+      formatDate(),      
+      firstName,         
+      lastName,          
+      email,             
+      phone || '',       
+      program,           
+      productId || '',   
+      size || '',        
+      color || '',       
+      consent || 'Yes',  
+      'Pending'          
+    ]];
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range:            'bbw4life-plan-request!A:K',
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
+      resource:         { values }
+    });
+
+    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trigger:   'plan_request',
+        email:     email,
+        firstName: firstName,
+        lastName:  lastName,
+        program:   program,
+        productId: productId || '',
+        size:      size  || '',
+        color:     color || ''
+      })
+    }).catch(e => console.warn('[Email] plan_request failed:', e.message));
+
+    await notifyTelegram(
+    `⏳ <b>Pdg Francenel, un client vient de mettre en attente un des design BBW4LIFE!</b>\n\n` +
+    `👤 <b>Nom:</b> ${firstName} ${lastName}\n` +
+    `📧 <b>Email:</b> ${email}\n` +
+    `🎨 <b>Produit:</b> ${program}`
+  );
+  // ── Email Custom Product ──
+    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        trigger:       'custom_product',
+        email:         email,
+        firstname:     firstname,
+        lastname:      lastname,
+        product_title: product_title,
+        product_desc:  product_desc
+      })
+    }).catch(e => console.warn('[Email] custom_product failed:', e.message));
+
+    return { statusCode: 200, body: JSON.stringify({ success: true }) };
+
+  } catch (error) {
+    console.error('PLAN REQUEST ERROR:', error.message);
+    return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+  }
+};
