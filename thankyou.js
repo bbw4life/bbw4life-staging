@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             body: JSON.stringify(payload)
         });
 
-        console.log(`📡 Response status: ${response.status}`);
+        console.log(`📡 Response status: ${response.status}`); 
 
         if (response.status === 404) {
             throw new Error("We're experiencing a temporary issue with order verification. Please try again in a moment or contact BBW4LIFE support — we will make it right.");

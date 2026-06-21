@@ -13,7 +13,6 @@ function response(statusCode, body) {
     headers: { 'Content-Type': 'application/json' }
   });
 }
-
 // ── saveAsPending ─────────────────────────────────────────────────────
 async function saveAsPending(item, shipping, BASE_URL, provider, paymentId, status = 'pending_stock') {
   try {
