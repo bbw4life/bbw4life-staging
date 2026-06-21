@@ -1,0 +1,12 @@
+{
+  "name": "bbw4life-retry-pending",
+  "main": "index.js",
+  "compatibility_date": "2026-06-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+  "vars": {
+    "BASE_URL": "https://bbw4life-staging.pages.dev"
+  }
+}
