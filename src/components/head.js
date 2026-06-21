@@ -1097,7 +1097,7 @@ function injectGlobalHead() {
     canonical.href = seo.canonical;
 }
 
-injectGlobalHead().then(() => {
-    injectPageSEO();
-    injectBlogSchema();
-});
+
+injectPageSEO();
+injectBlogSchema();
+injectGlobalHead();
