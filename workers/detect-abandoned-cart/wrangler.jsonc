@@ -1,5 +1,6 @@
 {
   "name": "bbw4life-detect-abandoned-cart",
+  "main": "index.js",
   "compatibility_date": "2026-06-21",
   "compatibility_flags": ["nodejs_compat"],
   "triggers": {
