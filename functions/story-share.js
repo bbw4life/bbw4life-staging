@@ -29,7 +29,7 @@ async function saveStory(body, env) {
     }
 
     const accessToken = await getGoogleAuthToken(env);
-    const spreadsheetId = env.SHEET_ID_BBW4LIFE_STORIES;
+    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ACCOUNTS;
 
     const values = [[
         firstName.trim(),
