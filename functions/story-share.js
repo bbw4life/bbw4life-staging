@@ -51,7 +51,7 @@ async function saveStory(body, env) {
         formatDate()
     ]];
 
-    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${SHEET_NAME}!A:Q:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+    await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(`${SHEET_NAME}!A:Q`)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${accessToken}`,

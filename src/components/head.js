@@ -1057,10 +1057,16 @@ function injectGlobalHead() {
 
  
     
-    document.title = seo.title;
-    window.__seoTitle = seo.title;
-    document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+        document.title = seo.title;
+        window.__seoTitle = seo.title;
 
+        document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+
+        setTimeout(() => {
+            document.dispatchEvent(new CustomEvent('seo:ready', { detail: { title: seo.title } }));
+        }, 300);
+
+        
     
     function setMeta(selector, attr, value) {
         let el = document.querySelector(selector);

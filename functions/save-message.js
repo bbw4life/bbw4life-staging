@@ -33,7 +33,7 @@ export async function onRequestPost(context) {
             formatDate()
         ]];
 
-        await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/bbw4life-contact-messages!A:G:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
+        await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent('bbw4life-contact-messages!A:G')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
