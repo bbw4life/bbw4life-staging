@@ -4750,138 +4750,107 @@ if (window.innerWidth <= 768) {
 //  BREADCRUMBS
 // ═══════════════════════════════════════
 (function initBreadcrumbs() {
-  const BC_KEY = 'bc_visited';
-  const BC_MAX = 6;
+  const settings = (products.find(p => p.type === 'settings') || {});
+  const bc = settings.breadcrumbs || {};
+
+  if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
 
   const nav  = document.getElementById('bc-nav');
   const list = document.getElementById('bc-list');
   if (!nav || !list) return;
 
-  function run(settings) {
-    const bc = settings.breadcrumbs || {};
-    if ((bc.show || 'yes').toLowerCase() !== 'yes') return;
+  const separatorMap = {
+    'separator_arrow':        '">"',
+    'separator_slash':        '"/"',
+    'separator_dash':         '"-"',
+    'separator_dot':          '"•"',
+    'separator_chevron':      '"»"',
+    'separator_pipe':         '"|"',
+    'separator_double_arrow': '">>"'
+  };
 
-    const separatorMap = {
-      'separator_arrow':        '">"',
-      'separator_slash':        '"/"',
-      'separator_dash':         '"-"',
-      'separator_dot':          '"•"',
-      'separator_chevron':      '"»"',
-      'separator_pipe':         '"|"',
-      'separator_double_arrow': '">>"'
-    };
-
-    let activeSep = '"/"';
-    for (const [key, val] of Object.entries(separatorMap)) {
-      if ((bc[key] || 'no').toLowerCase() === 'yes') {
-        activeSep = val;
-        break;
-      }
+  let activeSep = '"/"';
+  for (const [key, val] of Object.entries(separatorMap)) {
+    if ((bc[key] || 'no').toLowerCase() === 'yes') {
+      activeSep = val;
+      break;
     }
-    document.documentElement.style.setProperty('--bc-sep', activeSep);
+  }
+  document.documentElement.style.setProperty('--bc-sep', activeSep);
 
-    function build(title) {
-      const currentPath  = window.location.pathname;
-      const currentTitle = title.split('|')[0].trim() || title;
-      const currentNoExt = currentPath.replace(/\.html$/, '');
+  function build(title) {
+    const currentPath    = window.location.pathname;
+    const currentTitle   = title.split('|')[0].trim() || title;
+    const currentNoExt   = currentPath.replace(/\.html$/, '');
 
-      let visited = [];
-      try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
+    const BC_KEY = 'bc_visited';
+    const BC_MAX = 6;
 
-      visited = visited.filter(p => p.url.replace(/\.html$/, '') !== currentNoExt);
+    let visited = [];
+    try { visited = JSON.parse(localStorage.getItem(BC_KEY) || '[]'); } catch(e) {}
 
-      if (currentPath !== '/' && currentPath !== '/index.html') {
-        visited.unshift({ url: currentPath, title: currentTitle });
-      }
+    // Filtre avec ou sans .html
+    visited = visited.filter(p => p.url.replace(/\.html$/, '') !== currentNoExt);
 
-      if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
-
-      try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
-
-      list.innerHTML = `
-        <li class="bc-item">
-          <a href="/index.html">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9 21V12h6v9"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Home
-          </a>
-        </li>`;
-
-      visited.forEach(page => {
-        const isActive = page.url.replace(/\.html$/, '') === currentNoExt;
-        const li = document.createElement('li');
-        li.className = 'bc-item' + (isActive ? ' bc-active' : '');
-        li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
-        list.appendChild(li);
-      });
-
-      nav.style.display = 'block';
+    if (currentPath !== '/' && currentPath !== '/index.html') {
+      visited.unshift({ url: currentPath, title: currentTitle });
     }
 
-    // ── Récupère le titre avec fallback robuste ──
-    function getTitle() {
-      if (window.__seoTitle && window.__seoTitle !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
-        return window.__seoTitle;
-      }
-      const docTitle = document.title;
-      if (docTitle && docTitle !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
-        return docTitle;
-      }
-      return null;
+    if (visited.length > BC_MAX) visited = visited.slice(0, BC_MAX);
+
+    try { localStorage.setItem(BC_KEY, JSON.stringify(visited)); } catch(e) {}
+
+    list.innerHTML = `
+      <li class="bc-item">
+        <a href="/index.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Home
+        </a>
+      </li>`;
+
+    visited.forEach(page => {
+      const isActive = page.url.replace(/\.html$/, '') === currentNoExt;
+      const li = document.createElement('li');
+      li.className = 'bc-item' + (isActive ? ' bc-active' : '');
+      li.innerHTML = `<a href="${page.url}">${page.title}</a>`;
+      list.appendChild(li);
+    });
+
+    nav.style.display = 'block';
+  }
+
+  function tryBuild() {
+    const title = window.__seoTitle || document.title;
+    if (title && title !== 'BBW4LIFE — Beauty Has No Size | Plus Size Fashion') {
+      build(title);
+      return true;
     }
+    return false;
+  }
 
-    // Essai immédiat
-    const immediate = getTitle();
-    if (immediate) { build(immediate); return; }
-
-    // Écoute l'event seo:ready
-    document.addEventListener('seo:ready', function handler(e) {
-      document.removeEventListener('seo:ready', handler);
+  if (!tryBuild()) {
+    document.addEventListener('seo:ready', function(e) {
       build(e.detail.title);
     }, { once: true });
 
-    // Polling de sécurité (max 3s, toutes les 100ms)
     let attempts = 0;
     const poll = setInterval(function() {
       attempts++;
-      const t = getTitle();
-      if (t) {
+      if (window.__seoTitle) {
         clearInterval(poll);
-        // Vérifier qu'on n'a pas déjà buildé via seo:ready
-        if (nav.style.display !== 'block') build(t);
-        return;
-      }
-      // Fallback après 3s : utilise le titre brut
-      if (attempts >= 30) {
+        build(window.__seoTitle);
+      } else if (attempts > 500) {
         clearInterval(poll);
-        if (nav.style.display !== 'block') build(document.title || 'BBW4LIFE');
+        build(document.title);
       }
     }, 100);
   }
 
-  // Attendre products puis run
-  if (window.__allProducts && window.__allProducts.length) {
-    const settings = window.__allProducts.find(p => p.type === 'settings') || {};
-    run(settings);
-  } else {
-    let tries = 0;
-    const wait = setInterval(function() {
-      tries++;
-      if (window.__allProducts && window.__allProducts.length) {
-        clearInterval(wait);
-        const settings = window.__allProducts.find(p => p.type === 'settings') || {};
-        run(settings);
-      } else if (tries > 50) {
-        // Cloudflare tardif : run avec settings vide (breadcrumb s'affiche quand même)
-        clearInterval(wait);
-        run({});
-      }
-    }, 100);
-  }
 })();
 
 
@@ -5432,15 +5401,9 @@ if (rcCheckoutBtn) {
         const productSection = document.querySelector('.product-section');
         if (!productSection) return;
 
-       const pid     = productSection.dataset.productId;
+        const pid     = productSection.dataset.productId;
         const product = products.find(p => p.id === pid);
         if (!product) return;
-
-        // ── Cloudflare safety : attendre que le DOM soit stabilisé ──
-        if (!document.getElementById('sticky-atc')) {
-          setTimeout(initStickyATC, 300);
-          return;
-        }
 
         // ── Éléments DOM ──
         const bar         = document.getElementById('sticky-atc');
@@ -5632,11 +5595,14 @@ if (rcCheckoutBtn) {
         const windowHeight = window.innerHeight;
 
         const isMobileStickyAtc = window.innerWidth <= 768;
-        const settingsForAtc = (window.__allProducts || []).find(p => p.type === 'settings') || {};
-        const mobileThreshold = parseFloat(settingsForAtc.sticky_atc_mobile_threshold || 6.0);
-        const desktopThreshold = parseFloat(settingsForAtc.sticky_atc_desktop_threshold || 4.5);
-        const nearFooter = footerTop < windowHeight * (isMobileStickyAtc ? mobileThreshold : desktopThreshold);
-        
+          const mobileThreshold = parseFloat(
+            ((window.__allProducts || []).find(p => p.type === 'settings') || {}).sticky_atc_mobile_threshold || 6.0
+          );
+          const desktopThreshold = parseFloat(
+            ((window.__allProducts || []).find(p => p.type === 'settings') || {}).sticky_atc_desktop_threshold || 4.5
+          );
+          const nearFooter = footerTop < windowHeight * (isMobileStickyAtc ? mobileThreshold : desktopThreshold);
+
         // Cacher si le bouton principal ATC est visible à l'écran
         let mainBtnVisible = false;
         if (addToCartMainBtn && addToCartMainBtn.offsetParent !== null) {
