@@ -7,8 +7,5 @@
     "BASE_URL": "https://bbw4life-staging.pages.dev",
     "FROM_EMAIL": "BBW4LIFE <support@bbw4life.com>",
     "REPORT_SECRET": "pdg_francenel_bbw4life_report_2026"
-  },
-  "build": {
-    "command": "npm install"
   }
 }
