@@ -8,7 +8,6 @@ function normalizeEmail(email) {
     .toLowerCase();
 }
 
-// Génère un token = HMAC-SHA256(email_normalisé, SECRET)
 async function generateAccountToken(env, email) {
   const secret = env.ACCOUNT_TOKEN_SECRET;
   if (!secret) throw new Error('ACCOUNT_TOKEN_SECRET not configured');
@@ -31,12 +30,9 @@ async function generateAccountToken(env, email) {
   return bufferToHex(signature);
 }
 
-// Vérifie que le token fourni correspond bien à l'email fourni
 async function verifyAccountToken(env, email, token) {
   if (!email || !token) return false;
   const expected = await generateAccountToken(env, email);
-
-  // Comparaison à temps constant pour éviter les timing attacks
   return timingSafeEqual(expected, token);
 }
 
@@ -46,7 +42,6 @@ function bufferToHex(buffer) {
     .join('');
 }
 
-// Comparaison à temps constant (équivalent crypto.timingSafeEqual)
 function timingSafeEqual(a, b) {
   if (a.length !== b.length) return false;
   let result = 0;
@@ -56,4 +51,59 @@ function timingSafeEqual(a, b) {
   return result === 0;
 }
 
-export { generateAccountToken, verifyAccountToken, normalizeEmail };
+async function getGoogleAuthToken(env) {
+  const clientEmail = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKeyRaw = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    iss: clientEmail,
+    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    aud: 'https://oauth2.googleapis.com/token',
+    exp: now + 3600,
+    iat: now
+  };
+
+  const header = { alg: 'RS256', typ: 'JWT' };
+
+  const encode = (obj) => btoa(JSON.stringify(obj))
+    .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+
+  const unsignedToken = `${encode(header)}.${encode(payload)}`;
+
+  const pemContents = privateKeyRaw
+    .replace('-----BEGIN PRIVATE KEY-----', '')
+    .replace('-----END PRIVATE KEY-----', '')
+    .replace(/\s/g, '');
+
+  const binaryDer = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
+
+  const privateKey = await crypto.subtle.importKey(
+    'pkcs8',
+    binaryDer,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signature = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    privateKey,
+    new TextEncoder().encode(unsignedToken)
+  );
+
+  const jwt = `${unsignedToken}.${btoa(String.fromCharCode(...new Uint8Array(signature)))
+    .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')}`;
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`
+  });
+
+  const data = await res.json();
+  if (!data.access_token) throw new Error('Google auth failed: ' + JSON.stringify(data));
+  return data.access_token;
+}
+
+export { generateAccountToken, verifyAccountToken, normalizeEmail, getGoogleAuthToken };
