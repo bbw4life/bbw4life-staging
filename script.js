@@ -4779,7 +4779,11 @@ if (window.innerWidth <= 768) {
   document.documentElement.style.setProperty('--bc-sep', activeSep);
 
   function build(title) {
-    const currentPath    = window.location.pathname;
+    let currentPath = window.location.pathname;
+    if (currentPath.length > 1 && currentPath.endsWith('/')) {
+      currentPath = currentPath.slice(0, -1);
+    }
+    if (currentPath === '') currentPath = '/';
     const currentTitle   = title.split('|')[0].trim() || title;
     const currentNoExt   = currentPath.replace(/\.html$/, '');
 
@@ -4792,7 +4796,8 @@ if (window.innerWidth <= 768) {
     // Filtre avec ou sans .html
     visited = visited.filter(p => p.url.replace(/\.html$/, '') !== currentNoExt);
 
-    if (currentPath !== '/' && currentPath !== '/index.html') {
+    const isHome = currentPath === '/' || currentPath === '/index.html' || currentPath === '/index';
+      if (!isHome) {
       visited.unshift({ url: currentPath, title: currentTitle });
     }
 
