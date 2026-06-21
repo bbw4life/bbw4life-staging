@@ -1,13 +1,16 @@
 {
   "name": "bbw4life-backend",
   "version": "1.0.0",
-  "description": "Cloudflare Pages Functions for BBW4LIFE",
+  "description": "Netlify Functions for Bbw4life Checkout",
   "private": true,
   "scripts": {
-    "build": "npm install"
+    "build": "echo 'No build step required'",
+    "start": "set NODE_OPTIONS=--no-deprecation && netlify dev"
   },
   "dependencies": {
     "stripe": "^16.0.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "googleapis": "^128.0.0",
     "resend": "^4.0.0"
   },
   "engines": {
