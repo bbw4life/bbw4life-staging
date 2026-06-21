@@ -7608,9 +7608,18 @@ const cartWrapper = document.querySelector('.icon-wrapper:has(.cart-icon)');
   if (announcementItems.length > 0) setInterval(() => showAnnouncementItem((announcementCurrent + 1) % announcementItems.length), 4000);
 
   // ====================== AUTO OPEN CART ======================
-  if ((window.location.pathname.toLowerCase().includes('bbw4life-all-product.html') || window.location.pathname.toLowerCase().includes('bbw4life-all-product.html')) && localStorage.getItem('autoOpenCart') === 'true') {
+  if (window.location.pathname.toLowerCase().includes('bbw4life-all-product.html') && localStorage.getItem('autoOpenCart') === 'true') {
     localStorage.removeItem('autoOpenCart');
-    setTimeout(() => { if (typeof openCartDrawer === 'function') openCartDrawer(); }, 1200);
+    let __tries = 0;
+    const __waitDrawer = setInterval(() => {
+      __tries++;
+      if (typeof window.openCartDrawer === 'function') {
+        clearInterval(__waitDrawer);
+        window.openCartDrawer();
+      } else if (__tries > 50) {
+        clearInterval(__waitDrawer);
+      }
+    }, 100);
   }
 
   (function initHeaderParticles() {
@@ -7932,8 +7941,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
 
+      console.log('[openSavedItems] get-stats response:', data);
+
       const localCart   = JSON.parse(localStorage.getItem('cart') || '[]');
       const cartIsEmpty = !Array.isArray(localCart) || localCart.length === 0;
+
+      console.log('[openSavedItems] cartIsEmpty:', cartIsEmpty, '| cartItemIds:', data.cartItemIds);
 
       if (cartIsEmpty && data.cartItemIds && data.cartItemIds.length > 0) {
         let allProducts = [];
