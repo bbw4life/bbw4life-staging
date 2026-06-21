@@ -4844,7 +4844,7 @@ if (window.innerWidth <= 768) {
       if (window.__seoTitle) {
         clearInterval(poll);
         build(window.__seoTitle);
-      } else if (attempts > 600) {
+      } else if (attempts > 800) {
         clearInterval(poll);
         build(document.title);
       }
