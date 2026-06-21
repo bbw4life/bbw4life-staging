@@ -1,6 +1,4 @@
-process.removeAllListeners('warning');
-// netlify/functions/account-token.js
-const crypto = require('crypto');
+// functions/account-token.js
 
 function normalizeEmail(email) {
   return (email || '')
@@ -11,22 +9,51 @@ function normalizeEmail(email) {
 }
 
 // Génère un token = HMAC-SHA256(email_normalisé, SECRET)
-function generateAccountToken(email) {
-  const secret = process.env.ACCOUNT_TOKEN_SECRET;
+async function generateAccountToken(env, email) {
+  const secret = env.ACCOUNT_TOKEN_SECRET;
   if (!secret) throw new Error('ACCOUNT_TOKEN_SECRET not configured');
   const normalized = normalizeEmail(email);
-  return crypto.createHmac('sha256', secret).update(normalized).digest('hex');
+
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    new TextEncoder().encode(normalized)
+  );
+
+  return bufferToHex(signature);
 }
 
 // Vérifie que le token fourni correspond bien à l'email fourni
-function verifyAccountToken(email, token) {
+async function verifyAccountToken(env, email, token) {
   if (!email || !token) return false;
-  const expected = generateAccountToken(email);
+  const expected = await generateAccountToken(env, email);
+
   // Comparaison à temps constant pour éviter les timing attacks
-  const a = Buffer.from(expected);
-  const b = Buffer.from(token);
-  if (a.length !== b.length) return false;
-  return crypto.timingSafeEqual(a, b);
+  return timingSafeEqual(expected, token);
 }
 
-module.exports = { generateAccountToken, verifyAccountToken, normalizeEmail };
+function bufferToHex(buffer) {
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+// Comparaison à temps constant (équivalent crypto.timingSafeEqual)
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
+
+export { generateAccountToken, verifyAccountToken, normalizeEmail };

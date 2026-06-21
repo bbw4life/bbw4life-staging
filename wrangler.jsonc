@@ -1,0 +1,16 @@
+{
+  "name": "bbw4life-staging",
+  "compatibility_date": "2026-06-21",
+  "assets": {
+    "directory": "."
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "triggers": {
+    "crons": [
+      "*/5 * * * *",
+      "*/10 * * * *"
+    ]
+  }
+}

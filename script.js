@@ -7,7 +7,7 @@
     const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
     document.cookie = `aff_ref=${encodeURIComponent(refParam)};expires=${expires};path=/;SameSite=Lax`;
     
-    fetch('/.netlify/functions/save-account', {
+    fetch('/.netlifyfunctions/save-account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'aff-track-click', username: refParam }),

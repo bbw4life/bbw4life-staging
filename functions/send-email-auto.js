@@ -1,15 +1,6 @@
-// netlify/functions/send-email-auto.js
-process.removeAllListeners('warning');
+// functions/send-email-auto.js  —  Cloudflare Pages Function
 
-const { Resend } = require('resend');
-const { google }  = require('googleapis');
-const crypto = require('crypto');
-
-// ════════════════════════════════════════════════════════════════
-//  ENVIRONMENT
-// ════════════════════════════════════════════════════════════════
-const BASE_URL   = process.env.BASE_URL   || 'https://bbw4life.com';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'BBW4LIFE <hello@bbw4life.com>';
+import { Resend } from 'resend';
 
 // ════════════════════════════════════════════════════════════════
 //  EMAIL TYPE CONSTANTS
@@ -62,7 +53,7 @@ WRITING RULES:
 7. Output: Plain text only. Separate paragraphs with a blank line.
 8. ALWAYS reflect: Beauty Has No Sizes — every woman deserves to feel beautiful`;
 
-async function callGroq(userPrompt) {
+async function callGroq(userPrompt, env) {
   for (let attempt = 0; attempt < GROQ_MODELS.length; attempt++) {
     const idx   = (modelIdx + attempt) % GROQ_MODELS.length;
     const model = GROQ_MODELS[idx];
@@ -71,7 +62,7 @@ async function callGroq(userPrompt) {
         const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method:  'POST',
           headers: {
-            'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+            'Authorization': `Bearer ${env.GROQ_API_KEY}`,
             'Content-Type':  'application/json',
           },
           body: JSON.stringify({
@@ -103,7 +94,7 @@ async function callGroq(userPrompt) {
       }
     }
   }
-  return null; // AI failed — use fallback
+  return null;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -111,8 +102,9 @@ async function callGroq(userPrompt) {
 // ════════════════════════════════════════════════════════════════
 let _cachedSettings = null;
 
-async function loadSettings() {
+async function loadSettings(env) {
   if (_cachedSettings) return _cachedSettings;
+  const BASE_URL = env.BASE_URL || 'https://bbw4life.com';
   try {
     const res  = await fetch(`${BASE_URL}/products.data.json`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -128,59 +120,127 @@ async function loadSettings() {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  GOOGLE SHEETS HELPERS
+//  GOOGLE SHEETS — JWT AUTH (Web Crypto, RSASSA-PKCS1-v1_5)
 // ════════════════════════════════════════════════════════════════
-function getSheets() {
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key:  (process.env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
-    },
-    scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-  });
-  return google.sheets({ version: 'v4', auth });
+
+function base64urlEncode(str) {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function sheetRead(sheets, spreadsheetId, range) {
+function base64urlEncodeUint8(bytes) {
+  let str = '';
+  for (const b of bytes) str += String.fromCharCode(b);
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function getGoogleAccessToken(env) {
+  const clientEmail = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKeyPem = (env.GOOGLE_PRIVATE_KEY || '').replace(/\\n/g, '\n');
+
+  const now = Math.floor(Date.now() / 1000);
+  const header  = base64urlEncode(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const payload = base64urlEncode(JSON.stringify({
+    iss:   clientEmail,
+    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    aud:   'https://oauth2.googleapis.com/token',
+    iat:   now,
+    exp:   now + 3600,
+  }));
+
+  const signingInput = `${header}.${payload}`;
+
+  // Import PEM private key
+  const pemBody = privateKeyPem
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+  const derBytes = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8',
+    derBytes,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const sigBytes = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    cryptoKey,
+    new TextEncoder().encode(signingInput)
+  );
+
+  const jwt = `${signingInput}.${base64urlEncodeUint8(new Uint8Array(sigBytes))}`;
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+  });
+  const tokenData = await tokenRes.json();
+  if (!tokenData.access_token) throw new Error('[Sheets] Failed to get access token: ' + JSON.stringify(tokenData));
+  return tokenData.access_token;
+}
+
+async function sheetRead(token, spreadsheetId, range) {
   if (!spreadsheetId) { console.warn(`[Sheets] Missing ID for: ${range}`); return []; }
   try {
-    const res = await sheets.spreadsheets.values.get({ spreadsheetId, range });
-    return res.data.values || [];
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(range)}`;
+    const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data.values || [];
   } catch (e) {
     console.warn(`[Sheets] Read failed (${range}):`, e.message);
     return [];
   }
 }
 
-async function sheetAppend(sheets, spreadsheetId, range, values) {
+async function sheetAppend(token, spreadsheetId, range, values) {
   if (!spreadsheetId) { console.warn(`[Sheets] Missing ID for append: ${range}`); return; }
   try {
-    await sheets.spreadsheets.values.append({
-      spreadsheetId, range,
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      resource: { values: [values] },
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`;
+    const res = await fetch(url, {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ values: [values] }),
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
   } catch (e) {
     console.warn(`[Sheets] Append failed (${range}):`, e.message);
+  }
+}
+
+async function sheetUpdate(token, spreadsheetId, range, values) {
+  if (!spreadsheetId) { console.warn(`[Sheets] Missing ID for update: ${range}`); return; }
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(range)}?valueInputOption=RAW`;
+    const res = await fetch(url, {
+      method:  'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ values }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } catch (e) {
+    console.warn(`[Sheets] Update failed (${range}):`, e.message);
   }
 }
 
 // ── Email Log — anti-duplicate ────────────────────────────────
 const EMAIL_LOG_SHEET = 'bbw4life-email-log';
 
-async function loadEmailLog(sheets) {
-  const rows = await sheetRead(sheets, process.env.SHEET_ID_BBW4LIFE_ACCOUNTS, `${EMAIL_LOG_SHEET}!A:C`);
+async function loadEmailLog(token, env) {
+  const rows = await sheetRead(token, env.SHEET_ID_BBW4LIFE_ACCOUNTS, `${EMAIL_LOG_SHEET}!A:C`);
   const set  = new Set();
   rows.forEach(r => { if (r[0] && r[1]) set.add(`${r[0].toLowerCase()}||${r[1]}`); });
   console.log(`[EmailLog] ${set.size} sent records loaded`);
   return set;
 }
 
-async function markEmailSent(sheets, email, type) {
+async function markEmailSent(token, env, email, type) {
   await sheetAppend(
-    sheets,
-    process.env.SHEET_ID_BBW4LIFE_ACCOUNTS,
+    token,
+    env.SHEET_ID_BBW4LIFE_ACCOUNTS,
     `${EMAIL_LOG_SHEET}!A:C`,
     [email.toLowerCase(), type, new Date().toISOString().slice(0, 10)]
   );
@@ -193,12 +253,13 @@ function wasEmailSent(log, email, type) {
 // ════════════════════════════════════════════════════════════════
 //  RESEND DELIVERY
 // ════════════════════════════════════════════════════════════════
-async function deliver(to, subject, html) {
-  if (!process.env.RESEND_API_KEY) {
+async function deliver(to, subject, html, env) {
+  const FROM_EMAIL = env.FROM_EMAIL || 'BBW4LIFE <hello@bbw4life.com>';
+  if (!env.RESEND_API_KEY) {
     console.error('[Resend] Missing RESEND_API_KEY');
     return false;
   }
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const resend = new Resend(env.RESEND_API_KEY);
   try {
     const { data, error } = await resend.emails.send({
       from:    FROM_EMAIL,
@@ -215,22 +276,90 @@ async function deliver(to, subject, html) {
   }
 }
 
+// ════════════════════════════════════════════════════════════════
+//  MD5 PURE JS (règle 6 — Web Crypto ne supporte pas MD5)
+// ════════════════════════════════════════════════════════════════
+function md5(input) {
+  function safeAdd(x, y) {
+    const lsw = (x & 0xffff) + (y & 0xffff);
+    return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xffff);
+  }
+  function bitRotateLeft(num, cnt) { return (num << cnt) | (num >>> (32 - cnt)); }
+  function md5cmn(q, a, b, x, s, t) { return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b); }
+  function md5ff(a, b, c, d, x, s, t) { return md5cmn((b & c) | (~b & d), a, b, x, s, t); }
+  function md5gg(a, b, c, d, x, s, t) { return md5cmn((b & d) | (c & ~d), a, b, x, s, t); }
+  function md5hh(a, b, c, d, x, s, t) { return md5cmn(b ^ c ^ d, a, b, x, s, t); }
+  function md5ii(a, b, c, d, x, s, t) { return md5cmn(c ^ (b | ~d), a, b, x, s, t); }
+
+  const str = unescape(encodeURIComponent(input));
+  const x   = [];
+  for (let i = 0; i < str.length * 8; i += 8) x[i >> 5] |= (str.charCodeAt(i / 8) & 0xff) << (i % 32);
+  const len = str.length * 8;
+  x[len >> 5] |= 0x80 << (len % 32);
+  x[(((len + 64) >>> 9) << 4) + 14] = len;
+
+  let a =  1732584193, b = -271733879, c = -1732584194, d =  271733878;
+  for (let i = 0; i < x.length; i += 16) {
+    const [oa, ob, oc, od] = [a, b, c, d];
+    a = md5ff(a,b,c,d,x[i+0], 7,-680876936);  d=md5ff(d,a,b,c,x[i+1],12,-389564586);
+    c = md5ff(c,d,a,b,x[i+2],17, 606105819);  b=md5ff(b,c,d,a,x[i+3],22,-1044525330);
+    a = md5ff(a,b,c,d,x[i+4], 7,-176418897);  d=md5ff(d,a,b,c,x[i+5],12, 1200080426);
+    c = md5ff(c,d,a,b,x[i+6],17,-1473231341); b=md5ff(b,c,d,a,x[i+7],22,-45705983);
+    a = md5ff(a,b,c,d,x[i+8], 7, 1770035416); d=md5ff(d,a,b,c,x[i+9],12,-1958414417);
+    c = md5ff(c,d,a,b,x[i+10],17,-42063);     b=md5ff(b,c,d,a,x[i+11],22,-1990404162);
+    a = md5ff(a,b,c,d,x[i+12], 7, 1804603682);d=md5ff(d,a,b,c,x[i+13],12,-40341101);
+    c = md5ff(c,d,a,b,x[i+14],17,-1502002290);b=md5ff(b,c,d,a,x[i+15],22, 1236535329);
+    a = md5gg(a,b,c,d,x[i+1], 5,-165796510);  d=md5gg(d,a,b,c,x[i+6], 9,-1069501632);
+    c = md5gg(c,d,a,b,x[i+11],14, 643717713); b=md5gg(b,c,d,a,x[i+0],20,-373897302);
+    a = md5gg(a,b,c,d,x[i+5], 5,-701558691);  d=md5gg(d,a,b,c,x[i+10], 9, 38016083);
+    c = md5gg(c,d,a,b,x[i+15],14,-660478335); b=md5gg(b,c,d,a,x[i+4],20,-405537848);
+    a = md5gg(a,b,c,d,x[i+9], 5, 568446438);  d=md5gg(d,a,b,c,x[i+14], 9,-1019803690);
+    c = md5gg(c,d,a,b,x[i+3],14,-187363961);  b=md5gg(b,c,d,a,x[i+8],20, 1163531501);
+    a = md5gg(a,b,c,d,x[i+13], 5,-1444681467);d=md5gg(d,a,b,c,x[i+2], 9,-51403784);
+    c = md5gg(c,d,a,b,x[i+7],14, 1735328473); b=md5gg(b,c,d,a,x[i+12],20,-1926607734);
+    a = md5hh(a,b,c,d,x[i+5], 4,-378558);     d=md5hh(d,a,b,c,x[i+8],11,-2022574463);
+    c = md5hh(c,d,a,b,x[i+11],16, 1839030562);b=md5hh(b,c,d,a,x[i+14],23,-35309556);
+    a = md5hh(a,b,c,d,x[i+1], 4,-1530992060);d=md5hh(d,a,b,c,x[i+4],11, 1272893353);
+    c = md5hh(c,d,a,b,x[i+7],16,-155497632);  b=md5hh(b,c,d,a,x[i+10],23,-1094730640);
+    a = md5hh(a,b,c,d,x[i+13], 4, 681279174); d=md5hh(d,a,b,c,x[i+0],11,-358537222);
+    c = md5hh(c,d,a,b,x[i+3],16,-722521979);  b=md5hh(b,c,d,a,x[i+6],23, 76029189);
+    a = md5hh(a,b,c,d,x[i+9], 4,-640364487);  d=md5hh(d,a,b,c,x[i+12],11,-421815835);
+    c = md5hh(c,d,a,b,x[i+15],16, 530742520); b=md5hh(b,c,d,a,x[i+2],23,-995338651);
+    a = md5ii(a,b,c,d,x[i+0], 6,-198630844);  d=md5ii(d,a,b,c,x[i+7],10, 1126891415);
+    c = md5ii(c,d,a,b,x[i+14],15,-1416354905);b=md5ii(b,c,d,a,x[i+5],21,-57434055);
+    a = md5ii(a,b,c,d,x[i+12], 6, 1700485571);d=md5ii(d,a,b,c,x[i+3],10,-1894986606);
+    c = md5ii(c,d,a,b,x[i+10],15,-1051523);   b=md5ii(b,c,d,a,x[i+1],21,-2054922799);
+    a = md5ii(a,b,c,d,x[i+8], 6, 1873313359); d=md5ii(d,a,b,c,x[i+15],10,-30611744);
+    c = md5ii(c,d,a,b,x[i+6],15,-1560198380); b=md5ii(b,c,d,a,x[i+13],21, 1309151649);
+    a = md5ii(a,b,c,d,x[i+4], 6,-145523070);  d=md5ii(d,a,b,c,x[i+11],10,-1120210379);
+    c = md5ii(c,d,a,b,x[i+2],15, 718787259);  b=md5ii(b,c,d,a,x[i+9],21,-343485551);
+    a = safeAdd(a,oa); b = safeAdd(b,ob); c = safeAdd(c,oc); d = safeAdd(d,od);
+  }
+  const arr = [a, b, c, d];
+  let hex = '';
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < 4; j++) {
+      hex += ('0' + ((arr[i] >> (j * 8)) & 0xff).toString(16)).slice(-2);
+    }
+  }
+  return hex;
+}
 
 // ════════════════════════════════════════════════════════════════
 //  EPROLO — TRACKING CHECKER
 // ════════════════════════════════════════════════════════════════
 
-function buildEproloSign() {
-  const apiKey    = process.env.EPROLO_API_KEY;
-  const apiSecret = process.env.EPROLO_API_SECRET;
+function buildEproloSign(env) {
+  const apiKey    = env.EPROLO_API_KEY;
+  const apiSecret = env.EPROLO_API_SECRET;
   const timestamp = Date.now();
-  const sign      = crypto.createHash('md5').update(apiKey + timestamp + apiSecret).digest('hex');
+  const sign      = md5(apiKey + timestamp + apiSecret);
   return { apiKey, timestamp, sign };
 }
 
-async function getEproloOrderTracking(internalOrderId) {
+async function getEproloOrderTracking(internalOrderId, env) {
   try {
-    const { apiKey, timestamp, sign } = buildEproloSign();
+    const { apiKey, timestamp, sign } = buildEproloSign(env);
 
     const url = `https://openapi.eprolo.com/order_list.html?sign=${sign}&timestamp=${timestamp}&order_id=${encodeURIComponent(internalOrderId)}&status=0&page_size=1`;
 
@@ -252,7 +381,6 @@ async function getEproloOrderTracking(internalOrderId) {
     const order = list[0];
     if (!order) return null;
 
-    // Tracking est dans logistics[]
     const logistics = (order.logistics || [])[0];
     if (!logistics || !logistics.tracking_number) return null;
 
@@ -269,14 +397,14 @@ async function getEproloOrderTracking(internalOrderId) {
 }
 
 // ════════════════════════════════════════════════════════════════
-//  TRACKING SCHEDULER — appelé par cron-job.org toutes les 12h
+//  TRACKING SCHEDULER
 // ════════════════════════════════════════════════════════════════
-async function runTrackingChecker(sheets, settings) {
+async function runTrackingChecker(token, env, settings) {
   console.log('[Tracking] Starting tracking check...');
 
   const rows = await sheetRead(
-    sheets,
-    process.env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
+    token,
+    env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
     'bbw4life-pending-orders!A:S'
   );
 
@@ -285,11 +413,9 @@ async function runTrackingChecker(sheets, settings) {
     return { checked: 0, found: 0 };
   }
 
-  const now     = new Date();
-  let checked   = 0;
-  let found     = 0;
-
-  // Regrouper par payment_id pour éviter les doublons
+  const now       = new Date();
+  let checked     = 0;
+  let found       = 0;
   const processed = new Set();
 
   for (let i = 1; i < rows.length; i++) {
@@ -301,17 +427,15 @@ async function runTrackingChecker(sheets, settings) {
     const email           = row[4]  || '';
     const status          = (row[14] || '').toLowerCase();
     const orderDateStr    = row[16] || '';
-    const trackingCol     = row[18] || ''; // Col S = Tracking Number
+    const trackingCol     = row[18] || '';
 
-    // Skip si déjà un tracking ou pas successful
     if (trackingCol)                   continue;
     if (status !== 'successful')       continue;
     if (!email || !email.includes('@')) continue;
     if (processed.has(paymentId))      continue;
 
-    // Vérifier que 24h sont passées depuis la commande
     if (orderDateStr) {
-      const orderDate = new Date(orderDateStr);
+      const orderDate    = new Date(orderDateStr);
       const hoursElapsed = (now - orderDate) / (1000 * 60 * 60);
       if (hoursElapsed < 24) {
         console.log(`[Tracking] Order ${internalOrderId} — only ${hoursElapsed.toFixed(1)}h elapsed, skipping`);
@@ -322,26 +446,23 @@ async function runTrackingChecker(sheets, settings) {
     checked++;
     processed.add(paymentId);
 
-    // Interroger EPROLO
-    const result = await getEproloOrderTracking(internalOrderId);
+    const result = await getEproloOrderTracking(internalOrderId, env);
 
     if (result && result.trackingNumber) {
       found++;
 
-      // 1. Sauvegarder le tracking dans le sheet (col S = index 18, ligne i+1)
       try {
-        await sheets.spreadsheets.values.update({
-          spreadsheetId: process.env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
-          range:         `bbw4life-pending-orders!S${i + 1}`,
-          valueInputOption: 'RAW',
-          resource: { values: [[result.trackingNumber]] }
-        });
+        await sheetUpdate(
+          token,
+          env.SHEET_ID_BBW4LIFE_PENDING_ORDERS,
+          `bbw4life-pending-orders!S${i + 1}`,
+          [[result.trackingNumber]]
+        );
         console.log(`[Tracking] ✅ Saved tracking ${result.trackingNumber} for order ${internalOrderId}`);
       } catch (e) {
         console.warn('[Tracking] Failed to save tracking:', e.message);
       }
 
-      // 2. Envoyer email tracking au client
       const nameParts = fullName.split(' ');
       const firstName = nameParts[0] || '';
       const lastName  = nameParts.slice(1).join(' ') || '';
@@ -353,18 +474,17 @@ async function runTrackingChecker(sheets, settings) {
           orderId:        internalOrderId,
           trackingNumber: result.trackingNumber,
           carrier:        result.carrier || ''
-        }, settings);
-      });
+        }, settings, env);
+      }, env);
 
       console.log(`[Tracking] ✅ Email sent to ${email}`);
 
-      // Notifier Telegram
       try {
-        await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({
-            chat_id:    process.env.TELEGRAM_CHAT_ID,
+            chat_id:    env.TELEGRAM_CHAT_ID,
             text:       `📦 <b>Tracking trouvé!</b>\n\n👤 <b>Client:</b> ${fullName}\n📧 <b>Email:</b> ${email}\n🔢 <b>Tracking:</b> ${result.trackingNumber}\n🚚 <b>Carrier:</b> ${result.carrier || 'N/A'}`,
             parse_mode: 'HTML'
           })
@@ -377,7 +497,6 @@ async function runTrackingChecker(sheets, settings) {
       console.log(`[Tracking] ⏳ No tracking yet for ${internalOrderId}`);
     }
 
-    // Pause entre chaque requête EPROLO
     await sleep(800);
   }
 
@@ -385,12 +504,11 @@ async function runTrackingChecker(sheets, settings) {
   return { checked, found };
 }
 
-// Helper send sans log check (pour tracking — 1 seul envoi par commande grâce au sheet)
-async function trySendDirect(email, type, composeFn) {
+async function trySendDirect(email, type, composeFn, env) {
   if (!email || !email.includes('@')) return false;
   try {
     const { subject, html } = await composeFn();
-    return await deliver(email, subject, html);
+    return await deliver(email, subject, html, env);
   } catch (e) {
     console.error(`[trySendDirect] Error ${email}/${type}:`, e.message);
     return false;
@@ -400,8 +518,6 @@ async function trySendDirect(email, type, composeFn) {
 // ════════════════════════════════════════════════════════════════
 //  EMAIL DESIGN SYSTEM — BBW4LIFE BRANDED
 // ════════════════════════════════════════════════════════════════
-
-// ── Brand colors ──────────────────────────────────────────────
 const BBW = {
   rose:      '#c0385e',
   rose2:     '#e8245a',
@@ -417,7 +533,6 @@ const BBW = {
   textLight: '#9e8e96',
 };
 
-// ── Base CSS reset ─────────────────────────────────────────────
 const BASE_CSS = `
   body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
   table,td{mso-table-lspace:0pt;mso-table-rspace:0pt}
@@ -433,16 +548,15 @@ const BASE_CSS = `
   }
 `;
 
-// ── Settings-driven components ────────────────────────────────
-function buildLogoComponent(settings) {
-  const logoUrl = (settings.logo_url || settings.logo || '');
-  const siteName = 'BBW4LIFE';
+function buildLogoComponent(settings, env) {
+  const BASE_URL  = env.BASE_URL || 'https://bbw4life.com';
+  const logoUrl   = (settings.logo_url || settings.logo || '');
+  const siteName  = 'BBW4LIFE';
   if (logoUrl) {
     return `<a href="${BASE_URL}" target="_blank" style="display:inline-block;text-decoration:none;margin-bottom:20px;">
       <img src="${logoUrl}" alt="${siteName}" height="60" style="height:60px;width:auto;max-width:200px;display:block;">
     </a>`;
   }
-  // Text fallback
   return `<a href="${BASE_URL}" target="_blank" style="text-decoration:none;display:inline-block;margin-bottom:20px;">
     <table cellpadding="0" cellspacing="0" role="presentation" style="margin:0 auto;">
       <tr>
@@ -507,9 +621,9 @@ function buildCEOSignature(settings) {
 </table>`;
 }
 
-// ── Master template wrapper ────────────────────────────────────
-function masterTemplate({ preheader, headerGrad, topBadge, headline, subHeadline, bodyHTML, settings, showCEO = false }) {
-  const logoHTML   = buildLogoComponent(settings);
+function masterTemplate({ preheader, headerGrad, topBadge, headline, subHeadline, bodyHTML, settings, showCEO = false, env }) {
+  const BASE_URL   = env.BASE_URL || 'https://bbw4life.com';
+  const logoHTML   = buildLogoComponent(settings, env);
   const socialHTML = buildSocialFooter(settings);
   const ceoHTML    = showCEO ? buildCEOSignature(settings) : '';
   const support    = (settings.contact_emails || {}).general || (settings.contact || {}).email || 'support@bbw4life.com';
@@ -713,127 +827,126 @@ function cOrderItem(item) {
 //  AI COPY GENERATORS — with fallbacks
 // ════════════════════════════════════════════════════════════════
 
-async function genWelcomeCopy(name) {
+async function genWelcomeCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Welcome — new BBW4LIFE customer created their account.
 RECIPIENT: ${name}
 Write 2 short paragraphs (blank line between):
 - Para 1 (2 sentences): Make her feel genuinely seen. BBW4LIFE was built for her body right now.
 - Para 2 (2 sentences): What's waiting for her on the site. One warm personal closing line.
-Plain text only, no greeting, no sign-off.`
+Plain text only, no greeting, no sign-off.`, env
   );
   return copy || `You just made a decision that matters — creating your BBW4LIFE account is the first step toward a shopping experience that was built with you in mind. Every curve, every size, every woman belongs here.\n\nYour account gives you access to exclusive deals, your order history, and a wishlist to save the pieces you love. We're so glad you're here — and we can't wait to show you what's waiting for you.`;
 }
 
-async function genOrderConfirmCopy(name) {
+async function genOrderConfirmCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Order confirmation for BBW4LIFE.
 RECIPIENT: ${name}
 Write 1 paragraph (2-3 sentences): Thank her for the order. Express genuine excitement. Mention order is being prepared.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `Thank you so much for your order — this means the world to us and we're already excited for you to receive it. Your items are being carefully prepared and will be on their way very soon. We'll send you a tracking number as soon as your package ships.`;
 }
 
-async function genTrackingCopy(name) {
+async function genTrackingCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Shipping notification with tracking number — BBW4LIFE.
 RECIPIENT: ${name}
 Write 1 paragraph (2 sentences): Great news, order is on the way. Warm, excited tone.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `Great news — your BBW4LIFE order is officially on its way to you! We've packed it with care and it's now in the hands of the carrier heading straight to your door.`;
 }
 
-async function genNewsletter1Copy(name) {
+async function genNewsletter1Copy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Newsletter welcome #1 — BBW4LIFE subscriber confirmation.
 RECIPIENT: ${name || 'Beautiful'}
 Write 2 paragraphs: Welcome to the family, explain what they'll receive (deals, new arrivals, stories, tips). Warm and excited.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `Welcome to the BBW4LIFE family — you just joined a community of women who believe beauty truly has no sizes. We're so happy you're here and we promise to make every email worth opening.\n\nAs a subscriber, you'll be the first to know about new arrivals, exclusive discount codes, and real stories from women just like you. Good things are already on their way to your inbox.`;
 }
 
-async function genNewsletter2Copy(name) {
+async function genNewsletter2Copy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Newsletter follow-up day 3 — BBW4LIFE. Emotional connection email.
 RECIPIENT: ${name || 'Beautiful'}
 Write 2 paragraphs: Check in warmly. Ask about their browsing experience. Invite feedback. Create genuine conversation.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `Hey, it's been a few days since you joined the BBW4LIFE family and we've been thinking about you. Have you had a chance to browse the shop yet? We'd love to know what caught your eye.\n\nYour feedback genuinely shapes what we do — if there's something you'd love to see on the site, a style, a size, a product, please just reply to this email and tell us. We actually read every message.`;
 }
 
-async function genNewsletter3Copy(name) {
+async function genNewsletter3Copy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Newsletter day 5 — BBW4LIFE bundle & favorites email.
 RECIPIENT: ${name || 'Beautiful'}
 Write 2 paragraphs: Make her feel valued. Highlight that BBW4LIFE has bundles and customer favorites. Encourage first purchase warmly.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `You matter to us — and that's not something we say lightly. BBW4LIFE was built specifically for women who've been overlooked by fashion for too long, and every product in our shop was chosen with real women in mind.\n\nOur customers' favorites and bundle deals are live right now, and some of them move really fast. If you've been waiting for the right moment to treat yourself, this is it.`;
 }
 
-async function genNewsletter4BuyerCopy(name) {
+async function genNewsletter4BuyerCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Newsletter day 10 — BBW4LIFE appreciation email for existing buyer.
 RECIPIENT: ${name || 'Beautiful'}
 Write 2 paragraphs: Thank her for her purchase. Ask about experience. Invite to share feedback. Recommend exploring more.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `You've already trusted us with your order and that means everything to us. We hope your items have arrived safely and that you love every piece as much as we loved choosing them for you.\n\nWe'd genuinely love to hear how your experience was — your honest feedback helps us improve and helps other women make confident decisions. And whenever you're ready to shop again, we'll have something special waiting for you.`;
 }
 
-async function genNewsletter4NewCopy(name) {
+async function genNewsletter4NewCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Newsletter day 10 — BBW4LIFE conversion email for non-buyer.
 RECIPIENT: ${name || 'Beautiful'}
 Write 2 paragraphs: Encourage first purchase gently. Mention exclusive discount below. Create soft urgency without pressure.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `You've been part of the BBW4LIFE family for a little while now and we've noticed you haven't placed your first order yet — and that's completely okay. We just wanted to make sure nothing was holding you back.\n\nAs a thank-you for your patience and loyalty, we've prepared an exclusive discount just for you. It's our way of saying we'd love to welcome you as a customer, not just a subscriber.`;
 }
 
-async function genContactReplyCopy(name) {
+async function genContactReplyCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Contact form auto-reply — BBW4LIFE.
 RECIPIENT: ${name || 'Beautiful'}
 Write 1 paragraph (2-3 sentences): Confirm message received. Reassure them. Team will respond within 24-48 hours. Professional and caring.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `We've received your message and we're so glad you reached out to us. Our support team will review your request carefully and get back to you within 24 to 48 hours. Thank you for trusting BBW4LIFE — we take every message seriously.`;
 }
 
-async function genPlanRequestCopy(name, program) {
+async function genPlanRequestCopy(name, program, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Product reservation/plan request confirmation — BBW4LIFE.
 RECIPIENT: ${name || 'Beautiful'} PRODUCT: ${program}
 Write 2 paragraphs: Confirm request received for ${program}. Make her feel great. Team will review and contact her soon.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `We've received your reservation request for ${program} and we're genuinely excited for you. This tells us you're serious about treating yourself, and that's something we celebrate here at BBW4LIFE.\n\nOur team will review your request and reach out to you very soon with the next steps. In the meantime, feel free to continue browsing the shop — there's so much more waiting for you.`;
 }
 
-async function genCustomProductCopy(name, productTitle) {
+async function genCustomProductCopy(name, productTitle, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Custom/personalized product request confirmation — BBW4LIFE.
 RECIPIENT: ${name || 'Beautiful'} PRODUCT: ${productTitle}
 Write 2 paragraphs: Confirm receipt of personalized product request. Excite them. Design team will review. BBW4LIFE evaluating possibility.
-Plain text only.`
+Plain text only.`, env
   );
   return copy || `Your personalized product request has been received and we are genuinely impressed by your vision for ${productTitle}. At BBW4LIFE, we believe every woman deserves something made just for her.\n\nOur design team will carefully review your request and evaluate the possibility of bringing your idea to life on the website. We'll keep you posted — and whether or not it becomes a product, the fact that you shared your idea with us means a lot.`;
 }
 
-
-async function genCartAbandonedCopy(name) {
+async function genCartAbandonedCopy(name, env) {
   const copy = await callGroq(
     `EMAIL TYPE: Abandoned cart recovery — BBW4LIFE.
 RECIPIENT: ${name}
 Write 2 short paragraphs (blank line between):
 - Para 1 (2 sentences): Notice she left something behind in her cart. Warm, curious tone, not guilt-tripping. Ask gently what held her back.
 - Para 2 (2 sentences): Reassure her items are saved and waiting. Mention a special gift below to help her finish her order.
-Plain text only, no greeting, no sign-off.`
+Plain text only, no greeting, no sign-off.`, env
   );
   return copy || `We noticed you left something behind in your cart — and we just wanted to check in. Sometimes life gets busy, or maybe something wasn't quite clear, and we'd genuinely love to know if there's anything we can help with.\n\nYour items are safely saved and waiting for you, exactly where you left them. To make it even easier to come back, we've added a little gift below just for you.`;
 }
@@ -841,11 +954,12 @@ Plain text only, no greeting, no sign-off.`
 // ════════════════════════════════════════════════════════════════
 //  EMAIL COMPOSERS
 // ════════════════════════════════════════════════════════════════
+const BASE_URL_FALLBACK = 'https://bbw4life.com';
+function burl(env) { return env.BASE_URL || BASE_URL_FALLBACK; }
 
-// ── 1. Welcome Email ──────────────────────────────────────────
-async function composeWelcome(firstName, settings) {
+async function composeWelcome(firstName, settings, env) {
   const name = firstName || 'Beautiful';
-  const copy = await genWelcomeCopy(name);
+  const copy = await genWelcomeCopy(name, env);
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -858,7 +972,7 @@ async function composeWelcome(firstName, settings) {
     ${cHighlightBox('👗', 'Plus-Size Fashion', 'Hundreds of styles designed with your body in mind — dresses, tops, shoes, and more.')}
     ${cHighlightBox('💄', 'Beauty & Lifestyle', 'Products that make you feel as beautiful as you are.', '#fdf8f0')}
     ${cHighlightBox('❤️', 'A Community That Gets It', 'Real women, real stories, real support.', '#f0f8fd')}
-    ${cCTA('Explore the Shop →', `${BASE_URL}/collections/bbw4life-all-product.html`)}`;
+    ${cCTA('Explore the Shop →', `${burl(env)}/collections/bbw4life-all-product.html`)}`;
 
   return {
     subject: `Welcome to BBW4LIFE, ${name}! Beauty Has No Sizes 👑`,
@@ -871,15 +985,15 @@ async function composeWelcome(firstName, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 2. Order Confirmation ─────────────────────────────────────
-async function composeOrderConfirm(data, settings) {
+async function composeOrderConfirm(data, settings, env) {
   const { firstName, lastName, email, orderId, items = [], total, shippingAddress } = data;
   const name = firstName || lastName || 'Beautiful';
-  const copy = await genOrderConfirmCopy(name);
+  const copy = await genOrderConfirmCopy(name, env);
 
   const itemsHTML = items.map(item => cOrderItem(item)).join('');
 
@@ -920,15 +1034,15 @@ async function composeOrderConfirm(data, settings) {
       subHeadline:  'We\'re preparing your package with love.',
       bodyHTML,
       settings,
+      env,
     }),
   };
 }
 
-// ── 3. Order Tracking ─────────────────────────────────────────
-async function composeOrderTracking(data, settings) {
+async function composeOrderTracking(data, settings, env) {
   const { firstName, lastName, orderId, trackingNumber, carrier } = data;
   const name = firstName || lastName || 'Beautiful';
-  const copy = await genTrackingCopy(name);
+  const copy = await genTrackingCopy(name, env);
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -951,7 +1065,7 @@ async function composeOrderTracking(data, settings) {
         </td>
       </tr>
     </table>
-    ${cCTA('Track My Order →', data.trackingUrl || `${BASE_URL}/page/order-tracking.html`)}
+    ${cCTA('Track My Order →', data.trackingUrl || `${burl(env)}/page/order-tracking.html`)}
     ${cDivider()}
     <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:${BBW.textLight};text-align:center;">
       Order: <strong style="color:${BBW.dark};">#${orderId || 'BBW4LIFE'}</strong>
@@ -967,14 +1081,14 @@ async function composeOrderTracking(data, settings) {
       subHeadline:  'Track your package and watch the magic happen.',
       bodyHTML,
       settings,
+      env,
     }),
   };
 }
 
-// ── 4. Newsletter #1 — Immediate ──────────────────────────────
-async function composeNewsletter1(firstName, settings) {
+async function composeNewsletter1(firstName, settings, env) {
   const name = firstName || 'Beautiful';
-  const copy = await genNewsletter1Copy(name);
+  const copy = await genNewsletter1Copy(name, env);
   const promos = (settings.promos || []);
   const promo  = promos[0];
 
@@ -1006,7 +1120,7 @@ async function composeNewsletter1(firstName, settings) {
         </td>
       </tr>
     </table>` : ''}
-    ${cCTA('Discover the Shop →', `${BASE_URL}/collections/bbw4life-all-product.html`)}`;
+    ${cCTA('Discover the Shop →', `${burl(env)}/collections/bbw4life-all-product.html`)}`;
 
   return {
     subject: `You're in! Welcome to the BBW4LIFE family 💕`,
@@ -1019,14 +1133,14 @@ async function composeNewsletter1(firstName, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 5. Newsletter #2 — Day 3 ──────────────────────────────────
-async function composeNewsletter2(firstName, settings) {
-  const name = firstName || 'Beautiful';
-  const copy = await genNewsletter2Copy(name);
+async function composeNewsletter2(firstName, settings, env) {
+  const name    = firstName || 'Beautiful';
+  const copy    = await genNewsletter2Copy(name, env);
   const support = (settings.contact_emails || {}).general || 'support@bbw4life.com';
 
   const bodyHTML = `
@@ -1053,7 +1167,7 @@ async function composeNewsletter2(firstName, settings) {
         </td>
       </tr>
     </table>
-    ${cCTA('Browse the Shop →', `${BASE_URL}/collections/bbw4life-all-product.html`)}`;
+    ${cCTA('Browse the Shop →', `${burl(env)}/collections/bbw4life-all-product.html`)}`;
 
   return {
     subject: `Hey ${name}, how's your BBW4LIFE experience so far? 💬`,
@@ -1066,14 +1180,14 @@ async function composeNewsletter2(firstName, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 6. Newsletter #3 — Day 5 ──────────────────────────────────
-async function composeNewsletter3(firstName, settings) {
-  const name = firstName || 'Beautiful';
-  const copy = await genNewsletter3Copy(name);
+async function composeNewsletter3(firstName, settings, env) {
+  const name   = firstName || 'Beautiful';
+  const copy   = await genNewsletter3Copy(name, env);
   const promos = settings.promos || [];
   const promo  = promos[1] || promos[0];
 
@@ -1101,7 +1215,7 @@ async function composeNewsletter3(firstName, settings) {
         </td>
       </tr>
     </table>` : ''}
-    ${cCTA('Shop Our Favorites →', `${BASE_URL}/collections/most-popular.html`)}`;
+    ${cCTA('Shop Our Favorites →', `${burl(env)}/collections/most-popular.html`)}`;
 
   return {
     subject: `${name}, these are our customers' favorites 🔥`,
@@ -1113,14 +1227,14 @@ async function composeNewsletter3(firstName, settings) {
       subHeadline:  'Bundles, promotions, and our community\'s top picks.',
       bodyHTML,
       settings,
+      env,
     }),
   };
 }
 
-// ── 7. Newsletter #4 — Day 10 (Buyer) ────────────────────────
-async function composeNewsletter4Buyer(firstName, settings) {
+async function composeNewsletter4Buyer(firstName, settings, env) {
   const name = firstName || 'Beautiful';
-  const copy = await genNewsletter4BuyerCopy(name);
+  const copy = await genNewsletter4BuyerCopy(name, env);
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -1129,8 +1243,8 @@ async function composeNewsletter4Buyer(firstName, settings) {
     ${cDivider()}
     ${cHighlightBox('⭐', 'Share Your Experience', 'Your review helps other women feel confident in their choices.')}
     ${cHighlightBox('🛍️', 'Shop More', 'New arrivals added regularly — there\'s always something new waiting for you.', '#fdf8f0')}
-    ${cCTA('Leave a Review →', `${BASE_URL}/collections/bbw4life-all-product.html`)}
-    ${cCTA('Shop New Arrivals →', `${BASE_URL}/collections/bbw4life-all-product.html`, `linear-gradient(135deg,${BBW.gold},${BBW.rose})`)}`;
+    ${cCTA('Leave a Review →', `${burl(env)}/collections/bbw4life-all-product.html`)}
+    ${cCTA('Shop New Arrivals →', `${burl(env)}/collections/bbw4life-all-product.html`, `linear-gradient(135deg,${BBW.gold},${BBW.rose})`)}`;
 
   return {
     subject: `Thank you for your trust, ${name} 💕`,
@@ -1143,14 +1257,14 @@ async function composeNewsletter4Buyer(firstName, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 8. Newsletter #4 — Day 10 (Non-Buyer) ────────────────────
-async function composeNewsletter4New(firstName, settings) {
-  const name = firstName || 'Beautiful';
-  const copy = await genNewsletter4NewCopy(name);
+async function composeNewsletter4New(firstName, settings, env) {
+  const name   = firstName || 'Beautiful';
+  const copy   = await genNewsletter4NewCopy(name, env);
   const promos = settings.promos || [];
   const promo  = promos[0];
 
@@ -1175,7 +1289,7 @@ async function composeNewsletter4New(firstName, settings) {
         </td>
       </tr>
     </table>` : ''}
-    ${cCTA('Use My Discount →', `${BASE_URL}/collections/bbw4life-all-product.html`)}
+    ${cCTA('Use My Discount →', `${burl(env)}/collections/bbw4life-all-product.html`)}
     ${cDivider()}
     <p style="margin:0;font-family:Arial,sans-serif;font-size:13px;color:${BBW.textLight};text-align:center;">
       Beauty Has No Sizes — and neither does this offer. 👑
@@ -1192,15 +1306,15 @@ async function composeNewsletter4New(firstName, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 9. Contact Auto-Reply ─────────────────────────────────────
-async function composeContactReply(data, settings) {
+async function composeContactReply(data, settings, env) {
   const { firstName, lastName, subject: msgSubject, category } = data;
-  const name = firstName || lastName || 'Beautiful';
-  const copy = await genContactReplyCopy(name);
+  const name    = firstName || lastName || 'Beautiful';
+  const copy    = await genContactReplyCopy(name, env);
   const support = (settings.contact_emails || {}).general || 'support@bbw4life.com';
   const whatsapp = (settings.contact || {}).whatsapp_url || 'https://wa.me/18292677434';
 
@@ -1239,15 +1353,15 @@ async function composeContactReply(data, settings) {
       subHeadline:  'Our team will respond within 24 to 48 hours.',
       bodyHTML,
       settings,
+      env,
     }),
   };
 }
 
-// ── 10. Plan/Product Request ──────────────────────────────────
-async function composePlanRequest(data, settings) {
+async function composePlanRequest(data, settings, env) {
   const { firstName, lastName, program, productId, size, color } = data;
   const name = firstName || lastName || 'Beautiful';
-  const copy = await genPlanRequestCopy(name, program);
+  const copy = await genPlanRequestCopy(name, program, env);
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -1270,7 +1384,7 @@ async function composePlanRequest(data, settings) {
         </td>
       </tr>
     </table>
-    ${cCTA('Browse the Shop →', `${BASE_URL}/collections/bbw4life-all-product.html`)}`;
+    ${cCTA('Browse the Shop →', `${burl(env)}/collections/bbw4life-all-product.html`)}`;
 
   return {
     subject: `Your BBW4LIFE product request has been received! ⏳`,
@@ -1282,15 +1396,15 @@ async function composePlanRequest(data, settings) {
       subHeadline:  'Our team is on it — we\'ll be in touch very soon.',
       bodyHTML,
       settings,
+      env,
     }),
   };
 }
 
-// ── 11. Custom Product Request ────────────────────────────────
-async function composeCustomProduct(data, settings) {
+async function composeCustomProduct(data, settings, env) {
   const { firstname, lastname, email, product_title, product_desc } = data;
   const name = firstname || lastname || 'Beautiful';
-  const copy = await genCustomProductCopy(name, product_title);
+  const copy = await genCustomProductCopy(name, product_title, env);
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -1319,7 +1433,7 @@ async function composeCustomProduct(data, settings) {
       We evaluate every personalized product request carefully.<br>
       If your idea becomes a product, you'll be the first to know. 👑
     </p>
-    ${cCTA('Explore Existing Products →', `${BASE_URL}/collections/bbw4life-all-product.html`)}`;
+    ${cCTA('Explore Existing Products →', `${burl(env)}/collections/bbw4life-all-product.html`)}`;
 
   return {
     subject: `Your personalized product request is with our design team! 🎨`,
@@ -1332,18 +1446,18 @@ async function composeCustomProduct(data, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
 
-// ── 12. Abandoned Cart Recovery ───────────────────────────────
-async function composeCartAbandoned(data, settings) {
+async function composeCartAbandoned(data, settings, env) {
   const { firstName, lastName, items = [], promoCode, promoPercent, restartLink } = data;
   const name = firstName || lastName || 'Beautiful';
-  const copy = await genCartAbandonedCopy(name);
+  const copy = await genCartAbandonedCopy(name, env);
 
-  const itemsHTML = items.map(item => cOrderItem(item)).join('');
-  const finalRestartLink = restartLink || `${BASE_URL}/checkout.html`;
+  const itemsHTML        = items.map(item => cOrderItem(item)).join('');
+  const finalRestartLink = restartLink || `${burl(env)}/checkout.html`;
 
   const bodyHTML = `
     <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;
@@ -1389,6 +1503,7 @@ async function composeCartAbandoned(data, settings) {
       bodyHTML,
       settings,
       showCEO:      true,
+      env,
     }),
   };
 }
@@ -1396,7 +1511,7 @@ async function composeCartAbandoned(data, settings) {
 // ════════════════════════════════════════════════════════════════
 //  SEND HELPER — with log check
 // ════════════════════════════════════════════════════════════════
-async function trySend(email, type, composeFn, sheets, sentLog, results, ...args) {
+async function trySend(email, type, composeFn, token, env, sentLog, results) {
   if (!email || !email.includes('@')) {
     console.warn(`[trySend] Invalid email: "${email}"`);
     return false;
@@ -1407,10 +1522,10 @@ async function trySend(email, type, composeFn, sheets, sentLog, results, ...args
   }
   try {
     console.log(`[trySend] Composing ${type} for ${email}`);
-    const { subject, html } = await composeFn(...args);
-    const ok = await deliver(email, subject, html);
+    const { subject, html } = await composeFn();
+    const ok = await deliver(email, subject, html, env);
     if (ok) {
-      await markEmailSent(sheets, email, type);
+      await markEmailSent(token, env, email, type);
       sentLog.add(`${email.toLowerCase()}||${type}`);
       results.sent.push({ email, type });
     } else {
@@ -1425,208 +1540,166 @@ async function trySend(email, type, composeFn, sheets, sentLog, results, ...args
 }
 
 // ════════════════════════════════════════════════════════════════
-//  MAIN HANDLER
+//  CLOUDFLARE PAGES HANDLERS
 // ════════════════════════════════════════════════════════════════
-exports.handler = async (event) => {
-  const headers = {
-    'Access-Control-Allow-Origin':  '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Content-Type': 'application/json',
-  };
 
-  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin':  '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+  'Content-Type': 'application/json',
+};
+
+export async function onRequestOptions() {
+  return new Response('', { status: 200, headers: CORS_HEADERS });
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
   const results = { sent: [], skipped: [], errors: [] };
 
   try {
-    // Load settings once
-    const settings = await loadSettings();
-    const sheets   = getSheets();
-    const sentLog  = await loadEmailLog(sheets);
+    const settings = await loadSettings(env);
+    const token    = await getGoogleAccessToken(env);
+    const sentLog  = await loadEmailLog(token, env);
 
-    // ── TRIGGER MODE (POST) ────────────────────────────────
-    if (event.httpMethod === 'POST' && event.body) {
-      const body    = JSON.parse(event.body);
-      const trigger = body.trigger;
+    const body    = await request.json();
+    const trigger = body.trigger;
 
-      if (!trigger) {
-        return { statusCode: 400, headers, body: JSON.stringify({ error: 'trigger required' }) };
-      }
-
-      console.log(`[Handler] Trigger: ${trigger}`);
-
-      const email = body.email;
-      if (!email || !email.includes('@')) {
-        return { statusCode: 400, headers, body: JSON.stringify({ error: 'Valid email required' }) };
-      }
-
-      // ── Welcome ──
-      if (trigger === T.WELCOME) {
-        await trySend(email, T.WELCOME, () => composeWelcome(body.firstName, settings), sheets, sentLog, results);
-      }
-
-      // ── Order Confirmation ──
-      if (trigger === T.ORDER_CONFIRM) {
-        await trySend(email, T.ORDER_CONFIRM,
-          () => composeOrderConfirm(body, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Order Tracking ──
-      if (trigger === T.ORDER_TRACKING) {
-        await trySend(email, T.ORDER_TRACKING,
-          () => composeOrderTracking(body, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Newsletter #1 ──
-      if (trigger === T.NEWSLETTER_1) {
-        await trySend(email, T.NEWSLETTER_1,
-          () => composeNewsletter1(body.firstName, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Contact Reply ──
-      if (trigger === 'contact_reply') {
-        await trySend(email, 'contact_reply',
-          () => composeContactReply(body, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Plan Request ──
-      if (trigger === T.PLAN_REQUEST) {
-        await trySend(email, T.PLAN_REQUEST,
-          () => composePlanRequest(body, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Custom Product ──
-      if (trigger === T.CUSTOM_PRODUCT) {
-        await trySend(email, T.CUSTOM_PRODUCT,
-          () => composeCustomProduct(body, settings),
-          sheets, sentLog, results);
-      }
-
-      // ── Cart Abandoned ──
-      if (trigger === T.CART_ABANDONED) {
-        await trySend(email, T.CART_ABANDONED,
-          () => composeCartAbandoned(body, settings),
-          sheets, sentLog, results);
-      }
-
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ success: true, trigger, results }),
-      };
+    if (!trigger) {
+      return new Response(JSON.stringify({ error: 'trigger required' }), { status: 400, headers: CORS_HEADERS });
     }
 
-    // ── BATCH / SCHEDULER MODE (GET) ──────────────────────
-    
-    // ── BATCH / SCHEDULER MODE (GET) ──────────────────────
+    console.log(`[Handler] Trigger: ${trigger}`);
 
-    if (event.httpMethod === 'GET') {
-      const params = event.queryStringParameters || {};
-
-      // ── Tracking checker (appelé par cron toutes les 12h) ──
-      if (params.action === 'tracking') {
-        const secret = params.secret;
-        if (secret !== process.env.REPORT_SECRET) {
-          return { statusCode: 401, headers, body: JSON.stringify({ error: 'Unauthorized' }) };
-        }
-        const trackResult = await runTrackingChecker(sheets, settings);
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify({ success: true, ...trackResult })
-        };
-      }
-
-      // ── Newsletter batch (existant) ──
-      console.log('[Handler] Batch newsletter sequence mode');
-
-      const accountRows = await sheetRead(
-        sheets,
-        process.env.SHEET_ID_BBW4LIFE_ACCOUNTS,
-        'bbw4life-accounts!A:I'
-      );
-
-      console.log(`[Batch] ${accountRows.length} account rows`);
-
-      for (const row of accountRows) {
-        // A=LastName B=FirstName C=Email F=Newsletter G=Orders H=TotalSpent
-        const lastName   = (row[0] || '').trim();
-        const firstName  = (row[1] || '').trim();
-        const email      = (row[2] || '').trim();
-        const newsletter = (row[5] || '').trim().toLowerCase();
-        const orders     = parseInt(row[6] || 0, 10);
-
-        if (!email || !email.includes('@')) continue;
-
-        const name = firstName || lastName || 'Beautiful';
-
-        // Newsletter sequence
-        if (newsletter === 'yes') {
-          if (!wasEmailSent(sentLog, email, T.NEWSLETTER_1)) {
-            await trySend(email, T.NEWSLETTER_1,
-              () => composeNewsletter1(name, settings),
-              sheets, sentLog, results);
-            await sleep(500); continue;
-          }
-          if (!wasEmailSent(sentLog, email, T.NEWSLETTER_2)) {
-            await trySend(email, T.NEWSLETTER_2,
-              () => composeNewsletter2(name, settings),
-              sheets, sentLog, results);
-            await sleep(500); continue;
-          }
-          if (!wasEmailSent(sentLog, email, T.NEWSLETTER_3)) {
-            await trySend(email, T.NEWSLETTER_3,
-              () => composeNewsletter3(name, settings),
-              sheets, sentLog, results);
-            await sleep(500); continue;
-          }
-
-          // Day 10 — check if buyer or not
-          const type10 = orders > 0 ? T.NEWSLETTER_4_BUYER : T.NEWSLETTER_4_NEW;
-          if (!wasEmailSent(sentLog, email, T.NEWSLETTER_4_BUYER) &&
-              !wasEmailSent(sentLog, email, T.NEWSLETTER_4_NEW)) {
-            if (orders > 0) {
-              await trySend(email, T.NEWSLETTER_4_BUYER,
-                () => composeNewsletter4Buyer(name, settings),
-                sheets, sentLog, results);
-            } else {
-              await trySend(email, T.NEWSLETTER_4_NEW,
-                () => composeNewsletter4New(name, settings),
-                sheets, sentLog, results);
-            }
-            await sleep(500);
-          }
-        }
-      }
-
-      const summary = {
-        sent:    results.sent.length,
-        skipped: results.skipped.length,
-        errors:  results.errors.length,
-      };
-      console.log(`[Batch] Done — sent:${summary.sent} skipped:${summary.skipped} errors:${summary.errors}`);
-
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ success: true, summary, results }),
-      };
+    const email = body.email;
+    if (!email || !email.includes('@')) {
+      return new Response(JSON.stringify({ error: 'Valid email required' }), { status: 400, headers: CORS_HEADERS });
     }
 
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    if (trigger === T.WELCOME) {
+      await trySend(email, T.WELCOME, () => composeWelcome(body.firstName, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.ORDER_CONFIRM) {
+      await trySend(email, T.ORDER_CONFIRM, () => composeOrderConfirm(body, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.ORDER_TRACKING) {
+      await trySend(email, T.ORDER_TRACKING, () => composeOrderTracking(body, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.NEWSLETTER_1) {
+      await trySend(email, T.NEWSLETTER_1, () => composeNewsletter1(body.firstName, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === 'contact_reply') {
+      await trySend(email, 'contact_reply', () => composeContactReply(body, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.PLAN_REQUEST) {
+      await trySend(email, T.PLAN_REQUEST, () => composePlanRequest(body, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.CUSTOM_PRODUCT) {
+      await trySend(email, T.CUSTOM_PRODUCT, () => composeCustomProduct(body, settings, env), token, env, sentLog, results);
+    }
+
+    if (trigger === T.CART_ABANDONED) {
+      await trySend(email, T.CART_ABANDONED, () => composeCartAbandoned(body, settings, env), token, env, sentLog, results);
+    }
+
+    return new Response(JSON.stringify({ success: true, trigger, results }), { status: 200, headers: CORS_HEADERS });
 
   } catch (fatal) {
     console.error('[Handler] Fatal error:', fatal.message, fatal.stack);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ success: false, error: fatal.message }),
-    };
+    return new Response(JSON.stringify({ success: false, error: fatal.message }), { status: 500, headers: CORS_HEADERS });
   }
-};
+}
+
+export async function onRequestGet(context) {
+  const { request, env } = context;
+
+  const results = { sent: [], skipped: [], errors: [] };
+
+  try {
+    const settings = await loadSettings(env);
+    const token    = await getGoogleAccessToken(env);
+    const sentLog  = await loadEmailLog(token, env);
+
+    const url    = new URL(request.url);
+    const params = Object.fromEntries(url.searchParams.entries());
+
+    // ── Tracking checker ──
+    if (params.action === 'tracking') {
+      const secret = params.secret;
+      if (secret !== env.REPORT_SECRET) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: CORS_HEADERS });
+      }
+      const trackResult = await runTrackingChecker(token, env, settings);
+      return new Response(JSON.stringify({ success: true, ...trackResult }), { status: 200, headers: CORS_HEADERS });
+    }
+
+    // ── Newsletter batch ──
+    console.log('[Handler] Batch newsletter sequence mode');
+
+    const accountRows = await sheetRead(
+      token,
+      env.SHEET_ID_BBW4LIFE_ACCOUNTS,
+      'bbw4life-accounts!A:I'
+    );
+
+    console.log(`[Batch] ${accountRows.length} account rows`);
+
+    for (const row of accountRows) {
+      const lastName   = (row[0] || '').trim();
+      const firstName  = (row[1] || '').trim();
+      const email      = (row[2] || '').trim();
+      const newsletter = (row[5] || '').trim().toLowerCase();
+      const orders     = parseInt(row[6] || 0, 10);
+
+      if (!email || !email.includes('@')) continue;
+
+      const name = firstName || lastName || 'Beautiful';
+
+      if (newsletter === 'yes') {
+        if (!wasEmailSent(sentLog, email, T.NEWSLETTER_1)) {
+          await trySend(email, T.NEWSLETTER_1, () => composeNewsletter1(name, settings, env), token, env, sentLog, results);
+          await sleep(500); continue;
+        }
+        if (!wasEmailSent(sentLog, email, T.NEWSLETTER_2)) {
+          await trySend(email, T.NEWSLETTER_2, () => composeNewsletter2(name, settings, env), token, env, sentLog, results);
+          await sleep(500); continue;
+        }
+        if (!wasEmailSent(sentLog, email, T.NEWSLETTER_3)) {
+          await trySend(email, T.NEWSLETTER_3, () => composeNewsletter3(name, settings, env), token, env, sentLog, results);
+          await sleep(500); continue;
+        }
+
+        if (!wasEmailSent(sentLog, email, T.NEWSLETTER_4_BUYER) &&
+            !wasEmailSent(sentLog, email, T.NEWSLETTER_4_NEW)) {
+          if (orders > 0) {
+            await trySend(email, T.NEWSLETTER_4_BUYER, () => composeNewsletter4Buyer(name, settings, env), token, env, sentLog, results);
+          } else {
+            await trySend(email, T.NEWSLETTER_4_NEW, () => composeNewsletter4New(name, settings, env), token, env, sentLog, results);
+          }
+          await sleep(500);
+        }
+      }
+    }
+
+    const summary = {
+      sent:    results.sent.length,
+      skipped: results.skipped.length,
+      errors:  results.errors.length,
+    };
+    console.log(`[Batch] Done — sent:${summary.sent} skipped:${summary.skipped} errors:${summary.errors}`);
+
+    return new Response(JSON.stringify({ success: true, summary, results }), { status: 200, headers: CORS_HEADERS });
+
+  } catch (fatal) {
+    console.error('[Handler] Fatal error:', fatal.message, fatal.stack);
+    return new Response(JSON.stringify({ success: false, error: fatal.message }), { status: 500, headers: CORS_HEADERS });
+  }
+}

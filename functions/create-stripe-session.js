@@ -1,12 +1,11 @@
-process.removeAllListeners('warning');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const fetch  = require('node-fetch');
-const { saveTempOrder } = require('./temp-orders-store');
+// functions/create-stripe-session.js
+import Stripe from 'stripe';
+import { saveTempOrder } from './temp-orders-store.js';
 
 // ── Fetch settings from products.data.json ──────────────────────────
-async function getSettings() {
+async function getSettings(env) {
   try {
-    const BASE_URL = process.env.BASE_URL || '';
+    const BASE_URL = env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
     if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
@@ -35,9 +34,9 @@ function computeTotals(cart, settings, shippingMethod) {
   const isFree = isFreeMethod || isFreeByThreshold;
 
   return {
-    subtotal:     subtotal,
+    subtotal: subtotal,
     shippingCost: isFree ? 0 : SHIPPING_COST,
-    taxAmount:    isFree ? 0 : subtotal * TAX_RATE,
+    taxAmount: isFree ? 0 : subtotal * TAX_RATE,
   };
 }
 
@@ -45,12 +44,12 @@ function computeTotals(cart, settings, shippingMethod) {
 function sanitizeCart(cart, settings) {
   const cd = settings.cart_drawer || {};
   const buyQty = parseInt(cd.promo_buy_quantity) || 0;
-  const getQty = parseInt(cd.promo_get_quantity)  || 0;
+  const getQty = parseInt(cd.promo_get_quantity) || 0;
 
   if (!buyQty || !getQty) return cart;
 
   const paidItems = cart.filter(i => !i.isFreePromo);
-  const paidQty   = paidItems.reduce((sum, i) => sum + (parseInt(i.quantity) || 0), 0);
+  const paidQty = paidItems.reduce((sum, i) => sum + (parseInt(i.quantity) || 0), 0);
 
   return cart.map(item => {
     if (item.isFreePromo) {
@@ -64,42 +63,45 @@ function sanitizeCart(cart, settings) {
   });
 }
 
-exports.handler = async (event) => {
-  try {
-    if (!event.body) throw new Error("No data received");
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
-    const { cart: rawCart, shipping } = JSON.parse(event.body);
+  try {
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      throw new Error("No data received");
+    }
+
+    const { cart: rawCart, shipping } = body;
 
     if (!Array.isArray(rawCart) || rawCart.length === 0) throw new Error("Invalid cart data");
 
-    // ── Load settings server-side ──
-    const settings = await getSettings();
-    const cart     = sanitizeCart(rawCart, settings);
+    const settings = await getSettings(env);
+    const cart = sanitizeCart(rawCart, settings);
     const shippingMethod = shipping?.shipping_method || 'Standard Shipping';
     const { subtotal, shippingCost, taxAmount } = computeTotals(cart, settings, shippingMethod);
 
-    // ── Build Stripe line items ──
     const lineItems = cart.map(item => {
       const price = parseFloat(item.price);
-      const qty   = parseInt(item.quantity);
+      const qty = parseInt(item.quantity);
       if (price < 0 || !qty) throw new Error("Invalid item");
 
-      // Free promo items: Stripe requires unit_amount >= 0
-      // Use $0.01 minimum only if Stripe rejects 0 — here we pass 0 for free items
       return {
         price_data: {
           currency: 'usd',
           product_data: {
-            name:   item.isFreePromo ? `🎁 FREE: ${item.title}` : item.title,
+            name: item.isFreePromo ? `🎁 FREE: ${item.title}` : item.title,
             images: item.image ? [item.image] : []
           },
-          unit_amount: Math.round(price * 100) // 0 for free promo items
+          unit_amount: Math.round(price * 100)
         },
         quantity: qty
       };
     });
 
-    // Shipping line item (only if > 0)
     if (shippingCost > 0) {
       lineItems.push({
         price_data: {
@@ -111,7 +113,6 @@ exports.handler = async (event) => {
       });
     }
 
-    // Tax line item (only if > 0)
     if (taxAmount > 0) {
       lineItems.push({
         price_data: {
@@ -127,25 +128,28 @@ exports.handler = async (event) => {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.BASE_URL}/thankyou.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${process.env.BASE_URL}/checkout.html`,
+      success_url: `${env.BASE_URL}/thankyou.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${env.BASE_URL}/checkout.html`,
     });
 
     // ── Stocker cart + shipping complets dans le Sheet temporaire (clé = session.id) ──
-    await saveTempOrder(session.id, cart, shipping);
+    await saveTempOrder(env, session.id, cart, shipping);
 
-    return {
-      statusCode: 200,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ success: true, sessionId: session.id })
-    };
+    return jsonResponse(200, { success: true, sessionId: session.id });
 
   } catch (error) {
     console.error("[STRIPE SESSION ERROR]", error.message);
-    return {
-      statusCode: 500,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ success: false, error: error.message })
-    };
+    return jsonResponse(500, { success: false, error: error.message });
   }
-};
+}
+
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
+}
+
+function jsonResponse(statusCode, body) {
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
+    headers: { "Content-Type": "application/json" }
+  });
+}

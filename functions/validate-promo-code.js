@@ -1,55 +1,142 @@
 /* ================================================================
    BBW4LIFE — VALIDATE PROMO CODE (Single-Use Affiliate Code)
-   Netlify Function : /.netlify/functions/validate-promo-code
+   Cloudflare Pages Function : /validate-promo-code
 ================================================================ */
-process.removeAllListeners('warning');
-const { google } = require('googleapis');
 
-async function getSheets() {
-  const auth = new google.auth.GoogleAuth({
-    credentials: {
-      client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      private_key:  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
-    },
-    scopes: ['https://www.googleapis.com/auth/spreadsheets']
-  });
-  return google.sheets({ version: 'v4', auth });
+// ── JWT / Google Auth (Web Crypto RSASSA-PKCS1-v1_5) ──────────────────
+function base64urlEncode(str) {
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function getOrCreatePromoSheet(sheets, spreadsheetId) {
-  const meta = await sheets.spreadsheets.get({ spreadsheetId });
-  const existing = meta.data.sheets.find(
-    s => s.properties.title === 'PromoCodes'
+function base64urlEncodeUint8(bytes) {
+  let str = '';
+  for (const b of bytes) str += String.fromCharCode(b);
+  return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function getAccessToken(env) {
+  const privateKeyPem = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+  const pemBody = privateKeyPem
+    .replace('-----BEGIN PRIVATE KEY-----', '')
+    .replace('-----END PRIVATE KEY-----', '')
+    .replace(/\s+/g, '');
+  const binaryDer = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8',
+    binaryDer.buffer,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
   );
 
+  const now     = Math.floor(Date.now() / 1000);
+  const header  = base64urlEncode(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const payload = base64urlEncode(JSON.stringify({
+    iss:   env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    scope: 'https://www.googleapis.com/auth/spreadsheets',
+    aud:   'https://oauth2.googleapis.com/token',
+    iat:   now,
+    exp:   now + 3600
+  }));
+
+  const signingInput = `${header}.${payload}`;
+  const signature = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    cryptoKey,
+    new TextEncoder().encode(signingInput)
+  );
+
+  const jwt = `${signingInput}.${base64urlEncodeUint8(new Uint8Array(signature))}`;
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`
+  });
+
+  const tokenData = await tokenRes.json();
+  if (!tokenData.access_token) throw new Error('Failed to get Google access token');
+  return tokenData.access_token;
+}
+
+// ── Helpers fetch Sheets ───────────────────────────────────────────────
+async function sheetsGet(token, spreadsheetId, range) {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}`,
+    { headers: { 'Authorization': `Bearer ${token}` } }
+  );
+  if (!res.ok) throw new Error(`Sheets GET failed: ${await res.text()}`);
+  return res.json();
+}
+
+async function sheetsUpdate(token, spreadsheetId, range, values) {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+    {
+      method:  'PUT',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ values })
+    }
+  );
+  if (!res.ok) throw new Error(`Sheets UPDATE failed: ${await res.text()}`);
+  return res.json();
+}
+
+async function sheetsAppend(token, spreadsheetId, range, values) {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+    {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ values })
+    }
+  );
+  if (!res.ok) throw new Error(`Sheets APPEND failed: ${await res.text()}`);
+  return res.json();
+}
+
+async function sheetsGetMeta(token, spreadsheetId) {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}`,
+    { headers: { 'Authorization': `Bearer ${token}` } }
+  );
+  if (!res.ok) throw new Error(`Sheets getMeta failed: ${await res.text()}`);
+  return res.json();
+}
+
+async function sheetsBatchUpdate(token, spreadsheetId, requests) {
+  const res = await fetch(
+    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}:batchUpdate`,
+    {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ requests })
+    }
+  );
+  if (!res.ok) throw new Error(`Sheets batchUpdate failed: ${await res.text()}`);
+  return res.json();
+}
+
+// ── Crée l'onglet PromoCodes s'il n'existe pas encore ─────────────────
+async function getOrCreatePromoSheet(token, spreadsheetId) {
+  const meta     = await sheetsGetMeta(token, spreadsheetId);
+  const existing = meta.sheets.find(s => s.properties.title === 'PromoCodes');
+
   if (!existing) {
-    await sheets.spreadsheets.batchUpdate({
-      spreadsheetId,
-      resource: {
-        requests: [{
-          addSheet: {
-            properties: { title: 'PromoCodes' }
-          }
-        }]
-      }
-    });
-    await sheets.spreadsheets.values.update({
-      spreadsheetId,
-      range: 'PromoCodes!A1:F1',
-      valueInputOption: 'RAW',
-      resource: {
-        values: [['code', 'username', 'discount_percent', 'status', 'created_at', 'used_at']]
-      }
-    });
+    await sheetsBatchUpdate(token, spreadsheetId, [{
+      addSheet: { properties: { title: 'PromoCodes' } }
+    }]);
+    await sheetsUpdate(token, spreadsheetId, 'PromoCodes!A1:F1', [
+      ['code', 'username', 'discount_percent', 'status', 'created_at', 'used_at']
+    ]);
   }
 }
 
-async function findCodeRow(sheets, spreadsheetId, code) {
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId,
-    range: 'PromoCodes!A:F'
-  });
-  const rows = res.data.values || [];
+// ── Trouve la ligne du code (insensible à la casse) ───────────────────
+async function findCodeRow(token, spreadsheetId, code) {
+  const data = await sheetsGet(token, spreadsheetId, 'PromoCodes!A:F');
+  const rows  = data.values || [];
   for (let i = 1; i < rows.length; i++) {
     if (rows[i][0] && rows[i][0].trim().toUpperCase() === code.trim().toUpperCase()) {
       return { rowIndex: i + 1, row: rows[i] };
@@ -58,35 +145,28 @@ async function findCodeRow(sheets, spreadsheetId, code) {
   return null;
 }
 
-async function registerCode(sheets, spreadsheetId, code, username, discountPct) {
-  await getOrCreatePromoSheet(sheets, spreadsheetId);
+// ── Enregistre un nouveau code ─────────────────────────────────────────
+async function registerCode(token, spreadsheetId, code, username, discountPct) {
+  await getOrCreatePromoSheet(token, spreadsheetId);
 
-  const existing = await findCodeRow(sheets, spreadsheetId, code);
+  const existing = await findCodeRow(token, spreadsheetId, code);
   if (existing) return;
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range: 'PromoCodes!A:F',
-    valueInputOption: 'RAW',
-    insertDataOption: 'INSERT_ROWS',
-    resource: {
-      values: [[
-        code.toUpperCase(),
-        username || '',
-        discountPct || '',
-        'active',
-        new Date().toISOString(),
-        ''
-      ]]
-    }
-  });
+  await sheetsAppend(token, spreadsheetId, 'PromoCodes!A:F', [[
+    code.toUpperCase(),
+    username    || '',
+    discountPct || '',
+    'active',
+    new Date().toISOString(),
+    ''
+  ]]);
 }
 
-// ── Marquer used immédiatement dès le Apply ──
-async function validateCode(sheets, spreadsheetId, code) {
-  await getOrCreatePromoSheet(sheets, spreadsheetId);
+// ── Marquer used immédiatement dès le Apply ───────────────────────────
+async function validateCode(token, spreadsheetId, code) {
+  await getOrCreatePromoSheet(token, spreadsheetId);
 
-  const found = await findCodeRow(sheets, spreadsheetId, code);
+  const found = await findCodeRow(token, spreadsheetId, code);
   if (!found) {
     return { valid: false, reason: 'CODE_NOT_FOUND' };
   }
@@ -104,56 +184,60 @@ async function validateCode(sheets, spreadsheetId, code) {
     return { valid: false, reason: 'CODE_INACTIVE', discountPct, username };
   }
 
-  
   // Marquer used immédiatement dès la validation
-await sheets.spreadsheets.values.update({
-    spreadsheetId,
-    range: `PromoCodes!D${rowIndex}:F${rowIndex}`,
-    valueInputOption: 'RAW',
-    resource: {
-      values: [['used', row[4] || '', new Date().toLocaleString('fr-FR', { timeZone: 'America/New_York' })]]
-    }
-});
+  await sheetsUpdate(token, spreadsheetId, `PromoCodes!D${rowIndex}:F${rowIndex}`, [[
+    'used',
+    row[4] || '',
+    new Date().toLocaleString('fr-FR', { timeZone: 'America/New_York' })
+  ]]);
 
   return { valid: true, discountPct, username };
 }
 
-exports.handler = async (event) => {
-  const headers = { 'Content-Type': 'application/json' };
+// ── Response helper ───────────────────────────────────────────────────
+function res(statusCode, body) {
+  return new Response(JSON.stringify(body), {
+    status:  statusCode,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+// ── HANDLER ───────────────────────────────────────────────────────────
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
   try {
-    if (!event.body) {
-      return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'No body' }) };
-    }
+    const text = await request.text();
+    if (!text) return res(400, { success: false, error: 'No body' });
 
-    const { action, code, username, discount_percent } = JSON.parse(event.body);
-    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_ACCOUNTS;
-    const sheets = await getSheets();
+    const { action, code, username, discount_percent } = JSON.parse(text);
+    const spreadsheetId = env.SHEET_ID_BBW4LIFE_ACCOUNTS;
+    const token         = await getAccessToken(env);
 
     if (action === 'register') {
       if (!code || !username) {
-        return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'Missing code or username' }) };
+        return res(400, { success: false, error: 'Missing code or username' });
       }
-      await registerCode(sheets, spreadsheetId, code, username, discount_percent || 0);
-      return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
+      await registerCode(token, spreadsheetId, code, username, discount_percent || 0);
+      return res(200, { success: true });
     }
 
     if (action === 'validate') {
       if (!code) {
-        return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'Missing code' }) };
+        return res(400, { success: false, error: 'Missing code' });
       }
-      const result = await validateCode(sheets, spreadsheetId, code);
-      return { statusCode: 200, headers, body: JSON.stringify({ success: true, ...result }) };
+      const result = await validateCode(token, spreadsheetId, code);
+      return res(200, { success: true, ...result });
     }
 
-    return { statusCode: 400, headers, body: JSON.stringify({ success: false, error: 'Unknown action' }) };
+    return res(400, { success: false, error: 'Unknown action' });
 
   } catch (err) {
     console.error('[validate-promo-code]', err.message);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ success: false, error: err.message })
-    };
+    return res(500, { success: false, error: err.message });
   }
-};
+}
+
+export async function onRequestOptions() {
+  return new Response('', { status: 200, headers: { 'Content-Type': 'application/json' } });
+}

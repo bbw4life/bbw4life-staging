@@ -1,10 +1,9 @@
-process.removeAllListeners('warning');
-const fetch = require('node-fetch');
+// functions/paypal-create-order.js
 
 // ── Fetch settings from products.data.json ──────────────────────────
-async function getSettings() {
+async function getSettings(env) {
   try {
-    const BASE_URL = process.env.BASE_URL || '';
+    const BASE_URL = env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
     if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
@@ -39,17 +38,24 @@ function sanitizeCart(cart, settings) {
   });
 }
 
-exports.handler = async (event) => {
-  try {
-    if (!event.body) return response(400, { success: false, error: "No data" });
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
-    const { cart: rawCart, shipping, shipping_cost, tax } = JSON.parse(event.body);
+  try {
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return response(400, { success: false, error: "No data" });
+    }
+
+    const { cart: rawCart, shipping, shipping_cost, tax } = body;
 
     if (!Array.isArray(rawCart) || rawCart.length === 0) {
       return response(400, { success: false, error: "Cart empty" });
     }
 
-    const settings = await getSettings();
+    const settings = await getSettings(env);
     const cart = sanitizeCart(rawCart, settings);
 
     const shippingCost = shipping_cost !== undefined
@@ -60,11 +66,11 @@ exports.handler = async (event) => {
       ? parseFloat(tax)
       : 0;
 
-    const PAYPAL_BASE = process.env.PAYPAL_ENV === "live"
+    const PAYPAL_BASE = env.PAYPAL_ENV === "live"
       ? "https://api-m.paypal.com"
       : "https://api-m.sandbox.paypal.com";
 
-    const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString('base64');
+    const auth = btoa(`${env.PAYPAL_CLIENT_ID}:${env.PAYPAL_SECRET}`);
     const tokenRes = await fetch(`${PAYPAL_BASE}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
@@ -123,9 +129,9 @@ exports.handler = async (event) => {
         custom_id: custom_id
       }],
       application_context: {
-        return_url: `${process.env.BASE_URL}/thankyou.html`,
-        cancel_url: `${process.env.BASE_URL}/checkout.html`,
-        shipping_preference: "SET_PROVIDED_ADDRESS" 
+        return_url: `${env.BASE_URL}/thankyou.html`,
+        cancel_url: `${env.BASE_URL}/checkout.html`,
+        shipping_preference: "SET_PROVIDED_ADDRESS"
       }
     };
 
@@ -136,7 +142,7 @@ exports.handler = async (event) => {
     }
     if (shipping.phone && shipping.countryCode) {
       try {
-        const countriesRes = await fetch(`${process.env.BASE_URL}/countries.json`);
+        const countriesRes = await fetch(`${env.BASE_URL}/countries.json`);
         const countriesData = await countriesRes.json();
         const found = countriesData.find(c => c.cca2 === shipping.countryCode);
         if (found) {
@@ -188,8 +194,15 @@ exports.handler = async (event) => {
     console.error("[PAYPAL] Global error:", error.message);
     return response(500, { success: false, error: "PayPal order creation failed" });
   }
-};
+}
+
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
+}
 
 function response(statusCode, body) {
-  return { statusCode, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) };
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
+    headers: { "Content-Type": "application/json" }
+  });
 }

@@ -1,69 +1,36 @@
-process.removeAllListeners('warning');
-const fetch = require('node-fetch');
-const path  = require('path');
-const fs    = require('fs');
+// chat.js — Cloudflare Pages Function
 
-
-async function loadProductsData() {
-  const localPaths = [
-    path.join(process.cwd(), 'products.data.json'),
-    path.join(process.cwd(), 'public', 'products.data.json'),
-    path.join(process.cwd(), 'dist', 'products.data.json'),
-    path.join(__dirname, '..', '..', 'products.data.json'),
-    path.join(__dirname, '..', '..', 'public', 'products.data.json'),
-  ];
-  for (const p of localPaths) {
-    try {
-      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) {  }
-  }
-  const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+// ══════════════════════════════════════════════════════
+//   DATA LOADERS
+// ══════════════════════════════════════════════════════
+async function loadProductsData(env) {
+  const siteUrl = env.SITE_URL || env.URL || 'https://bbw4life.com';
   const res = await fetch(`${siteUrl}/products.data.json`);
   if (!res.ok) throw new Error(`Cannot load products.data.json: ${res.status}`);
   return res.json();
 }
 
-async function loadSearchData() {
-  const localPaths = [
-    path.join(process.cwd(), 'search.data.json'),
-    path.join(process.cwd(), 'public', 'search.data.json'),
-    path.join(__dirname, '..', '..', 'search.data.json'),
-    path.join(__dirname, '..', '..', 'public', 'search.data.json'),
-  ];
-  for (const p of localPaths) {
-    try {
-      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) {  }
-  }
+async function loadSearchData(env) {
   try {
-    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+    const siteUrl = env.SITE_URL || env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/search.data.json`);
     if (res.ok) return res.json();
-  } catch (e) {  }
+  } catch (e) { }
   return null;
 }
 
-async function loadBlogArticles() {
-  const localPaths = [
-    path.join(process.cwd(), 'blog', 'blog-articles.json'),
-    path.join(process.cwd(), 'public', 'blog', 'blog-articles.json'),
-    path.join(__dirname, '..', '..', 'blog', 'blog-articles.json'),
-    path.join(__dirname, '..', '..', 'public', 'blog', 'blog-articles.json'),
-  ];
-  for (const p of localPaths) {
-    try {
-      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch (e) {  }
-  }
+async function loadBlogArticles(env) {
   try {
-    const siteUrl = process.env.SITE_URL || process.env.URL || 'https://bbw4life.com';
+    const siteUrl = env.SITE_URL || env.URL || 'https://bbw4life.com';
     const res = await fetch(`${siteUrl}/blog/blog-articles.json`);
     if (res.ok) return res.json();
-  } catch (e) {  }
+  } catch (e) { }
   return null;
 }
 
-
+// ══════════════════════════════════════════════════════
+//   BUILD PRODUCT INDEX
+// ══════════════════════════════════════════════════════
 function buildProductIndex(rawData) {
   const allActive = rawData.filter(p => p.type !== 'settings' && p.id && p.active);
   const settings  = rawData.find(p => p.type === 'settings') || {};
@@ -112,9 +79,9 @@ function buildProductIndex(rawData) {
   return { products, settings };
 }
 
-/* ══════════════════════════════════════════════════════
-   GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   GENDER IDs — LIRE DEPUIS SETTINGS (jrgq_collections)
+// ══════════════════════════════════════════════════════
 function buildGenderIds(settings) {
   const jrgqCols = (settings.jrgq_collections && settings.jrgq_collections.collections) || [];
 
@@ -136,9 +103,9 @@ function buildGenderIds(settings) {
   return { MALE_PRODUCT_IDS, FEMALE_ONLY_IDS, BEAUTY_PRODUCT_IDS };
 }
 
-/* ══════════════════════════════════════════════════════
-   BADGE DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   BADGE DETECTION
+// ══════════════════════════════════════════════════════
 function buildBadgeMap(products) {
   const map = new Map();
   for (const p of products) {
@@ -158,11 +125,11 @@ function detectBadgeQuery(message, badgeMap) {
   return null;
 }
 
-/* ══════════════════════════════════════════════════════
-   LANGUAGE DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   LANGUAGE DETECTION
+// ══════════════════════════════════════════════════════
 function detectLanguage(message, allowedLanguages) {
-  const text = message.toLowerCase().trim();
+  const text  = message.toLowerCase().trim();
   const words = text.split(/\s+/).map(w => w.replace(/[^a-záàâçèêëéíîïóôùûüñúkouwòèe]/gi, ''));
 
   let scores = { en: 0, fr: 0, es: 0, ar: 0, zh: 0, hi: 0, pt: 0, ru: 0, de: 0, ja: 0, ht: 0 };
@@ -221,9 +188,9 @@ function getLangName(code) {
   return names[code] || 'ENGLISH';
 }
 
-/* ══════════════════════════════════════════════════════
-   SMART INTENT DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   SMART INTENT DETECTION
+// ══════════════════════════════════════════════════════
 function detectIntent(message) {
   const q = message.toLowerCase();
 
@@ -308,9 +275,9 @@ function detectIntent(message) {
   return 'general';
 }
 
-/* ══════════════════════════════════════════════════════
-   TOP STARTER REQUEST
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   TOP STARTER REQUEST
+// ══════════════════════════════════════════════════════
 function isTopStarterRequest(message) {
   const q = message.toLowerCase();
   const patterns = [
@@ -339,17 +306,17 @@ function isTopStarterRequest(message) {
   return patterns.some(p => p.test(q));
 }
 
-/* ══════════════════════════════════════════════════════
-   GREETING DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   GREETING DETECTION
+// ══════════════════════════════════════════════════════
 function isGreeting(message) {
   const q = message.toLowerCase().trim();
   return /^(bonjour|bonsoir|salut|hello|hi|hey|hola|buenas|buenos|allo|yow|yo|wesh|cc|good morning|good evening|good afternoon|buenos días|buenas noches|buenas tardes|bonjou|bonswa)[\s!.,]*$/.test(q);
 }
 
-/* ══════════════════════════════════════════════════════
-   SHORT ACK DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   SHORT ACK DETECTION
+// ══════════════════════════════════════════════════════
 function isShortAck(message) {
   const q = message.toLowerCase().trim();
   const wordCount = q.split(/\s+/).filter(w => w.length > 0).length;
@@ -357,9 +324,9 @@ function isShortAck(message) {
   return /^(ok|okay|k|oui|non|wi|non|merci|mesi|thanks|thx|ty|super|parfait|génial|great|bien|bueno|nice|cool|perfect|noted|got it|compris|alright|sure|yep|yup|nope|d'accord|ça marche|ça va|bien reçu|reçu|👍|🙏|❤️|😊|🥰|ah|oh|wow|true|right|correct|exactly|absolutely|definitely|of course|bien sûr|exactement|np|no problem|no worries|pas de problème|c'est bon)[\s!.,🙏❤️😊🥰]*$/.test(q);
 }
 
-/* ══════════════════════════════════════════════════════
-   GENDER DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   GENDER DETECTION
+// ══════════════════════════════════════════════════════
 function detectGender(message) {
   const q = message.toLowerCase();
 
@@ -389,41 +356,34 @@ function detectGender(message) {
   return null;
 }
 
-/* ══════════════════════════════════════════════════════
-   BRAND QUERY DETECTION
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   BRAND QUERY DETECTION
+// ══════════════════════════════════════════════════════
 function isBrandQuery(message) {
   const q = message.toLowerCase();
   return /votre propre marque|votre propre collection|vous avez.+(marque|brand|collection propre)|est.ce que bbw.+(une marque|son propre)|avez.vous.+(marque|design)|your own brand|your own collection|do you have.+(brand|own collection|your own)|is bbw.+(a brand|own brand)|tienen.+(su propia marca|colección propia)|es bbw.+(una marca|marca propia)|tienen marca propia|bbw.+(sa propre|son propre|leur propre).+(marque|collection|design)|marque propre|propre marque|brand propre|own brand|marca propia/.test(q);
 }
 
-/* ══════════════════════════════════════════════════════
-   PRODUCT SEARCH
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   PRODUCT SEARCH
+// ══════════════════════════════════════════════════════
 function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_ONLY_IDS, BEAUTY_PRODUCT_IDS) {
   if (!query) return { results: [], isVague: false };
   const q        = query.toLowerCase();
   const keywords = q.split(/\s+/).filter(k => k.length >= 2);
 
-  
   let baseProducts = products;
   if (genderFilter === 'male') {
     baseProducts = products.filter(p => MALE_PRODUCT_IDS.includes(p.id));
-    if (baseProducts.length === 0) {
-      console.warn('[Chat] Gender filter male returned 0 products — check MALE_PRODUCT_IDS in settings');
-    }
+    if (baseProducts.length === 0) console.warn('[Chat] Gender filter male returned 0 products — check MALE_PRODUCT_IDS in settings');
   } else if (genderFilter === 'female') {
     baseProducts = products.filter(p => FEMALE_ONLY_IDS.includes(p.id));
-    if (baseProducts.length === 0) {
-      console.warn('[Chat] Gender filter female returned 0 products — check FEMALE_ONLY_IDS in settings');
-    }
+    if (baseProducts.length === 0) console.warn('[Chat] Gender filter female returned 0 products — check FEMALE_ONLY_IDS in settings');
   } else if (genderFilter === 'beauty') {
     baseProducts = BEAUTY_PRODUCT_IDS.length
       ? products.filter(p => BEAUTY_PRODUCT_IDS.includes(p.id))
       : products;
-    if (baseProducts.length === 0) {
-      console.warn('[Chat] Gender filter beauty returned 0 products — check BEAUTY_PRODUCT_IDS in settings');
-    }
+    if (baseProducts.length === 0) console.warn('[Chat] Gender filter beauty returned 0 products — check BEAUTY_PRODUCT_IDS in settings');
   }
 
   const scored = baseProducts.map(p => {
@@ -538,7 +498,9 @@ function searchProducts(query, products, genderFilter, MALE_PRODUCT_IDS, FEMALE_
   return { results: filtered.slice(0, 2), isVague: false };
 }
 
-
+// ══════════════════════════════════════════════════════
+//   HELPERS
+// ══════════════════════════════════════════════════════
 function formatDelivery(startDate, endDate) {
   if (!startDate || !endDate) return null;
   try {
@@ -587,9 +549,9 @@ function buildBlogContext(blogData) {
   return text;
 }
 
-/* ══════════════════════════════════════════════════════
-   PAGE_MAP — toutes les pages connues du site
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   PAGE_MAP
+// ══════════════════════════════════════════════════════
 const PAGE_MAP = {
   '/index.html':                               { label: 'Home',               icon: '🏠' },
   '/collections/bbw4life-all-product.html':    { label: 'Shop All',           icon: '🛍️' },
@@ -619,28 +581,27 @@ const PAGE_MAP = {
   '/page/products-care.html':                  { label: 'Product Care Guide', icon: '✨' },
 };
 
-/* ══════════════════════════════════════════════════════
-   BUILD SYSTEM PROMPT
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   BUILD SYSTEM PROMPT
+// ══════════════════════════════════════════════════════
 function buildSystemPrompt(products, settings, contactInfo, searchData, blogData, badgeMap, allowedLanguages) {
-  
-const founder = settings.founder || {};
-const founderName        = founder.full_name    || 'Paul Francenel';
-const founderAge         = founder.age          || 26;
-const founderTitle       = founder.title        || 'CEO & Founder';
-const founderPhoto       = founder.photo        || '';
-const founderFounded     = founder.founded      || 'June 18, 2025';
-const founderNationality = founder.nationality  || 'Haitian';
-const founderBio         = founder.bio          || '';
-const founderMission     = founder.mission      || '';
-const founderPersonality = founder.personality  || '';
-const founderQuote       = founder.quote        || '';
-const founderValues      = (founder.values      || []).map(v => `  • ${v}`).join('\n');
-const founderFunFacts    = (founder.fun_facts   || []).map(f => `  • ${f}`).join('\n');
-const founderPhotoLine   = founderPhoto
-  ? `\n**Founder photo:** ![${founderName}](${founderPhoto})`
-  : '';
-  
+  const founder = settings.founder || {};
+  const founderName        = founder.full_name    || 'Paul Francenel';
+  const founderAge         = founder.age          || 26;
+  const founderTitle       = founder.title        || 'CEO & Founder';
+  const founderPhoto       = founder.photo        || '';
+  const founderFounded     = founder.founded      || 'June 18, 2025';
+  const founderNationality = founder.nationality  || 'Haitian';
+  const founderBio         = founder.bio          || '';
+  const founderMission     = founder.mission      || '';
+  const founderPersonality = founder.personality  || '';
+  const founderQuote       = founder.quote        || '';
+  const founderValues      = (founder.values      || []).map(v => `  • ${v}`).join('\n');
+  const founderFunFacts    = (founder.fun_facts   || []).map(f => `  • ${f}`).join('\n');
+  const founderPhotoLine   = founderPhoto
+    ? `\n**Founder photo:** ![${founderName}](${founderPhoto})`
+    : '';
+
   const contactEmails  = settings.contact_emails || {};
   const emailsText     = Object.entries(contactEmails).map(([k, v]) => `• ${k}: ${v}`).join('\n') || '• No emails configured';
   const promos         = settings.promos      || [];
@@ -1162,7 +1123,9 @@ ${blogContext || '(not available)'}
 - If you have zero information about something the user asks → say clearly: "I don't have information about that." NEVER make up data.`;
 }
 
-
+// ══════════════════════════════════════════════════════
+//   FALLBACK / ERROR MESSAGES
+// ══════════════════════════════════════════════════════
 function getFallbackMessage(lang) {
   const msgs = {
     fr: "Je suis très sollicitée en ce moment 😅 Réessayez dans quelques secondes !",
@@ -1195,9 +1158,9 @@ function getErrorMessage(lang) {
   return msgs[lang] || "Sorry, I'm having a little trouble right now. Please try again in a moment! 🙏";
 }
 
-/* ══════════════════════════════════════════════════════
-   MODEL ROTATION STATE
-══════════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════════
+//   MODEL ROTATION STATE
+// ══════════════════════════════════════════════════════
 const MODELS = [
   'llama-3.3-70b-versatile',
   'moonshotai/kimi-k2-instruct',
@@ -1212,29 +1175,37 @@ const MODELS = [
 ];
 let currentModelIndex = 0;
 
-/* ══════════════════════════════════════════════════════
-   MAIN HANDLER
-══════════════════════════════════════════════════════ */
-exports.handler = async (event, context) => {
-  const headers = {
-    'Access-Control-Allow-Origin':  '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Content-Type': 'application/json'
-  };
+// ══════════════════════════════════════════════════════
+//   CORS HEADERS
+// ══════════════════════════════════════════════════════
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin':  '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Content-Type': 'application/json'
+};
 
-  if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
-  if (event.httpMethod !== 'POST')   return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+// ══════════════════════════════════════════════════════
+//   HANDLER
+// ══════════════════════════════════════════════════════
+export async function onRequestOptions() {
+  return new Response('', { status: 200, headers: CORS_HEADERS });
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
 
   try {
-    const { message, history = [] } = JSON.parse(event.body);
+    const bodyText = await request.text();
+    const { message, history = [] } = JSON.parse(bodyText);
+
     if (!message || message.trim().length === 0) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Message is required' }) };
+      return new Response(JSON.stringify({ error: 'Message is required' }), { status: 400, headers: CORS_HEADERS });
     }
 
     let products = [], settings = {};
     try {
-      const rawData = await loadProductsData();
+      const rawData = await loadProductsData(env);
       const built   = buildProductIndex(rawData);
       products = built.products;
       settings = built.settings;
@@ -1251,8 +1222,8 @@ exports.handler = async (event, context) => {
     let searchData = null, blogData = null;
     try {
       [searchData, blogData] = await Promise.all([
-        loadSearchData().catch(e   => { console.warn('search.data.json failed:', e.message);   return null; }),
-        loadBlogArticles().catch(e => { console.warn('blog-articles.json failed:', e.message); return null; })
+        loadSearchData(env).catch(e   => { console.warn('search.data.json failed:', e.message);   return null; }),
+        loadBlogArticles(env).catch(e => { console.warn('blog-articles.json failed:', e.message); return null; })
       ]);
     } catch (err) { console.warn('Could not load search/blog data:', err.message); }
 
@@ -1307,8 +1278,8 @@ exports.handler = async (event, context) => {
           FEMALE_ONLY_IDS,
           BEAUTY_PRODUCT_IDS
         );
-        relevantProducts   = searchResult.results;
-        isVague            = searchResult.isVague;
+        relevantProducts = searchResult.results;
+        isVague          = searchResult.isVague;
       }
     }
 
@@ -1380,8 +1351,8 @@ exports.handler = async (event, context) => {
       ? '\n[CATEGORY FILTER: User asked for BEAUTY products. Show ONLY beauty products (nails, mascara, eyebrow, lip, skincare, haircare). NEVER suggest: clothing, shoes, dresses, pants — STRICTLY EXCLUDED.]'
       : '';
 
-    const langName    = getLangName(userLang);
-    const otherLangs  = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE','HAITIAN CREOLE']
+    const langName   = getLangName(userLang);
+    const otherLangs = ['ENGLISH','FRENCH','SPANISH','ARABIC','CHINESE','HINDI','PORTUGUESE','RUSSIAN','GERMAN','JAPANESE','HAITIAN CREOLE']
       .filter(l => l !== langName).join(', ');
     const langInstruction = `CRITICAL — ABSOLUTE RULE: You MUST reply 100% in ${langName}. NOT a single word in ${otherLangs}. The user wrote in ${langName} — respond ONLY in ${langName}, no exception, no matter what.`;
 
@@ -1407,9 +1378,9 @@ exports.handler = async (event, context) => {
       for (let retry = 1; retry <= 2; retry++) {
         try {
           groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model, messages: groqMessages, max_tokens: 400, temperature: 0.70, stream: false })
+            method:  'POST',
+            headers: { 'Authorization': `Bearer ${env.GROQ_API_KEY}`, 'Content-Type': 'application/json' },
+            body:    JSON.stringify({ model, messages: groqMessages, max_tokens: 400, temperature: 0.70, stream: false })
           });
 
           if (groqResponse.status === 429) {
@@ -1432,13 +1403,10 @@ exports.handler = async (event, context) => {
     }
 
     if (!modelSuccess) {
-      return {
-        statusCode: 200, headers,
-        body: JSON.stringify({
-          reply: getFallbackMessage(userLang), products: [], intent: 'general',
-          isVague: false, showContact: false, contactInfo: null, pageButtons: []
-        })
-      };
+      return new Response(JSON.stringify({
+        reply: getFallbackMessage(userLang), products: [], intent: 'general',
+        isVague: false, showContact: false, contactInfo: null, pageButtons: []
+      }), { status: 200, headers: CORS_HEADERS });
     }
 
     console.log(`[Chat] Model: ${usedModel} | Lang: ${userLang} | Badge: ${matchedBadge || 'none'} | TopStarter: ${topStarterRequest} | Brand: ${brandRequest} | ShortAck: ${shortAck} | Gender: ${genderFilter2 || 'none'}`);
@@ -1488,9 +1456,7 @@ exports.handler = async (event, context) => {
       discounts:     p.discounts
     }));
 
-    return {
-      statusCode: 200, headers,
-     body: JSON.stringify({
+    return new Response(JSON.stringify({
       reply:       finalReply,
       products:    productCards,
       intent:      (topStarterRequest || isBadgeQuery) ? 'product' : intent,
@@ -1503,15 +1469,17 @@ exports.handler = async (event, context) => {
       } : null,
       pageButtons,
       founderPhoto: shouldShowFounderPhoto ? {
-        url:  founderPhotoUrl,
-        name: settings.founder?.full_name || 'Paul Francenel',
-        title: settings.founder?.title   || 'CEO & Founder'
+        url:   founderPhotoUrl,
+        name:  settings.founder?.full_name || 'Paul Francenel',
+        title: settings.founder?.title     || 'CEO & Founder'
       } : null
-    })
-    };
+    }), { status: 200, headers: CORS_HEADERS });
 
   } catch (error) {
     console.error('Chat function error:', error);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Internal server error', message: error.message }) };
+    return new Response(
+      JSON.stringify({ error: 'Internal server error', message: error.message }),
+      { status: 500, headers: CORS_HEADERS }
+    );
   }
-};
+}

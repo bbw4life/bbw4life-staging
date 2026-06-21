@@ -1,16 +1,10 @@
-process.removeAllListeners('warning');
-const https = require('https');
-const fetch = require('node-fetch');
-const { saveTempOrder } = require('./temp-orders-store');
-
-// ── Mode LIVE ──
-const BASE_URL_NOW = 'api.nowpayments.io';
-const API_KEY      = process.env.NOWPAYMENTS_API_KEY;
+// functions/nowpayments-create-order.js
+import { saveTempOrder } from './temp-orders-store.js';
 
 // ── Fetch settings from products.data.json ──
-async function getSettings() {
+async function getSettings(env) {
   try {
-    const BASE_URL = process.env.BASE_URL || '';
+    const BASE_URL = env.BASE_URL || '';
     const res = await fetch(`${BASE_URL}/products.data.json`);
     if (!res.ok) throw new Error('Failed to fetch products.data.json');
     const data = await res.json();
@@ -23,9 +17,9 @@ async function getSettings() {
 
 // ── Sanitize free promo items ──
 function sanitizeCart(cart, settings) {
-  const cd     = settings.cart_drawer || {};
+  const cd = settings.cart_drawer || {};
   const buyQty = parseInt(cd.promo_buy_quantity) || 0;
-  const getQty = parseInt(cd.promo_get_quantity)  || 0;
+  const getQty = parseInt(cd.promo_get_quantity) || 0;
   if (!buyQty || !getQty) return cart;
 
   const paidQty = cart
@@ -44,65 +38,39 @@ function sanitizeCart(cart, settings) {
 
 // ── Compute totals ──
 function computeTotals(cart, settings, shippingMethod) {
-  const cd                = settings.cart_drawer || {};
-  const SHIPPING_COST     = parseFloat(settings.shipping_cost) || 10.00;
-  const TAX_RATE          = parseFloat(settings.tax_rate)      || 0.00;
+  const cd = settings.cart_drawer || {};
+  const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
+  const TAX_RATE = parseFloat(settings.tax_rate) || 0.00;
   const freeShipThreshold = parseFloat(cd.free_shipping_threshold) || 0;
 
   const subtotal = cart.reduce((sum, item) =>
     sum + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0), 0);
 
-  const isFreeMethod    = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
+  const isFreeMethod = ['Standard Shipping', 'Economy Shipping'].includes(shippingMethod);
   const isFreeThreshold = freeShipThreshold > 0 && subtotal >= freeShipThreshold;
-  const isFree          = isFreeMethod || isFreeThreshold;
+  const isFree = isFreeMethod || isFreeThreshold;
 
   return {
     subtotal,
     shippingCost: isFree ? 0 : SHIPPING_COST,
-    taxAmount:    isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2)),
+    taxAmount: isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2)),
   };
 }
 
-// ── HTTPS POST helper ──
-function httpsPost(hostname, path, data, headers) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify(data);
-    const options = {
-      hostname,
-      path,
-      method: 'POST',
-      headers: {
-        'Content-Type':   'application/json',
-        'Content-Length': Buffer.byteLength(body),
-        ...headers
-      }
-    };
-    const req = https.request(options, (response) => {
-      let raw = '';
-      response.on('data', chunk => raw += chunk);
-      response.on('end', () => {
-        try { resolve({ status: response.statusCode, data: JSON.parse(raw) }); }
-        catch { resolve({ status: response.statusCode, data: {} }); }
-      });
-    });
-    req.on('error', (err) => {
-      console.error('[NOWPAYMENTS] HTTPS error:', err.message);
-      reject(err);
-    });
-    req.setTimeout(10000, () => {
-      req.destroy();
-      reject(new Error('NOWPayments request timeout'));
-    });
-    req.write(body);
-    req.end();
-  });
-}
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const API_KEY = env.NOWPAYMENTS_API_KEY;
+  const BASE_URL_NOW = 'https://api.nowpayments.io';
 
-exports.handler = async (event) => {
   try {
-    if (!event.body) return res(400, { success: false, error: 'No data received' });
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return res(400, { success: false, error: 'No data received' });
+    }
 
-    const { cart: rawCart, shipping, shipping_cost, tax, cartToken } = JSON.parse(event.body);
+    const { cart: rawCart, shipping, shipping_cost, tax } = body;
 
     if (!Array.isArray(rawCart) || rawCart.length === 0) {
       return res(400, { success: false, error: 'Cart empty' });
@@ -115,9 +83,8 @@ exports.handler = async (event) => {
 
     console.log(`[NOWPAYMENTS] Mode: LIVE | Host: ${BASE_URL_NOW}`);
 
-    // ── Load settings + sanitize cart ──
-    const settings       = await getSettings();
-    const cart           = sanitizeCart(rawCart, settings);
+    const settings = await getSettings(env);
+    const cart = sanitizeCart(rawCart, settings);
     const shippingMethod = shipping?.shipping_method || 'Standard Shipping';
 
     const shippingCost = shipping_cost !== undefined
@@ -133,66 +100,74 @@ exports.handler = async (event) => {
 
     const totalAmount = parseFloat((subtotal + shippingCost + taxAmount).toFixed(2));
 
-    const BASE_SITE  = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
-    const orderId    = `BBW-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+    const BASE_SITE = env.BASE_URL || 'https://bbw4lifee.netlify.app';
+    const orderId = `BBW-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
     const orderTitle = cart.length === 1
       ? cart[0].title.substring(0, 100)
       : `BBW4LIFE — ${cart.length} articles`;
 
     // ── Stocker cart + shipping dans le Sheet temporaire (clé = orderId) ──
-    await saveTempOrder(orderId, cart, shipping);
+    await saveTempOrder(env, orderId, cart, shipping);
     console.log('[NOWPAYMENTS] Temp order saved | orderId:', orderId);
 
     const invoiceBody = {
-      price_amount:        totalAmount,
-      price_currency:      'usd',
-      order_id:            orderId,
-      order_description:   orderTitle,
-      ipn_callback_url:    `${BASE_SITE}/.netlify/functions/nowpayments-webhook`,
-      success_url:         `${BASE_SITE}/thankyou.html?provider=nowpayments&orderId=${orderId}`,
-      cancel_url:          `${BASE_SITE}/checkout.html`,
-      is_fixed_rate:       false,
+      price_amount: totalAmount,
+      price_currency: 'usd',
+      order_id: orderId,
+      order_description: orderTitle,
+      ipn_callback_url: `${BASE_SITE}/nowpayments-webhook`,
+      success_url: `${BASE_SITE}/thankyou.html?provider=nowpayments&orderId=${orderId}`,
+      cancel_url: `${BASE_SITE}/checkout.html`,
+      is_fixed_rate: false,
       is_fee_paid_by_user: false,
     };
 
     console.log('[NOWPAYMENTS] Creating invoice:', orderId, '| Amount:', totalAmount, 'USD');
 
-    const result = await httpsPost(
-      BASE_URL_NOW,
-      '/v1/invoice',
-      invoiceBody,
-      { 'x-api-key': API_KEY }
-    );
+    const nowRes = await fetch(`${BASE_URL_NOW}/v1/invoice`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY
+      },
+      body: JSON.stringify(invoiceBody)
+    });
 
-    console.log('[NOWPAYMENTS] Response status:', result.status);
+    let data = {};
+    try { data = await nowRes.json(); } catch {}
 
-    if (result.status !== 200 || !result.data.invoice_url) {
-      console.error('[NOWPAYMENTS] Error response:', JSON.stringify(result.data));
+    console.log('[NOWPAYMENTS] Response status:', nowRes.status);
+
+    if (nowRes.status !== 200 || !data.invoice_url) {
+      console.error('[NOWPAYMENTS] Error response:', JSON.stringify(data));
       return res(500, {
         success: false,
-        error: result.data?.message || result.data?.error || 'NOWPayments invoice creation failed'
+        error: data?.message || data?.error || 'NOWPayments invoice creation failed'
       });
     }
 
-    console.log('[NOWPAYMENTS] Invoice created:', result.data.id);
+    console.log('[NOWPAYMENTS] Invoice created:', data.id);
 
     return res(200, {
-      success:    true,
-      invoiceUrl: result.data.invoice_url,
+      success: true,
+      invoiceUrl: data.invoice_url,
       orderId,
-      paymentId:  result.data.id,
+      paymentId: data.id,
     });
 
   } catch (err) {
     console.error('[NOWPAYMENTS] Fatal:', err.message);
     return res(500, { success: false, error: err.message || 'Internal server error' });
   }
-};
+}
+
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
+}
 
 function res(statusCode, body) {
-  return {
-    statusCode,
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  };
+  });
 }

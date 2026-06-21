@@ -1,55 +1,38 @@
-process.removeAllListeners('warning');
-const https = require('https');
+// functions/get-exchange-rates.js
+
 // Cache en mémoire (6 heures)
 let cachedRates = null;
-let cacheTime   = 0;
+let cacheTime = 0;
 const CACHE_TTL = 6 * 60 * 60 * 1000; // 6h
 
-exports.handler = async function () {
+export async function onRequestGet() {
   const now = Date.now();
 
   // Retourner le cache si encore valide
   if (cachedRates && (now - cacheTime) < CACHE_TTL) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ success: true, rates: cachedRates, cached: true })
-    };
+    return jsonResponse(200, { success: true, rates: cachedRates, cached: true });
   }
 
   // Appel API — exchangerate.host (gratuit, pas de clé requise)
-  return new Promise((resolve) => {
-    https.get('https://api.exchangerate.host/latest?base=USD', (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(data);
-          if (json && json.rates) {
-            cachedRates = json.rates;
-            cacheTime   = now;
-            resolve({
-              statusCode: 200,
-              headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-              body: JSON.stringify({ success: true, rates: cachedRates, cached: false })
-            });
-          } else {
-            throw new Error('Invalid response');
-          }
-        } catch (e) {
-          resolve({
-            statusCode: 500,
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({ success: false, error: e.message })
-          });
-        }
-      });
-    }).on('error', (e) => {
-      resolve({
-        statusCode: 500,
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify({ success: false, error: e.message })
-      });
-    });
+  try {
+    const res = await fetch('https://api.exchangerate.host/latest?base=USD');
+    const json = await res.json();
+
+    if (json && json.rates) {
+      cachedRates = json.rates;
+      cacheTime = now;
+      return jsonResponse(200, { success: true, rates: cachedRates, cached: false });
+    } else {
+      throw new Error('Invalid response');
+    }
+  } catch (e) {
+    return jsonResponse(500, { success: false, error: e.message });
+  }
+}
+
+function jsonResponse(statusCode, body) {
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
   });
-};
+}

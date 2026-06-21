@@ -1,12 +1,21 @@
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+export async function onRequestPost(context) {
+  const { request, env } = context;
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    body = {};
   }
-  const body = JSON.parse(event.body || '{}');
-  const ok   = body.password === process.env.EPROLO_PASSWORD;
-  return {
-    statusCode: ok ? 200 : 401,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok })
-  };
-};
+
+  const ok = body.password === env.EPROLO_PASSWORD;
+
+  return new Response(JSON.stringify({ ok }), {
+    status: ok ? 200 : 401,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
+}

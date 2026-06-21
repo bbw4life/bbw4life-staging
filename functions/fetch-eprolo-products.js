@@ -1,6 +1,4 @@
-// fetch-eprolo-products.js — VERSION PARALLÈLE + CATÉGORIES
-process.removeAllListeners('warning');
-const crypto = require('crypto');
+// functions/fetch-eprolo-products.js — VERSION PARALLÈLE + CATÉGORIES
 
 const CATEGORIES = [
   {
@@ -37,7 +35,6 @@ const CATEGORIES = [
   },
 ];
 
-// Flat list of all IDs with their category/subcategory info
 const ALL_PRODUCT_ENTRIES = [];
 CATEGORIES.forEach(cat => {
   cat.subcategories.forEach(sub => {
@@ -47,10 +44,64 @@ CATEGORIES.forEach(cat => {
   });
 });
 
-const SEP  = "═".repeat(80);
+const SEP = "═".repeat(80);
 const SEP2 = "─".repeat(80);
 
-exports.handler = async (event) => {
+// ── MD5 pure JS (remplace crypto.createHash('md5'), absent de Web Crypto) ──
+async function md5(text) {
+  function rotateLeft(n, s) { return (n << s) | (n >>> (32 - s)); }
+  function toHex(n) {
+    let s = '', v;
+    for (let i = 0; i < 4; i++) {
+      v = (n >>> (i * 8)) & 255;
+      s += ('0' + v.toString(16)).slice(-2);
+    }
+    return s;
+  }
+  function utf8Encode(str) { return unescape(encodeURIComponent(str)); }
+
+  const msg = utf8Encode(text);
+  const msgLen = msg.length;
+  const wordArray = [];
+  for (let i = 0; i < msgLen - 3; i += 4) {
+    wordArray.push(msg.charCodeAt(i) | (msg.charCodeAt(i + 1) << 8) | (msg.charCodeAt(i + 2) << 16) | (msg.charCodeAt(i + 3) << 24));
+  }
+  switch (msgLen % 4) {
+    case 0: wordArray.push(0x80); break;
+    case 1: wordArray.push(msg.charCodeAt(msgLen - 1) | 0x8000); break;
+    case 2: wordArray.push(msg.charCodeAt(msgLen - 2) | (msg.charCodeAt(msgLen - 1) << 8) | 0x800000); break;
+    case 3: wordArray.push(msg.charCodeAt(msgLen - 3) | (msg.charCodeAt(msgLen - 2) << 8) | (msg.charCodeAt(msgLen - 1) << 16) | 0x80000000); break;
+  }
+  while (wordArray.length % 16 !== 14) wordArray.push(0);
+  wordArray.push(msgLen * 8);
+  wordArray.push(0);
+
+  const S = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
+  const K = [];
+  for (let i = 0; i < 64; i++) K[i] = Math.floor(Math.abs(Math.sin(i + 1)) * 4294967296);
+
+  let a0 = 1732584193, b0 = -271733879, c0 = -1732584194, d0 = 271733878;
+
+  for (let blockStart = 0; blockStart < wordArray.length; blockStart += 16) {
+    let A = a0, B = b0, C = c0, D = d0;
+    for (let i = 0; i < 64; i++) {
+      let F, g;
+      if (i < 16) { F = (B & C) | (~B & D); g = i; }
+      else if (i < 32) { F = (D & B) | (~D & C); g = (5 * i + 1) % 16; }
+      else if (i < 48) { F = B ^ C ^ D; g = (3 * i + 5) % 16; }
+      else { F = C ^ (B | ~D); g = (7 * i) % 16; }
+      F = (F + A + K[i] + (wordArray[blockStart + g] || 0)) | 0;
+      A = D; D = C; C = B;
+      B = (B + rotateLeft(F, S[i])) | 0;
+    }
+    a0 = (a0 + A) | 0; b0 = (b0 + B) | 0; c0 = (c0 + C) | 0; d0 = (d0 + D) | 0;
+  }
+
+  return toHex(a0) + toHex(b0) + toHex(c0) + toHex(d0);
+}
+
+export async function onRequestGet(context) {
+  const { env } = context;
   const logs = [];
   const log = (msg) => { console.log(msg); logs.push(msg); };
 
@@ -60,23 +111,19 @@ exports.handler = async (event) => {
   log(SEP);
 
   try {
-    const apiKey    = process.env.EPROLO_API_KEY;
-    const apiSecret = process.env.EPROLO_API_SECRET;
+    const apiKey = env.EPROLO_API_KEY;
+    const apiSecret = env.EPROLO_API_SECRET;
 
-    // Fetch all products in parallel
     const results = await Promise.all(
       ALL_PRODUCT_ENTRIES.map(async (entry) => {
         const { id: productId, category, subcategory } = entry;
         try {
           const timestamp = Date.now();
-          const sign = crypto
-            .createHash('md5')
-            .update(apiKey + timestamp + apiSecret)
-            .digest('hex');
+          const sign = await md5(apiKey + timestamp + apiSecret);
 
           const url = `https://openapi.eprolo.com/getproduct.html?sign=${sign}&timestamp=${timestamp}&id=${productId}`;
 
-          const response     = await fetch(url, { method: "GET", headers: { "apiKey": apiKey } });
+          const response = await fetch(url, { method: "GET", headers: { "apiKey": apiKey } });
           const responseText = await response.text();
 
           let data = {};
@@ -124,25 +171,25 @@ exports.handler = async (event) => {
         let color = (variant.option1 || 'N/A').replace(/ one$/i, '').trim();
         color = color.charAt(0).toUpperCase() + color.slice(1);
 
-        const size    = (variant.option2 || '').trim();
+        const size = (variant.option2 || '').trim();
         const option3 = (variant.option3 || '').trim();
 
         if (!colorGroups[color]) colorGroups[color] = [];
         colorGroups[color].push({
           size,
           option3,
-          id:     variant.id,
-          sku:    variant.sku                || 'N/A',
-          price:  variant.cost               || 'N/A',
-          weight: variant.weight             || 'N/A',
-          stock:  variant.inventory_quantity || 'N/A'
+          id: variant.id,
+          sku: variant.sku || 'N/A',
+          price: variant.cost || 'N/A',
+          weight: variant.weight || 'N/A',
+          stock: variant.inventory_quantity || 'N/A'
         });
       });
 
       Object.entries(colorGroups).forEach(([color, variants]) => {
         log(`        🎨  ${color}  (${variants.length} taille(s))`);
         variants.forEach((v) => {
-          const sizeStr = v.size    ? `SIZE: ${v.size.padEnd(6)}` : `SIZE: ${'—'.padEnd(6)}`;
+          const sizeStr = v.size ? `SIZE: ${v.size.padEnd(6)}` : `SIZE: ${'—'.padEnd(6)}`;
           const opt3Str = v.option3 ? `  |  OPT3: ${v.option3}` : '';
           log(`              ID: ${v.id}  |  ${sizeStr}  |  SKU: ${v.sku}  |  PRIX: $${v.price}  |  POIDS: ${v.weight}g  |  STOCK: ${v.stock}${opt3Str}`);
         });
@@ -154,26 +201,25 @@ exports.handler = async (event) => {
     log("  ✅  FIN DU LOG");
     log(SEP);
 
-    return {
-      statusCode: 200,
+    return new Response(JSON.stringify({
+      success: true,
+      total: allProducts.length,
+      logs: logs,
+      products: allProducts,
+      categories: CATEGORIES.map(cat => cat.category),
+    }), {
+      status: 200,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*"
-      },
-      body: JSON.stringify({
-        success:     true,
-        total:       allProducts.length,
-        logs:        logs,
-        products:    allProducts,
-        categories:  CATEGORIES.map(cat => cat.category),
-      })
-    };
+      }
+    });
 
   } catch (error) {
     console.error("[EPROLO ERROR]", error.message);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, error: error.message, logs })
-    };
+    return new Response(JSON.stringify({ success: false, error: error.message, logs }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
-};
+}

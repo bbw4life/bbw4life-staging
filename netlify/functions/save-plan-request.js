@@ -1,108 +1,96 @@
-process.removeAllListeners('warning');
-const { google } = require('googleapis');
-const { notifyTelegram } = require('./notify-telegram');
+import { notifyTelegram } from './notify-telegram.js';
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: JSON.stringify({ success: false, error: 'Method not allowed' }) };
-  }
+async function getGoogleAccessToken(env) {
+  const email = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const privateKeyPem = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
+  const header = { alg: 'RS256', typ: 'JWT' };
+  const now = Math.floor(Date.now() / 1000);
+  const claimSet = {
+    iss: email, scope: 'https://www.googleapis.com/auth/spreadsheets',
+    aud: 'https://oauth2.googleapis.com/token', exp: now + 3600, iat: now,
+  };
+  const base64url = (obj) => btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const unsigned = `${base64url(header)}.${base64url(claimSet)}`;
+  const key = await importPrivateKey(privateKeyPem);
+  const signature = await crypto.subtle.sign({ name: 'RSASSA-PKCS1-v1_5' }, key, new TextEncoder().encode(unsigned));
+  const sigBase64 = btoa(String.fromCharCode(...new Uint8Array(signature))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const jwt = `${unsigned}.${sigBase64}`;
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer&assertion=${jwt}`,
+  });
+  if (!tokenRes.ok) throw new Error('Failed to get Google access token');
+  const { access_token } = await tokenRes.json();
+  return access_token;
+}
 
+async function importPrivateKey(pem) {
+  const pemContents = pem.replace('-----BEGIN PRIVATE KEY-----', '').replace('-----END PRIVATE KEY-----', '').replace(/\s/g, '');
+  const binaryDer = Uint8Array.from(atob(pemContents), c => c.charCodeAt(0));
+  return crypto.subtle.importKey('pkcs8', binaryDer, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+}
+
+async function sheetsAppend(accessToken, spreadsheetId, range, values) {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${encodeURIComponent(range)}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`;
+  const res = await fetch(url, {
+    method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ values })
+  });
+  if (!res.ok) throw new Error(`Sheets append failed: ${await res.text()}`);
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
   try {
-    
     const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      program,
-      productId,
-      size,
-      color,
-      consent
-    } = JSON.parse(event.body);
+      firstName, lastName, email, phone, program, productId, size, color, consent
+    } = await request.json();
 
     if (!firstName || !lastName || !email || !program) {
-      return { statusCode: 400, body: JSON.stringify({ success: false, error: 'Missing required fields' }) };
+      return jsonResponse(400, { success: false, error: 'Missing required fields' });
     }
 
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key:  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n')
-      },
-      scopes: ['https://www.googleapis.com/auth/spreadsheets']
-    });
-
-    const sheets        = google.sheets({ version: 'v4', auth });
-    const spreadsheetId = process.env.SHEET_ID_BBW4LIFE_PLAN_REQUEST;
+    const spreadsheetId = env.SHEET_ID_BBW4LIFE_PLAN_REQUEST;
+    const accessToken = await getGoogleAccessToken(env);
 
     function formatDate() {
       const d = new Date();
       return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear().toString().slice(-2)} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
     }
 
-    
     const values = [[
-      formatDate(),      
-      firstName,         
-      lastName,          
-      email,             
-      phone || '',       
-      program,           
-      productId || '',   
-      size || '',        
-      color || '',       
-      consent || 'Yes',  
-      'Pending'          
+      formatDate(), firstName, lastName, email, phone || '', program,
+      productId || '', size || '', color || '', consent || 'Yes', 'Pending'
     ]];
 
-    await sheets.spreadsheets.values.append({
-      spreadsheetId,
-      range:            'bbw4life-plan-request!A:K',
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      resource:         { values }
-    });
+    await sheetsAppend(accessToken, spreadsheetId, 'bbw4life-plan-request!A:K', values);
 
-    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    fetch(`${env.BASE_URL}/send-email-auto`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        trigger:   'plan_request',
-        email:     email,
-        firstName: firstName,
-        lastName:  lastName,
-        program:   program,
-        productId: productId || '',
-        size:      size  || '',
-        color:     color || ''
+        trigger: 'plan_request', email, firstName, lastName, program,
+        productId: productId || '', size: size || '', color: color || ''
       })
     }).catch(e => console.warn('[Email] plan_request failed:', e.message));
 
-    await notifyTelegram(
-    `⏳ <b>Pdg Francenel, un client vient de mettre en attente un des design BBW4LIFE!</b>\n\n` +
-    `👤 <b>Nom:</b> ${firstName} ${lastName}\n` +
-    `📧 <b>Email:</b> ${email}\n` +
-    `🎨 <b>Produit:</b> ${program}`
-  );
-  // ── Email Custom Product ──
-    fetch(`${process.env.BASE_URL}/.netlify/functions/send-email-auto`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        trigger:       'custom_product',
-        email:         email,
-        firstname:     firstname,
-        lastname:      lastname,
-        product_title: product_title,
-        product_desc:  product_desc
-      })
-    }).catch(e => console.warn('[Email] custom_product failed:', e.message));
+    await notifyTelegram(env,
+      `⏳ <b>Pdg Francenel, un client vient de mettre en attente un des design BBW4LIFE!</b>\n\n` +
+      `👤 <b>Nom:</b> ${firstName} ${lastName}\n` +
+      `📧 <b>Email:</b> ${email}\n` +
+      `🎨 <b>Produit:</b> ${program}`
+    );
 
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
-
+    return jsonResponse(200, { success: true });
   } catch (error) {
     console.error('PLAN REQUEST ERROR:', error.message);
-    return { statusCode: 500, body: JSON.stringify({ success: false, error: error.message }) };
+    return jsonResponse(500, { success: false, error: error.message });
   }
-};
+}
+
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
+}
+
+function jsonResponse(statusCode, body) {
+  return new Response(JSON.stringify(body), { status: statusCode, headers: { 'Content-Type': 'application/json' } });
+}

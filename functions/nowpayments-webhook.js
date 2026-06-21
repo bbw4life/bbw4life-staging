@@ -1,26 +1,47 @@
-process.removeAllListeners('warning');
-const crypto = require('crypto');
-const fetch  = require('node-fetch');
-const { getAndDeleteTempOrder } = require('./temp-orders-store');
+// functions/nowpayments-webhook.js
+import { getAndDeleteTempOrder } from './temp-orders-store.js';
 
-const IPN_SECRET = process.env.NOWPAYMENTS_IPN_SECRET;
+function sortObject(obj) {
+  if (typeof obj !== 'object' || obj === null) return obj;
+  if (Array.isArray(obj)) return obj.map(sortObject);
+  return Object.keys(obj).sort().reduce((sorted, key) => {
+    sorted[key] = sortObject(obj[key]);
+    return sorted;
+  }, {});
+}
 
-exports.handler = async (event) => {
+// ── HMAC-SHA512 via Web Crypto (remplace crypto.createHmac) ──
+async function hmacSha512Hex(secret, message) {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-512' },
+    false,
+    ['sign']
+  );
+  const signature = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const IPN_SECRET = env.NOWPAYMENTS_IPN_SECRET;
+
   try {
-    if (event.httpMethod !== 'POST') {
-      return res(405, { error: 'Method not allowed' });
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      body = {};
     }
 
-    const body = JSON.parse(event.body || '{}');
-
     // ── Vérification signature IPN ──
-    const signature = event.headers['x-nowpayments-sig'];
+    const signature = request.headers.get('x-nowpayments-sig');
     if (signature && IPN_SECRET) {
       const sortedBody = JSON.stringify(sortObject(body));
-      const hmac = crypto
-        .createHmac('sha512', IPN_SECRET)
-        .update(sortedBody)
-        .digest('hex');
+      const hmac = await hmacSha512Hex(IPN_SECRET, sortedBody);
 
       if (hmac !== signature) {
         console.error('[NOWPAYMENTS WEBHOOK] Invalid signature');
@@ -37,19 +58,19 @@ exports.handler = async (event) => {
       return res(200, { received: true });
     }
 
-    const BASE_SITE = process.env.BASE_URL || 'https://bbw4lifee.netlify.app';
-    const orderId   = body.order_id;
+    const BASE_SITE = env.BASE_URL || 'https://bbw4lifee.netlify.app';
+    const orderId = body.order_id;
 
     // ── Récupérer cart + shipping depuis le Sheet temporaire ──
-    let cart     = [];
+    let cart = [];
     let shipping = {};
     try {
-      const tempOrder = await getAndDeleteTempOrder(orderId);
+      const tempOrder = await getAndDeleteTempOrder(env, orderId);
       if (!tempOrder) {
         console.error('[NOWPAYMENTS WEBHOOK] No temp order found for orderId:', orderId);
         return res(404, { error: 'Order data not found' });
       }
-      cart     = tempOrder.cart     || [];
+      cart = tempOrder.cart || [];
       shipping = tempOrder.shipping || {};
       console.log('[NOWPAYMENTS WEBHOOK] Cart + shipping récupérés | items:', cart.length);
     } catch (e) {
@@ -58,14 +79,13 @@ exports.handler = async (event) => {
     }
 
     // ── Appeler verify-payment avec cart + shipping ──
-    // Fix: verify-payment.js lit `orderID` (pas `paymentId`) pour NOWPayments
     try {
-      await fetch(`${BASE_SITE}/.netlify/functions/verify-payment`, {
-        method:  'POST',
+      await fetch(`${BASE_SITE}/verify-payment`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          provider:    'nowpayments',
-          orderID:     orderId,
+        body: JSON.stringify({
+          provider: 'nowpayments',
+          orderID: orderId,
           cart,
           shipping,
           totalAmount: body.price_amount
@@ -78,11 +98,11 @@ exports.handler = async (event) => {
 
     // ── Notifier Telegram ──
     try {
-      await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method:  'POST',
+      await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id:    process.env.TELEGRAM_CHAT_ID,
+          chat_id: env.TELEGRAM_CHAT_ID,
           parse_mode: 'HTML',
           text: `💎 <b>Paiement Crypto Confirmé!</b>\n\n` +
                 `🔢 <b>Order:</b> ${orderId}\n` +
@@ -102,21 +122,15 @@ exports.handler = async (event) => {
     console.error('[NOWPAYMENTS WEBHOOK] Fatal:', err.message);
     return res(500, { error: 'Internal server error' });
   }
-};
+}
 
-function sortObject(obj) {
-  if (typeof obj !== 'object' || obj === null) return obj;
-  if (Array.isArray(obj)) return obj.map(sortObject);
-  return Object.keys(obj).sort().reduce((sorted, key) => {
-    sorted[key] = sortObject(obj[key]);
-    return sorted;
-  }, {});
+export async function onRequestGet() {
+  return new Response('Method Not Allowed', { status: 405 });
 }
 
 function res(statusCode, body) {
-  return {
-    statusCode,
+  return new Response(JSON.stringify(body), {
+    status: statusCode,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  };
+  });
 }
