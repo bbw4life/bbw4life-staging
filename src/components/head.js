@@ -1011,27 +1011,20 @@ function injectGlobalHead() {
             const temp = document.createElement('div');
             temp.innerHTML = html;
             Array.from(temp.children).forEach(el => {
-                try {
-                    if (el.tagName === 'SCRIPT') {
-                        const s = document.createElement('script');
-                        if (el.src) {
-                            s.src = el.src;
-                        } else {
-                            const blob = new Blob([el.textContent], {type: 'text/javascript'});
-                            s.src = URL.createObjectURL(blob);
-                        }
-                        s.defer = el.defer;
-                        document.head.appendChild(s);
-                    } else {
-                        document.head.appendChild(el.cloneNode(true));
-                    }
-                } catch(e) {
-                    console.warn('[Head] Element skip:', e.message);
+                if (el.tagName === 'SCRIPT') {
+                    // Recrée le script pour forcer l'exécution
+                    const s = document.createElement('script');
+                    if (el.src) s.src = el.src;
+                    else s.textContent = el.textContent;
+                    s.defer = el.defer;
+                    document.head.appendChild(s);
+                } else {
+                    document.head.appendChild(el.cloneNode(true));
                 }
             });
         })
         .catch(err => console.error('[Head] Failed to load head.html:', err));
-}
+        }
 
         
         function injectPageSEO() {
@@ -1104,6 +1097,7 @@ function injectGlobalHead() {
     canonical.href = seo.canonical;
 }
 
-injectPageSEO();
-injectBlogSchema();
-injectGlobalHead();
+injectGlobalHead().then(() => {
+    injectPageSEO();
+    injectBlogSchema();
+});
