@@ -4844,10 +4844,10 @@ if (window.innerWidth <= 768) {
       if (window.__seoTitle) {
         clearInterval(poll);
         build(window.__seoTitle);
-      } else if (attempts > 50) {
+      } else if (attempts > 200) {
         clearInterval(poll);
         build(document.title);
-      }
+    }
     }, 100);
   }
 

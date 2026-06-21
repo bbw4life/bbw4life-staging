@@ -1,0 +1,5 @@
+/src/components/head.html
+  Cache-Control: public, max-age=300
+
+/src/components/*.html
+  Cache-Control: public, max-age=300
