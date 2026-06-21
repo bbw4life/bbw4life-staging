@@ -221,11 +221,7 @@ export async function onRequestPost(context) {
     // ==================== UPDATE CART QUANTITY ====================
     if (action === 'update-cart-quantity') {
       if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-      const { cartItemIds = [] } = body;
-      await sheetsBatchUpdate(accessToken, spreadsheetId, [
-        { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] },
-        { range: `bbw4life-accounts!AC${rowNum}`, values: [[JSON.stringify(cartItemIds)]] }
-      ]);
+      await sheetsUpdate(accessToken, spreadsheetId, `bbw4life-accounts!O${rowNum}`, [[currentCartQuantity]]);
       return jsonResponse(200, { success: true });
     }
 
@@ -267,8 +263,7 @@ export async function onRequestPost(context) {
         line2: currentRow[10] || "",
         city: currentRow[11] || "",
         state: currentRow[12] || "",
-        zip: currentRow[13] || "",
-        cartItemIds: (() => { try { return JSON.parse(currentRow[28] || "[]"); } catch(e) { return []; } })()
+        zip: currentRow[13] || ""
       });
     }
 
