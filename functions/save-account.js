@@ -219,29 +219,25 @@ export async function onRequestPost(context) {
     }
 
     // ==================== UPDATE CART QUANTITY + CONTENT ====================
-    if (action === 'update-cart-quantity') {
-      if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-      const { cartContent = null } = body;
+      if (action === 'update-cart-quantity') {
+        if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
+        const { cartContent = null } = body;
 
-      const updateData = [
-        { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] }
-      ];
+        const updateData = [
+          { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] }
+        ];
 
-      // Sauvegarder le contenu complet du panier si fourni (colonne AC = index 28)
-      if (cartContent !== null) {
-        updateData.push({
-          range: `bbw4life-accounts!AC${rowNum}`,
-          values: [[JSON.stringify(cartContent)]]
-        });
+        if (cartContent !== null) {
+          updateData.push({
+            range: `bbw4life-accounts!AC${rowNum}`,
+            values: [[JSON.stringify(cartContent)]]
+          });
+        }
+
+        await sheetsBatchUpdate(accessToken, spreadsheetId, updateData);
+
+        return jsonResponse(200, { success: true });
       }
-
-      await sheets.spreadsheets.values.batchUpdate({
-        spreadsheetId,
-        resource: { valueInputOption: "RAW", data: updateData }
-      });
-
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
-    }
 
     // ==================== RECORD ORDER ====================
     if (action === 'record-order') {
