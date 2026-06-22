@@ -218,11 +218,29 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: true });
     }
 
-    // ==================== UPDATE CART QUANTITY ====================
+    // ==================== UPDATE CART QUANTITY + CONTENT ====================
     if (action === 'update-cart-quantity') {
       if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-      await sheetsUpdate(accessToken, spreadsheetId, `bbw4life-accounts!O${rowNum}`, [[currentCartQuantity]]);
-      return jsonResponse(200, { success: true });
+      const { cartContent = null } = body;
+
+      const updateData = [
+        { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] }
+      ];
+
+      // Sauvegarder le contenu complet du panier si fourni (colonne AC = index 28)
+      if (cartContent !== null) {
+        updateData.push({
+          range: `bbw4life-accounts!AC${rowNum}`,
+          values: [[JSON.stringify(cartContent)]]
+        });
+      }
+
+      await sheets.spreadsheets.values.batchUpdate({
+        spreadsheetId,
+        resource: { valueInputOption: "RAW", data: updateData }
+      });
+
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
     }
 
     // ==================== RECORD ORDER ====================
@@ -251,20 +269,21 @@ export async function onRequestPost(context) {
       try { history = JSON.parse(currentRow[16] || "[]"); } catch(e) {}
 
       return jsonResponse(200, {
-        orders: parseInt(currentRow[6] || 0),
-        totalSpent: parseFloat(currentRow[7] || 0),
-        quantityInCart: parseInt(currentRow[14] || 0),
-        history: history,
-        memberSince: currentRow[15] || "January 2026",
-        points: parseInt(currentRow[6] || 0) * 10,
-        reviewsCount: parseInt(currentRow[8] || 0),
-        profilePhoto: currentRow[17] || "",
-        addressLine1: currentRow[9] || "",
-        line2: currentRow[10] || "",
-        city: currentRow[11] || "",
-        state: currentRow[12] || "",
-        zip: currentRow[13] || ""
-      });
+      orders:         parseInt(currentRow[6]  || 0),
+      totalSpent:     parseFloat(currentRow[7] || 0),
+      quantityInCart: parseInt(currentRow[14] || 0),
+      history:        history,
+      memberSince:    currentRow[15] || "January 2026",
+      points:         parseInt(currentRow[6]  || 0) * 10,
+      reviewsCount:   parseInt(currentRow[8]  || 0),
+      profilePhoto:   currentRow[17] || "",
+      addressLine1:   currentRow[9]  || "",
+      line2:          currentRow[10] || "",
+      city:           currentRow[11] || "",
+      state:          currentRow[12] || "",
+      zip:            currentRow[13] || "",
+      savedCart:      currentRow[28] || "[]"
+    });
     }
 
     // ==================== NEWSLETTER SUBSCRIBE ====================
@@ -294,7 +313,7 @@ export async function onRequestPost(context) {
           formatDate(), "[]", "", "", "", "", "", "", "", "", "", "", "", birthday || ""
         ];
 
-        await sheetsAppend(accessToken, spreadsheetId, "bbw4life-accounts!A:Z", [rowData]);
+        await sheetsAppend(accessToken, spreadsheetId, "bbw4life-accounts!A:AE", [rowData]);
       }
 
       fetch(`${env.BASE_URL}/send-email-auto`, {
