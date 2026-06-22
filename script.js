@@ -3384,7 +3384,11 @@ window.updateWishlistIcons = updateWishlistIcons;
 
 // Ces 4 lignes sont NOUVELLES — à ajouter
 window.__getCart = () => cart;
-window.__setCart = (c) => { cart = c; };
+window.__setCart = (c) => { 
+  cart = c;
+  localStorage.setItem('cart', JSON.stringify(cart));
+  window.cart = cart;
+};
 window.__getWishlist = () => wishlist;
 window.__setWishlist = (w) => { wishlist = w; };
 
@@ -6393,8 +6397,87 @@ document.addEventListener('submit', async function(e) {
   window.cart = cart;
   document.dispatchEvent(new Event('cart:update'));
   if (typeof window.__rcRefresh === 'function') window.__rcRefresh();
+
+  // ── Sync vers le sheet si connecté ──
+  const userEmail = localStorage.getItem('userEmail');
+  if (userEmail) {
+    updateCartQuantityInSheet();
+  }
+
+  const wishlistCountEl = document.querySelector('[data-wishlist-count]');
+  if (wishlistCountEl) {
+    const qty = cart.reduce((sum, i) => sum + i.quantity, 0);
+    wishlistCountEl.textContent = qty;
+  }
 }
 function saveWishlist() { localStorage.setItem('wishlist', JSON.stringify(wishlist)); }
+
+
+window.__bbwRestoreSavedCart = async function (userEmail, token) {
+    if (!userEmail) return;
+    try {
+      const res = await fetch('/save-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'get-stats', email: userEmail, token })
+      });
+      const data = await res.json();
+      if (!data || !data.savedCart) return;
+
+      let savedCart = [];
+      try { savedCart = JSON.parse(data.savedCart); } catch (e) { savedCart = []; }
+      if (!Array.isArray(savedCart) || savedCart.length === 0) return;
+
+      // ── Fusionner avec le cart local ──
+      let localCart = [];
+      try { localCart = JSON.parse(localStorage.getItem('cart') || '[]'); } catch (e) { localCart = []; }
+
+      savedCart.forEach(function (savedItem) {
+        const existing = localCart.find(function (i) {
+          return i.id === savedItem.id && i.color === savedItem.color && i.size === savedItem.size;
+        });
+        if (existing) {
+          existing.quantity = Math.max(existing.quantity, savedItem.quantity);
+        } else {
+          localCart.push(savedItem);
+        }
+      });
+
+      // ── CRITIQUE : pousser dans la variable cart via __setCart ──
+      if (typeof window.__setCart === 'function') {
+        window.__setCart(localCart);
+      } else {
+        localStorage.setItem('cart', JSON.stringify(localCart));
+      }
+
+      // ── Attendre que le DOM soit prêt puis mettre à jour l'UI ──
+      function applyCartToUI() {
+        // Sync le badge cart header
+        const cartQty = localCart.reduce((sum, i) => sum + i.quantity, 0);
+        document.querySelectorAll('.cart-badge').forEach(badge => {
+          badge.textContent = cartQty;
+          badge.classList.toggle('active', cartQty > 0);
+        });
+        // Sync items in cart sur la page account
+        const wishlistCountEl = document.querySelector('[data-wishlist-count]');
+        if (wishlistCountEl) wishlistCountEl.textContent = cartQty;
+
+        if (typeof window.updateBadges === 'function') window.updateBadges();
+        if (typeof window.renderCart   === 'function') window.renderCart();
+        if (typeof window.updateCartQuantityInSheet === 'function') window.updateCartQuantityInSheet();
+      }
+
+      // Petit délai pour s'assurer que les fonctions sont disponibles
+      if (typeof window.updateBadges === 'function') {
+        applyCartToUI();
+      } else {
+        setTimeout(applyCartToUI, 800);
+      }
+
+    } catch (e) {
+      console.warn('[CartSync] Restore failed:', e.message);
+    }
+  };
 
 document.dispatchEvent(new Event('wishlist:change'));
 
@@ -6778,7 +6861,12 @@ document.dispatchEvent(new Event('wishlist:change'));
     const qty = cart.reduce((sum, item) => sum + item.quantity, 0);
     await fetch('/save-account', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'update-cart-quantity', email: userEmail, currentCartQuantity: qty })
+      body: JSON.stringify({
+        action: 'update-cart-quantity',
+        email: userEmail,
+        currentCartQuantity: qty,
+        cartContent: cart
+      })
     }).catch(() => {});
   }
 
@@ -7878,6 +7966,26 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('userZip',    data.user.zip    || '');
           const addressStr = [data.user.addressLine1, data.user.line2, data.user.city, data.user.state, data.user.zip].filter(Boolean).join(', ');
           localStorage.setItem('userAddress', addressStr || 'No default address set');
+
+          await new Promise((resolve) => {
+            let tries = 0;
+            const waitForRestore = setInterval(() => {
+              tries++;
+              if (typeof window.__bbwRestoreSavedCart === 'function') {
+                clearInterval(waitForRestore);
+                window.__bbwRestoreSavedCart(email, data.token).then(resolve).catch(resolve);
+              } else if (tries > 50) {
+                clearInterval(waitForRestore);
+                resolve();
+              }
+            }, 100);
+          });
+
+          // Force refresh badge items in cart après restore
+          const _qty = (JSON.parse(localStorage.getItem('cart') || '[]')).reduce((s, i) => s + i.quantity, 0);
+          const _el = document.querySelector('[data-wishlist-count]');
+          if (_el) _el.textContent = _qty;
+
           window.showToast(`Welcome ${data.user.firstName} !`);
           paulPopupOverlay.classList.remove('active');
           if (isAccountPage) location.reload(); else window.location.href = '/account.html';
@@ -7912,9 +8020,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const firstName = localStorage.getItem('userFirstName') || '';
     document.getElementById('user-name').textContent = firstName.charAt(0).toUpperCase() + firstName.slice(1);
     document.getElementById('user-address').textContent = localStorage.getItem('userAddress') || 'No default address set';
-    // ── Charger la photo de profil
-     loadProfilePhoto();
-    setTimeout(loadAccountStats, 3000);
+      // ── Charger la photo de profil
+      loadProfilePhoto();
+      setTimeout(loadAccountStats, 3000);
   }
 
   window.openSavedItems = () => {
@@ -7975,7 +8083,32 @@ document.addEventListener('DOMContentLoaded', () => {
         statValues[1].textContent = `$${(data.totalSpent || 0).toFixed(2)}`;
         statValues[3].textContent = data.reviewsCount || 0;
       }
-      document.querySelector('[data-wishlist-count]').textContent = data.quantityInCart || 0;
+
+
+      // ── Restaurer le cart sauvegardé depuis le sheet ──
+        if (data.savedCart && data.savedCart !== '[]') {
+          let savedCart = [];
+          try { savedCart = JSON.parse(data.savedCart); } catch(e) {}
+          if (Array.isArray(savedCart) && savedCart.length > 0) {
+            let localCart = [];
+            try { localCart = JSON.parse(localStorage.getItem('cart') || '[]'); } catch(e) {}
+            savedCart.forEach(function(savedItem) {
+              const existing = localCart.find(i => i.id === savedItem.id && i.color === savedItem.color && i.size === savedItem.size);
+              if (existing) {
+                existing.quantity = Math.max(existing.quantity, savedItem.quantity);
+              } else {
+                localCart.push(savedItem);
+              }
+            });
+            if (typeof window.__setCart === 'function') window.__setCart(localCart);
+            else localStorage.setItem('cart', JSON.stringify(localCart));
+            if (typeof window.updateBadges === 'function') window.updateBadges();
+          }
+        }
+        const localCartQty = (JSON.parse(localStorage.getItem('cart') || '[]')).reduce((sum, i) => sum + i.quantity, 0);
+        const cartCountEl = document.querySelector('[data-wishlist-count]');
+        if (cartCountEl) cartCountEl.textContent = localCartQty;
+     
 
       const historyContainer = document.querySelector('.order-history');
       if (!historyContainer) {
