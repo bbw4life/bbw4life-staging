@@ -1,4 +1,3 @@
-// functions/save-account.js
 import { google } from 'googleapis';
 import { verifyAccountToken } from './account-token.js';
 
@@ -6,22 +5,17 @@ export default {
   async fetch(request, env) {
     if (request.method !== 'POST') {
       return new Response(JSON.stringify({ success: false, error: "Method not allowed" }), {
-        status: 405,
-        headers: { 'Content-Type': 'application/json' }
+        status: 405, headers: { 'Content-Type': 'application/json' }
       });
     }
 
     try {
       const body = JSON.parse(await request.text());
-      const {
-        action = 'signup', lastName, firstName, email, phone = "", password,
-        newsletter = "No", birthday = "",
-        line1, line2, city, state, zip, newPassword,
-        totalAmount = 0, totalQuantity = 0, orderItems = [],
-        currentCartQuantity = null, token
-      } = body;
+      const { action = 'signup', lastName, firstName, email, phone = "", password, newsletter = "No", birthday = "",
+              line1, line2, city, state, zip, newPassword,
+              totalAmount = 0, totalQuantity = 0, orderItems = [],
+              currentCartQuantity = null, token } = body;
 
-      // ── Actions sensibles : nécessitent un token valide lié à l'email ──
       const PROTECTED_ACTIONS = [
         'get-stats',
         'update-address',
@@ -35,8 +29,7 @@ export default {
       if (PROTECTED_ACTIONS.includes(action)) {
         if (!verifyAccountToken(email, token)) {
           return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), {
-            status: 401,
-            headers: { 'Content-Type': 'application/json' }
+            status: 401, headers: { 'Content-Type': 'application/json' }
           });
         }
       }
@@ -78,22 +71,16 @@ export default {
           body: JSON.stringify({ trigger: 'welcome', email, firstName, lastName, newsletter }),
         }).catch(e => console.warn('[Email] welcome trigger failed:', e.message));
 
-        // ── Email Newsletter #1 ──
         if ((newsletter || '').toLowerCase() === 'yes') {
           fetch(`${env.BASE_URL}/api/send-email-auto`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              trigger:   'newsletter_1',
-              email:     email,
-              firstName: firstName
-            })
+            body: JSON.stringify({ trigger: 'newsletter_1', email, firstName })
           }).catch(e => console.warn('[Email] newsletter_1 failed:', e.message));
         }
 
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -108,25 +95,22 @@ export default {
           resource: { values: [[photoBase64 || ""]] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
       // ==================== UPDATE ADDRESS ====================
       if (action === 'update-address') {
         if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-        await sheets.spreadsheets.values.update({
-          spreadsheetId, range: `bbw4life-accounts!J${rowNum}:N${rowNum}`, valueInputOption: "RAW",
+        await sheets.spreadsheets.values.update({ spreadsheetId, range: `bbw4life-accounts!J${rowNum}:N${rowNum}`, valueInputOption: "RAW",
           resource: { values: [[line1 || "", line2 || "", city || "", state || "", zip || ""]] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
-      // ==================== RESET PASSWORD (Forgot Password) ====================
+      // ==================== RESET PASSWORD ====================
       if (action === 'reset-password') {
         const { newPassword } = body;
         if (!email || !newPassword) throw new Error("Email and new password are required");
@@ -136,8 +120,7 @@ export default {
 
         if (rowIdx === -1) {
           return new Response(JSON.stringify({ success: false, error: 'EMAIL_NOT_FOUND' }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
 
@@ -150,21 +133,18 @@ export default {
         });
 
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
       // ==================== UPDATE PASSWORD ====================
       if (action === 'update-password') {
         if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-        await sheets.spreadsheets.values.update({
-          spreadsheetId, range: `bbw4life-accounts!E${rowNum}`, valueInputOption: "RAW",
+        await sheets.spreadsheets.values.update({ spreadsheetId, range: `bbw4life-accounts!E${rowNum}`, valueInputOption: "RAW",
           resource: { values: [[normalize(newPassword)]] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -190,8 +170,7 @@ export default {
         });
 
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -217,8 +196,7 @@ export default {
           }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -245,8 +223,7 @@ export default {
           zip:            currentRow[13] || "",
           savedCart:      currentRow[28] || "[]"
         }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -299,20 +276,14 @@ export default {
           });
         }
 
-        // ── Email Newsletter #1 ──
         fetch(`${env.BASE_URL}/api/send-email-auto`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            trigger:   'newsletter_1',
-            email:     email,
-            firstName: firstName || ''
-          })
+          body: JSON.stringify({ trigger: 'newsletter_1', email, firstName: firstName || '' })
         }).catch(e => console.warn('[Email] newsletter_1 failed:', e.message));
 
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -328,12 +299,10 @@ export default {
         const existingUsername = (rows[rowIndex][18] || '').toLowerCase().trim();
         if (existingUsername && existingUsername === newAff.username.toLowerCase().trim()) {
           return new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
 
-        // S=Username, T=Clicks, U=Earnings, V=Orders, W=OrderValue, X=WithdrawStatus, Y=CreatedAt
         await sheets.spreadsheets.values.update({
           spreadsheetId,
           range: `bbw4life-accounts!S${rowNum}:Y${rowNum}`,
@@ -349,8 +318,7 @@ export default {
           ]] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -359,14 +327,11 @@ export default {
         if (!email) throw new Error("Email required");
         if (rowIndex === -1) {
           return new Response(JSON.stringify({ success: true, affiliates: [] }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
 
         const currentRow = rows[rowIndex] || [];
-
-        // S=Username(18), T=Clicks(19), U=Earnings(20), V=Orders(21), W=OrderValue(22), X=WithdrawStatus(23), Y=CreatedAt(24)
         const username        = currentRow[18] || '';
         const clicks          = parseInt(currentRow[19]  || 0);
         const totalMoney      = parseFloat(currentRow[20] || 0);
@@ -377,16 +342,14 @@ export default {
 
         if (!username) {
           return new Response(JSON.stringify({ success: true, affiliates: [] }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
 
         const affiliates = [{ username, clicks, totalMoney, totalOrders, totalOrderValue, withdrawStatus, createdAt }];
 
         return new Response(JSON.stringify({ success: true, affiliates, withdrawStatus }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -409,13 +372,11 @@ export default {
             resource: { values: [[newClicks]] }
           });
           return new Response(JSON.stringify({ success: true, clicks: newClicks }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
         return new Response(JSON.stringify({ success: false, error: 'Username not found' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -441,13 +402,11 @@ export default {
             resource: { values: [[newMoney, newOrders, newOrderVal]] }
           });
           return new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
         return new Response(JSON.stringify({ success: false, error: 'Username not found' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -457,7 +416,6 @@ export default {
         if (!email || !paypalName || !paypalEmail) throw new Error("Missing data");
         if (rowIndex === -1) throw new Error("User not found");
 
-        // X=WithdrawStatus(23), Z=PaypalName(25), AA=PaypalEmail(26)
         await sheets.spreadsheets.values.update({
           spreadsheetId,
           range: `bbw4life-accounts!X${rowNum}:AA${rowNum}`,
@@ -465,8 +423,7 @@ export default {
           resource: { values: [['pending', '', paypalName, paypalEmail]] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -480,7 +437,6 @@ export default {
         if (targetIdx === -1) throw new Error("User not found");
 
         const targetRowNum = targetIdx + 1;
-
         await sheets.spreadsheets.values.update({
           spreadsheetId,
           range: `bbw4life-accounts!X${targetRowNum}`,
@@ -488,8 +444,7 @@ export default {
           resource: { values: [['approved']] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -504,8 +459,7 @@ export default {
           resource: { values: [['yes']] }
         });
         return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -514,15 +468,13 @@ export default {
         if (!email) throw new Error("Email required");
         if (rowIndex === -1) {
           return new Response(JSON.stringify({ success: true, used: false }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
+            status: 200, headers: { 'Content-Type': 'application/json' }
           });
         }
         const currentRow = rows[rowIndex] || [];
         const usedVal = (currentRow[27] || '').toLowerCase().trim();
         return new Response(JSON.stringify({ success: true, used: usedVal === 'yes' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
+          status: 200, headers: { 'Content-Type': 'application/json' }
         });
       }
 
@@ -531,8 +483,7 @@ export default {
     } catch (error) {
       console.error("SAVE ERROR:", error.message);
       return new Response(JSON.stringify({ success: false, error: error.message }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        status: 500, headers: { 'Content-Type': 'application/json' }
       });
     }
   }
