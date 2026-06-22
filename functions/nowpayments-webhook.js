@@ -104,7 +104,7 @@ export async function onRequestPost(context) {
         body: JSON.stringify({
           chat_id: env.TELEGRAM_CHAT_ID,
           parse_mode: 'HTML',
-          text: `💎 <b>Paiement Crypto Confirmé!</b>\n\n` +
+          text: `💎 <b>Pdg Francenel,Un Paiement avec Crypto Confirmé!</b>\n\n` +
                 `🔢 <b>Order:</b> ${orderId}\n` +
                 `💰 <b>Montant:</b> $${body.price_amount} USD\n` +
                 `🪙 <b>Crypto:</b> ${body.pay_amount} ${body.pay_currency?.toUpperCase()}\n` +
