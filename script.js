@@ -8566,15 +8566,17 @@ function loadProfilePhoto() {
 
   /* ────────────────────────────────────────────────────────────
      FETCH CLIENTS AVEC BIRTHDAY AUJOURD'HUI
-     Appel à save-account avec action get-all-birthdays
-     FALLBACK : scan du sheet via save-account
   ────────────────────────────────────────────────────────────── */
-  async function fetchTodayBirthdays() {
+ async function fetchTodayBirthdays() {
     try {
       var res  = await fetch('/save-account', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ action: 'get-today-birthdays' })
+        body:    JSON.stringify({ 
+          action: 'get-today-birthdays',
+          clientDay: new Date().getDate(),
+          clientMonth: new Date().getMonth() + 1
+        })
       });
       var data = await res.json();
       if (data.success && Array.isArray(data.customers)) {
