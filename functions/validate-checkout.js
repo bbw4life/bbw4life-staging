@@ -4,7 +4,6 @@ const RATE_LIMIT_MAP       = new Map();
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_MAX       = 5;
 
-// ── IP ────────────────────────────────────────────────────────────────
 function getClientIp(request) {
   return (
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
@@ -26,7 +25,6 @@ function isRateLimited(ip) {
   return false;
 }
 
-// ── Products ──────────────────────────────────────────────────────────
 async function getAllProductsData(env) {
   try {
     const BASE_URL = env.BASE_URL || '';
@@ -39,7 +37,6 @@ async function getAllProductsData(env) {
   }
 }
 
-// ── Validation ────────────────────────────────────────────────────────
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
 }
@@ -73,7 +70,6 @@ function validateCart(cart) {
   return errors;
 }
 
-// ── Compute total ─────────────────────────────────────────────────────
 function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCode) {
   const cd = settings.cart_drawer || {};
   const SHIPPING_COST = parseFloat(settings.shipping_cost) || 10.00;
@@ -83,7 +79,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
   const buyQty = parseInt(cd.promo_buy_quantity) || 0;
   const getQty = parseInt(cd.promo_get_quantity)  || 0;
 
-  // Produits réels uniquement (exclut le nœud settings)
   const realProducts = allProducts.filter(p => !p.type);
 
   const paidQty = cart
@@ -92,7 +87,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
 
   const sanitized = cart.map(item => {
 
-    // ── Item gratuit promo ──
     if (item.isFreePromo && buyQty && getQty && paidQty >= buyQty) {
       return { ...item, price: 0 };
     }
@@ -100,7 +94,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       return { ...item, isFreePromo: false };
     }
 
-    // ── Bundle : prix calculé CÔTÉ SERVEUR depuis les settings ──
     if (item.fromBundle) {
       const prod = realProducts.find(p => p.id === item.id);
       if (prod) {
@@ -113,14 +106,13 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
           parseFloat(prod.single_discount || 0)
         );
         const minAllowedPrice   = parseFloat((catalogPrice * (1 - maxBundleDiscount / 100)).toFixed(2));
-        const serverBundlePrice = Math.max(minAllowedPrice, catalogPrice * 0.50); // plancher à -50%
+        const serverBundlePrice = Math.max(minAllowedPrice, catalogPrice * 0.50);
 
         return { ...item, price: parseFloat(serverBundlePrice.toFixed(2)) };
       }
       return item;
     }
 
-    // ── Upsell : prix calculé CÔTÉ SERVEUR depuis les settings ──
     if (item.fromUpsell) {
       const prod = realProducts.find(p => p.id === item.id);
       if (prod) {
@@ -147,7 +139,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       return item;
     }
 
-    // ── Prix normal : relit depuis le catalogue ──
     const prod = realProducts.find(p => p.id === item.id);
     if (prod) {
       const variant      = prod.variants?.find(v => String(v.vid) === String(item.cj_variant_id));
@@ -155,7 +146,6 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
       return { ...item, price: isNaN(trustedPrice) ? parseFloat(item.price) : trustedPrice };
     }
 
-    // ── Produit non trouvé dans le catalogue → garde le prix client ──
     return item;
   });
 
@@ -170,18 +160,48 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
   const shipping = isFree ? 0 : SHIPPING_COST;
   const tax      = isFree ? 0 : parseFloat((subtotal * TAX_RATE).toFixed(2));
 
-  // ── Promo code (depuis settings.promos) ──
+  // ── Promo code (depuis settings.promos + birthday_gift) ──
   let discountAmount = 0;
   if (promoCode) {
-    const promos = settings.promos || [];
+    const promos           = settings.promos || [];
+    const birthdayCfg      = settings.birthday_gift || {};
+    const birthdayCode     = (birthdayCfg.promo_code || '').toUpperCase().trim();
+    const birthdayDiscount = parseFloat(
+      (birthdayCfg.promo_discount || '0').toString().replace('%', '').trim()
+    ) || 0;
+
     const paidQtyForPromo = sanitized
       .filter(i => !i.isFreePromo)
       .reduce((s, i) => s + (parseInt(i.quantity) || 0), 0);
-    const promo = promos.find(
-      p => p.code && p.code.toUpperCase() === promoCode.toUpperCase() && p.items === paidQtyForPromo
-    );
-    if (promo && promo.percent > 0) {
-      discountAmount = parseFloat((subtotal * (promo.percent / 100)).toFixed(2));
+
+    const inputCode = (promoCode || '').toUpperCase().trim();
+
+    if (birthdayCode && inputCode === birthdayCode) {
+      if (birthdayDiscount > 0) {
+        const birthdayAllowCombine = (birthdayCfg.allow_combine || 'no').toLowerCase().trim() === 'yes';
+
+        const birthdaySubtotal = sanitized
+          .filter(i => !i.isFreePromo)
+          .reduce((s, i) => s + (parseFloat(i.price) || 0) * (parseInt(i.quantity) || 0), 0);
+
+        if (!birthdayAllowCombine) {
+          const hasBundleOrUpsell = sanitized.some(i => i.fromBundle || i.fromUpsell);
+          if (hasBundleOrUpsell) {
+            discountAmount = 0;
+          } else {
+            discountAmount = parseFloat((birthdaySubtotal * (birthdayDiscount / 100)).toFixed(2));
+          }
+        } else {
+          discountAmount = parseFloat((birthdaySubtotal * (birthdayDiscount / 100)).toFixed(2));
+        }
+      }
+    } else {
+      const promo = promos.find(
+        p => p.code && p.code.toUpperCase() === inputCode && p.items === paidQtyForPromo
+      );
+      if (promo && promo.percent > 0) {
+        discountAmount = parseFloat((subtotal * (promo.percent / 100)).toFixed(2));
+      }
     }
   }
 
@@ -203,15 +223,14 @@ function computeServerTotal(cart, settings, allProducts, shippingMethod, promoCo
   };
 }
 
-// ── HMAC-SHA256 (Web Crypto) ──────────────────────────────────────────
 async function hmacSha256Hex(secret, data) {
-  const enc     = new TextEncoder();
-  const key     = await crypto.subtle.importKey(
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
     'raw', enc.encode(secret),
     { name: 'HMAC', hash: 'SHA-256' },
     false, ['sign']
   );
-  const sig     = await crypto.subtle.sign('HMAC', key, enc.encode(data));
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(data));
   return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
@@ -222,7 +241,6 @@ async function generateCartToken(cart, total, secret) {
 
 async function verifyCartToken(cart, total, token, secret) {
   const expected = await generateCartToken(cart, total, secret);
-  // Comparaison en longueur constante (timing-safe) sans Buffer
   if (expected.length !== token.length) return false;
   let diff = 0;
   for (let i = 0; i < expected.length; i++) {
@@ -231,7 +249,6 @@ async function verifyCartToken(cart, total, token, secret) {
   return diff === 0;
 }
 
-// ── Response helper ───────────────────────────────────────────────────
 function res(statusCode, body) {
   return new Response(JSON.stringify(body), {
     status:  statusCode,
@@ -239,7 +256,6 @@ function res(statusCode, body) {
   });
 }
 
-// ── HANDLER ───────────────────────────────────────────────────────────
 export async function onRequestPost(context) {
   const { request, env } = context;
 

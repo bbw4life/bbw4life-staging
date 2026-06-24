@@ -1,7 +1,6 @@
 // functions/save-account.js
 import { verifyAccountToken } from './account-token.js';
 
-// ── Auth Google via JWT signé avec Web Crypto ──
 async function getGoogleAccessToken(env) {
   const email = env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const privateKeyPem = env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n');
@@ -113,7 +112,6 @@ export async function onRequestPost(context) {
             totalAmount = 0, totalQuantity = 0, orderItems = [],
             currentCartQuantity = null, token } = body;
 
-    // ── Actions sensibles : nécessitent un token valide lié à l'email ──
     const PROTECTED_ACTIONS = [
       'get-stats',
       'update-address',
@@ -165,11 +163,7 @@ export async function onRequestPost(context) {
         fetch(`${env.BASE_URL}/send-email-auto`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            trigger: 'newsletter_1',
-            email: email,
-            firstName: firstName
-          })
+          body: JSON.stringify({ trigger: 'newsletter_1', email, firstName })
         }).catch(e => console.warn('[Email] newsletter_1 failed:', e.message));
       }
 
@@ -192,7 +186,7 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: true });
     }
 
-    // ==================== RESET PASSWORD (Forgot Password) ====================
+    // ==================== RESET PASSWORD ====================
     if (action === 'reset-password') {
       const { newPassword } = body;
       if (!email || !newPassword) throw new Error("Email and new password are required");
@@ -219,25 +213,24 @@ export async function onRequestPost(context) {
     }
 
     // ==================== UPDATE CART QUANTITY + CONTENT ====================
-      if (action === 'update-cart-quantity') {
-        if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
-        const { cartContent = null } = body;
+    if (action === 'update-cart-quantity') {
+      if (rowIndex === -1) throw new Error("Utilisateur non trouvé");
+      const { cartContent = null } = body;
 
-        const updateData = [
-          { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] }
-        ];
+      const updateData = [
+        { range: `bbw4life-accounts!O${rowNum}`, values: [[currentCartQuantity]] }
+      ];
 
-        if (cartContent !== null) {
-          updateData.push({
-            range: `bbw4life-accounts!AC${rowNum}`,
-            values: [[JSON.stringify(cartContent)]]
-          });
-        }
-
-        await sheetsBatchUpdate(accessToken, spreadsheetId, updateData);
-
-        return jsonResponse(200, { success: true });
+      if (cartContent !== null) {
+        updateData.push({
+          range: `bbw4life-accounts!AC${rowNum}`,
+          values: [[JSON.stringify(cartContent)]]
+        });
       }
+
+      await sheetsBatchUpdate(accessToken, spreadsheetId, updateData);
+      return jsonResponse(200, { success: true });
+    }
 
     // ==================== RECORD ORDER ====================
     if (action === 'record-order') {
@@ -265,21 +258,21 @@ export async function onRequestPost(context) {
       try { history = JSON.parse(currentRow[16] || "[]"); } catch(e) {}
 
       return jsonResponse(200, {
-      orders:         parseInt(currentRow[6]  || 0),
-      totalSpent:     parseFloat(currentRow[7] || 0),
-      quantityInCart: parseInt(currentRow[14] || 0),
-      history:        history,
-      memberSince:    currentRow[15] || "January 2026",
-      points:         parseInt(currentRow[6]  || 0) * 10,
-      reviewsCount:   parseInt(currentRow[8]  || 0),
-      profilePhoto:   currentRow[17] || "",
-      addressLine1:   currentRow[9]  || "",
-      line2:          currentRow[10] || "",
-      city:           currentRow[11] || "",
-      state:          currentRow[12] || "",
-      zip:            currentRow[13] || "",
-      savedCart:      currentRow[28] || "[]"
-    });
+        orders:         parseInt(currentRow[6]  || 0),
+        totalSpent:     parseFloat(currentRow[7] || 0),
+        quantityInCart: parseInt(currentRow[14] || 0),
+        history:        history,
+        memberSince:    currentRow[15] || "January 2026",
+        points:         parseInt(currentRow[6]  || 0) * 10,
+        reviewsCount:   parseInt(currentRow[8]  || 0),
+        profilePhoto:   currentRow[17] || "",
+        addressLine1:   currentRow[9]  || "",
+        line2:          currentRow[10] || "",
+        city:           currentRow[11] || "",
+        state:          currentRow[12] || "",
+        zip:            currentRow[13] || "",
+        savedCart:      currentRow[28] || "[]"
+      });
     }
 
     // ==================== NEWSLETTER SUBSCRIBE ====================
@@ -308,23 +301,19 @@ export async function onRequestPost(context) {
           0, 0, 0, "", "", "", "", "", 0,
           formatDate(), "[]", "", "", "", "", "", "", "", "", "", "", "", birthday || ""
         ];
-
         await sheetsAppend(accessToken, spreadsheetId, "bbw4life-accounts!A:AE", [rowData]);
       }
 
       fetch(`${env.BASE_URL}/send-email-auto`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          trigger: 'newsletter_1',
-          email: email,
-          firstName: firstName || ''
-        })
+        body: JSON.stringify({ trigger: 'newsletter_1', email, firstName: firstName || '' })
       }).catch(e => console.warn('[Email] newsletter_1 failed:', e.message));
 
       return jsonResponse(200, { success: true });
     }
 
+    // ==================== AFF CREATE ====================
     if (action === 'aff-create') {
       if (!email) throw new Error("Email required");
       const { allAffiliates } = body;
@@ -350,31 +339,45 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: true });
     }
 
+    // ==================== AFF GET STATS ====================
     if (action === 'aff-get-stats') {
       if (!email) throw new Error("Email required");
       if (rowIndex === -1) return jsonResponse(200, { success: true, affiliates: [] });
 
       const currentRow = rows[rowIndex] || [];
 
-      const username = currentRow[18] || '';
-      const clicks = parseInt(currentRow[19] || 0);
-      const totalMoney = parseFloat(currentRow[20] || 0);
-      const totalOrders = parseInt(currentRow[21] || 0);
+      const username        = currentRow[18] || '';
+      const clicks          = parseInt(currentRow[19]  || 0);
+      const totalMoney      = parseFloat(currentRow[20] || 0);
+      const totalOrders     = parseInt(currentRow[21]  || 0);
       const totalOrderValue = parseFloat(currentRow[22] || 0);
-      const withdrawStatus = currentRow[23] || 'none';
-      const createdAt = currentRow[24] || '';
+      const withdrawStatus  = currentRow[23] || 'none';
+      const createdAt       = currentRow[24] || '';
 
       if (!username) {
         return jsonResponse(200, { success: true, affiliates: [] });
       }
 
+      // ── AD (index 29) = ClickRewardThreshold, AE (index 30) = ClickRewardEarned ──
+      const clickRewardEarned     = parseFloat(currentRow[30] || 0);
+      const clicksPerRewardStored = currentRow[29] || '';
+
       const affiliates = [{
-        username, clicks, totalMoney, totalOrders, totalOrderValue, withdrawStatus, createdAt
+        username,
+        clicks,
+        totalMoney,
+        totalOrders,
+        totalOrderValue,
+        withdrawStatus,
+        createdAt,
+        clickRewardEarned,
+        clicksPerRewardStored
       }];
 
       return jsonResponse(200, { success: true, affiliates, withdrawStatus });
     }
 
+    // ==================== AFF TRACK CLICK ====================
     if (action === 'aff-track-click') {
       const { username } = body;
       if (!username) throw new Error("Username required");
@@ -392,6 +395,7 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: false, error: 'Username not found' });
     }
 
+    // ==================== AFF RECORD ORDER ====================
     if (action === 'aff-record-order') {
       const { username, orderAmount } = body;
       if (!username || !orderAmount) throw new Error("Missing data");
@@ -402,8 +406,8 @@ export async function onRequestPost(context) {
         const rowUsername = (rows[i][18] || '').toLowerCase().trim();
         if (rowUsername !== username.toLowerCase().trim()) continue;
 
-        const newMoney = parseFloat((parseFloat(rows[i][20] || 0) + commission)).toFixed(2);
-        const newOrders = parseInt(rows[i][21] || 0) + 1;
+        const newMoney    = parseFloat((parseFloat(rows[i][20] || 0) + commission)).toFixed(2);
+        const newOrders   = parseInt(rows[i][21] || 0) + 1;
         const newOrderVal = parseFloat((parseFloat(rows[i][22] || 0) + parseFloat(orderAmount))).toFixed(2);
 
         await sheetsUpdate(accessToken, spreadsheetId, `bbw4life-accounts!U${i + 1}:W${i + 1}`,
@@ -413,6 +417,7 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: false, error: 'Username not found' });
     }
 
+    // ==================== AFF WITHDRAW REQUEST ====================
     if (action === 'aff-withdraw-request') {
       const { paypalName, paypalEmail } = body;
       if (!email || !paypalName || !paypalEmail) throw new Error("Missing data");
@@ -423,6 +428,7 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: true });
     }
 
+    // ==================== AFF APPROVE WITHDRAW ====================
     if (action === 'aff-approve-withdraw') {
       const { targetEmail } = body;
       if (!targetEmail) throw new Error("targetEmail required");
@@ -432,11 +438,11 @@ export async function onRequestPost(context) {
       if (targetIdx === -1) throw new Error("User not found");
 
       const targetRowNum = targetIdx + 1;
-
       await sheetsUpdate(accessToken, spreadsheetId, `bbw4life-accounts!X${targetRowNum}`, [['approved']]);
       return jsonResponse(200, { success: true });
     }
 
+    // ==================== AFF MARK PROMO USED ====================
     if (action === 'aff-mark-promo-used') {
       if (!email) throw new Error("Email required");
       if (rowIndex === -1) throw new Error("User not found");
@@ -444,12 +450,140 @@ export async function onRequestPost(context) {
       return jsonResponse(200, { success: true });
     }
 
+    // ==================== AFF CHECK PROMO USED ====================
     if (action === 'aff-check-promo-used') {
       if (!email) throw new Error("Email required");
       if (rowIndex === -1) return jsonResponse(200, { success: true, used: false });
       const currentRow = rows[rowIndex] || [];
       const usedVal = (currentRow[27] || '').toLowerCase().trim();
       return jsonResponse(200, { success: true, used: usedVal === 'yes' });
+    }
+
+    // ==================== GET TODAY BIRTHDAYS ====================
+    if (action === 'get-today-birthdays') {
+      const today = new Date();
+      const todayDay   = today.getDate();
+      const todayMonth = today.getMonth() + 1;
+
+      function parseBirthdaySheet(raw) {
+        if (!raw || typeof raw !== 'string') return null;
+        raw = raw.trim();
+
+        const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (isoMatch) {
+          return { month: parseInt(isoMatch[2], 10), day: parseInt(isoMatch[3], 10) };
+        }
+
+        const parts = raw.split('/');
+        if (parts.length >= 2) {
+          const d = parseInt(parts[0], 10);
+          const m = parseInt(parts[1], 10);
+          if (!isNaN(d) && !isNaN(m) && m >= 1 && m <= 12 && d >= 1 && d <= 31) {
+            return { day: d, month: m };
+          }
+        }
+
+        const usMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+        if (usMatch) {
+          const m2 = parseInt(usMatch[1], 10);
+          const d2 = parseInt(usMatch[2], 10);
+          if (m2 <= 12 && d2 <= 31) return { day: d2, month: m2 };
+        }
+
+        return null;
+      }
+
+      const customers = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const row      = rows[i] || [];
+        const birthday = row[27] || '';
+        if (!birthday) continue;
+
+        const parsed = parseBirthdaySheet(birthday);
+        if (!parsed) continue;
+
+        if (parsed.day === todayDay && parsed.month === todayMonth) {
+          customers.push({
+            firstName: row[1] || '',
+            lastName:  row[0] || '',
+            email:     row[2] || '',
+          });
+        }
+      }
+
+      return jsonResponse(200, {
+        success:   true,
+        customers: customers,
+        count:     customers.length
+      });
+    }
+
+    // ==================== CHECK BIRTHDAY PROMO ELIGIBILITY ====================
+    if (action === 'check-birthday-promo-eligibility') {
+      if (!email) {
+        return jsonResponse(200, { success: false, reason: 'NOT_LOGGED_IN' });
+      }
+
+      const normalizedEmail = normalize(email);
+      const userRowIndex    = rows.findIndex(row => normalize(row[2] || '') === normalizedEmail);
+
+      if (userRowIndex === -1) {
+        return jsonResponse(200, { success: false, reason: 'USER_NOT_FOUND' });
+      }
+
+      const userRow      = rows[userRowIndex] || [];
+      const isSubscribed = (userRow[5] || '').toLowerCase().trim() === 'yes';
+      const birthdayRaw  = (userRow[27] || '').trim();
+
+      if (!isSubscribed) {
+        return jsonResponse(200, { success: false, reason: 'NOT_SUBSCRIBED' });
+      }
+
+      if (!birthdayRaw) {
+        return jsonResponse(200, { success: false, reason: 'NO_BIRTHDAY' });
+      }
+
+      function parseBirthdayLocal(raw) {
+        const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (isoMatch) return { month: parseInt(isoMatch[2], 10), day: parseInt(isoMatch[3], 10) };
+        const parts = raw.split('/');
+        if (parts.length >= 2) {
+          const d = parseInt(parts[0], 10), m = parseInt(parts[1], 10);
+          if (!isNaN(d) && !isNaN(m) && m >= 1 && m <= 12 && d >= 1 && d <= 31) return { day: d, month: m };
+        }
+        const usMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+        if (usMatch) {
+          const m2 = parseInt(usMatch[1], 10), d2 = parseInt(usMatch[2], 10);
+          if (m2 <= 12 && d2 <= 31) return { day: d2, month: m2 };
+        }
+        return null;
+      }
+
+      const parsed = parseBirthdayLocal(birthdayRaw);
+      const today  = new Date();
+      const isBday = parsed && parsed.day === today.getDate() && parsed.month === (today.getMonth() + 1);
+
+      return jsonResponse(200, {
+        success:         true,
+        isSubscribed:    true,
+        hasBirthday:     !!parsed,
+        isBirthdayToday: isBday || false
+      });
+    }
+
+    // ==================== AFF UPDATE CLICK REWARD ====================
+    if (action === 'aff-update-click-reward') {
+      if (!email) throw new Error("Email required");
+      if (rowIndex === -1) throw new Error("User not found");
+
+      const { clickRewardEarned = 0, clicksPerReward = 1000 } = body;
+
+      // AD (index 29) = ClickRewardThreshold (format "2 / 3000"), AE (index 30) = ClickRewardEarned
+      await sheetsUpdate(accessToken, spreadsheetId, `bbw4life-accounts!AD${rowNum}:AE${rowNum}`,
+        [[clicksPerReward, clickRewardEarned]]);
+
+      return jsonResponse(200, { success: true });
     }
 
     throw new Error("Action inconnue");
