@@ -4,7 +4,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": ".",
   "vars": {
-    "BASE_URL": "https://bbw4life-staging.pages.dev",
+    "BASE_URL": "",
     "FROM_EMAIL": "BBW4LIFE <support@bbw4life.com>",
     "REPORT_SECRET": "pdg_francenel_bbw4life_report_2026"
   }

@@ -7,6 +7,6 @@
     "crons": ["*/10 * * * *"]
   },
   "vars": {
-    "BASE_URL": "https://bbw4life-staging.pages.dev"
+    "BASE_URL": ""
   }
 }
